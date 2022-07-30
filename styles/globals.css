@@ -1,0 +1,62 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer components {
+  .custom-bg {
+    background: blue;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  h1 {
+    @apply text-[55px] font-bold leading-[70px] text-primary md:text-[70px] md:leading-h1;
+  }
+  h2 {
+    @apply text-[45px] font-bold text-primary md:text-[60px];
+  }
+  h3 {
+    @apply text-[36px] font-bold text-primary;
+  }
+  h4 {
+    @apply text-[20px] font-semibold text-primary;
+  }
+
+  /* FAQ STYLE */
+  details {
+    user-select: none;
+    & summary svg {
+      transform: rotate(0deg);
+    }
+  }
+  details[open] {
+    & summary svg {
+      transform: rotate(-180deg);
+    }
+  }
+  details[open] {
+    & summary {
+      background: #f3f4f6;
+      color: #111827;
+    }
+  }
+  details[open] summary ~ * {
+    animation: ease-opacity-t-b 0.5s ease;
+  }
+  /* TO JE TO - TO JE TAJ */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer components {
+  .p1 {
+    @apply text-[20px] leading-h2 text-secondary;
+  }
+  .p2 {
+    @apply text-[16px] leading-h2 text-secondary;
+  }
+}
