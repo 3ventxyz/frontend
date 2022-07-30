@@ -76,6 +76,7 @@ export default function TOS() {
             <a
               href="https://www.termsfeed.com/terms-conditions-generator/"
               target="_blank"
+              rel="external nofollow noreferrer noopener"
             >
               TermsFeed Terms and Conditions Generator
             </a>
@@ -95,8 +96,8 @@ export default function TOS() {
             <strong>Website</strong> refers to 3vent, accessible from{' '}
             <a
               href="3vent.xyz"
-              rel="external nofollow noopener"
               target="_blank"
+              rel="external nofollow noreferrer noopener"
             >
               3vent.xyz
             </a>

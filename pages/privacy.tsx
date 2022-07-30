@@ -101,7 +101,7 @@ export default function PrivacyPolicy() {
             <strong>Website</strong> refers to 3vent, accessible from{' '}
             <a
               href="3vent.xyzz"
-              rel="external nofollow noopener"
+              rel="external nofollow noreferrer noopener"
               target="_blank"
             >
               3vent.xyzz
@@ -181,7 +181,7 @@ export default function PrivacyPolicy() {
           disabling, or deleting local shared objects?&quot; available at{' '}
           <a
             href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_"
-            rel="external nofollow noopener"
+            rel="external nofollow noreferrer noopener"
             target="_blank"
           >
             https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_
@@ -205,6 +205,7 @@ export default function PrivacyPolicy() {
         <a
           href="https://www.privacypolicies.com/blog/privacy-policy-template/#Use_Of_Cookies_Log_Files_And_Tracking"
           target="_blank"
+          rel="external nofollow noreferrer noopener"
         >
           Privacy Policies website
         </a>{' '}
