@@ -3,6 +3,30 @@ import Head from 'next/head'
 import { AppProps } from 'next/app'
 import Layout from '../components/layout'
 import { EventsProvider } from '../context/eventsContext'
+import '@rainbow-me/rainbowkit/styles.css'
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { publicProvider } from 'wagmi/providers/public'
+
+const { chains, provider } = configureChains(
+  [chain.mainnet, chain.localhost, chain.rinkeby],
+  [
+    jsonRpcProvider({ rpc: () => ({ http: 'https://rpc.ankr.com/eth' }) }),
+    publicProvider()
+  ]
+)
+
+const { connectors } = getDefaultWallets({
+  appName: 'My RainbowKit App',
+  chains
+})
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors: connectors,
+  provider: provider
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,6 +45,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </EventsProvider>
       </Layout>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains}>
+          <Header />
+          <div className="pt-[78px]">
+            <Component {...pageProps} />
+          </div>
+          <Footer />
+        </RainbowKitProvider>
+      </WagmiConfig>
     </div>
   )
 }

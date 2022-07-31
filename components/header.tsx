@@ -3,6 +3,7 @@ import Button from './button'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export default function Header() {
   const headerTextButtonStyle =
@@ -81,19 +82,30 @@ export default function Header() {
           </p>
         </Link>
       </div>
-      <a
-        href="https://forms.gle/LzvnhgUnw8TabykB8"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Button
-          active={true}
-          text={'Apply for Beta'}
-          onClick={() => {
-            return
-          }}
-        />
-      </a>
+      {path === '/mint' ? (
+        <ConnectButton />
+      ) : (
+        // <Button
+        //   active={true}
+        //   text={'Connect Wallet'}
+        //   onClick={() => {
+        //     return
+        //   }}
+        // />
+        <a
+          href="https://forms.gle/LzvnhgUnw8TabykB8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button
+            active={true}
+            text={'Apply for Beta'}
+            onClick={() => {
+              return
+            }}
+          />
+        </a>
+      )}
     </nav>
   )
 }
