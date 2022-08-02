@@ -19,6 +19,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.8.0",
+    "@firebase/app": "^0.7.29",
+    "@firebase/auth": "^0.20.5",
+    "@firebase/firestore": "^3.4.13",
     "@heroicons/react": "^1.0.6",
     "next": "12.2.3",
     "react": "18.2.0",
