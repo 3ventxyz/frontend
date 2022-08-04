@@ -62,7 +62,7 @@ export default function Event() {
         >
           {TicketListData.map((ticket: TicketInterface, index) => {
             return (
-              <div id={ticket.tokenId}>
+              <div key={ticket.tokenId}>
                 <button
                   className="w-full"
                   onClick={() => {
