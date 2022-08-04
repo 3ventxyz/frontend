@@ -19,7 +19,8 @@ module.exports = {
         linkText: '#0043FF',
         linkDisabled: '#4B5563',
         accent: '#6600CC',
-        disabled: '#C5C5C5'
+        disabled: '#C5C5C5',
+        dashboard: '#EAF2FF'
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
