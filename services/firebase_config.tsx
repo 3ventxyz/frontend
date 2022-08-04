@@ -19,3 +19,4 @@ const analytics = getAnalytics(app)
 const auth = getAuth(app)
 
 export { app, db, analytics, auth }
+// export { app, db }
