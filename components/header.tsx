@@ -69,6 +69,17 @@ export default function Header() {
             Pricing
           </p>
         </Link>
+        <Link href="/dashboard">
+          <p
+            className={
+              path === '' || path === 'dashboard'
+                ? activeHeaderTextButtonStyle
+                : headerTextButtonStyle
+            }
+          >
+            Dashboard
+          </p>
+        </Link>
       </div>
       <a
         href="https://forms.gle/LzvnhgUnw8TabykB8"

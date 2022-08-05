@@ -31,6 +31,7 @@
     "next-absolute-url": "^1.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
     "react-scroll": "^1.8.7",
     "react-tooltip": "^4.2.21"
   },

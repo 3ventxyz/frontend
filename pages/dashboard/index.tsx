@@ -11,6 +11,7 @@ import {
   DocumentData,
   DocumentSnapshot
 } from '@firebase/firestore'
+import { TbPhotoOff } from 'react-icons/tb'
 
 export default function Dashboard() {
   const [fetched, setFetched] = useState(false)
@@ -73,17 +74,17 @@ export default function Dashboard() {
     }
   }, [])
   return (
-    <div className="space-y-[30px] bg-dashboard px-[20px] pt-[50px] pb-[106px] md:space-y-[69px] md:px-[112px] xl:pt-[148px]">
+    <div className="bg-dashboard px-[20px] pb-[106px]  md:px-[112px] xl:pt-[35px] ">
       {!fetched ? (
         <div>Loading...</div>
       ) : (
-        <div>
+        <div className="flex flex-col space-y-[35px]">
           <EventsDisplay
             title={'Upcoming Events'}
             route={''}
             events={upcomingEvents}
           />
-          <EventsDisplay title={'Past Events'} route={''} events={pastEvents} />
+          <EventsDisplay title={'Past Events'} route={''} events={eventData} />
         </div>
       )}
     </div>
@@ -102,13 +103,13 @@ function EventsDisplay({
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
   return (
     <div>
-      <div className="flex flex-row items-baseline justify-between pb-[50px]">
+      <div className="flex flex-row items-baseline justify-between">
         <h1 className={titleSectionStyle}>{title}</h1>
         <a className="hover:underline" href={route}>
           See all
         </a>
       </div>
-      <div className="grid grid-cols-2 justify-center gap-y-3 gap-x-4 sm:grid-cols-3  sm:gap-x-12 sm:gap-y-5">
+      <div className="grid justify-center gap-y-[30px] gap-x-4 sm:gap-x-12 md:grid-cols-2  xl:grid-cols-3 xl:gap-y-[60px] ">
         {events.map((event, index) => {
           return (
             <div key={index.toString()}>
@@ -124,15 +125,28 @@ function EventsDisplay({
 function EventTile({ event }: { event: EventInterface }) {
   return (
     <Link href={`event/${event.id}`}>
-      <div className="h-[250px] w-[150px] rounded-3xl bg-white  lg:h-[360px] lg:w-[240px] xl:h-[548px] xl:w-[380px]">
-        <div className="relative h-[150px] w-full rounded-3xl bg-red-100  lg:h-[240px] xl:h-[384px]">
-          <Image
-            src={event.imgURL}
-            layout="fill"
-            loading="lazy"
-            objectFit="cover"
-            className="rounded-3xl"
-          />
+      <div className="h-[410px] w-[310px] rounded-3xl bg-white   lg:h-[548px] lg:w-[380px]">
+        <div className="relative h-[310px] w-full rounded-3xl bg-gray-200   lg:h-[384px]">
+          {event.imgURL === '' ? (
+            <div className="flex h-full w-full flex-col items-center text-gray-500">
+              <div className="grow"></div>
+              <div>
+                <div>
+                  <TbPhotoOff className="h-[150px] w-[150px] " />
+                </div>
+                <div>No image available</div>
+              </div>
+              <div className="grow"></div>
+            </div>
+          ) : (
+            <Image
+              src={event.imgURL}
+              layout="fill"
+              loading="lazy"
+              objectFit="cover"
+              className="rounded-3xl"
+            />
+          )}
         </div>
         <div className="px-[21px] pt-[8px] xl:pt-[20px] xl:pb-[27px]">
           <ul>
@@ -162,7 +176,7 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   },
   {
     id: '2',
@@ -170,7 +184,7 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   },
   {
     id: '3',
@@ -178,7 +192,7 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   },
   {
     id: '4',
@@ -186,7 +200,7 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   },
   {
     id: '5',
@@ -194,7 +208,7 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   },
   {
     id: '6',
@@ -202,6 +216,6 @@ const eventData = [
     orgTitle: 'orgTitle',
     date: 'date',
     address: 'address',
-    imgURL: 'imgURL'
+    imgURL: ''
   }
 ]
