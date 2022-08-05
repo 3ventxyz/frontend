@@ -29,6 +29,10 @@ module.exports = {
         h1: '98px',
         h2: '24.2px',
         h3: '20px'
+      },
+      screens: {
+        xl: '1350px',
+        lg: '1280px'
       }
     }
   },
