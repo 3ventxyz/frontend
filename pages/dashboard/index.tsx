@@ -18,57 +18,46 @@ export default function Dashboard() {
   const [upcomingEvents, setUpcomingEvents] = useState<EventInterface[]>([])
   const [pastEvents, setPastEvents] = useState<EventInterface[]>([])
 
+  const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
+    const eventData: EventInterface = {
+      address: eventDoc.data()?.address,
+      date: eventDoc.data()?.date,
+      id: eventDoc.data()?.id,
+      eventTitle: eventDoc.data()?.eventTitle,
+      orgTitle: eventDoc.data()?.orgTitle,
+      imgURL: eventDoc.data()?.imgURL
+    }
+    return eventData
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       let pastEventsRefs: Array<DocumentReference> = []
       let upcomingEventsRefs: Array<DocumentReference> = []
-      var pastEventsDocs: Array<DocumentSnapshot<DocumentData>> = []
-      var upcomingEventsDocs: Array<DocumentSnapshot<DocumentData>> = []
       var upcomingEventsData: Array<EventInterface> = []
       var pastEventsData: Array<EventInterface> = []
 
-      const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
-        const eventData: EventInterface = {
-          address: eventDoc.data()?.address,
-          date: eventDoc.data()?.date,
-          id: eventDoc.data()?.id,
-          eventTitle: eventDoc.data()?.eventTitle,
-          orgTitle: eventDoc.data()?.orgTitle,
-          imgURL: eventDoc.data()?.imgURL
-        }
-        return eventData
-      }
-
+      // TODO: just query for test user
       const query = await getDocs(collection(db, 'user'))
       if (!query) {
         return
       }
 
+      // TODO: no need for a .forEach
       query.forEach((userRef) => {
-        userRef.data().pastEvents.forEach((pastEventRef: DocumentReference) => {
-          pastEventsRefs.push(pastEventRef)
-          console.log(pastEventRef)
-        })
-        userRef
-          .data()
-          .upcomingEvents.forEach((upcomingEventRef: DocumentReference) => {
-            upcomingEventsRefs.push(upcomingEventRef)
-            console.log(upcomingEventRef)
-          })
+        pastEventsRefs = userRef.data().pastEvents
+        upcomingEventsRefs = userRef.data().upcomingEvents
       })
 
       for (const pastEventRef of pastEventsRefs) {
         const pastEventDoc = await getDoc(pastEventRef)
-        pastEventsDocs.push(pastEventDoc)
+        pastEventsData.push(newEventData(pastEventDoc))
       }
 
       for (const upcomingEventRef of upcomingEventsRefs) {
         const upcomingEventDoc = await getDoc(upcomingEventRef)
-        upcomingEventsDocs.push(upcomingEventDoc)
+        upcomingEventsData.push(newEventData(upcomingEventDoc))
       }
-
-      pastEventsData = pastEventsDocs.map<EventInterface>(newEventData)
-      upcomingEventsData = upcomingEventsDocs.map<EventInterface>(newEventData)
 
       setUpcomingEvents(upcomingEventsData)
       setPastEvents(pastEventsData)
