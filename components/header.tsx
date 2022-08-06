@@ -20,7 +20,7 @@ export default function Header() {
       const hash = pathParts.slice(-1)[0]
       setPath(hash)
     } else {
-      setPath('')
+      setPath(asPath)
     }
   }, [asPath])
 
