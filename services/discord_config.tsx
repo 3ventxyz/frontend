@@ -1,23 +1,26 @@
-export default function DiscordConfig (){
-    import requests
+import axios from 'axios'
+import { app } from './firebase_config';
+import url from 'url'
 
-    API_ENDPOINT = 'https://discord.com/api/v10'
-    CLIENT_ID = process.env.NEXT_PUBLIC_DISCORD_API_ID
-    CLIENT_SECRET = process.env.NEXT_PUBLIC_DISCORD_API_SECRET
-    REDIRECT_URI = process.env.NEXT_PUBLIC_DISCORD_OAUTH_URL
-
-    def exchange_code(code):
-    data = {
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': REDIRECT_URI
+export default async function DiscordConfig (accessCode: string){
+    try {
+        const formData = new url.URLSearchParams({
+            /*Add info correctly*/
+               client_id: '997585077548617728',
+               client_secret: 'e-LTOH-gMZfdIZXCq16EdrQR-AvAR7Qv', 
+               grant_type: 'authorization_code',
+               accessCode,
+               redirect_uri: 'http://localhost:3000/temp/verify',
+           });
+    const response = await axios.post('https://discord.com/api/v8/oauth2/token', 
+    formData.toString(),
+     {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    console.log(`RESPONSE: ${response}`)
+    } catch(err) {
+        console.log(err);
     }
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    r = requests.post('%s/oauth2/token' % API_ENDPOINT, data=data, headers=headers)
-    r.raise_for_status()
-    return r.json()
 }
