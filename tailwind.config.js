@@ -19,8 +19,7 @@ module.exports = {
         linkText: '#0043FF',
         linkDisabled: '#4B5563',
         accent: '#6600CC',
-        disabled: '#C5C5C5',
-        dashboard: '#EAF2FF'
+        disabled: '#C5C5C5'
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
@@ -31,8 +30,8 @@ module.exports = {
         h3: '20px'
       },
       screens: {
-        xl: '1350px',
-        lg: '1280px'
+        xlDashboard: '1350px',
+        lgDashboard: '1280px'
       }
     }
   },
