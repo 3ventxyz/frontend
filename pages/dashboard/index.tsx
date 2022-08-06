@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { EventInterface } from '../shared/interface/common'
+import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
 import {
   collection,

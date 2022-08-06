@@ -1,4 +1,4 @@
-import { TicketInterface } from '../../shared/interface/common'
+import { TicketInterface } from '../../../shared/interface/common'
 
 export default function TicketButton({ticket}:{ticket: TicketInterface}) {
   return (

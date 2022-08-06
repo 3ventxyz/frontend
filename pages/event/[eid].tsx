@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import TicketButton from './components/ticketButton'
-import { TicketInterface } from '../shared/interface/common'
 import { useEffect, useState } from 'react'
-import { EventInterface } from '../shared/interface/common'
+import TicketButton from './components/ticketButton'
+import { TicketInterface } from '../../shared/interface/common'
+import { EventInterface } from '../../shared/interface/common'
 
 export default function Event() {
   // TODO: fetch event data
