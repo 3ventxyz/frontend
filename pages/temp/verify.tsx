@@ -9,19 +9,18 @@ export default function Verify() {
     useEffect(() => {
         const pathParts = asPath.split('=')
         if (pathParts.length >= 2) {
-          const hash = pathParts.slice(-1)[0]
-          setAccessCode(hash)
+            const hash = pathParts.slice(-1)[0]
+            setAccessCode(hash)
+            /*Use access code once app was authorized*/
+            if (hash !== '') {
+              console.log(`Access Code: ${hash}`)
+              /*Get access token from discord_config*/
+              DiscordConfig(hash)
+            }         
         } else {
           setAccessCode('')
         }
-      }, [asPath])
-
-    /*Use access code once app was authorized*/
-    if (accessCode !== '') {
-        console.log(`Access Code: ${accessCode}`)
-        /*Get access token from discord_config*/
-        DiscordConfig(accessCode)
-    }
+    }, [asPath])
 
     return (
     <div className="px-32">
