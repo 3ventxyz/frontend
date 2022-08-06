@@ -20,6 +20,7 @@ export default function Verify() {
     if (accessCode !== '') {
         console.log(`Access Code: ${accessCode}`)
         /*Get access token from discord_config*/
+        DiscordConfig(accessCode)
     }
 
     return (
