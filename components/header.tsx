@@ -72,7 +72,7 @@ export default function Header() {
         <Link href="/dashboard">
           <p
             className={
-              path === '' || path === 'dashboard'
+              path === 'dashboard'
                 ? activeHeaderTextButtonStyle
                 : headerTextButtonStyle
             }
