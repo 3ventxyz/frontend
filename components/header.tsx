@@ -14,11 +14,9 @@ export default function Header() {
 
   // determines which path or sub element we are focused on
   useEffect(() => {
-    console.log(asPath)
     const pathParts = asPath.split('#')
     if (pathParts.length >= 2) {
       const hash = pathParts.slice(-1)[0]
-      console.log(hash)
       setPath(hash)
     } else {
       setPath('')
