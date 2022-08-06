@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import TicketButton from './components/ticketButton'
+import TicketButton from '../../components/ticketButton'
 import { TicketInterface } from '../../shared/interface/common'
 import { EventInterface } from '../../shared/interface/common'
 
