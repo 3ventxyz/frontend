@@ -1,33 +1,17 @@
-// author: marthel
-export default function TextInput({
-  id,
-  placeholder,
-  inputName,
-  htmlFor,
-  labelTitle,
-  width = 'w-auto',
-  height = 'h-[43px]'
-}: {
-  id: string
-  placeholder: string
-  inputName: string
-  htmlFor: string
-  labelTitle: string
-  width?: string
-  height?: string
-}) {
+import Button from './button'
+
+export default function TextInput({ labelText }: { labelText: string }) {
   return (
-    <div className="flex flex-col">
-      <label className="text-[12px] font-semibold" htmlFor={htmlFor}>
-        {labelTitle}
-      </label>
-      <input
-        className={`${height} ${width} rounded-[6px] border-[2px] border-inputUnselected pl-[12px] placeholder-placeholderUnselected placeholder:text-[13px] placeholder:font-semibold focus:border-inputSelected focus:placeholder-inputSelected`}
-        id={id}
-        type="text"
-        name={inputName}
-        placeholder={placeholder}
-      />
+    <div className="p1">
+      <form>
+        <label>{labelText}</label>
+        <input
+          className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+          id="username"
+          type="text"
+          placeholder="Username"
+        />
+      </form>
     </div>
   )
 }
