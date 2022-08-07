@@ -12,6 +12,7 @@ export interface EventInterface {
   eventTitle: string
   orgTitle: string
   date: string
+  timestamp?: Date
   address: string
   imgURL: string
   tickets?: TicketInterface[]

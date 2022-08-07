@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
 import {
-  collection,
-  getDocs,
+  // collection,
+  // getDocs,
   getDoc,
+  doc,
   DocumentReference,
   DocumentData,
-  DocumentSnapshot
+  DocumentSnapshot,
 } from '@firebase/firestore'
 import { TbPhotoOff } from 'react-icons/tb'
 
@@ -37,17 +38,15 @@ export default function Dashboard() {
       var upcomingEventsData: Array<EventInterface> = []
       var pastEventsData: Array<EventInterface> = []
 
-      // TODO: just query for test user
-      const query = await getDocs(collection(db, 'user'))
-      if (!query) {
+      // get the data by using the UID of the logged in user.
+      //test user id: 'guJqAglqTLAzoMIQA6Gi'
+      const userdocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
+      const userDoc = await getDoc(userdocRef)
+      if (!userDoc) {
         return
       }
-
-      // TODO: no need for a .forEach
-      query.forEach((userRef) => {
-        pastEventsRefs = userRef.data().pastEvents
-        upcomingEventsRefs = userRef.data().upcomingEvents
-      })
+      pastEventsRefs = userDoc.data()?.pastEvents
+      upcomingEventsRefs = userDoc.data()?.upcomingEvents
 
       for (const pastEventRef of pastEventsRefs) {
         const pastEventDoc = await getDoc(pastEventRef)
@@ -58,7 +57,6 @@ export default function Dashboard() {
         const upcomingEventDoc = await getDoc(upcomingEventRef)
         upcomingEventsData.push(newEventData(upcomingEventDoc))
       }
-
       setUpcomingEvents(upcomingEventsData)
       setPastEvents(pastEventsData)
       setFetched(true)
@@ -137,19 +135,19 @@ function EventTile({ event }: { event: EventInterface }) {
           )}
         </div>
         <ul className="p-[20px]">
-            <li className="... truncate text-[24px] font-bold">
-              {event.eventTitle}
-            </li>
-            <li className="... truncate text-[14px]">
-              {event.orgTitle}
-            </li>
-            <li className="... truncate text-[14px]">
-              {event.date}
-            </li>
-            <li className="... truncate text-[14px]">
-              {event.address}
-            </li>
-          </ul>
+          <li className="... truncate text-[24px] font-bold">
+            {event.eventTitle}
+          </li>
+          <li className="... truncate text-[14px]">
+            {event.orgTitle}
+          </li>
+          <li className="... truncate text-[14px]">
+            {event.date}
+          </li>
+          <li className="... truncate text-[14px]">
+            {event.address}
+          </li>
+        </ul>
       </div>
     </Link>
   )
