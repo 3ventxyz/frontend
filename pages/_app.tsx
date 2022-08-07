@@ -11,6 +11,8 @@ import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider, useAuth } from '../contexts/auth'
 import Layout from '../components/layout'
 
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
   [
@@ -41,6 +43,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.svg" />
+        <script
+          src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`}
+        ></script>
       </Head>
       <AuthProvider>
         <WagmiConfig client={wagmiClient}>
