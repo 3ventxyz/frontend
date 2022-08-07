@@ -1,17 +1,25 @@
-import Button from './button'
+interface TextInputProps {
+  id: string
+  labelText: string
+  placeholder?: string
+  maxWidth?: number
+}
 
-export default function TextInput({ labelText }: { labelText: string }) {
+export default function TextInput({
+  labelText,
+  placeholder,
+  id,
+  maxWidth
+}: TextInputProps) {
   return (
-    <div className="p1">
-      <form>
-        <label>{labelText}</label>
-        <input
-          className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-          id="username"
-          type="text"
-          placeholder="Username"
-        />
-      </form>
-    </div>
+    <form className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
+      <label htmlFor={id}>{labelText}</label>
+      <input
+        className="focus:shadow-outline leading-0 h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] border-black px-2 text-gray-700 focus:outline-none"
+        id={id}
+        type="text"
+        placeholder={placeholder}
+      />
+    </form>
   )
 }
