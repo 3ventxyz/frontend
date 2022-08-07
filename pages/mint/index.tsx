@@ -95,7 +95,7 @@ export default function Mint() {
   ]
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-grow flex-col">
       <div
         id="details-pricing"
         className="flex flex-col items-center bg-secondaryBg py-[80px] px-[20px] sm:px-[56px] md:px-[112px]"
