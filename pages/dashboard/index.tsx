@@ -74,10 +74,10 @@ export default function Dashboard() {
         <>
           <EventsDisplay
             title={'upcoming events'}
-            route={''}
+            route={'dashboard/seeAll'}
             events={upcomingEvents}
           />
-          <EventsDisplay title={'past events'} route={''} events={eventData} />
+          <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={eventData} />
         </>
       )}
     </div>
