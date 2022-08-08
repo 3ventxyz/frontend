@@ -5,12 +5,17 @@ import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
 import {
   // collection,
-  // getDocs,
+  getDocs,
   getDoc,
   doc,
+  query,
   DocumentReference,
   DocumentData,
+  limit,
   DocumentSnapshot,
+  collection,
+  orderBy,
+  QuerySnapshot,
 } from '@firebase/firestore'
 import { TbPhotoOff } from 'react-icons/tb'
 
@@ -33,33 +38,35 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let pastEventsRefs: Array<DocumentReference> = []
-      let upcomingEventsRefs: Array<DocumentReference> = []
       var upcomingEventsData: Array<EventInterface> = []
       var pastEventsData: Array<EventInterface> = []
+      var pastEventsRefs: QuerySnapshot<DocumentData>
+      var upcomingEventsRefs: QuerySnapshot<DocumentData>
 
       // get the data by using the UID of the logged in user.
       //test user id: 'guJqAglqTLAzoMIQA6Gi'
-      const userdocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
-      const userDoc = await getDoc(userdocRef)
-      if (!userDoc) {
-        return
-      }
-      pastEventsRefs = userDoc.data()?.pastEvents
-      upcomingEventsRefs = userDoc.data()?.upcomingEvents
+      try {
+        const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
+        pastEventsRefs = await getDocs(query(collection(userDocRef, 'pastEvents'), orderBy('timestamp', 'desc'), limit(3)))
+        upcomingEventsRefs = await getDocs(query(collection(userDocRef, 'upcomingEvents'), orderBy('timestamp', 'desc'), limit(3)))
+        for (const pastEventRef of pastEventsRefs.docs) {
+          const pastEventDoc: any = await getDoc(pastEventRef.data().eventReference)
+          pastEventsData.push(newEventData(pastEventDoc))
+        }
 
-      for (const pastEventRef of pastEventsRefs) {
-        const pastEventDoc = await getDoc(pastEventRef)
-        pastEventsData.push(newEventData(pastEventDoc))
+        for (const upcomingEventRef of upcomingEventsRefs.docs) {
+          const upcomingEventDoc: any = await getDoc(upcomingEventRef.data().eventReference)
+          upcomingEventsData.push(newEventData(upcomingEventDoc))
+        }
+        setUpcomingEvents(upcomingEventsData)
+        setPastEvents(pastEventsData)
+        setFetched(true)
       }
-
-      for (const upcomingEventRef of upcomingEventsRefs) {
-        const upcomingEventDoc = await getDoc(upcomingEventRef)
-        upcomingEventsData.push(newEventData(upcomingEventDoc))
+      catch (e: any) {
+        console.log('dashboard: error in retrieving data event')
+        console.log(e)
+        console.log('=========================================')
       }
-      setUpcomingEvents(upcomingEventsData)
-      setPastEvents(pastEventsData)
-      setFetched(true)
     }
     if (!fetched) {
       fetchData()
@@ -77,7 +84,8 @@ export default function Dashboard() {
             route={'dashboard/seeAll'}
             events={upcomingEvents}
           />
-          <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={eventData} />
+          <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={pastEvents} />
+          {/* <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={eventData} /> */}
         </>
       )}
     </div>
