@@ -4,25 +4,25 @@ import { useEffect, useState } from 'react'
 import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
 import {
-  // collection,
   getDocs,
   getDoc,
   doc,
   query,
-  DocumentReference,
   DocumentData,
   limit,
   DocumentSnapshot,
   collection,
   orderBy,
-  QuerySnapshot,
+  CollectionReference
 } from '@firebase/firestore'
 import { TbPhotoOff } from 'react-icons/tb'
+import { useEventsCache } from '../../context/cacheEventContext'
 
 export default function Dashboard() {
   const [fetched, setFetched] = useState(false)
   const [upcomingEvents, setUpcomingEvents] = useState<EventInterface[]>([])
   const [pastEvents, setPastEvents] = useState<EventInterface[]>([])
+  const eventsCache = useEventsCache()
 
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
@@ -37,32 +37,56 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      var upcomingEventsData: Array<EventInterface> = []
-      var pastEventsData: Array<EventInterface> = []
-      var pastEventsRefs: QuerySnapshot<DocumentData>
-      var upcomingEventsRefs: QuerySnapshot<DocumentData>
+    const fetchEventsData = async ({
+      collectionRef
+    }: {
+      collectionRef: CollectionReference<DocumentData>
+    }) => {
+      const eventsRef = await getDocs(
+        query(collectionRef, orderBy('timestamp', 'desc'), limit(3))
+      )
+      const eventsList = []
+      for (const eventRef of eventsRef.docs) {
+        const eventDoc: any = await getDoc(eventRef.data().eventReference)
+        eventsList.push(newEventData(eventDoc))
+      }
+      return eventsList
+    }
 
-      // get the data by using the UID of the logged in user.
-      //test user id: 'guJqAglqTLAzoMIQA6Gi'
+    const fetchData = async () => {
+      let pastEventsData
+      let upcomingEventsData
       try {
         const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
-        pastEventsRefs = await getDocs(query(collection(userDocRef, 'pastEvents'), orderBy('timestamp', 'desc'), limit(3)))
-        upcomingEventsRefs = await getDocs(query(collection(userDocRef, 'upcomingEvents'), orderBy('timestamp', 'desc'), limit(3)))
-        for (const pastEventRef of pastEventsRefs.docs) {
-          const pastEventDoc: any = await getDoc(pastEventRef.data().eventReference)
-          pastEventsData.push(newEventData(pastEventDoc))
-        }
-
-        for (const upcomingEventRef of upcomingEventsRefs.docs) {
-          const upcomingEventDoc: any = await getDoc(upcomingEventRef.data().eventReference)
-          upcomingEventsData.push(newEventData(upcomingEventDoc))
-        }
-        setUpcomingEvents(upcomingEventsData)
+        const pastEventsCollRef: CollectionReference<DocumentData> = collection(
+          userDocRef,
+          'pastEvents'
+        )
+        const upcomingEventsCollRefs: CollectionReference<DocumentData> =
+          collection(userDocRef, 'upcomingEvents')
+        pastEventsData = await fetchEventsData({
+          collectionRef: pastEventsCollRef
+        })
+        upcomingEventsData = await fetchEventsData({
+          collectionRef: upcomingEventsCollRefs
+        })
         setPastEvents(pastEventsData)
+        setUpcomingEvents(upcomingEventsData)
+
+        eventsCache.setCacheEventsData({
+          cacheName: 'pastEventsCache',
+          url: 'http://localhost:3000/',
+          // fetchedEventsData: pastEventsData
+          fetchedEventsData: 'pastEventsData'
+        })
+        eventsCache.setCacheEventsData({
+          cacheName: 'upcomingEventsCache',
+          url: 'http://localhost:3000/',
+          // fetchedEventsData: upcomingEventsData
+          fetchedEventsData: 'upcomingEventsData'
+        })
         setFetched(true)
-      }
-      catch (e: any) {
+      } catch (e: any) {
         console.log('dashboard: error in retrieving data event')
         console.log(e)
         console.log('=========================================')
@@ -74,7 +98,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="bg-secondaryBg flex flex-col space-y-[35px] px-[20px] pb-[106px] md:px-[112px] pt-[35px] ">
+    <div className="flex flex-col  space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px] ">
       {!fetched ? (
         <div>Loading...</div>
       ) : (
@@ -84,7 +108,11 @@ export default function Dashboard() {
             route={'dashboard/seeAll'}
             events={upcomingEvents}
           />
-          <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={pastEvents} />
+          <EventsDisplay
+            title={'past events'}
+            route={'dashboard/seeAll'}
+            events={pastEvents}
+          />
           {/* <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={eventData} /> */}
         </>
       )}
@@ -105,17 +133,15 @@ function EventsDisplay({
 
   return (
     <div className="flex flex-col items-stretch space-y-[20px]">
-      <div className="flex flex-row mx-auto w-full max-w-[1200px] items-end justify-between border-b border-disabled">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-row items-end justify-between border-b border-disabled">
         <p className={titleSectionStyle}>{title}</p>
         <a className="hover:underline" href={route}>
           see all
         </a>
       </div>
-      <div className="mx-auto max-w-[1200px] justify-evenly 2xl:justify-start gap-[30px] flex flex-row flex-wrap">
+      <div className="mx-auto flex max-w-[1200px] flex-row flex-wrap justify-evenly gap-[30px] 2xl:justify-start">
         {events.map((event, index) => {
-          return (
-            <EventTile key={index.toString()} event={event} />
-          )
+          return <EventTile key={index.toString()} event={event} />
         })}
       </div>
     </div>
@@ -125,10 +151,10 @@ function EventsDisplay({
 function EventTile({ event }: { event: EventInterface }) {
   return (
     <Link href={`event/${event.id}`}>
-      <div className="w-full max-w-[320px] sm:max-w-[380px] rounded-3xl bg-white h-[460px] sm:h-[524px] sm:w-[380px]">
-        <div className="relative w-full max-h-[320px] sm:max-h-full max-w-[380px] rounded-3xl bg-gray-200 h-[384px]">
+      <div className="h-[460px] w-full max-w-[320px] rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
+        <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
           {event.imgURL === '' ? (
-            <div className="flex h-full w-full flex-col justify-center items-center text-gray-500">
+            <div className="flex h-full w-full flex-col items-center justify-center text-gray-500">
               <TbPhotoOff className="h-[150px] w-[150px] " />
               <p>No image available</p>
             </div>
@@ -146,15 +172,9 @@ function EventTile({ event }: { event: EventInterface }) {
           <li className="... truncate text-[24px] font-bold">
             {event.eventTitle}
           </li>
-          <li className="... truncate text-[14px]">
-            {event.orgTitle}
-          </li>
-          <li className="... truncate text-[14px]">
-            {event.date}
-          </li>
-          <li className="... truncate text-[14px]">
-            {event.address}
-          </li>
+          <li className="... truncate text-[14px]">{event.orgTitle}</li>
+          <li className="... truncate text-[14px]">{event.date}</li>
+          <li className="... truncate text-[14px]">{event.address}</li>
         </ul>
       </div>
     </Link>
