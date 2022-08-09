@@ -1,5 +1,4 @@
 import {
-  collection,
   doc,
   DocumentData,
   DocumentSnapshot,
@@ -12,6 +11,7 @@ import { db } from '../../services/firebase_config'
 import { TicketInterface } from '../../shared/interface/common'
 import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
+import Modal from '../../components/modal'
 
 export default function Event() {
   // TODO: fetch event data
@@ -20,6 +20,7 @@ export default function Event() {
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
+  const [showModal, setShowModal] = useState(false)
   const router = useRouter()
 
   // get event id
@@ -63,6 +64,8 @@ export default function Event() {
     console.log(`=========`)
   }
 
+  const handleOnClose = () => setShowModal(false)
+
   return (
     <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
       {/* TODO build the event page, after a user clicks the button 'create event' */}
@@ -84,10 +87,10 @@ export default function Event() {
               <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
                 <Image
                   src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-                  layout='fill'
-                  loading='lazy'
-                  objectFit='cover'
-                  className='rounded-[20px]'
+                  layout="fill"
+                  loading="lazy"
+                  objectFit="cover"
+                  className="rounded-[20px]"
                 />
               </div>
               <div>description of the event</div>
@@ -114,27 +117,33 @@ export default function Event() {
                   purchaseSelectedTier()
                 }}
               >
-                <div className="h-[40px]  w-[97px] rounded-xl bg-white px-[20px] py-[10px] text-[14px] font-semibold">
+                <div
+                  onClick={() => {
+                    setShowModal(true)
+                  }}
+                  className="h-[40px]  w-[97px] rounded-xl bg-white px-[20px] py-[10px] text-[14px] font-semibold"
+                >
                   Register
                 </div>
               </button>
             </div>
           </div>
           <div className="h-full">
-            <div className="h-[400px] w-[400px] relative rounded-[67px] bg-slate-400 px-[50px] py-[50px]">
+            <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px]">
               <Image
-                  src={event ? event.imgURL: ''}
-                  layout='fill'
-                  loading='lazy'
-                  objectFit='cover'
-                  className='rounded-[20px]'
-                />
+                src={event ? event.imgURL : ''}
+                layout="fill"
+                loading="lazy"
+                objectFit="cover"
+                className="rounded-[20px]"
+              />
             </div>
           </div>
         </>
       ) : (
         <div>Loading</div>
       )}
+      <Modal visible={showModal} onClose={handleOnClose} />
     </div>
   )
 }
