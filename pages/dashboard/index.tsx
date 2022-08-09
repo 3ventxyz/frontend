@@ -1,3 +1,4 @@
+// author: marthel
 import { useEffect, useState } from 'react'
 import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
@@ -49,7 +50,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col  space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px] ">
+    <div className="flex flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
       {!fetched ? (
         <div>Loading...</div>
       ) : (
@@ -60,7 +61,7 @@ export default function Dashboard() {
             query={{ events: 'upcoming' }}
             eventsData={upcomingEvents}
             seeAllOption={true}
-            />
+          />
           <EventsDisplay
             title={'past events'}
             route={'dashboard/seeAll'}
@@ -68,60 +69,8 @@ export default function Dashboard() {
             eventsData={pastEvents}
             seeAllOption={true}
           />
-          {/* <EventsDisplay title={'past events'} route={'dashboard/seeAll'} events={eventData} /> */}
         </>
       )}
     </div>
   )
 }
-
-const eventData = [
-  {
-    id: '1',
-    eventTitle: 'eventTitle',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  },
-  {
-    id: '2',
-    eventTitle: 'eventTitle1',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  },
-  {
-    id: '3',
-    eventTitle: 'eventTitle2',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  },
-  {
-    id: '4',
-    eventTitle: 'eventTitle3',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  },
-  {
-    id: '5',
-    eventTitle: 'eventTitle4',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  },
-  {
-    id: '6',
-    eventTitle: 'eventTitle5',
-    orgTitle: 'orgTitle',
-    date: 'date',
-    address: 'address',
-    imgURL: ''
-  }
-]

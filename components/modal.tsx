@@ -1,3 +1,4 @@
+// author: marthel
 export default function Modal({
   visible,
   onClose

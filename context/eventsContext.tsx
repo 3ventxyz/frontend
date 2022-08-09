@@ -1,3 +1,4 @@
+// author: marthel
 import {
   CollectionReference,
   DocumentData,
@@ -28,15 +29,22 @@ interface EventsInterface {
   }) => void
 
   fetchEventsData: ({
-    collectionRef, numberOfEvents 
+    collectionRef,
+    numberOfEvents
   }: {
-    collectionRef: CollectionReference<DocumentData>, numberOfEvents?:number 
+    collectionRef: CollectionReference<DocumentData>
+    numberOfEvents?: number
   }) => Promise<any> | void
+
+  newEventData: (
+    eventDoc: DocumentSnapshot<DocumentData>
+  ) => EventInterface | void
 }
 
 const EventsContext = createContext<EventsInterface>({
   setCacheEventsData: () => undefined,
-  fetchEventsData: () => undefined
+  fetchEventsData: () => undefined,
+  newEventData: () => undefined
 })
 
 const EventsProvider = ({ children }: Props): JSX.Element => {
@@ -74,9 +82,11 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   }
 
   const fetchEventsData = async ({
-    collectionRef, numberOfEvents = 3
+    collectionRef,
+    numberOfEvents = 3
   }: {
-    collectionRef: CollectionReference<DocumentData>, numberOfEvents?:number
+    collectionRef: CollectionReference<DocumentData>
+    numberOfEvents?: number
   }) => {
     const eventsRef = await getDocs(
       query(collectionRef, orderBy('timestamp', 'desc'), limit(numberOfEvents))
@@ -92,6 +102,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   return (
     <EventsContext.Provider
       value={{
+        newEventData: newEventData,
         setCacheEventsData: setCacheEventsData,
         fetchEventsData: fetchEventsData
       }}

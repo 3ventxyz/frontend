@@ -1,3 +1,4 @@
+// author: marthel
 import Link from 'next/link'
 import { TbPhotoOff } from 'react-icons/tb'
 import { EventInterface } from '../../../shared/interface/common'
@@ -24,7 +25,7 @@ export default function EventsDisplay({
         <p className={titleSectionStyle}>{title}</p>
         {seeAllOption ? (
           <Link href={{ pathname: route, query: query }}>
-            <div className="hover:underline cursor-pointer">see all</div>
+            <div className="cursor-pointer hover:underline">see all</div>
           </Link>
         ) : (
           <></>

@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['firebasestorage.googleapis.com','maps.googleapis.com'],
+    minimumCacheTTL: 120,
+    domains: ['firebasestorage.googleapis.com', 'maps.googleapis.com'],
     formats: ['image/webp']
   }
 }
