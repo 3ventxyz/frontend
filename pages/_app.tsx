@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import Layout from '../components/layout'
-import { EventsProvider } from '../context/cacheEventContext'
+import { EventsProvider } from '../context/eventsContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
