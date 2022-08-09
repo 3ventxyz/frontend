@@ -1,3 +1,4 @@
+// author: marthel
 import { collection, doc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -5,12 +6,6 @@ import { useEvents } from '../../context/eventsContext'
 import { db } from '../../services/firebase_config'
 import { EventInterface } from '../../shared/interface/common'
 import EventsDisplay from './components/eventsDisplay'
-
-/*
- **plan for the see all.
- **from the dashboard page, pass the 'pastEvents'/'upcomingEvents' value to this page, from the urlQuery.
- ** here, retrieve
- */
 
 export default function SeeAll() {
   const router = useRouter()
@@ -59,7 +54,7 @@ export default function SeeAll() {
           eventsData={eventsData}
         ></EventsDisplay>
       ) : (
-        <>loading</>
+        <>loading...</>
       )}
     </div>
   )

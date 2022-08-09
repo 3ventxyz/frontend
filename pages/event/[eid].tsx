@@ -1,3 +1,4 @@
+// author: marthel
 import {
   doc,
   DocumentData,
@@ -12,9 +13,12 @@ import { TicketInterface } from '../../shared/interface/common'
 import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
+<<<<<<< HEAD
+=======
+import { useEvents } from '../../context/eventsContext'
+>>>>>>> 5303a2c (event page ticket flow modal component and basic logic added; code clean)
 
 export default function Event() {
-  // TODO: fetch event data
   // user id (this will probably be useContext)
 
   const [fetched, setFetched] = useState(false)
@@ -22,32 +26,18 @@ export default function Event() {
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
+  const events = useEvents()
 
-  // get event id
   const { eid } = router.query
 
   useEffect(() => {
-    const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
-      const eventData: EventInterface = {
-        address: eventDoc.data()?.address,
-        date: eventDoc.data()?.date,
-        id: eventDoc.data()?.id,
-        eventTitle: eventDoc.data()?.eventTitle,
-        orgTitle: eventDoc.data()?.orgTitle,
-        imgURL: eventDoc.data()?.imgURL
-      }
-      return eventData
-    }
     const fetchData = async () => {
-      //get and set the data from firebase
-      //get EventInterface for the correct eventID
       const eventId: any = eid
-      console.log('============fetchData::eid============')
-      console.log(eid)
-      console.log('=================================')
       const docRef = doc(db, 'events', eventId)
       const eventDoc = await getDoc(docRef)
-      setEvent(newEventData(eventDoc))
+      const eventData = events.newEventData(eventDoc)
+      if (!eventData) return
+      setEvent(eventData)
       setFetched(true)
     }
     if (!fetched) {
@@ -68,7 +58,6 @@ export default function Event() {
 
   return (
     <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
-      {/* TODO build the event page, after a user clicks the button 'create event' */}
       {fetched ? (
         <>
           <div className="flex h-full flex-col">
