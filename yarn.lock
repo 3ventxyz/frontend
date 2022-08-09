@@ -74,10 +74,10 @@
     "@firebase/util" "1.6.3"
     tslib "^2.1.0"
 
-"@firebase/firestore@^3.4.13":
-  version "3.4.13"
-  resolved "https://registry.npmjs.org/@firebase/firestore/-/firestore-3.4.13.tgz"
-  integrity sha512-wLsbWflFoWDg9NprulzTAjtapLA3dfaG1Dsa9OUsgPRDGg5jfeo60n43d94fesX4crE+C5vkFhLQKMgsEGpr9w==
+"@firebase/firestore@^3.4.14":
+  version "3.4.14"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-3.4.14.tgz#864a56e70b3fd8f0274d3497ed67fabf5b38fdb2"
+  integrity sha512-F4Pqd5OUBtJaAWWC39C0vrMLIdZtx7jsO7sARFHSiOZY/8bikfH9YovIRkpxk7OSs3HT/SgVdK0B1vISGNSnJA==
   dependencies:
     "@firebase/component" "0.5.17"
     "@firebase/logger" "0.3.3"
