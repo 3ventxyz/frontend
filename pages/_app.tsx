@@ -45,6 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.svg" />
         <script
           src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`}
+          async
         ></script>
       </Head>
       <AuthProvider>
