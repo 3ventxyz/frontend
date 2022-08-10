@@ -15,7 +15,12 @@ export default function Event() {
 
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
-  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
+  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>({
+    price: '',
+    registeredUsers: '',
+    ticketTitle: '',
+    tokenId: ''
+  })
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
@@ -50,87 +55,97 @@ export default function Event() {
   const handleOnClose = () => setShowModal(false)
 
   return (
-    <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
-      {fetched ? (
-        <>
-          <div className="flex h-full flex-col">
-            <div
-              id="event-details"
-              className="mb-[50px] space-y-[20px] text-[14px] font-medium leading-[19px]"
-            >
-              <h3>
-                {event?.eventTitle !== null ? event?.eventTitle : 'Event Title'}
-              </h3>
-              <div>
-                {event?.date} <br />
-                {event?.address}
-              </div>
+    <div>
+      <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
+        {fetched ? (
+          <>
+            <div className="flex h-full flex-col">
+              <div
+                id="event-details"
+                className="mb-[50px] space-y-[20px] text-[14px] font-medium leading-[19px]"
+              >
+                <h3>
+                  {event?.eventTitle !== null
+                    ? event?.eventTitle
+                    : 'Event Title'}
+                </h3>
+                <div>
+                  {event?.date} <br />
+                  {event?.address}
+                </div>
 
-              <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
+                <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
+                  <Image
+                    src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                    layout="fill"
+                    loading="lazy"
+                    objectFit="cover"
+                    className="rounded-[20px]"
+                  />
+                </div>
+                <div>description of the event</div>
+              </div>
+              <div
+                id="ticketbuilder"
+                className="flex w-[373px] flex-col items-center space-y-[19px]"
+              >
+                {TicketListData.map((ticket: TicketInterface, index) => {
+                  return (
+                    <button
+                      key={index.toString()}
+                      className="w-full"
+                      onClick={() => {
+                        setSelectedTicket(ticket)
+                        setSelectedIndex(index)
+                      }}
+                    >
+                      <TicketButton
+                        key={index.toString()}
+                        selected={selectedIndex === index}
+                        ticket={ticket}
+                      />
+                    </button>
+                  )
+                })}
+                <button
+                  onClick={() => {
+                    purchaseSelectedTier()
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setShowModal(true)
+                    }}
+                    className="h-[40px]  w-[97px] rounded-xl bg-white px-[20px] py-[10px] text-[14px] font-semibold"
+                  >
+                    Register
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div className="h-full">
+              <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px]">
                 <Image
-                  src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+                  src={event ? event.imgURL : ''}
                   layout="fill"
                   loading="lazy"
                   objectFit="cover"
-                  className="rounded-[20px]"
+                  className="rounded-[67px]"
                 />
               </div>
-              <div>description of the event</div>
             </div>
-            <div
-              id="ticketbuilder"
-              className="flex w-[373px] flex-col items-center space-y-[19px]"
-            >
-              {TicketListData.map((ticket: TicketInterface, index) => {
-                return (
-                  <button
-                    key={index.toString()}
-                    className="w-full"
-                    onClick={() => {
-                      setSelectedTicket(ticket)
-                      setSelectedIndex(index)
-                    }}
-                  >
-                    <TicketButton
-                      key={index.toString()}
-                      selected={selectedIndex === index}
-                      ticket={ticket}
-                    />
-                  </button>
-                )
-              })}
-              <button
-                onClick={() => {
-                  purchaseSelectedTier()
-                }}
-              >
-                <div
-                  onClick={() => {
-                    setShowModal(true)
-                  }}
-                  className="h-[40px]  w-[97px] rounded-xl bg-white px-[20px] py-[10px] text-[14px] font-semibold"
-                >
-                  Register
-                </div>
-              </button>
-            </div>
-          </div>
-          <div className="h-full">
-            <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px]">
-              <Image
-                src={event ? event.imgURL : ''}
-                layout="fill"
-                loading="lazy"
-                objectFit="cover"
-                className="rounded-[67px]"
-              />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div>Loading</div>
-      )}
-      <Modal visible={showModal} onClose={handleOnClose} />
+          </>
+        ) : (
+          <div>Loading</div>
+        )}
+      </div>
+      <Modal
+        visible={showModal}
+        ticket={selectedTicket}
+        onClose={handleOnClose}
+      >
+        <div>excelent</div>
+      </Modal>
     </div>
   )
 }
