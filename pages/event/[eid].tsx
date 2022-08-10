@@ -1,10 +1,5 @@
 // author: marthel
-import {
-  doc,
-  DocumentData,
-  DocumentSnapshot,
-  getDoc
-} from '@firebase/firestore'
+import { doc, getDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
@@ -13,10 +8,7 @@ import { TicketInterface } from '../../shared/interface/common'
 import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
-<<<<<<< HEAD
-=======
 import { useEvents } from '../../context/eventsContext'
->>>>>>> 5303a2c (event page ticket flow modal component and basic logic added; code clean)
 
 export default function Event() {
   // user id (this will probably be useContext)
@@ -24,6 +16,7 @@ export default function Event() {
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
+  const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
   const events = useEvents()
@@ -40,10 +33,10 @@ export default function Event() {
       setEvent(eventData)
       setFetched(true)
     }
-    if (!fetched) {
+    if (!fetched && eid) {
       fetchData()
     }
-  }, [])
+  }, [eid])
 
   const purchaseSelectedTier = () => {
     console.log(`==========Purchasing selected tier=========`)
@@ -91,13 +84,18 @@ export default function Event() {
               {TicketListData.map((ticket: TicketInterface, index) => {
                 return (
                   <button
-                    key={ticket.tokenId}
+                    key={index.toString()}
                     className="w-full"
                     onClick={() => {
                       setSelectedTicket(ticket)
+                      setSelectedIndex(index)
                     }}
                   >
-                    <TicketButton ticket={ticket} />
+                    <TicketButton
+                      key={index.toString()}
+                      selected={selectedIndex === index}
+                      ticket={ticket}
+                    />
                   </button>
                 )
               })}
@@ -124,7 +122,7 @@ export default function Event() {
                 layout="fill"
                 loading="lazy"
                 objectFit="cover"
-                className="rounded-[20px]"
+                className="rounded-[67px]"
               />
             </div>
           </div>
