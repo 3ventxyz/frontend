@@ -55,7 +55,7 @@ export default function Event() {
   const handleOnClose = () => setShowModal(false)
 
   return (
-    <div>
+    <>
       <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
         {fetched ? (
           <>
@@ -146,7 +146,7 @@ export default function Event() {
       >
         <div>excelent</div>
       </Modal>
-    </div>
+    </>
   )
 }
 
