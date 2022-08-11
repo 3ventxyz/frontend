@@ -28,17 +28,22 @@ export default function LocationInput({
 
   const handleChange = (search: string) => {
     setSearchText(search)
-    console.log('setSearchText', search)
   }
 
-  const handleSelect = (address: string) => {
+  const handleSelect = (address: string, placeID: string) => {
     console.log('handleSelect', address)
     geocodeByAddress(address)
       .then((results) => {
+        setSearchText(address)
         setAddress(results[0].formatted_address)
         return getLatLng(results[0])
       })
       .then((latLng) => {
+        setLocation({
+          lat: latLng['lat'],
+          long: latLng['lng'],
+          address: address
+        })
         return console.log('Success', latLng)
       })
       .catch((error) => console.error('Error', error))
@@ -48,11 +53,13 @@ export default function LocationInput({
     <PlacesAutocomplete
       value={searchText}
       onChange={handleChange}
-      onSelect={() => handleSelect('a')}
+      onSelect={handleSelect}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <>
-          <label htmlFor={id}>{labelText}</label>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-stretch">
+          <label className="text-left" htmlFor={id}>
+            {labelText}
+          </label>
           <input
             {...getInputProps({
               placeholder: placeholder,
@@ -66,15 +73,17 @@ export default function LocationInput({
             {suggestions.map((suggestion, index) => {
               return (
                 <div
+                  {...getSuggestionItemProps(suggestion, {
+                    className: '... w-full max-w-[350px] truncate p-2 text-left'
+                  })}
                   key={suggestion.description || index.toString()}
-                  className="... w-full max-w-[350px] truncate p-2 text-left"
                 >
                   {suggestion.description}
                 </div>
               )
             })}
           </div>
-        </>
+        </div>
       )}
     </PlacesAutocomplete>
   )
