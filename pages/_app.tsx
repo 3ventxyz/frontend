@@ -10,6 +10,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider, useAuth } from '../contexts/auth'
 import Layout from '../components/layout'
+import Script from 'next/script'
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
@@ -45,7 +46,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.svg" />
         <script
           src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`}
-          async
         ></script>
       </Head>
       <AuthProvider>

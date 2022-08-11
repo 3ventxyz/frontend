@@ -1,6 +1,7 @@
 import TextInput from '../../components/textInput'
 import LocationInput from '../../components/locationInput'
 import { useState } from 'react'
+import FileInput from '../../components/fileInput'
 
 interface LocationData {
   lat: number
@@ -9,23 +10,27 @@ interface LocationData {
 }
 
 export default function Organization() {
+  const [name, setName] = useState('')
+  const [desc, setDesc] = useState('')
   const [location, setLocation] = useState<LocationData>()
 
   return (
     <div className="flex w-full flex-col items-center space-y-4 px-4 text-center sm:px-0">
-      <h3>Create a Collective</h3>
+      <h3>Create an Organization</h3>
       <TextInput
         labelText="Name"
         id="org_name"
         placeholder="3vent"
         maxWidth={500}
         textArea={false}
+        setValue={setName}
       />
       <TextInput
         labelText="Description"
         id="org_desc"
         placeholder="What is your collective about?"
         textArea={true}
+        setValue={setDesc}
       />
       <LocationInput
         labelText="Location"
@@ -33,6 +38,7 @@ export default function Organization() {
         placeholder="Where is your collective based?"
         setLocation={setLocation}
       />
+      <FileInput />
     </div>
   )
 }
