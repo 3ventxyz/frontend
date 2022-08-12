@@ -17,7 +17,9 @@ export default function Button({
         type={type}
         disabled={!active}
         onClick={onClick}
-        className="h-[40px] w-fit items-center justify-center rounded-[6px] bg-primary px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white"
+        className={`${
+          !active ? 'bg-white text-disabled' : 'bg-black text-white'
+        } h-[40px] w-fit items-center justify-center rounded-[6px] px-[20px] py-[10px] text-[14px] font-semibold leading-[] `}
       >
         {text}
       </button>

@@ -11,7 +11,7 @@ export default function TicketButton({
     <div
       className={`${
         selected ? 'border-accent text-accent' : 'border-black text-black'
-      } flex h-[76px] w-full flex-row items-center justify-between rounded-xl border bg-white px-[20px]`}
+      } flex h-[76px] w-[320px] flex-row items-center justify-between rounded-xl border bg-white px-[20px] md:w-[373px]`}
     >
       <div className="flex flex-col items-start">
         <div className="text-[14px] font-bold">{ticket.ticketTitle}</div>

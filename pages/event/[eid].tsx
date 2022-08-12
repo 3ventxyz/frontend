@@ -9,18 +9,15 @@ import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
 import { useEvents } from '../../context/eventsContext'
+import Button from '../../components/button'
+import CreateCheckoutSession from './components/createCheckout'
 
 export default function Event() {
   // user id (this will probably be useContext)
 
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
-  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>({
-    price: '',
-    registeredUsers: '',
-    ticketTitle: '',
-    tokenId: ''
-  })
+  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
@@ -56,10 +53,10 @@ export default function Event() {
 
   return (
     <>
-      <div className="bg-secondaryBg flex flex-col px-[20px] pt-[35px] md:pt-[85px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px]">
+      <div className="flex flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px] md:pt-[85px]">
         {fetched ? (
           <>
-            <div className="flex h-full flex-col space-y-[20px] items-center md:items-start ">
+            <div className="flex h-full flex-col items-center space-y-[20px] md:items-start ">
               <div
                 id="event-details"
                 className=" w-auto space-y-[15px]   font-medium leading-[35px]  md:mb-[50px] md:space-y-[25px] md:text-[14px] md:leading-[19px]"
@@ -95,14 +92,11 @@ export default function Event() {
                     className="rounded-[20px]"
                   />
                 </div>
-                <div className='leading-[20px]'>description of the event LOREWUREHRUEW efwefewn kdj nwkllajw faewjf ewlkfnj
-                  awekfjawn fkwjnwe knewfk wnkwqjnm
-                </div>
+                <div className="leading-[20px]">description of the event</div>
               </div>
               <div
-
                 id="ticketbuilder"
-                className=" flex w-[320px] md:w-[373px] flex-col items-center space-y-[19px]"
+                className=" flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
               >
                 {TicketListData.map((ticket: TicketInterface, index) => {
                   return (
@@ -122,24 +116,18 @@ export default function Event() {
                     </button>
                   )
                 })}
-                <button
+                <Button
+                  text={'Register'}
                   onClick={() => {
                     purchaseSelectedTier()
+                    setShowModal(true)
                   }}
-                >
-                  <div
-                    onClick={() => {
-                      setShowModal(true)
-                    }}
-                    className="h-[40px]  w-[97px] rounded-xl bg-white px-[20px] py-[10px] text-[14px] font-semibold"
-                  >
-                    Register
-                  </div>
-                </button>
+                  active={selectedTicket !== undefined}
+                />
               </div>
             </div>
-            <div >
-              <div className="hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] md:block relative">
+            <div>
+              <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] md:block">
                 <Image
                   src={event ? event.imgURL : ''}
                   layout="fill"
@@ -156,11 +144,23 @@ export default function Event() {
       </div>
       <Modal
         visible={showModal}
-        ticket={selectedTicket}
         onClose={handleOnClose}
+        width="w-[700px]"
+        height="h-[600px]"
       >
-        <div>excelent</div>
+        <CreateCheckoutSession
+          selectedTicket={
+            selectedTicket || {
+              price: '',
+              registeredUsers: '',
+              ticketTitle: '',
+              tokenId: ''
+            }
+          }
+          onClose={() => setShowModal(false)}
+        />
       </Modal>
+      {/* </div> */}
     </>
   )
 }
