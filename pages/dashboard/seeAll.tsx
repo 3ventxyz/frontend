@@ -13,7 +13,6 @@ export default function SeeAll() {
   const router = useRouter()
   const events = useEvents()
   const [title, setTitle] = useState('')
-  // const [fetched, setIsFetched] = useState(false)
   const [eventsData, setEvents] = useState<Array<EventInterface>>([])
   const [mode, setMode] = useState('upcoming')
 
@@ -27,8 +26,6 @@ export default function SeeAll() {
 
   useEffect(() => {
     const setData = async () => {
-      // if(!events) return
-
       let eventData: Array<EventInterface>
       const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
 
@@ -59,16 +56,15 @@ export default function SeeAll() {
 
   return (
     <div className="flex flex-col items-center bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
-      {/* <div className="flex flex-col bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]"> */}
       <div className="mx-auto mb-[20px] flex w-full max-w-[1200px] flex-row items-center justify-between border-b border-disabled pb-2">
         <div className="flex flex-row items-center">
           <button
-            className="h-[40px]"
+            className="h-[40px] w-[40px]"
             onClick={() => {
               router.back()
             }}
           >
-            <HiChevronLeft className="h-full" />
+            <HiChevronLeft className="h-full w-full" />
           </button>
           <p className="text-[25px] font-bold md:text-[32px]">{title}</p>
         </div>

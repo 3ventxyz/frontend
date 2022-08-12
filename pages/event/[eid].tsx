@@ -56,19 +56,31 @@ export default function Event() {
 
   return (
     <>
-      <div className="bg-dashboard flex flex-row space-x-[291px] px-[210px] pt-[85px] pb-[106px]">
+      <div className="bg-secondaryBg flex flex-col px-[20px] pt-[35px] md:pt-[85px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px]">
         {fetched ? (
           <>
-            <div className="flex h-full flex-col">
+            <div className="flex h-full flex-col space-y-[20px] items-center md:items-start ">
               <div
                 id="event-details"
-                className="mb-[50px] space-y-[20px] text-[14px] font-medium leading-[19px]"
+                className=" w-auto space-y-[15px]   font-medium leading-[35px]  md:mb-[50px] md:space-y-[25px] md:text-[14px] md:leading-[19px]"
               >
                 <h3>
                   {event?.eventTitle !== null
                     ? event?.eventTitle
                     : 'Event Title'}
                 </h3>
+                <div
+                  id="mobile-event-image"
+                  className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] md:hidden"
+                >
+                  <Image
+                    src={event ? event.imgURL : ''}
+                    layout="fill"
+                    loading="lazy"
+                    objectFit="cover"
+                    className="rounded-[67px]"
+                  />
+                </div>
                 <div>
                   {event?.date} <br />
                   {event?.address}
@@ -83,11 +95,14 @@ export default function Event() {
                     className="rounded-[20px]"
                   />
                 </div>
-                <div>description of the event</div>
+                <div className='leading-[20px]'>description of the event LOREWUREHRUEW efwefewn kdj nwkllajw faewjf ewlkfnj
+                  awekfjawn fkwjnwe knewfk wnkwqjnm
+                </div>
               </div>
               <div
+
                 id="ticketbuilder"
-                className="flex w-[373px] flex-col items-center space-y-[19px]"
+                className=" flex w-[320px] md:w-[373px] flex-col items-center space-y-[19px]"
               >
                 {TicketListData.map((ticket: TicketInterface, index) => {
                   return (
@@ -123,8 +138,8 @@ export default function Event() {
                 </button>
               </div>
             </div>
-            <div className="h-full">
-              <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px]">
+            <div >
+              <div className="hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] md:block relative">
                 <Image
                   src={event ? event.imgURL : ''}
                   layout="fill"
