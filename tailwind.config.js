@@ -19,7 +19,11 @@ module.exports = {
         linkText: '#0043FF',
         linkDisabled: '#4B5563',
         accent: '#6600CC',
-        disabled: '#C5C5C5'
+        disabled: '#C5C5C5',
+        // find a way to describe better these colors
+        inputUnselected: '#E0E0E0',
+        inputSelected: '#0570DE',
+        placeholderUnselected: '#A5ACB8',
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
