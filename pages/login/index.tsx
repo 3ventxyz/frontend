@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/auth'
 import { useRouter } from 'next/router'
 import Button from '../../components/button'
 import Link from 'next/link'
+import AuthInput from '../../components/inputs/authInput'
 
 export default function Login() {
   const emailRef = React.createRef<HTMLInputElement>()
@@ -32,28 +33,30 @@ export default function Login() {
   }
 
   return (
-    <div className="p-auto flex flex-grow items-center justify-center bg-secondaryBg">
+    <div className="p-auto flex flex-grow flex-col items-center justify-center bg-secondaryBg">
+      <h3 className="text-[32px]">Welcome Back!</h3>
+      <p className="p2 w-[240px] text-center text-primary">
+        Login to your account to get this party started 🎉
+      </p>
       <form action="" onSubmit={handleSubmit}>
         {/* email input */}
-        <div className="mb-6">
-          <input
-            type="text"
-            className="text-primaryDark focus:text-secondaryDark bg-surfaceDark border-backgroundDark focus:border-tertiaryDark form-control m-0 block w-full rounded border border-solid bg-clip-padding py-2 px-4 text-xl font-normal transition ease-in-out focus:outline-none"
-            placeholder="Email address"
-            ref={emailRef}
-            required
-          />
-        </div>
+        <AuthInput
+          id="email"
+          type="email"
+          labelText="Email"
+          inputRef={emailRef}
+          placeholder="Ex: abc@example.com"
+          icon="assets/auth/atSign.svg"
+        />
         {/* password input */}
-        <div className="mb-6">
-          <input
-            type="password"
-            className="text-primaryDark focus:text-secondaryDark bg-surfaceDark border-backgroundDark focus:border-tertiaryDark form-control m-0 block w-full rounded border border-solid bg-clip-padding py-2 px-4 text-xl font-normal transition ease-in-out focus:outline-none"
-            placeholder="Password"
-            ref={passwordRef}
-            required
-          />
-        </div>
+        <AuthInput
+          id="password"
+          type="password"
+          labelText="Your Password"
+          inputRef={passwordRef}
+          placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+          icon="assets/auth/lock.svg"
+        />
         <div className="mb-6 flex items-center justify-between">
           <a
             href="#!"
