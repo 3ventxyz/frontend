@@ -3,16 +3,19 @@ export default function Button({
   onClick,
   active,
   type = 'button',
-  isExpanded = false
+  isExpanded = false,
+  id = ''
 }: {
   text: string
   onClick: () => void
   active: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
   isExpanded?: boolean
+  id?: string
 }) {
   return (
     <button
+      id={id}
       type={type}
       disabled={!active}
       onClick={onClick}
