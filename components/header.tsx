@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useAuth } from '../contexts/auth'
 
 export default function Header() {
   const headerTextButtonStyle =
@@ -12,6 +13,7 @@ export default function Header() {
     'cursor-pointer hidden md:block text-[14px] font-semibold text-primary underline-offset-4 underline'
   const { asPath } = useRouter()
   const [path, setPath] = useState('')
+  const auth = useAuth()
 
   // determines which path or sub element we are focused on
   useEffect(() => {
@@ -71,8 +73,16 @@ export default function Header() {
           </p>
         </Link>
       </div>
-      {path === '/mint' ? (
-        <ConnectButton />
+      {auth.currentUser ? (
+        <div className="flex flex-row gap-x-2">
+          <ConnectButton />
+          <img
+            alt="avatar"
+            src="/assets/auth/avatar.svg"
+            width="36"
+            onClick={async () => await auth.logout()}
+          />
+        </div>
       ) : (
         // <Button
         //   active={true}

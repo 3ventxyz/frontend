@@ -4,7 +4,9 @@ import {
   signOut,
   onAuthStateChanged,
   User,
-  UserCredential
+  UserCredential,
+  GoogleAuthProvider,
+  signInWithPopup
 } from '@firebase/auth'
 
 import React, {
@@ -28,6 +30,7 @@ interface UserCredentials {
 
 interface AuthInterface {
   currentUser?: User | null
+  signInWithGoogle: () => Promise<UserCredential> | void
   register: ({
     email,
     password
@@ -42,12 +45,20 @@ interface AuthInterface {
 const AuthContext = createContext<AuthInterface>({
   register: () => undefined,
   login: () => undefined,
-  logout: () => undefined
+  logout: () => undefined,
+  signInWithGoogle: () => undefined
 })
 
 const AuthProvider = ({ children }: Props): JSX.Element => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+
+  const provider = new GoogleAuthProvider()
+  provider.setCustomParameters({ prompt: 'select_account' })
+
+  const signInWithGoogle = () => {
+    return signInWithPopup(auth, provider)
+  }
 
   const register = ({
     email: email = '',
@@ -79,6 +90,7 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
     <AuthContext.Provider
       value={{
         currentUser: currentUser,
+        signInWithGoogle: signInWithGoogle,
         register: register,
         login: login,
         logout: logout

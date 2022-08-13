@@ -5,10 +5,12 @@ import Button from '../../components/button'
 import Link from 'next/link'
 import AuthInput from '../../components/inputs/authInput'
 import ButtonOutlined from '../../components/buttonOutlined'
+import ErrorAlert from '../../components/alerts/errorAlert'
 
 export default function Register() {
   const emailRef = React.createRef<HTMLInputElement>()
   const passwordRef = React.createRef<HTMLInputElement>()
+  const passwordConfirmRef = React.createRef<HTMLInputElement>()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -16,27 +18,46 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (passwordRef.current?.value !== passwordConfirmRef.current?.value) {
+      return setError('Passwords do not match')
+    }
 
     try {
       setError('')
       setLoading(true)
-      await auth.login({
+
+      await auth.register({
         email: emailRef.current?.value,
         password: passwordRef.current?.value
       })
-      console.log('log in success')
-      router.push('/mint')
+      console.log('register success')
+      router.push('/register/verify')
     } catch {
-      setError('Failed to log in')
-      console.log('log in error')
+      setError('Failed to register')
+      console.log('register error')
+    }
+    setLoading(false)
+  }
+
+  const handleGoogleLogin = async () => {
+    try {
+      setError('')
+      setLoading(true)
+
+      await auth.signInWithGoogle()
+      console.log('register success')
+      router.push('/register/verify')
+    } catch {
+      setError('Failed to register')
+      console.log('google register error')
     }
     setLoading(false)
   }
 
   return (
     <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
-      <div className="p-auto flex min-w-[343px] flex-col items-center gap-y-6">
-        <div>
+      <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
+        <div className="flex w-full flex-col items-center">
           <h3 className="mb-2 w-full text-center text-[32px]">
             Join the Party!🎉
           </h3>
@@ -44,6 +65,13 @@ export default function Register() {
             Create an account to get started.
           </p>
         </div>
+        {error && (
+          <ErrorAlert
+            title="Holy Smokes!"
+            description={error}
+            onClose={() => setError('')}
+          />
+        )}
         <form
           action=""
           onSubmit={handleSubmit}
@@ -66,8 +94,15 @@ export default function Register() {
             inputRef={passwordRef}
             placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
             icon="assets/auth/lock.svg"
-            bottomText="Forgot Password?"
-            bottomRedirect="/recover"
+          />
+          {/* password confirmation */}
+          <AuthInput
+            id="password-confirm"
+            type="password"
+            labelText="Password Confirmation"
+            inputRef={passwordConfirmRef}
+            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+            icon="assets/auth/lock.svg"
           />
           <Button
             text="Sign Up"
@@ -80,7 +115,7 @@ export default function Register() {
           <ButtonOutlined
             text="Continue with Google"
             active={!loading}
-            onClick={() => null}
+            onClick={handleGoogleLogin}
             isExpanded={true}
             icon="assets/auth/google.svg"
           />
