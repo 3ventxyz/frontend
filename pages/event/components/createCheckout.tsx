@@ -1,3 +1,4 @@
+// author: marthel
 import { useState } from 'react'
 import Button from '../../../components/button'
 import Spinner from '../../../components/spinner'
@@ -7,10 +8,12 @@ import TextInput from '../../../components/textInput'
 
 export default function CreateCheckoutSessionModal({
   selectedTicket,
-  onClose
+  onClose,
+  confirmSelectedTicketPurchase
 }: {
   selectedTicket: TicketInterface
   onClose: () => void
+  confirmSelectedTicketPurchase: () => void
 }) {
   const [checkoutPage, setcheckoutPage] = useState(0)
   const nextCheckoutPage = () => {
@@ -26,6 +29,7 @@ export default function CreateCheckoutSessionModal({
       case 3:
         return <DisplayStatus onClick={nextCheckoutPage} />
       case 4:
+        confirmSelectedTicketPurchase()
         onClose()
       default:
         return (

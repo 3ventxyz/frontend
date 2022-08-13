@@ -20,6 +20,7 @@ export default function Event() {
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
+  const [ticketPurchased, setTicketPurchased] = useState(false)
   const router = useRouter()
   const events = useEvents()
 
@@ -40,13 +41,8 @@ export default function Event() {
     }
   }, [eid])
 
-  const purchaseSelectedTier = () => {
-    console.log(`==========Purchasing selected tier=========`)
-    console.log(`ticketTitle: ${selectedTicket?.ticketTitle}`)
-    console.log(`registeredUsers: ${selectedTicket?.registeredUsers}`)
-    console.log(`tokenId: ${selectedTicket?.tokenId}`)
-    console.log(`price: ${selectedTicket?.price}`)
-    console.log(`=========`)
+  const confirmSelectedTicketPurchase = () => {
+    setTicketPurchased(true)
   }
 
   const handleOnClose = () => setShowModal(false)
@@ -56,7 +52,7 @@ export default function Event() {
       <div className="flex flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px] md:pt-[85px]">
         {fetched ? (
           <>
-            <div className="flex h-full flex-col items-center space-y-[20px] md:items-start ">
+            <div className="flex h-full flex-col items-center  md:items-start ">
               <div
                 id="event-details"
                 className=" w-auto space-y-[15px]   font-medium leading-[35px]  md:mb-[50px] md:space-y-[25px] md:text-[14px] md:leading-[19px]"
@@ -94,37 +90,33 @@ export default function Event() {
                 </div>
                 <div className="leading-[20px]">description of the event</div>
               </div>
-              <div
-                id="ticketbuilder"
-                className=" flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
-              >
-                {TicketListData.map((ticket: TicketInterface, index) => {
-                  return (
-                    <button
-                      key={index.toString()}
-                      className="w-full"
-                      onClick={() => {
-                        setSelectedTicket(ticket)
-                        setSelectedIndex(index)
-                      }}
-                    >
-                      <TicketButton
-                        key={index.toString()}
-                        selected={selectedIndex === index}
-                        ticket={ticket}
-                      />
-                    </button>
-                  )
-                })}
-                <Button
-                  text={'Register'}
-                  onClick={() => {
-                    purchaseSelectedTier()
-                    setShowModal(true)
-                  }}
-                  active={selectedTicket !== undefined}
+              {!ticketPurchased ? (
+                <SelectAndPurchaseTicket
+                  selectedIndex={selectedIndex || 0}
+                  setSelectedIndex={setSelectedIndex}
+                  selectedTicket={
+                    selectedTicket || {
+                      price: '',
+                      registeredUsers: '',
+                      ticketTitle: '',
+                      tokenId: ''
+                    }
+                  }
+                  setSelectedTicket={setSelectedTicket}
+                  setShowModal={setShowModal}
                 />
-              </div>
+              ) : (
+                <PurchasedTicketConfirmation
+                  selectedTicket={
+                    selectedTicket || {
+                      price: '',
+                      registeredUsers: '',
+                      ticketTitle: '',
+                      tokenId: ''
+                    }
+                  }
+                />
+              )}
             </div>
             <div>
               <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] md:block">
@@ -158,10 +150,89 @@ export default function Event() {
             }
           }
           onClose={() => setShowModal(false)}
+          confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
         />
       </Modal>
-      {/* </div> */}
     </>
+  )
+}
+
+function SelectAndPurchaseTicket({
+  selectedIndex,
+  setSelectedIndex,
+  selectedTicket,
+  setSelectedTicket,
+  setShowModal
+}: {
+  selectedIndex: number
+  setSelectedIndex: (index: number) => void
+  selectedTicket: TicketInterface
+  setSelectedTicket: (ticket: TicketInterface) => void
+  setShowModal: (toggle: boolean) => void
+}) {
+  return (
+    <div
+      id="ticketbuilder"
+      className=" flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
+    >
+      {TicketListData.map((ticket: TicketInterface, index) => {
+        return (
+          <button
+            key={index.toString()}
+            className="w-full"
+            onClick={() => {
+              setSelectedTicket(ticket)
+              setSelectedIndex(index)
+            }}
+          >
+            <TicketButton
+              key={index.toString()}
+              selected={selectedIndex === index}
+              ticket={ticket}
+            />
+          </button>
+        )
+      })}
+      <Button
+        text={'Register'}
+        onClick={() => {
+          setShowModal(true)
+        }}
+        active={selectedTicket !== undefined}
+      />
+    </div>
+  )
+}
+
+function PurchasedTicketConfirmation({
+  selectedTicket
+}: {
+  selectedTicket: TicketInterface
+}) {
+  return (
+    <div className="flex flex-col space-y-[26px]">
+      <TicketButton selected={true} ticket={selectedTicket} />
+      <div className="space-y-[13px]">
+        <div className="text-[14px] font-bold">
+          add your ticket to your apple wallet
+        </div>
+        <div className="relative h-[34px] w-[114px] rounded-xl bg-black text-white">
+          apple wallet
+          <Image
+            src={'/assets/featureIcons/apple-wallet.svg'}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-xl"
+          />
+        </div>
+      </div>
+      <div className="space-y-[13px]">
+        <div className="text-[14px] font-bold">
+          Present this QR code to enter your event
+        </div>
+        <div className="h-[242px] w-[242px] bg-slate-300"> QR CODE IMAGE</div>
+      </div>
+    </div>
   )
 }
 
