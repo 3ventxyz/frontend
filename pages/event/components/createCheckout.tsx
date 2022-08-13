@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Button from '../../../components/button'
+import Spinner from '../../../components/spinner'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
-import TextInput from './textInput'
+import TextInput from '../../../components/textInput'
 
 export default function CreateCheckoutSessionModal({
   selectedTicket,
@@ -149,12 +150,7 @@ function DisplayIsLoading({ onClick }: { onClick: () => void }) {
   return (
     <div className="h-full ">
       <div className="flex h-[300px]  items-center justify-center">
-        <div
-          className="h-[100px] w-[100px] animate-spin rounded-full border-4 border-solid border-blue-400 border-t-white/[.00]"
-          role="status"
-        >
-          <span className="hidden">Loading...</span>
-        </div>
+        <Spinner />
       </div>
       <div>
         <Button
