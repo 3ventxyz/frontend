@@ -30,7 +30,8 @@ export default function AuthInput({
       <label htmlFor={id}>{labelText}</label>
       <div className="relative w-full">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5">
-          {icon && <img alt={iconAlt} src={icon} width="20" />}
+          {/* {icon && <img alt={iconAlt} src={icon} width="20" />} */}
+          {icon}
         </div>
         <input
           type={type}

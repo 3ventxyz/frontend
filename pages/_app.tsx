@@ -9,7 +9,6 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider, useAuth } from '../contexts/auth'
-import Layout from '../components/layout'
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
