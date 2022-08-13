@@ -35,8 +35,8 @@ export default function Login() {
 
   return (
     <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
-      <div className="p-auto flex min-w-[343px] flex-col items-center gap-y-6">
-        <div>
+      <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
+        <div className="flex w-full flex-col items-center">
           <h3 className="mb-2 w-full text-center text-[32px]">Welcome Back!</h3>
           <p className="p2 max-w-[240px] text-center text-primary">
             Login to your account to get this party started 🎉

@@ -36,7 +36,9 @@ export default function AuthInput({
           type={type}
           id={id}
           ref={inputRef}
-          className={`block h-[56px] w-full rounded-[16px] border border-black bg-transparent p-2.5 pr-[20px] pl-[56px] text-[16px] text-gray-700 ${
+          className={`block h-[56px] w-full rounded-[16px] border border-black bg-transparent p-2.5 pr-[20px] ${
+            icon ? 'pl-14' : 'pl-4'
+          } text-[16px] text-gray-700 ${
             type === 'password'
               ? 'placeholder:text-[8px]'
               : 'placeholder:italic'
