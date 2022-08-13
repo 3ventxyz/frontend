@@ -3,17 +3,10 @@ import { useRouter } from 'next/router'
 // import { useAuth } from '../../contexts/auth'
 import Button from '../../components/button'
 import AuthInput from '../../components/inputs/authInput'
-import ButtonOutlined from '../../components/buttonOutlined'
-import {
-  getAuth,
-  signInWithPhoneNumber,
-  RecaptchaVerifier
-} from '@firebase/auth'
+import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { auth, db } from '../../services/firebase_config'
-import Link from 'next/link'
 import ReactCodeInput from 'react-code-input'
-// import PhoneInput from 'react-phone-number-input/input'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
@@ -23,12 +16,13 @@ export default function Login() {
   const [confirmation, setConfirmation] = useState(() => (code: string) => {
     console.log(code)
   })
-  const appVerifier = (window as any).recaptchaVerifier
+  const [token, setToken] = useState('')
 
   const phoneRef = React.createRef<HTMLInputElement>()
   const [error, setError] = useState('')
   const router = useRouter()
 
+  //   const appVerifier = (window as any).recaptchaVerifier
   useEffect(() => {
     ;(window as any).recaptchaVerifier = new RecaptchaVerifier(
       'recaptcha-container',
@@ -38,23 +32,29 @@ export default function Login() {
   }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    console.log('attempt submit')
     e.preventDefault()
 
     const phoneNumber = phoneRef.current?.value || ''
     console.log('phoneNumber', phoneNumber)
 
+    const appVerifier = (window as any).recaptchaVerifier
+
     try {
       setError('')
       setLoading(true)
+
       if (phoneNumber === '' || phoneNumber.length < 10) return
-      //   const auth = getAuth()
       signInWithPhoneNumber(auth, phoneNumber, appVerifier)
         .then((confirmationResult) => {
+          // ROUTES USER TO CONFIRMATION UI
+          // SETS UP CALLBACK FOR CONFIRMATION CODE
           setShowConfirmation(true)
           setConfirmation(() => (code: string) => {
             confirmationResult
               .confirm(code)
               .then(async (result) => {
+                // FIREBASE AND GLOBAL STATE
                 // check for user existance in db
                 const userRef = doc(db, 'users', result.user.uid)
                 const docSnap = await getDoc(userRef)
@@ -68,6 +68,8 @@ export default function Login() {
                 }
                 // store user record in global state
                 // setUser(result.user.uid)
+                // ROUTE USER TO NEXT SCREEN
+                // router.push('/mint')
               })
               .catch((error) => {
                 console.log('error', error)
@@ -82,8 +84,6 @@ export default function Login() {
           console.log(error)
           setLoading(false)
         })
-      console.log('log in success')
-      //   router.push('/mint')
     } catch {
       setError('Failed to log in')
       console.log('log in error')
@@ -96,11 +96,12 @@ export default function Login() {
       {!showConfirmation ? (
         <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
           <div className="flex w-full flex-col items-center">
-            <h3 className="mb-2 w-full text-center text-[32px]">
-              Welcome Back!
-            </h3>
-            <p className="p2 max-w-[240px] text-center text-primary">
-              Login to your account to get this party started 🎉
+            <h3 className="mb-2 w-full text-center text-[32px]">Woohoo!</h3>
+            <p
+              id="recaptcha-container"
+              className="p2 max-w-[240px] text-center text-primary"
+            >
+              Enter your number to get this party started 🎉
             </p>
           </div>
           <form
@@ -115,15 +116,18 @@ export default function Login() {
               labelText="Phone Number"
               inputRef={phoneRef}
               placeholder="(555)-123-4567"
-              icon="assets/auth/atSign.svg"
+              //   icon="assets/auth/atSign.svg"
+              icon={`📱`}
             />
             <Button
-              id="recaptcha-container"
-              text="Login"
+              text="Submit"
               active={!loading}
-              onClick={() => null}
+              onClick={() => {
+                console.log('submit')
+              }}
               type="submit"
               isExpanded={true}
+              auth={true}
             />
           </form>
         </div>
@@ -131,10 +135,10 @@ export default function Login() {
         <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
           <div className="flex w-full flex-col items-center">
             <h3 className="mb-2 w-full text-center text-[32px]">
-              CONFIRMATION HEADER
+              Confirmation
             </h3>
             <p className="p2 max-w-[240px] text-center text-primary">
-              CONFIRMATION COPY
+              Enter the 6 digit code we just texted you!
             </p>
           </div>
           <div className="flex flex-col items-center space-y-4">
@@ -160,7 +164,7 @@ export default function Login() {
             <Button
               onClick={() => confirmation(confirmationCode)}
               active={!(confirmationCode.length !== 6)}
-              text="INPUT CONFIRMATION CODE"
+              text="Confirm"
             />
           </div>
         </div>

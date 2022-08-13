@@ -4,7 +4,8 @@ export default function Button({
   active,
   type = 'button',
   isExpanded = false,
-  id = ''
+  id = '',
+  auth = false
 }: {
   text: string
   onClick: () => void
@@ -12,10 +13,25 @@ export default function Button({
   type?: 'button' | 'submit' | 'reset' | undefined
   isExpanded?: boolean
   id?: string
+  auth?: boolean
 }) {
+  if (auth) {
+    return (
+      <button
+        id={id}
+        type={type}
+        disabled={!active}
+        onClick={onClick}
+        className={`h-[56px] items-center justify-center rounded-[16px] bg-primary px-[20px] py-[10px] text-[16px] font-bold leading-[] text-white ${
+          isExpanded ? 'w-full' : 'w-fit'
+        }`}
+      >
+        {text}
+      </button>
+    )
+  }
   return (
     <button
-      id={id}
       type={type}
       disabled={!active}
       onClick={onClick}
