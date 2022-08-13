@@ -6,7 +6,7 @@ import Link from 'next/link'
 import AuthInput from '../../components/inputs/authInput'
 import ButtonOutlined from '../../components/buttonOutlined'
 
-export default function Login() {
+export default function Register() {
   const emailRef = React.createRef<HTMLInputElement>()
   const passwordRef = React.createRef<HTMLInputElement>()
   const [error, setError] = useState('')
@@ -37,9 +37,11 @@ export default function Login() {
     <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
       <div className="p-auto flex min-w-[343px] flex-col items-center gap-y-6">
         <div>
-          <h3 className="mb-2 w-full text-center text-[32px]">Welcome Back!</h3>
-          <p className="p2 max-w-[240px] text-center text-primary">
-            Login to your account to get this party started 🎉
+          <h3 className="mb-2 w-full text-center text-[32px]">
+            Join the Party!🎉
+          </h3>
+          <p className="p2 text-center text-primary">
+            Create an account to get started.
           </p>
         </div>
         <form
@@ -68,7 +70,7 @@ export default function Login() {
             bottomRedirect="/recover"
           />
           <Button
-            text="Login"
+            text="Sign Up"
             active={!loading}
             onClick={() => null}
             type="submit"
@@ -84,9 +86,9 @@ export default function Login() {
           />
         </form>
         <p className="p2 mx-4 mb-0 text-center text-primary">
-          Don&apos;t have an account?
+          Already have an account?
           <span className="ml-[6px] cursor-pointer text-linkText underline">
-            <Link href="/register">Register</Link>
+            <Link href="/login">Login</Link>
           </span>
         </p>
       </div>
