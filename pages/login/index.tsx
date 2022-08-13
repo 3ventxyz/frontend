@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Button from '../../components/button'
 import Link from 'next/link'
 import AuthInput from '../../components/inputs/authInput'
+import ButtonOutlined from '../../components/buttonOutlined'
 
 export default function Login() {
   const emailRef = React.createRef<HTMLInputElement>()
@@ -33,53 +34,62 @@ export default function Login() {
   }
 
   return (
-    <div className="p-auto flex flex-grow flex-col items-center justify-center bg-secondaryBg">
-      <h3 className="text-[32px]">Welcome Back!</h3>
-      <p className="p2 w-[240px] text-center text-primary">
-        Login to your account to get this party started 🎉
-      </p>
-      <form action="" onSubmit={handleSubmit}>
-        {/* email input */}
-        <AuthInput
-          id="email"
-          type="email"
-          labelText="Email"
-          inputRef={emailRef}
-          placeholder="Ex: abc@example.com"
-          icon="assets/auth/atSign.svg"
-        />
-        {/* password input */}
-        <AuthInput
-          id="password"
-          type="password"
-          labelText="Your Password"
-          inputRef={passwordRef}
-          placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-          icon="assets/auth/lock.svg"
-        />
-        <div className="mb-6 flex items-center justify-between">
-          <a
-            href="#!"
-            className="text-secondaryDark hover:text-tertiaryDark focus:text-primaryDark active:text-primaryDark transition duration-200 ease-in-out"
-          >
-            Forgot password?
-          </a>
-        </div>
-        <Button
-          text="LOGIN"
-          active={!loading}
-          onClick={() => null}
-          type="submit"
-        />
-        <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-gray-300 after:mt-0.5 after:flex-1 after:border-t after:border-gray-300">
-          <p className="text-primaryDark mx-4 mb-0 text-center font-semibold">
-            Don&apos;t have an account?
+    <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
+      <div className="p-auto flex min-w-[343px] flex-col items-center gap-y-6">
+        <div>
+          <h3 className="mb-2 w-full text-center text-[32px]">Welcome Back!</h3>
+          <p className="p2 max-w-[240px] text-center text-primary">
+            Login to your account to get this party started 🎉
           </p>
         </div>
-        <Link href="/register">
-          <a>Register</a>
-        </Link>
-      </form>
+        <form
+          action=""
+          onSubmit={handleSubmit}
+          className="flex w-full flex-col gap-y-6"
+        >
+          {/* email input */}
+          <AuthInput
+            id="email"
+            type="email"
+            labelText="Email"
+            inputRef={emailRef}
+            placeholder="Ex: abc@example.com"
+            icon="assets/auth/atSign.svg"
+          />
+          {/* password input */}
+          <AuthInput
+            id="password"
+            type="password"
+            labelText="Your Password"
+            inputRef={passwordRef}
+            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+            icon="assets/auth/lock.svg"
+            bottomText="Forgot Password?"
+            bottomRedirect="/recover"
+          />
+          <Button
+            text="Login"
+            active={!loading}
+            onClick={() => null}
+            type="submit"
+            isExpanded={true}
+          />
+          <div className="border-[1px] border-t border-primary"></div>
+          <ButtonOutlined
+            text="Continue with Google"
+            active={!loading}
+            onClick={() => null}
+            isExpanded={true}
+            icon="assets/auth/google.svg"
+          />
+        </form>
+        <p className="p2 mx-4 mb-0 text-center text-primary">
+          Don&apos;t have an account?
+          <span className="ml-[6px] cursor-pointer text-linkText underline">
+            <a href="/register">Register</a>
+          </span>
+        </p>
+      </div>
     </div>
   )
 }
