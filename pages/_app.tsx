@@ -1,8 +1,7 @@
 import '../styles/globals.css'
 import Head from 'next/head'
-import Header from '../components/header'
-import Footer from '../components/footer'
 import { AppProps } from 'next/app'
+import Layout from '../components/layout'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,11 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.svg" />
       </Head>
-      <Header />
-      <div className="pt-[78px]">
+      <Layout>
         <Component {...pageProps} />
-      </div>
-      <Footer />
+      </Layout>
     </div>
   )
 }
