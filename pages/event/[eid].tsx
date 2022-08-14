@@ -49,13 +49,13 @@ export default function Event() {
 
   return (
     <>
-      <div className="flex w-screen flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px] md:pt-[85px]">
+      <div className="flex w-screen flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:space-x-[291px] md:pb-[106px] md:pt-[85px]">
         {fetched ? (
           <>
-            <div className="flex h-full flex-col items-center  md:items-start ">
+            <div className="flex h-full flex-col items-center lg:items-start ">
               <div
                 id="event-details"
-                className=" w-auto space-y-[15px]   font-medium leading-[35px]  md:mb-[50px] md:space-y-[25px] md:text-[14px] md:leading-[19px]"
+                className="mb-[50px] w-auto  space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
               >
                 <h3>
                   {event?.eventTitle !== null
@@ -64,7 +64,7 @@ export default function Event() {
                 </h3>
                 <div
                   id="mobile-event-image"
-                  className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] md:hidden"
+                  className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] lg:hidden"
                 >
                   <Image
                     src={event ? event.imgURL : ''}
@@ -74,7 +74,7 @@ export default function Event() {
                     className="rounded-[67px]"
                   />
                 </div>
-                <div>
+                <div className="leading-[25px]">
                   {event?.date} <br />
                   {event?.address}
                 </div>
@@ -103,7 +103,7 @@ export default function Event() {
               )}
             </div>
             <div>
-              <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] md:block">
+              <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] lg:block">
                 <Image
                   src={event ? event.imgURL : ''}
                   layout="fill"
@@ -150,7 +150,7 @@ function SelectAndPurchaseTicket({
   return (
     <div
       id="ticketbuilder"
-      className=" flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
+      className="flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
     >
       {TicketListData.map((ticket: TicketInterface, index) => {
         return (
