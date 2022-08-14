@@ -17,9 +17,7 @@ export default function Event() {
 
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
-  const [selectedTicket, setSelectedTicket] = useState<
-    TicketInterface | undefined
-  >()
+  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const [ticketPurchased, setTicketPurchased] = useState(false)
