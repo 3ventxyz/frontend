@@ -11,7 +11,7 @@ export default function CreateCheckoutSessionModal({
   onClose,
   confirmSelectedTicketPurchase
 }: {
-  selectedTicket: TicketInterface
+  selectedTicket: TicketInterface | undefined
   onClose: () => void
   confirmSelectedTicketPurchase: () => void
 }) {

@@ -17,7 +17,9 @@ export default function Event() {
 
   const [fetched, setFetched] = useState(false)
   const [event, setEvent] = useState<EventInterface>()
-  const [selectedTicket, setSelectedTicket] = useState<TicketInterface>()
+  const [selectedTicket, setSelectedTicket] = useState<
+    TicketInterface | undefined
+  >()
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const [ticketPurchased, setTicketPurchased] = useState(false)
@@ -92,30 +94,14 @@ export default function Event() {
               </div>
               {!ticketPurchased ? (
                 <SelectAndPurchaseTicket
-                  selectedIndex={selectedIndex || 0}
+                  selectedIndex={selectedIndex}
                   setSelectedIndex={setSelectedIndex}
-                  selectedTicket={
-                    selectedTicket || {
-                      price: '',
-                      registeredUsers: '',
-                      ticketTitle: '',
-                      tokenId: ''
-                    }
-                  }
+                  selectedTicket={selectedTicket}
                   setSelectedTicket={setSelectedTicket}
                   setShowModal={setShowModal}
                 />
               ) : (
-                <PurchasedTicketConfirmation
-                  selectedTicket={
-                    selectedTicket || {
-                      price: '',
-                      registeredUsers: '',
-                      ticketTitle: '',
-                      tokenId: ''
-                    }
-                  }
-                />
+                <PurchasedTicketConfirmation selectedTicket={selectedTicket} />
               )}
             </div>
             <div>
@@ -141,14 +127,7 @@ export default function Event() {
         height="h-[600px]"
       >
         <CreateCheckoutSession
-          selectedTicket={
-            selectedTicket || {
-              price: '',
-              registeredUsers: '',
-              ticketTitle: '',
-              tokenId: ''
-            }
-          }
+          selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
         />
@@ -164,9 +143,9 @@ function SelectAndPurchaseTicket({
   setSelectedTicket,
   setShowModal
 }: {
-  selectedIndex: number
+  selectedIndex: number | undefined
   setSelectedIndex: (index: number) => void
-  selectedTicket: TicketInterface
+  selectedTicket: TicketInterface | undefined
   setSelectedTicket: (ticket: TicketInterface) => void
   setShowModal: (toggle: boolean) => void
 }) {
@@ -207,22 +186,31 @@ function SelectAndPurchaseTicket({
 function PurchasedTicketConfirmation({
   selectedTicket
 }: {
-  selectedTicket: TicketInterface
+  selectedTicket: TicketInterface | undefined
 }) {
   return (
     <div className="flex flex-col space-y-[26px]">
-      <TicketButton selected={true} ticket={selectedTicket} />
+      <TicketButton
+        selected={true}
+        ticket={
+          selectedTicket || {
+            ticketTitle: '',
+            registeredUsers: '',
+            tokenId: '',
+            price: ''
+          }
+        }
+      />
       <div className="space-y-[13px]">
         <div className="text-[14px] font-bold">
           add your ticket to your apple wallet
         </div>
-        <div className="relative h-[34px] w-[114px] rounded-xl bg-black text-white">
+        <div className="relative h-[34px] w-[114px]">
           apple wallet
           <Image
             src={'/assets/featureIcons/apple-wallet.svg'}
             layout="fill"
             objectFit="cover"
-            className="rounded-xl"
           />
         </div>
       </div>
@@ -230,7 +218,9 @@ function PurchasedTicketConfirmation({
         <div className="text-[14px] font-bold">
           Present this QR code to enter your event
         </div>
-        <div className="h-[242px] w-[242px] bg-slate-300"> QR CODE IMAGE</div>
+        <div className="relative h-[242px] w-[242px]">
+          <Image src={'/assets/qr-code.png'} layout="fill" objectFit="cover" />
+        </div>
       </div>
     </div>
   )
