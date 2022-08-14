@@ -55,7 +55,7 @@ export default function SeeAll() {
   }, [mode])
 
   return (
-    <div className="flex flex-col items-center bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
+    <div className="flex flex-col w-screen items-center bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
       <div className="mx-auto mb-[20px] flex w-full max-w-[1200px] flex-row items-center justify-between border-b border-disabled pb-2">
         <div className="flex flex-row items-center">
           <button
