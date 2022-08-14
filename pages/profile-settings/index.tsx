@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { VerifyDiscord, VerifyTwitter } from '../../services/verify_profile'
+import { verifyDiscord, verifyTwitter } from '../../services/verify_profile'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import absoluteUrl from 'next-absolute-url'
+
+const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
 export default function Verify() {
   const { asPath } = useRouter()
@@ -28,9 +30,9 @@ export default function Verify() {
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
-        if (docSnap.data().discordVerified === false) {
+        if (docSnap.data().discord_verified === false) {
           if (hash !== '' && !asPath.includes('state')) {
-            const response = await VerifyDiscord(hash, uid)
+            const response = await verifyDiscord(hash, uid)
             if (response === true) {
               setDiscordVerified(true)
             }
@@ -38,9 +40,9 @@ export default function Verify() {
         } else {
           setDiscordVerified(true)
         }
-        if (docSnap.data().twitterVerified === false) {
+        if (docSnap.data().twitter_verified === false) {
           if (hash !== '' && asPath.includes('state')) {
-            const response = await VerifyTwitter(hash, uid)
+            const response = await verifyTwitter(hash, uid)
             if (response === true) {
               setTwitterVerified(true)
             }
@@ -62,10 +64,6 @@ export default function Verify() {
     setUrl(`${origin}${router.pathname}`)
   }, [])
 
-  useEffect(() => {
-    console.log(url)
-  }, [url])
-
   return (
     <div className="mx-auto flex w-[160px] flex-col space-y-1 text-center">
       {discordVerified ? (
@@ -86,7 +84,7 @@ export default function Verify() {
         </p>
       ) : (
         <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=MVlFOFhNVHM0UGtJYUtkbnVkMlE6MTpjaQ&redirect_uri=${url}&scope=tweet.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
           Twitter
