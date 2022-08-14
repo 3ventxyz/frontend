@@ -4,7 +4,6 @@ import { VerifyDiscord, VerifyTwitter } from '../../services/verify_profile'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import absoluteUrl from 'next-absolute-url'
-import { getRedirectResult } from '@firebase/auth'
 
 export default function Verify() {
   const { asPath } = useRouter()
@@ -68,35 +67,31 @@ export default function Verify() {
   }, [url])
 
   return (
-    <div className="px-12 md:px-32">
-      <div className="py-2">
-        {discordVerified ? (
-          <p className="h-[40px] w-full items-center justify-center rounded-[6px] border border-[#5865f2] bg-white px-[5px] py-[10px] text-[14px] font-semibold leading-[] text-[#5865f2] sm:w-[160px] md:px-[20px]">
-            Discord Verified
-          </p>
-        ) : (
-          <a
-            href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
-            className="h-[40px] w-full items-center justify-center rounded-[6px] bg-[#5865f2] px-[5px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#4752c4] sm:w-[160px] md:px-[20px]"
-          >
-            Discord
-          </a>
-        )}
-      </div>
-      <div className="py-2">
-        {twitterVerified ? (
-          <p className="h-[40px] w-full items-center justify-center rounded-[6px] border border-[#1d9bf0] bg-white px-[5px] py-[10px] text-[14px] font-semibold leading-[] text-[#1d9bf0] sm:w-[160px] md:px-[20px]">
-            Twitter Verified
-          </p>
-        ) : (
-          <a
-            href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=MVlFOFhNVHM0UGtJYUtkbnVkMlE6MTpjaQ&redirect_uri=${url}&scope=tweet.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
-            className="h-[40px] w-full items-center justify-center rounded-[6px] bg-[#1d9bf0] px-[5px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#1a8cd8] sm:w-[160px] md:px-[20px]"
-          >
-            Twitter
-          </a>
-        )}
-      </div>
+    <div className="mx-auto flex w-[160px] flex-col space-y-1 text-center">
+      {discordVerified ? (
+        <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
+          Discord Verified
+        </p>
+      ) : (
+        <a
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
+        >
+          Discord
+        </a>
+      )}
+      {twitterVerified ? (
+        <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] border border-[#1d9bf0] bg-white text-[14px] font-semibold text-[#1d9bf0]">
+          Twitter Verified
+        </p>
+      ) : (
+        <a
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=MVlFOFhNVHM0UGtJYUtkbnVkMlE6MTpjaQ&redirect_uri=${url}&scope=tweet.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+        >
+          Twitter
+        </a>
+      )}
     </div>
   )
 }
