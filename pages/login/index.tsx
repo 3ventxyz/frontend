@@ -2,27 +2,25 @@ import React, { FormEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 // import { useAuth } from '../../contexts/auth'
 import Button from '../../components/button'
-import AuthInput from '../../components/inputs/authInput'
 import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { auth, db } from '../../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
+import PhoneInput from 'react-phone-number-input'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
-  const [showError, setShowError] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [error, setError] = useState('')
   const [confirmation, setConfirmation] = useState(() => (code: string) => {
     console.log(code)
   })
-  const [token, setToken] = useState('')
-
-  const phoneRef = React.createRef<HTMLInputElement>()
-  const [error, setError] = useState('')
   const router = useRouter()
+  const [phoneNumber, setPhoneNumber] = useState<any>('')
 
-  //   const appVerifier = (window as any).recaptchaVerifier
+  // configure recaptcha
   useEffect(() => {
     ;(window as any).recaptchaVerifier = new RecaptchaVerifier(
       'recaptcha-container',
@@ -32,19 +30,14 @@ export default function Login() {
   }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log('attempt submit')
     e.preventDefault()
 
-    const phoneNumber = phoneRef.current?.value || ''
-    console.log('phoneNumber', phoneNumber)
-
+    // declare phonenumber and appverifier
+    if (phoneNumber === '') return
     const appVerifier = (window as any).recaptchaVerifier
-
     try {
       setError('')
       setLoading(true)
-
-      if (phoneNumber === '' || phoneNumber.length < 10) return
       signInWithPhoneNumber(auth, phoneNumber, appVerifier)
         .then((confirmationResult) => {
           // ROUTES USER TO CONFIRMATION UI
@@ -66,6 +59,7 @@ export default function Login() {
                   }
                   setDoc(userRef, userObject)
                 }
+                console.log('confirmation success')
                 // store user record in global state
                 // setUser(result.user.uid)
                 // ROUTE USER TO NEXT SCREEN
@@ -110,20 +104,20 @@ export default function Login() {
             className="flex w-full flex-col gap-y-6"
           >
             {/* phone input */}
-            <AuthInput
-              id="phone"
-              type="phone"
-              labelText="Phone Number"
-              inputRef={phoneRef}
-              placeholder="(555)-123-4567"
-              //   icon="assets/auth/atSign.svg"
-              icon={`📱`}
-            />
+            <div className="mx-auto flex w-full flex-col items-start space-y-1 text-[16px] font-normal">
+              <label htmlFor={'phone'}>Phone Number</label>
+              <PhoneInput
+                placeholder="Enter phone number"
+                defaultCountry="US"
+                value={phoneNumber}
+                onChange={setPhoneNumber}
+              />
+            </div>
             <Button
               text="Submit"
               active={!loading}
               onClick={() => {
-                console.log('submit')
+                return
               }}
               type="submit"
               isExpanded={true}
