@@ -6,6 +6,8 @@ import { db } from '../../services/firebase_config'
 
 export default function Verify() {
   const { asPath } = useRouter()
+  const router = useRouter()
+
   const [discordVerified, setDiscordVerified] = useState(false)
   const [twitterVerified, setTwitterVerified] = useState(false)
   const uid = 'guJqAglqTLAzoMIQA6Gi'
@@ -44,18 +46,22 @@ export default function Verify() {
     }
   }, [])
 
+  /*Get path*/
+  useEffect(() => {
+     console.log(router.pathname)
+  }, [])
+
   return (
-    <div className="px-32">
-      <h3 className="w-full max-w-[480px]">Verify your account</h3>
+    <div className=" px-12 md:px-32">
       <div className="py-2">
         {discordVerified ? (
-          <p className="h-[40px] w-fit items-center justify-center rounded-[6px] border border-[#5865f2] bg-white px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-[#5865f2]">
+          <p className="h-[40px] w-full md:w-fit items-center justify-center rounded-[6px] border border-[#5865f2] bg-white px-[5px] md:px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-[#5865f2]">
             Discord Verified
           </p>
         ) : (
           <a
             href={process.env.NEXT_PUBLIC_DISCORD_OAUTH_URL}
-            className="h-[40px] w-fit items-center justify-center rounded-[6px] bg-[#5865f2] px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#4752c4]"
+            className="h-[40px] w-full md:w-fit items-center justify-center rounded-[6px] bg-[#5865f2] px-[5px] md:px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#4752c4]"
           >
             Discord
           </a>
@@ -64,14 +70,14 @@ export default function Verify() {
       <div className="py-2">
         {twitterVerified ? (
         <p
-        className="h-[40px] w-fit items-center justify-center rounded-[6px] border border-[#1d9bf0] bg-white px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-[#1d9bf0]"
+        className="h-[40px] w-full md:w-fit items-center justify-center rounded-[6px] border border-[#1d9bf0] bg-white px-[5px] md:px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-[#1d9bf0]"
       >
         Twitter Verified
       </p>
         ) : (
           <a
           href={process.env.NEXT_PUBLIC_TWITTER_OAUTH_URL}
-          className="h-[40px] w-fit items-center justify-center rounded-[6px] bg-[#1d9bf0] px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#1a8cd8]"
+          className="h-[40px] w-full md:w-fit items-center justify-center rounded-[6px] bg-[#1d9bf0] px-[5px] md:px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white hover:bg-[#1a8cd8]"
         >
           Twitter
         </a>
