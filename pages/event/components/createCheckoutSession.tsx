@@ -37,7 +37,7 @@ export default function CreateCheckoutSession({
   }
 
   return (
-    <div className="flex h-full flex-col  items-center justify-around overflow-auto  py-[34px]">
+    <div className="flex h-full flex-col items-center justify-around py-[34px]">
       <h3 className="mb-[26px] text-[32px]">Your Order</h3>
       <TicketButton
         selected={true}
@@ -143,25 +143,28 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
 
 function DisplayIsLoading({ onClick }: { onClick: () => void }) {
   return (
-    <div className="h-full ">
-      <div className="flex h-[300px]  items-center justify-center">
-        <Spinner />
-      </div>
+    <div className="flex h-full flex-col">
+      <div className="grow"></div>
+      <Spinner />
+      <div className="grow"></div>
       <div>
         <Button text={'Pending'} onClick={onClick} active={true} />
       </div>
     </div>
   )
 }
+
 function DisplayStatus({ onClick }: { onClick: () => void }) {
   return (
     <div className="flex h-full flex-col items-center space-y-[20px]">
-      <div className="flex h-[300px] flex-col items-center justify-center space-y-[20px]">
-        <h3 className="text-[32px] font-bold">Success!</h3>
+      <div className="grow"></div>
+      <div className="flex  flex-col items-center justify-center space-y-[20px]">
+        <h3 className="text-[32px] ">Success!</h3>
         <div className="text-[14px] font-normal">
           an email confirmation was sent to your inbox
         </div>
       </div>
+      <div className="grow"></div>
       <div>
         <Button text={'Close window'} onClick={onClick} active={true} />
       </div>
