@@ -6,7 +6,7 @@ import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
 import TextInput from '../../../components/textInput'
 
-export default function CreateCheckoutSessionModal({
+export default function CreateCheckoutSession({
   selectedTicket,
   onClose,
   confirmSelectedTicketPurchase
@@ -20,7 +20,7 @@ export default function CreateCheckoutSessionModal({
     setcheckoutPage(checkoutPage + 1)
   }
 
-  const pageModal = () => {
+  const checkoutSessionPage = () => {
     switch (checkoutPage) {
       case 1:
         return <RegisterUserForm onClick={nextCheckoutPage} />
@@ -32,25 +32,12 @@ export default function CreateCheckoutSessionModal({
         confirmSelectedTicketPurchase()
         onClose()
       default:
-        return (
-          <div className="h-[300px]">
-            <div className="h-full"></div>
-            <div>
-              <Button
-                text={'Register user'}
-                onClick={() => {
-                  nextCheckoutPage()
-                }}
-                active={true}
-              />
-            </div>
-          </div>
-        )
+        return <SelectPaymentOption onClick={nextCheckoutPage} />
     }
   }
 
   return (
-    <div className="mt-[34px] flex flex-col items-center justify-around ">
+    <div className="flex h-full flex-col  items-center justify-around overflow-auto  py-[34px]">
       <h3 className="mb-[26px] text-[32px]">Your Order</h3>
       <TicketButton
         selected={true}
@@ -63,17 +50,26 @@ export default function CreateCheckoutSessionModal({
           }
         }
       />
-      <div className="my-[18px] flex h-[320px] items-center justify-center">
-        {pageModal()}
+      <div className="flex h-full items-center justify-center">
+        {checkoutSessionPage()}
       </div>
+    </div>
+  )
+}
+
+function SelectPaymentOption({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="flex h-full flex-col">
+      <div className="grow"></div>
+      <Button text={'Register user with ETH'} onClick={onClick} active={true} />
     </div>
   )
 }
 
 function RegisterUserForm({ onClick }: { onClick: () => void }) {
   return (
-    <div className="flex w-[466px] flex-col items-center space-y-[39px]">
-      <form action="submit" className="mt-[30px] w-full space-y-[10px]">
+    <div className="flex h-full w-[466px] flex-col items-center pt-[18px]">
+      <form action="submit" className=" w-full space-y-[10px]">
         <div className="flex space-x-[10px]">
           <TextInput
             id={'first-name'}
@@ -137,14 +133,9 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           />
         </div>
       </form>
+      <div className="grow"></div>
       <div>
-        <Button
-          text={'Submit Order'}
-          onClick={() => {
-            onClick()
-          }}
-          active={true}
-        />
+        <Button text={'Submit Order'} onClick={onClick} active={true} />
       </div>
     </div>
   )
@@ -157,13 +148,7 @@ function DisplayIsLoading({ onClick }: { onClick: () => void }) {
         <Spinner />
       </div>
       <div>
-        <Button
-          text={'Pending'}
-          onClick={() => {
-            onClick()
-          }}
-          active={true}
-        />
+        <Button text={'Pending'} onClick={onClick} active={true} />
       </div>
     </div>
   )
@@ -178,13 +163,7 @@ function DisplayStatus({ onClick }: { onClick: () => void }) {
         </div>
       </div>
       <div>
-        <Button
-          text={'Close window'}
-          onClick={() => {
-            onClick()
-          }}
-          active={true}
-        />
+        <Button text={'Close window'} onClick={onClick} active={true} />
       </div>
     </div>
   )
