@@ -10,7 +10,7 @@ import Image from 'next/image'
 import Modal from '../../components/modal'
 import { useEvents } from '../../context/eventsContext'
 import Button from '../../components/button'
-import CreateCheckoutSession from './components/createCheckout'
+import CreateCheckoutSession from './components/createCheckoutSession'
 
 export default function Event() {
   // user id (this will probably be useContext)
@@ -123,7 +123,7 @@ export default function Event() {
       <Modal
         visible={showModal}
         onClose={handleOnClose}
-        width="w-[700px]"
+        width="w-[600px]"
         height="h-[600px]"
       >
         <CreateCheckoutSession
