@@ -9,42 +9,52 @@ import { getRedirectResult } from '@firebase/auth'
 export default function Verify() {
   const { asPath } = useRouter()
   const router = useRouter()
+  const [url, setUrl] = useState('')
+  const [checked, setChecked] = useState(false)
   const [discordVerified, setDiscordVerified] = useState(false)
   const [twitterVerified, setTwitterVerified] = useState(false)
-  const [url, setUrl] = useState('')
   const uid = 'guJqAglqTLAzoMIQA6Gi'
 
+  // checks if user is verified on discord and twitter
+  // if user is not verified and hash is present, run verification and update db
   useEffect(() => {
-    const checkDiscord = async () => {
+    const pathParts = asPath.split('code=')
+    let hash = ''
+    if (pathParts.length >= 2) {
+      hash = pathParts.slice(-1)[0]
+    }
+
+    const checkVerification = async () => {
       const docRef = doc(db, 'user', uid)
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
-        if (docSnap.data().discordVerified === true) {
+        if (docSnap.data().discordVerified === false) {
+          if (hash !== '' && !asPath.includes('state')) {
+            const response = await VerifyDiscord(hash, uid)
+            if (response === true) {
+              setDiscordVerified(true)
+            }
+          }
+        } else {
           setDiscordVerified(true)
         }
-        if (docSnap.data().twitterVerified === true) {
+        if (docSnap.data().twitterVerified === false) {
+          if (hash !== '' && asPath.includes('state')) {
+            const response = await VerifyTwitter(hash, uid)
+            if (response === true) {
+              setTwitterVerified(true)
+            }
+          }
+        } else {
           setTwitterVerified(true)
         }
-        console.log('Document data:', docSnap.data())
-      } else {
-        console.log('No such document!')
       }
+      setChecked(true)
     }
-    checkDiscord()
-  }, [])
 
-  useEffect(() => {
-    const pathParts = asPath.split('code=')
-    if (pathParts.length >= 2) {
-      const hash = pathParts.slice(-1)[0]
-      /*Use access code once app was authorized*/
-      if (hash !== '') {
-        console.log(hash)
-        /*Verify access token and store verification state in database*/
-        VerifyTwitter(hash, uid)
-        //VerifyDiscord(hash, uid)
-      }
+    if (!checked) {
+      checkVerification()
     }
   }, [])
 
