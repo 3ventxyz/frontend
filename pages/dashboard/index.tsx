@@ -50,7 +50,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
+    <div className="flex flex-col space-y-[35px] w-screen bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
       {!fetched ? (
         <div>Loading...</div>
       ) : (

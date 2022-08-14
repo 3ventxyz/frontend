@@ -49,7 +49,7 @@ export default function Event() {
 
   return (
     <>
-      <div className="flex flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px] md:pt-[85px]">
+      <div className="flex w-screen flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[106px] md:flex-row md:space-x-[291px] md:px-[210px] md:pt-[85px]">
         {fetched ? (
           <>
             <div className="flex h-full flex-col items-center  md:items-start ">
