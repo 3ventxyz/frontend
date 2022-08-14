@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { VerifyDiscord, VerifyTwitter } from '../../services/verify_profile'
+import { verifyDiscord, verifyTwitter } from '../../services/verify_profile'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import absoluteUrl from 'next-absolute-url'
+
+const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
 export default function Verify() {
   const { asPath } = useRouter()
@@ -28,9 +30,9 @@ export default function Verify() {
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
-        if (docSnap.data().discordVerified === false) {
+        if (docSnap.data().discord_verified === false) {
           if (hash !== '' && !asPath.includes('state')) {
-            const response = await VerifyDiscord(hash, uid)
+            const response = await verifyDiscord(hash, uid)
             if (response === true) {
               setDiscordVerified(true)
             }
@@ -38,9 +40,9 @@ export default function Verify() {
         } else {
           setDiscordVerified(true)
         }
-        if (docSnap.data().twitterVerified === false) {
+        if (docSnap.data().twitter_verified === false) {
           if (hash !== '' && asPath.includes('state')) {
-            const response = await VerifyTwitter(hash, uid)
+            const response = await verifyTwitter(hash, uid)
             if (response === true) {
               setTwitterVerified(true)
             }
@@ -61,39 +63,33 @@ export default function Verify() {
     const { origin } = absoluteUrl()
     setUrl(`${origin}${router.pathname}`)
   }, [])
-  
-  useEffect(() => {
-    console.log(url)
-  }, [url])
 
   return (
-    <div className="mx-auto flex flex-col space-y-1 w-[160px] text-center">
-        {discordVerified ? (
-          <p className="h-[40px] w-full items-center justify-center inline-flex rounded-[6px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
-            Discord Verified
-          </p>
-        ) : (
-          <a
-            href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
-            className="h-[40px] w-full items-center justify-center inline-flex rounded-[6px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
-          >
-            Discord
-          </a>
-        )}
-        {twitterVerified ? (
-        <p
-        className="h-[40px] w-full items-center justify-center rounded-[6px] inline-flex border border-[#1d9bf0] bg-white text-[14px] font-semibold text-[#1d9bf0]"
-      >
-        Twitter Verified
-      </p>
-        ) : (
-          <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=MVlFOFhNVHM0UGtJYUtkbnVkMlE6MTpjaQ&redirect_uri=${url}&scope=tweet.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
-          className="h-[40px] w-full items-center justify-center rounded-[6px] inline-flex bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+    <div className="mx-auto flex w-[160px] flex-col space-y-1 text-center">
+      {discordVerified ? (
+        <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
+          Discord Verified
+        </p>
+      ) : (
+        <a
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
+        >
+          Discord
+        </a>
+      )}
+      {twitterVerified ? (
+        <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] border border-[#1d9bf0] bg-white text-[14px] font-semibold text-[#1d9bf0]">
+          Twitter Verified
+        </p>
+      ) : (
+        <a
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[6px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
           Twitter
         </a>
-        )}
+      )}
     </div>
   )
 }

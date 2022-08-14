@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     code: accessCode,
     grant_type: 'authorization_code',
     client_id: process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID || '',
-    redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URL || '',
+    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL || '',
     code_verifier: 'challenge'
   })
 

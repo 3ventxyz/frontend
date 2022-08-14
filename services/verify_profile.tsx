@@ -1,7 +1,7 @@
 import { db } from './firebase_config'
 import { doc, updateDoc } from 'firebase/firestore'
 
-export async function VerifyDiscord(accessCode: string, uid: string) {
+export async function verifyDiscord(accessCode: string, uid: string) {
   try {
     const url = 'https://discord.com/api/v10/oauth2/token'
 
@@ -10,7 +10,7 @@ export async function VerifyDiscord(accessCode: string, uid: string) {
       client_secret: process.env.NEXT_PUBLIC_DISCORD_API_SECRET || '',
       grant_type: 'authorization_code',
       code: accessCode,
-      redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URL || '',
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL || '',
       scope: 'identify'
     })
 
@@ -29,7 +29,7 @@ export async function VerifyDiscord(accessCode: string, uid: string) {
       try {
         const docRef = doc(db, 'user', uid)
         await updateDoc(docRef, {
-          discordVerified: true
+          discord_verified: true
         })
         console.log('Data written into doc ID: ', docRef.id)
         return true
@@ -43,18 +43,22 @@ export async function VerifyDiscord(accessCode: string, uid: string) {
   return false
 }
 
-export async function VerifyTwitter(accessCode: string, uid: string) {
+export async function verifyTwitter(accessCode: string, uid: string) {
   try {
     const rawResponse = await fetch('api/twitter?accessCode=' + accessCode)
     const response = await rawResponse.json()
-
     const token = response.access_token
     if (token && token !== undefined) {
+      /* get twitter id */
+      const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
+      const twitterIdJson = await getTwitterId.json()
+
       /*change value on database*/
       try {
         const docRef = doc(db, 'user', uid)
         await updateDoc(docRef, {
-          twitterVerified: true
+          twitter_verified: true,
+          twitter_id: twitterIdJson.data.id
         })
         console.log('Data written into doc ID: ', docRef.id)
         return true
