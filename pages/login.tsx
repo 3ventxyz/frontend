@@ -64,16 +64,27 @@ export default function Login() {
               .then(async (result) => {
                 // FIREBASE AND GLOBAL STATE
                 // check for user existance in db
+                console.log('new')
                 const userRef = doc(db, 'users', result.user.uid)
                 const docSnap = await getDoc(userRef)
 
                 // create new user document if sign up
+                console.log('new')
                 if (!docSnap.exists()) {
                   const userObject = {
-                    phone_number: phoneNumber
+                    uid: result.user.uid,
+                    phone_number: phoneNumber,
+                    discord_verified: false,
+                    twitter_verified: false,
+                    discord_id: '',
+                    twitter_id: '',
+                    past_events: [],
+                    upcoming_events: [],
+                    wallets: []
                   }
                   setDoc(userRef, userObject)
                 }
+                console.log('new')
                 router.push('/events')
               })
               .catch((error) => {
