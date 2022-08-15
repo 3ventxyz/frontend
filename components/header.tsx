@@ -68,7 +68,7 @@ export default function Header() {
             active={true}
             text={'Login'}
             onClick={() => {
-              router.push('login')
+              router.push('/login')
             }}
           />
         )}
@@ -127,7 +127,7 @@ export default function Header() {
           active={true}
           text={'Launch App'}
           onClick={() => {
-            router.push('login')
+            router.push('/login')
           }}
         />
       </nav>

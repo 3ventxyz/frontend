@@ -1,10 +1,10 @@
 import React, { FormEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAuth } from '../../contexts/auth'
-import Button from '../../components/button'
+import { useAuth } from '../contexts/auth'
+import Button from '../components/button'
 import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
-import { auth, db } from '../../services/firebase_config'
+import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 
@@ -25,7 +25,7 @@ export default function Login() {
   // CHECK IF USER LOGGED IN -> ROUTE TO DASHBOARD
   useEffect(() => {
     if (authContext.isLoggedIn()) {
-      router.push('/mint')
+      router.push('/profile')
     }
   }, [authContext])
 
@@ -74,7 +74,7 @@ export default function Login() {
                   }
                   setDoc(userRef, userObject)
                 }
-                router.push('/mint')
+                router.push('/profile')
               })
               .catch((error) => {
                 console.log('error', error)
