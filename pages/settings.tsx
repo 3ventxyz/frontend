@@ -3,6 +3,7 @@ import { db } from '../services/firebase_config'
 import { doc, collection, getDoc } from '@firebase/firestore'
 import TextInputDisplay from '../components/textInputDisplay'
 import { useAuth } from '../contexts/auth'
+import Verify from './profile-settings'
 
 export default function Settings() {
   const [wallets, setWallets] = useState([])
@@ -41,6 +42,7 @@ export default function Settings() {
             labelText={'Public Address'}
             bodyText={'0x4444...4444'}
           />
+          <Verify />
         </div>
       </div>
     </div>

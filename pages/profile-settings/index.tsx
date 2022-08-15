@@ -4,6 +4,7 @@ import { verifyDiscord, verifyTwitter } from '../../services/verify_profile'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import absoluteUrl from 'next-absolute-url'
+import { useAuth } from '../../contexts/auth'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
@@ -14,7 +15,8 @@ export default function Verify() {
   const [checked, setChecked] = useState(false)
   const [discordVerified, setDiscordVerified] = useState(false)
   const [twitterVerified, setTwitterVerified] = useState(false)
-  const uid = 'guJqAglqTLAzoMIQA6Gi'
+  const auth = useAuth()
+  // const uid = 'guJqAglqTLAzoMIQA6Gi'
 
   // checks if user is verified on discord and twitter
   // if user is not verified and hash is present, run verification and update db
@@ -26,13 +28,13 @@ export default function Verify() {
     }
 
     const checkVerification = async () => {
-      const docRef = doc(db, 'user', uid)
+      const docRef = doc(db, 'user', auth.uid)
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
         if (docSnap.data().discord_verified === false) {
           if (hash !== '' && !asPath.includes('state')) {
-            const response = await verifyDiscord(hash, uid)
+            const response = await verifyDiscord(hash, auth.uid)
             if (response === true) {
               setDiscordVerified(true)
             }
@@ -42,7 +44,7 @@ export default function Verify() {
         }
         if (docSnap.data().twitter_verified === false) {
           if (hash !== '' && asPath.includes('state')) {
-            const response = await verifyTwitter(hash, uid)
+            const response = await verifyTwitter(hash, auth.uid)
             if (response === true) {
               setTwitterVerified(true)
             }
