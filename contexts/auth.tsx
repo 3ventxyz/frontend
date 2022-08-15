@@ -24,6 +24,7 @@ interface UserCredentials {
 
 interface AuthInterface {
   currentUser?: User | null
+  uid: string
   login: ({ phoneNumber }: UserCredentials) => Promise<UserCredential> | void
   logout: () => Promise<void> | void
   isLoggedIn: () => boolean
@@ -31,6 +32,7 @@ interface AuthInterface {
 }
 
 const AuthContext = createContext<AuthInterface>({
+  uid: '',
   login: () => undefined,
   logout: () => undefined,
   isLoggedIn: () => false,
@@ -38,6 +40,7 @@ const AuthContext = createContext<AuthInterface>({
 })
 
 const AuthProvider = ({ children }: Props): JSX.Element => {
+  const [uid, setUid] = useState('')
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
@@ -51,6 +54,7 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
+      setUid(user?.uid || '')
       setLoading(false)
       console.log('onAuthStateChanged()', user)
     })
@@ -60,12 +64,14 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
   // LOGIN: UPDATE STORE + LOCALSTORAGE
   const login = ({ data }: any) => {
     setCurrentUser(data)
+    setUid(data?.uid || '')
     localStorage.setItem('data', data)
   }
 
   // LOGOUT: UPDATE STORE + LOCALSTORAGE
   const logout = () => {
     setCurrentUser(null)
+    setUid('')
     localStorage.setItem('data', '')
     router.push('/login')
     return signOut(auth)
@@ -83,6 +89,7 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
     <AuthContext.Provider
       value={{
         currentUser: currentUser,
+        uid: uid,
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
