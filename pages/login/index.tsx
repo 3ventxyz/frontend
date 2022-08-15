@@ -1,6 +1,6 @@
 import React, { FormEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-// import { useAuth } from '../../contexts/auth'
+import { useAuth } from '../../contexts/auth'
 import Button from '../../components/button'
 import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
@@ -14,19 +14,34 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [showError, setShowError] = useState(false)
   const [error, setError] = useState('')
+  const [onlyOnce, setOnlyOnce] = useState(false)
   const [confirmation, setConfirmation] = useState(() => (code: string) => {
     console.log(code)
   })
   const router = useRouter()
+  const authContext = useAuth()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
+
+  // CHECK IF USER LOGGED IN -> ROUTE TO DASHBOARD
+  useEffect(() => {
+    if (authContext.isLoggedIn()) {
+      router.push('/mint')
+    }
+  }, [authContext])
 
   // configure recaptcha
   useEffect(() => {
-    ;(window as any).recaptchaVerifier = new RecaptchaVerifier(
-      'recaptcha-container',
-      { size: 'invisible' },
-      auth
-    )
+    const run = () => {
+      ;(window as any).recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha',
+        { size: 'invisible' },
+        auth
+      )
+      setOnlyOnce(true)
+    }
+    if (onlyOnce === false) {
+      run()
+    }
   }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -59,11 +74,7 @@ export default function Login() {
                   }
                   setDoc(userRef, userObject)
                 }
-                console.log('confirmation success')
-                // store user record in global state
-                // setUser(result.user.uid)
-                // ROUTE USER TO NEXT SCREEN
-                // router.push('/mint')
+                router.push('/mint')
               })
               .catch((error) => {
                 console.log('error', error)
@@ -91,11 +102,10 @@ export default function Login() {
         <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
           <div className="flex w-full flex-col items-center">
             <h3 className="mb-2 w-full text-center text-[32px]">Woohoo!</h3>
-            <p
-              id="recaptcha-container"
-              className="p2 max-w-[240px] text-center text-primary"
-            >
-              Enter your number to get this party started 🎉
+            <p className="p2 max-w-[240px] text-center text-primary">
+              Enter your number to get
+              <br />
+              this party started 🎉
             </p>
           </div>
           <form
@@ -115,6 +125,7 @@ export default function Login() {
             </div>
             <Button
               text="Submit"
+              id="recaptcha"
               active={!loading}
               onClick={() => {
                 return
@@ -126,13 +137,13 @@ export default function Login() {
           </form>
         </div>
       ) : (
-        <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
+        <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center justify-center gap-y-6">
           <div className="flex w-full flex-col items-center">
             <h3 className="mb-2 w-full text-center text-[32px]">
               Confirmation
             </h3>
             <p className="p2 max-w-[240px] text-center text-primary">
-              Enter the 6 digit code we just texted you!
+              Enter your 6 digit code
             </p>
           </div>
           <div className="flex flex-col items-center space-y-4">
@@ -140,7 +151,7 @@ export default function Login() {
               value={confirmationCode}
               onChange={(e) => setConfirmationCode(e)}
               className="bg-transparent"
-              type="number"
+              type="text"
               fields={6}
               name={'code'}
               inputMode={'numeric'}
