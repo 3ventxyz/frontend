@@ -25,7 +25,7 @@ export default function Login() {
   // CHECK IF USER LOGGED IN -> ROUTE TO DASHBOARD
   useEffect(() => {
     if (authContext.isLoggedIn()) {
-      router.push('/profile')
+      router.push('/events')
     }
   }, [authContext])
 
@@ -74,7 +74,7 @@ export default function Login() {
                   }
                   setDoc(userRef, userObject)
                 }
-                router.push('/profile')
+                router.push('/events')
               })
               .catch((error) => {
                 console.log('error', error)
