@@ -1,5 +1,5 @@
 // author: marthel
-import { doc, getDoc } from '@firebase/firestore'
+import { doc, getDoc, getDocs,collection, DocumentData } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
@@ -21,10 +21,22 @@ export default function Event() {
   const [selectedIndex, setSelectedIndex] = useState<number>()
   const [showModal, setShowModal] = useState(false)
   const [ticketPurchased, setTicketPurchased] = useState(false)
+  const [ticketListData, setTicketListData] = useState<TicketInterface[]>()
   const router = useRouter()
   const events = useEvents()
 
   const { eid } = router.query
+
+  const newTicketOption = (ticketDoc:any)=>{
+    const ticketData:TicketInterface={
+      ticketTitle: ticketDoc.data().ticket_title,
+      registeredUsers: ticketDoc.data().registered_users,
+      capLimit: ticketDoc.data().cap_limit,
+      tokenId: ticketDoc.data().token_id,
+      price: ticketDoc.data().ticket_price
+    }
+    return ticketData
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,8 +44,18 @@ export default function Event() {
       const docRef = doc(db, 'events', eventId)
       const eventDoc = await getDoc(docRef)
       const eventData = events.newEventData(eventDoc)
+      const fetchedTicketListData : Array<TicketInterface> = []
       if (!eventData) return
       setEvent(eventData)
+
+
+      // fetch ticket data.
+      const ticketDocs = await getDocs(collection(db, 'tickets'))
+
+      ticketDocs.forEach((ticketDoc)=>{
+        fetchedTicketListData.push(newTicketOption(ticketDoc))
+      })
+      setTicketListData(fetchedTicketListData)
       setFetched(true)
     }
     if (!fetched && eid) {
@@ -92,6 +114,7 @@ export default function Event() {
               </div>
               {!ticketPurchased ? (
                 <SelectAndPurchaseTicket
+                ticketListData={ticketListData}
                   selectedIndex={selectedIndex}
                   setSelectedIndex={setSelectedIndex}
                   selectedTicket={selectedTicket}
@@ -135,24 +158,26 @@ export default function Event() {
 }
 
 function SelectAndPurchaseTicket({
-  selectedIndex,
-  setSelectedIndex,
+  ticketListData,
   selectedTicket,
   setSelectedTicket,
-  setShowModal
+  selectedIndex,
+  setSelectedIndex,
+  setShowModal,
 }: {
+  ticketListData: Array<TicketInterface> | undefined
   selectedIndex: number | undefined
   setSelectedIndex: (index: number) => void
   selectedTicket: TicketInterface | undefined
   setSelectedTicket: (ticket: TicketInterface) => void
-  setShowModal: (toggle: boolean) => void
+  setShowModal: (toggle: boolean) => void,
 }) {
   return (
     <div
       id="ticketbuilder"
       className="flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
     >
-      {TicketListData.map((ticket: TicketInterface, index) => {
+      {ticketListData?.map((ticket: TicketInterface, index) => {
         return (
           <button
             key={index.toString()}
@@ -193,9 +218,10 @@ function PurchasedTicketConfirmation({
         ticket={
           selectedTicket || {
             ticketTitle: '',
-            registeredUsers: '',
+            registeredUsers: 0,
+            capLimit: 0,
             tokenId: '',
-            price: ''
+            price: 0
           }
         }
       />
@@ -224,29 +250,3 @@ function PurchasedTicketConfirmation({
   )
 }
 
-const TicketListData = [
-  {
-    ticketTitle: 'Ticket 1',
-    registeredUsers: '0/10000000000',
-    tokenId: '#213',
-    price: '$ 0.25'
-  },
-  {
-    ticketTitle: 'Ticket 2',
-    registeredUsers: '55/1000',
-    tokenId: '#213',
-    price: '$ 11.00'
-  },
-  {
-    ticketTitle: 'Ticket 3',
-    registeredUsers: '2/10',
-    tokenId: '#213',
-    price: '$ 30.00'
-  },
-  {
-    ticketTitle: 'Ticket 4',
-    registeredUsers: '3/3',
-    tokenId: '#213',
-    price: '$ 2,000.00'
-  }
-]

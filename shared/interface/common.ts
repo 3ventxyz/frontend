@@ -1,8 +1,9 @@
 export interface TicketInterface {
   ticketTitle: string
-  registeredUsers: string
+  registeredUsers: number,
+  capLimit: number,
   tokenId: string
-  price: string
+  price: number
   disabled?: boolean
   isSelected?: boolean
 }
