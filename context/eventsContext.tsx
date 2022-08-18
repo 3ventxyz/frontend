@@ -53,9 +53,9 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       address: eventDoc.data()?.address,
       date: eventDoc.data()?.date,
       id: eventDoc.data()?.id,
-      eventTitle: eventDoc.data()?.eventTitle,
-      orgTitle: eventDoc.data()?.orgTitle,
-      imgURL: eventDoc.data()?.imgURL
+      eventTitle: eventDoc.data()?.event_title,
+      orgTitle: eventDoc.data()?.organization,
+      imgURL: eventDoc.data()?.img_url
     }
     return eventData
   }
@@ -89,11 +89,16 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     numberOfEvents?: number
   }) => {
     const eventsRef = await getDocs(
-      query(collectionRef, orderBy('timestamp', 'desc'), limit(numberOfEvents))
+      query(
+        collectionRef,
+        orderBy('date_of_event', 'desc'),
+        limit(numberOfEvents)
+      )
     )
     const eventsList: Array<EventInterface> = []
     for (const eventRef of eventsRef.docs) {
-      const eventDoc: any = await getDoc(eventRef.data().eventReference)
+      const eventDoc: any = await getDoc(eventRef.data().event_ref)
+      console
       eventsList.push(newEventData(eventDoc))
     }
     return eventsList

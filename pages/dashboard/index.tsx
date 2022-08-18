@@ -19,10 +19,10 @@ export default function Dashboard() {
       try {
         const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
         pastEventsData = await events.fetchEventsData({
-          collectionRef: collection(userDocRef, 'pastEvents')
+          collectionRef: collection(userDocRef, 'past_events')
         })
         upcomingEventsData = await events.fetchEventsData({
-          collectionRef: collection(userDocRef, 'upcomingEvents')
+          collectionRef: collection(userDocRef, 'upcoming_events')
         })
         setPastEvents(pastEventsData)
         setUpcomingEvents(upcomingEventsData)
