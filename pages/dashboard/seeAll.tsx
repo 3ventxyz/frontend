@@ -33,7 +33,7 @@ export default function SeeAll() {
         case 'upcoming':
           setTitle('all upcoming events')
           eventData = await events.fetchEventsData({
-            collectionRef: collection(userDocRef, 'upcomingEvents'),
+            collectionRef: collection(userDocRef, 'upcoming_events'),
             numberOfEvents: 6
           })
           setEvents(eventData)
@@ -41,7 +41,7 @@ export default function SeeAll() {
         case 'past':
           setTitle('all past events')
           eventData = await events.fetchEventsData({
-            collectionRef: collection(userDocRef, 'pastEvents'),
+            collectionRef: collection(userDocRef, 'past_events'),
             numberOfEvents: 6
           })
           setEvents(eventData)
