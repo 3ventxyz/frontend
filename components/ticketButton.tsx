@@ -15,10 +15,10 @@ export default function TicketButton({
     >
       <div className="flex flex-col items-start">
         <div className="text-[14px] font-bold">{ticket.ticketTitle}</div>
-        <div className="text-[10px]">{ticket.registeredUsers} remaining</div>
+        <div className="text-[10px]">{ticket.registeredUsers}/{ticket.capLimit} remaining</div>
         <div className="text-[10px]"># {ticket.tokenId} required?</div>
       </div>
-      <div className="text-[14px] font-bold">{ticket.price}</div>
+      <div className="text-[14px] font-bold">$ {ticket.price.toFixed(2)}</div>
     </div>
   )
 }

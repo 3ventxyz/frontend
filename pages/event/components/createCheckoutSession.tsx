@@ -43,8 +43,9 @@ export default function CreateCheckoutSession({
         selected={true}
         ticket={
           selectedTicket || {
-            price: '',
-            registeredUsers: '',
+            capLimit: 0,
+            price: 0,
+            registeredUsers: 0,
             ticketTitle: '',
             tokenId: ''
           }
