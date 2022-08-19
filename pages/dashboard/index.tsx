@@ -1,6 +1,5 @@
 // author: marthel
 import { useEffect, useState } from 'react'
-import { EventInterface } from '../../shared/interface/common'
 import { db } from '../../services/firebase_config'
 import { doc, collection } from '@firebase/firestore'
 import { useEvents } from '../../context/eventsContext'
@@ -8,8 +7,6 @@ import EventsDisplay from './components/eventsDisplay'
 
 export default function Dashboard() {
   const [fetched, setFetched] = useState(false)
-  const [upcomingEvents, setUpcomingEvents] = useState<EventInterface[]>([])
-  const [pastEvents, setPastEvents] = useState<EventInterface[]>([])
   const events = useEvents()
 
   useEffect(() => {
@@ -18,25 +15,18 @@ export default function Dashboard() {
       let upcomingEventsData: any
       try {
         const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
-        pastEventsData = await events.fetchEventsData({
-          collectionRef: collection(userDocRef, 'past_events')
-        })
-        upcomingEventsData = await events.fetchEventsData({
-          collectionRef: collection(userDocRef, 'upcoming_events')
-        })
-        setPastEvents(pastEventsData)
-        setUpcomingEvents(upcomingEventsData)
-
-        events.setCacheEventsData({
-          cacheName: 'pastEventsCache',
-          url: 'http://localhost:3000/',
-          fetchedEventsData: pastEventsData
-        })
-        events.setCacheEventsData({
-          cacheName: 'upcomingEventsCache',
-          url: 'http://localhost:3000/',
-          fetchedEventsData: upcomingEventsData
-        })
+        if (!events.cachedPastEvents) {
+          pastEventsData = await events.fetchEventsData({
+            collectionRef: collection(userDocRef, 'past_events')
+          })
+          events.cachePastEvents(pastEventsData)
+        }
+        if (!events.cachedUpcomingEvents) {
+          upcomingEventsData = await events.fetchEventsData({
+            collectionRef: collection(userDocRef, 'upcoming_events')
+          })
+          events.cacheUpcomingEvents(upcomingEventsData)
+        }
         setFetched(true)
       } catch (e: any) {
         console.log('dashboard: error in retrieving data event')
@@ -50,7 +40,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col space-y-[35px] w-screen bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
+    <div className="flex w-screen flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
       {!fetched ? (
         <div>Loading...</div>
       ) : (
@@ -59,14 +49,14 @@ export default function Dashboard() {
             title={'upcoming events'}
             route={'dashboard/seeAll'}
             query={{ events: 'upcoming' }}
-            eventsData={upcomingEvents}
+            eventsData={events.cachedUpcomingEvents}
             seeAllOption={true}
           />
           <EventsDisplay
             title={'past events'}
             route={'dashboard/seeAll'}
             query={{ events: 'past' }}
-            eventsData={pastEvents}
+            eventsData={events.cachedPastEvents}
             seeAllOption={true}
           />
         </>

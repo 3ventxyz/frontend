@@ -9,7 +9,7 @@ import {
   orderBy,
   DocumentSnapshot
 } from '@firebase/firestore'
-import { ReactNode, useContext } from 'react'
+import { ReactNode, useContext, useState } from 'react'
 import { createContext } from 'react'
 import { EventInterface } from '../shared/interface/common'
 
@@ -18,16 +18,10 @@ interface Props {
 }
 
 interface EventsInterface {
-  setCacheEventsData: ({
-    cacheName,
-    fetchedEventsData,
-    url
-  }: {
-    cacheName: string
-    fetchedEventsData: any
-    url: string
-  }) => void
-
+  cachedUpcomingEvents: EventInterface[] | null
+  cachedPastEvents: EventInterface[] | null
+  cacheUpcomingEvents: (events: EventInterface[]) => void | void
+  cachePastEvents: (events: EventInterface[]) => void | void
   fetchEventsData: ({
     collectionRef,
     numberOfEvents
@@ -42,12 +36,31 @@ interface EventsInterface {
 }
 
 const EventsContext = createContext<EventsInterface>({
-  setCacheEventsData: () => undefined,
   fetchEventsData: () => undefined,
-  newEventData: () => undefined
+  newEventData: () => undefined,
+  cacheUpcomingEvents: () => undefined,
+  cachePastEvents: () => undefined,
+  cachedPastEvents: null,
+  cachedUpcomingEvents: null
 })
 
 const EventsProvider = ({ children }: Props): JSX.Element => {
+  const [cachedUpcomingEvents, setCachedUpcomingEvents] = useState<
+    EventInterface[] | null
+  >(null)
+  const [cachedPastEvents, setCachedPastEvents] = useState<
+    EventInterface[] | null
+  >(null)
+
+  const cacheUpcomingEvents = (events: EventInterface[]) => {
+    setCachedUpcomingEvents(events)
+  }
+  const cachePastEvents = (events: EventInterface[]) => {
+    setCachedPastEvents(events)
+  }
+
+  // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
+
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
       address: eventDoc.data()?.address,
@@ -58,27 +71,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       imgURL: eventDoc.data()?.img_url
     }
     return eventData
-  }
-  const setCacheEventsData = ({
-    cacheName,
-    fetchedEventsData,
-    url
-  }: {
-    cacheName: string
-    fetchedEventsData: any
-    url: string
-  }) => {
-    const cachedData = new Response(JSON.stringify(fetchedEventsData))
-    console.log('====cacheEventContext:setCacheEventsData===')
-    console.log(cachedData)
-    console.log('===========================================')
-
-    if ('caches' in window) {
-      caches.open(cacheName).then((cache) => {
-        cache.put(url, cachedData)
-        console.log('data cached in the webbrowser!!!')
-      })
-    }
   }
 
   const fetchEventsData = async ({
@@ -95,7 +87,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
         limit(numberOfEvents)
       )
     )
-    const eventsList: Array<EventInterface> = []
+    const eventsList: EventInterface[] = []
     for (const eventRef of eventsRef.docs) {
       const eventDoc: any = await getDoc(eventRef.data().event_ref)
       console
@@ -107,9 +99,12 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   return (
     <EventsContext.Provider
       value={{
+        cachedUpcomingEvents: cachedUpcomingEvents,
+        cachedPastEvents: cachedPastEvents,
         newEventData: newEventData,
-        setCacheEventsData: setCacheEventsData,
-        fetchEventsData: fetchEventsData
+        fetchEventsData: fetchEventsData,
+        cacheUpcomingEvents: cacheUpcomingEvents,
+        cachePastEvents: cachePastEvents
       }}
     >
       {children}
