@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { TbPhotoOff } from 'react-icons/tb'
 import { EventInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
-// impo
 
 export default function EventsDisplay({
   title,
@@ -16,7 +15,7 @@ export default function EventsDisplay({
   title: string
   route: string
   query: any
-  eventsData: EventInterface[]
+  eventsData: EventInterface[] | null
   seeAllOption?: boolean
   showHeader?: boolean
 }) {
