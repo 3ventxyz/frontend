@@ -25,11 +25,23 @@ export async function verifyDiscord(accessCode: string, uid: string) {
     data = JSON.stringify(data)
     const token = JSON.parse(data).access_token
     if (token && token !== undefined) {
+      /*Get User ID*/
+      const userResponse = await fetch('https://discordapp.com/api/users/@me', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      let userData = await userResponse.json()
+      console.log(userData)
+      userData = JSON.stringify(userData)
+      const id = JSON.parse(userData).id
       /*change value on database*/
       try {
-        const docRef = doc(db, 'user', uid)
+        const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
-          discord_verified: true
+          discord_verified: true,
+          discord_id: id
         })
         console.log('Data written into doc ID: ', docRef.id)
         return true
@@ -55,7 +67,7 @@ export async function verifyTwitter(accessCode: string, uid: string) {
 
       /*change value on database*/
       try {
-        const docRef = doc(db, 'user', uid)
+        const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
           twitter_verified: true,
           twitter_id: twitterIdJson.data.id

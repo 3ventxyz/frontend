@@ -22,8 +22,19 @@ interface UserCredentials {
   phoneNumber?: string
 }
 
+interface UserModel {
+  phone_number: string
+  discord_id: ''
+  discord_verified: boolean
+  twitter_id: ''
+  twitter_verified: boolean
+  wallets: string[]
+}
+
 interface AuthInterface {
   currentUser?: User | null
+  userModel?: UserModel | null
+  setUserModel: (data: UserModel) => Promise<UserModel | null> | void
   uid: string
   login: ({ phoneNumber }: UserCredentials) => Promise<UserCredential> | void
   logout: () => Promise<void> | void
@@ -36,30 +47,42 @@ const AuthContext = createContext<AuthInterface>({
   login: () => undefined,
   logout: () => undefined,
   isLoggedIn: () => false,
-  isLoading: true
+  isLoading: true,
+  setUserModel: () => undefined
 })
 
 const AuthProvider = ({ children }: Props): JSX.Element => {
   const [uid, setUid] = useState('')
   const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [userModel, setUserModel] = useState<UserModel | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
-  // SENTINEL: SHOW THE CURRENT USER
   useEffect(() => {
-    console.log('auth context: current user', currentUser)
-  }, [currentUser])
+    console.log('user model change', userModel)
+  }, [userModel])
 
   // SENTINEL: WATCHES USER AUTH CHANGES + UPDATES STORE
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
+      const loggedInUser = localStorage.getItem('3vent-user-model')
+      if (loggedInUser) {
+        const foundUser = JSON.parse(loggedInUser)
+        setUserModel(foundUser)
+      }
       setUid(user?.uid || '')
       setLoading(false)
-      console.log('onAuthStateChanged()', user)
+      console.log('onAuthStateChanged(): current user', user, userModel)
     })
     return unsubscribe
   }, [])
+
+  // UPDATE USER MODEL LOCAL STORAGE
+  const updateUserModel = (userModel: UserModel) => {
+    localStorage.setItem('3vent-user-model', JSON.stringify(userModel))
+    setUserModel(userModel)
+  }
 
   // LOGIN: UPDATE STORE + LOCALSTORAGE
   const login = ({ data }: any) => {
@@ -71,8 +94,9 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
   // LOGOUT: UPDATE STORE + LOCALSTORAGE
   const logout = () => {
     setCurrentUser(null)
+    setUserModel(null)
     setUid('')
-    localStorage.setItem('data', '')
+    localStorage.clear()
     router.push('/login')
     return signOut(auth)
   }
@@ -93,7 +117,9 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
-        isLoading: loading
+        isLoading: loading,
+        userModel: userModel,
+        setUserModel: updateUserModel
       }}
     >
       {!loading && children}

@@ -22,13 +22,6 @@ export default function Login() {
   const authContext = useAuth()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
 
-  // CHECK IF USER LOGGED IN -> ROUTE TO DASHBOARD
-  // useEffect(() => {
-  //   if (authContext.isLoggedIn()) {
-  //     router.push('/events')
-  //   }
-  // }, [authContext])
-
   // configure recaptcha
   useEffect(() => {
     const run = () => {
@@ -82,12 +75,31 @@ export default function Login() {
                     upcoming_events: [],
                     wallets: []
                   }
-                  setDoc(userRef, userObject)
+                  await setDoc(doc(db, 'users', result.user.uid), userObject)
+                  const userModel: UserModel = {
+                    phone_number: phoneNumber,
+                    discord_id: '',
+                    discord_verified: false,
+                    twitter_id: '',
+                    twitter_verified: false,
+                    wallets: []
+                  }
+                  authContext.setUserModel(userModel)
                 } else {
-                  console.log('USER EXISTS')
+                  const userDocRef = doc(db, 'users', result.user.uid)
+                  const userDocSnap = await getDoc(userDocRef)
+                  const data = userDocSnap.data()
+                  const userModel: UserModel = {
+                    phone_number: data?.phone_number,
+                    discord_id: data?.discord_id,
+                    discord_verified: data?.discord_verified,
+                    twitter_id: data?.twitter_id,
+                    twitter_verified: data?.twitter_verified,
+                    wallets: data?.wallets
+                  }
+                  authContext.setUserModel(userModel)
                 }
-                console.log('new')
-                router.push('/events')
+                router.push('/settings')
               })
               .catch((error) => {
                 console.log('error', error)
@@ -189,4 +201,13 @@ export default function Login() {
       )}
     </div>
   )
+}
+
+interface UserModel {
+  phone_number: string
+  discord_id: ''
+  discord_verified: false
+  twitter_id: ''
+  twitter_verified: false
+  wallets: string[]
 }
