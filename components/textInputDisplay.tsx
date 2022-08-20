@@ -7,6 +7,16 @@ export default function TextInputDisplay({
   labelText,
   bodyText
 }: TextInputDisplayProps) {
+  if (labelText === 'Phone Number' && bodyText.startsWith('+1')) {
+    bodyText =
+      '+1 (' +
+      bodyText.slice(2, 5) +
+      ')-' +
+      bodyText.slice(5, 8) +
+      '-' +
+      bodyText.slice(8)
+  }
+
   return (
     <form className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-semibold">
       <p>{labelText}</p>
