@@ -23,11 +23,11 @@ export default function Login() {
   const [phoneNumber, setPhoneNumber] = useState<any>('')
 
   // CHECK IF USER LOGGED IN -> ROUTE TO DASHBOARD
-  useEffect(() => {
-    if (authContext.isLoggedIn()) {
-      router.push('/events')
-    }
-  }, [authContext])
+  // useEffect(() => {
+  //   if (authContext.isLoggedIn()) {
+  //     router.push('/events')
+  //   }
+  // }, [authContext])
 
   // configure recaptcha
   useEffect(() => {
@@ -64,15 +64,13 @@ export default function Login() {
               .then(async (result) => {
                 // FIREBASE AND GLOBAL STATE
                 // check for user existance in db
-                console.log('new')
+                console.log('USER ID:', result.user.uid)
                 const userRef = doc(db, 'users', result.user.uid)
                 const docSnap = await getDoc(userRef)
 
                 // create new user document if sign up
-                console.log('new')
                 if (!docSnap.exists()) {
                   const userObject = {
-                    uid: result.user.uid,
                     phone_number: phoneNumber,
                     discord_verified: false,
                     twitter_verified: false,
@@ -83,6 +81,8 @@ export default function Login() {
                     wallets: []
                   }
                   setDoc(userRef, userObject)
+                } else {
+                  console.log('USER EXISTS')
                 }
                 console.log('new')
                 router.push('/events')
