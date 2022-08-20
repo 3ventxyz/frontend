@@ -41,26 +41,22 @@ export default function Dashboard() {
 
   return (
     <div className="flex w-screen flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
-      {!fetched ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <EventsDisplay
-            title={'upcoming events'}
-            route={'dashboard/seeAll'}
-            query={{ events: 'upcoming' }}
-            eventsData={events.cachedUpcomingEvents}
-            seeAllOption={true}
-          />
-          <EventsDisplay
-            title={'past events'}
-            route={'dashboard/seeAll'}
-            query={{ events: 'past' }}
-            eventsData={events.cachedPastEvents}
-            seeAllOption={true}
-          />
-        </>
-      )}
+      <EventsDisplay
+        title={'upcoming events'}
+        route={'dashboard/seeAll'}
+        query={{ events: 'upcoming' }}
+        eventsData={events.cachedUpcomingEvents}
+        seeAllOption={true}
+        isFetching={!fetched}
+      />
+      <EventsDisplay
+        title={'past events'}
+        route={'dashboard/seeAll'}
+        query={{ events: 'past' }}
+        eventsData={events.cachedPastEvents}
+        seeAllOption={true}
+        isFetching={!fetched}
+      />
     </div>
   )
 }
