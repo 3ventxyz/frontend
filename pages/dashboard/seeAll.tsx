@@ -13,7 +13,7 @@ export default function SeeAll() {
   const router = useRouter()
   const events = useEvents()
   const [title, setTitle] = useState('')
-  const [eventsData, setEvents] = useState<Array<EventInterface>>([])
+  const [eventsData, setEvents] = useState<Array<EventInterface>|null>(null)
   const [mode, setMode] = useState('upcoming')
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function SeeAll() {
   useEffect(() => {
     const setData = async () => {
       let eventData: Array<EventInterface>
+      setEvents(null)
       const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
 
       switch (mode) {
@@ -90,6 +91,7 @@ export default function SeeAll() {
         query={undefined}
         eventsData={eventsData}
         showHeader={false}
+        isFetching={eventsData === null}
       />
     </div>
   )
