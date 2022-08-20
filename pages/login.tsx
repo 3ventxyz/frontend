@@ -72,10 +72,12 @@ export default function Login() {
                 if (!docSnap.exists()) {
                   const userObject = {
                     phone_number: phoneNumber,
-                    discord_verified: false,
-                    twitter_verified: false,
+                    organizations: [],
                     discord_id: '',
+                    discord_verified: false,
+                    discord_guilds: [],
                     twitter_id: '',
+                    twitter_verified: false,
                     past_events: [],
                     upcoming_events: [],
                     wallets: []
