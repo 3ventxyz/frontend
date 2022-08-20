@@ -1,6 +1,6 @@
 // author: marthel
 import Link from 'next/link'
-import { TbPhotoOff } from 'react-icons/tb'
+import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
 import { EventInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 
@@ -10,7 +10,8 @@ export default function EventsDisplay({
   query,
   eventsData,
   seeAllOption = false,
-  showHeader = true
+  showHeader = true,
+  isFetching
 }: {
   title: string
   route: string
@@ -18,6 +19,7 @@ export default function EventsDisplay({
   eventsData: EventInterface[] | null
   seeAllOption?: boolean
   showHeader?: boolean
+  isFetching: boolean
 }) {
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
 
@@ -36,17 +38,39 @@ export default function EventsDisplay({
         </div>
       )}
       <div className="mx-auto flex max-w-[1200px] flex-row flex-wrap justify-evenly gap-[30px] 2xl:justify-start">
-        {eventsData &&
+        {isFetching ? (
+          <>
+            <EventTile eventData={null} />
+            <EventTile eventData={null} />
+            <EventTile eventData={null} />
+          </>
+        ) : (
+          eventsData &&
           eventsData.map((eventData, index) => {
             return <EventTile key={index.toString()} eventData={eventData} />
-          })}
+          })
+        )}
       </div>
     </div>
   )
 }
 
-function EventTile({ eventData }: { eventData: EventInterface }) {
-  return (
+function EventTile({ eventData }: { eventData: EventInterface | null }) {
+  return !eventData ? (
+    <div className=" h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
+      <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-300 sm:max-h-full">
+        <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
+          <TbPhoto className="h-[150px] w-[150px]" />
+        </div>
+      </div>
+      <div className="flex flex-col space-y-[7px] p-[20px]  ">
+        <div className="h-[25px] w-auto rounded-md bg-gray-300 mt-[5px] mb-[5px]"></div>
+        <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
+        <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
+        <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
+      </div>
+    </div>
+  ) : (
     <Link href={`/event/${eventData.id}`}>
       <div className=" h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
         <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
