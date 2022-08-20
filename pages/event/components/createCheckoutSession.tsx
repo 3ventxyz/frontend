@@ -11,7 +11,7 @@ export default function CreateCheckoutSession({
   onClose,
   confirmSelectedTicketPurchase
 }: {
-  selectedTicket: TicketInterface | undefined
+  selectedTicket: TicketInterface | null
   onClose: () => void
   confirmSelectedTicketPurchase: () => void
 }) {
@@ -39,18 +39,7 @@ export default function CreateCheckoutSession({
   return (
     <div className="flex h-full flex-col items-center justify-around py-[34px]">
       <h3 className="mb-[26px] text-[32px]">Your Order</h3>
-      <TicketButton
-        selected={true}
-        ticket={
-          selectedTicket || {
-            capLimit: 0,
-            price: 0,
-            registeredUsers: 0,
-            ticketTitle: '',
-            tokenId: ''
-          }
-        }
-      />
+      <TicketButton selected={true} ticket={selectedTicket} />
       <div className="flex h-full items-center justify-center">
         {checkoutSessionPage()}
       </div>
