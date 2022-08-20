@@ -1,4 +1,5 @@
 // author: marthel
+import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
 import {
   doc,
   getDoc,
@@ -87,7 +88,7 @@ export default function Event() {
           </LoadedEventPage>
         )
       default:
-        return <div>Loading</div>
+        return <LoadingEventPage/>
     }
   }
 
@@ -121,8 +122,6 @@ export default function Event() {
     }
   }, [eid])
 
-
-
   return (
     <>
       <div className="flex w-screen flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:space-x-[291px] md:pb-[106px] md:pt-[85px]">
@@ -140,6 +139,44 @@ export default function Event() {
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
         />
       </Modal>
+    </>
+  )
+}
+
+function LoadingEventPage() {
+  return (
+    <>
+      <div className="flex h-full flex-col items-center lg:items-start animate-pulse">
+        <div
+          id="event-details"
+          className="mb-[50px] w-auto  space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
+        >
+          <h3>
+            Loading ...
+          </h3>
+          <div
+            id="mobile-event-image"
+            className="relative h-[310px] w-[310px] bg-gray-300 text-gray-400 rounded-[67px]  px-[50px] py-[50px] lg:hidden"
+          >
+            <TbPhoto className="h-[150px] w-[150px]" />
+          </div>
+          <div className="leading-[25px]">
+            date <br />
+            address
+          </div>
+
+          <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-200">
+            google map image
+          </div>
+          <div className="leading-[20px]">description of the event</div>
+        </div>
+        tickets fetching
+      </div>
+      <div>
+        <div className="relative hidden h-[400px] w-[400px] rounded-[67px] text-gray-400 bg-gray-300 px-[50px] py-[50px] lg:block">
+           <TbPhoto className="h-[150px] w-[150px]" />
+        </div>
+      </div>
     </>
   )
 }
