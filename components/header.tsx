@@ -19,7 +19,7 @@ export default function Header() {
       const hash = pathParts.slice(-1)[0]
       setPath(hash)
     } else {
-      setPath('')
+      setPath(asPath)
     }
   }, [asPath])
 
@@ -39,7 +39,7 @@ export default function Header() {
         <Link href="/">
           <p
             className={
-              path === '' || path === 'features'
+              path === '/' || path === 'features'
                 ? activeHeaderTextButtonStyle
                 : headerTextButtonStyle
             }
@@ -72,7 +72,7 @@ export default function Header() {
         <Link href="/dashboard">
           <p
             className={
-              path === 'dashboard'
+              path === '/dashboard'
                 ? activeHeaderTextButtonStyle
                 : headerTextButtonStyle
             }
