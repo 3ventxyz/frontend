@@ -1,5 +1,5 @@
 // author: marthel
-import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
+import { TbPhotoOff, TbPhoto, TbMap } from 'react-icons/tb'
 import {
   doc,
   getDoc,
@@ -18,16 +18,7 @@ import Modal from '../../components/modal'
 import { useEvents } from '../../context/eventsContext'
 import Button from '../../components/button'
 import CreateCheckoutSession from './components/createCheckoutSession'
-
-/**
- * parts that will use the loading animation
- *  -- title
- *  -- date and address
- *  --google map image
- *  -- description
- *  -- the event image(the icon will be used for an easy fix)
- *  -- the ticket buttons.
- */
+import Spinner from '../../components/spinner'
 
 enum EventPageEnum {
   fetchingData,
@@ -88,7 +79,7 @@ export default function Event() {
           </LoadedEventPage>
         )
       default:
-        return <LoadingEventPage/>
+        return <LoadingEventPage />
     }
   }
 
@@ -146,35 +137,43 @@ export default function Event() {
 function LoadingEventPage() {
   return (
     <>
-      <div className="flex h-full flex-col items-center lg:items-start animate-pulse">
+      <div className="flex h-full max-w-[373px] animate-pulse flex-col items-center lg:items-start">
         <div
           id="event-details"
-          className="mb-[50px] w-auto  space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
+          className="mb-[50px] w-full space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
         >
-          <h3>
-            Loading ...
-          </h3>
+          <div className="h-[40px] w-full rounded-lg bg-gray-300"></div>
           <div
             id="mobile-event-image"
-            className="relative h-[310px] w-[310px] bg-gray-300 text-gray-400 rounded-[67px]  px-[50px] py-[50px] lg:hidden"
+            className="relative h-[310px] w-[310px] rounded-[67px] bg-gray-300 px-[50px]  py-[50px] text-gray-400 lg:hidden"
           >
-            <TbPhoto className="h-[150px] w-[150px]" />
+            <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
+              <TbPhoto className="h-[150px] w-[150px]" />
+            </div>
           </div>
-          <div className="leading-[25px]">
-            date <br />
-            address
+          <div className="flex flex-col space-y-[8px] leading-[25px]">
+            <div className="h-[19px] w-[100px] rounded-lg bg-gray-300"></div>
+            <div className="h-[19px] w-[280px] rounded-lg bg-gray-300"></div>
           </div>
 
-          <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-200">
-            google map image
+          <div className="flex h-[100px] w-[100px] items-center justify-center rounded-[20px] bg-green-200">
+            <TbMap className="h-[50px] w-[50px]" />
           </div>
-          <div className="leading-[20px]">description of the event</div>
+          <div className="flex flex-col space-y-[5px]">
+            <div className="h-[19px] w-full rounded-lg bg-gray-300 leading-[20px]"></div>
+            <div className="h-[19px] w-full rounded-lg bg-gray-300 leading-[20px]"></div>
+          </div>
         </div>
-        tickets fetching
+
+        <div className="flex h-[364px] w-[320px] flex-col items-center justify-center space-y-[19px] md:w-[373px]">
+          <Spinner />
+        </div>
       </div>
       <div>
-        <div className="relative hidden h-[400px] w-[400px] rounded-[67px] text-gray-400 bg-gray-300 px-[50px] py-[50px] lg:block">
-           <TbPhoto className="h-[150px] w-[150px]" />
+        <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-gray-300 px-[50px] py-[50px] text-gray-400 lg:block">
+          <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
+            <TbPhoto className="h-[150px] w-[150px]" />
+          </div>
         </div>
       </div>
     </>
@@ -190,10 +189,10 @@ function LoadedEventPage({
 }): JSX.Element {
   return (
     <>
-      <div className="flex h-full flex-col items-center lg:items-start ">
+      <div className="flex h-full max-w-[373px] flex-col items-center lg:items-start ">
         <div
           id="event-details"
-          className="mb-[50px] w-auto  space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
+          className="mb-[50px] w-auto space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
         >
           <h3>
             {event?.eventTitle !== null ? event?.eventTitle : 'Event Title'}
