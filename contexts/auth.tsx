@@ -28,7 +28,7 @@ interface UserModel {
   discord_verified: boolean
   twitter_id: ''
   twitter_verified: boolean
-  wallets: string[]
+  wallet: string
 }
 
 interface AuthInterface {

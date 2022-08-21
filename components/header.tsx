@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAuth } from '../contexts/auth'
 import Button from './button'
+import { useConnectModal, ConnectButton } from '@rainbow-me/rainbowkit'
+import { useAccount } from 'wagmi'
+import SignInButton from './siwe'
 
 export default function Header() {
   const headerTextButtonStyle =
@@ -14,6 +16,8 @@ export default function Header() {
   const router = useRouter()
   const [path, setPath] = useState('')
   const auth = useAuth()
+  const { openConnectModal } = useConnectModal()
+  const { address } = useAccount()
 
   // determines which path or sub element we are focused on
   useEffect(() => {
@@ -54,8 +58,29 @@ export default function Header() {
           </Link>
         </div>
         {auth.currentUser ? (
-          <div className="flex flex-row gap-x-2">
-            <ConnectButton />
+          <div className="flex flex-row gap-x-4">
+            {address ? (
+              <>
+                <ConnectButton
+                  accountStatus="address"
+                  chainStatus="none"
+                  showBalance={false}
+                />
+                {/* TODO: this should actually check iron session + expiry */}
+                {!auth.userModel?.wallet && (
+                  <SignInButton
+                    onSuccess={(address: any) => console.log(address)}
+                    onError={(address: any) => console.log(address)}
+                  />
+                )}
+              </>
+            ) : (
+              <Button
+                active={true}
+                text={address ? address : 'Connect Wallet'}
+                onClick={openConnectModal}
+              />
+            )}
             <img
               alt="avatar"
               src="/assets/auth/avatar.svg"
