@@ -56,6 +56,28 @@ export default function Header() {
               Home
             </p>
           </Link>
+          <Link href="/dashboard">
+            <p
+              className={
+                path.includes('dashboard')
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Dashboard
+            </p>
+          </Link>
+          <Link href="/settings">
+            <p
+              className={
+                path.includes('settings')
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Settings
+            </p>
+          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">
