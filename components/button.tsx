@@ -3,43 +3,53 @@ export default function Button({
   onClick,
   active,
   type = 'button',
+  isExpanded = false,
+  id = '',
+  auth = false,
   activeStyling = false
 }: {
   text: string
-  onClick: () => void
+  onClick: (() => void) | undefined
   active: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
+  isExpanded?: boolean
+  id?: string
+  auth?: boolean
   activeStyling?: boolean
 }) {
-  if (!activeStyling) {
+  if (auth) {
     return (
       <button
+        id={id}
         type={type}
         disabled={!active}
         onClick={onClick}
-        className={`${
-          !active ? 'bg-white text-disabled' : 'bg-black text-white'
-        } h-[40px] w-fit items-center justify-center rounded-[6px] px-[20px] py-[10px] text-[14px] font-semibold leading-[] `}
-      >
-        {text}
-      </button>
-    )
-  } else {
-    return (
-      <button
-        type={type}
-        disabled={!active}
-        onClick={onClick}
-        className={`
-      ${
-        !active
-          ? 'bg-black text-white'
-          : 'bg-white text-disabled hover:bg-black hover:text-white'
-      }
-      h-[40px] w-fit cursor-pointer items-center justify-center rounded-[6px] border px-[20px] py-[10px] text-[14px]  font-semibold`}
+        className={`h-[56px] items-center justify-center rounded-[16px] bg-primary px-[20px] py-[10px] text-[16px] font-bold leading-[] text-white ${
+          isExpanded ? 'w-full' : 'w-fit'
+        }`}
       >
         {text}
       </button>
     )
   }
+  return (
+    <button
+      type={type}
+      disabled={!active}
+      onClick={onClick}
+      className={`h-[40px] items-center justify-center rounded-[6px] bg-primary px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white ${
+        isExpanded ? 'w-full' : 'w-fit'
+      } ${
+        !activeStyling
+          ? !active
+            ? 'bg-white text-disabled'
+            : 'bg-black text-white'
+          : !active
+          ? 'cursor-pointer bg-black text-white'
+          : 'cursor-pointer bg-slate-50 text-disabled hover:bg-black hover:text-white'
+      }`}
+    >
+      {text}
+    </button>
+  )
 }

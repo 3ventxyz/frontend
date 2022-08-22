@@ -1,5 +1,5 @@
 import { initializeApp } from '@firebase/app'
-import { getAnalytics } from '@firebase/analytics'
+import { getAnalytics, isSupported } from '@firebase/analytics'
 import { getFirestore } from '@firebase/firestore'
 import { getAuth } from '@firebase/auth'
 
@@ -15,6 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
+// const analytics = isSupported().then((yes) => (yes ? getAnalytics(app) : null))
 const auth = getAuth(app)
 
-export { app, auth, db }
+export { app, db, auth }

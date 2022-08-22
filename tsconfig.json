@@ -16,6 +16,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["pages", "components", "services", "context", "hooks", "shared"],
+  "include": ["pages", "components", "services", "context", "hooks", "shared", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

@@ -4,7 +4,11 @@ const nextConfig = {
   swcMinify: true,
   images: {
     minimumCacheTTL: 120,
-    domains: ['firebasestorage.googleapis.com', 'maps.googleapis.com'],
+    domains: [
+      'firebasestorage.googleapis.com',
+      'maps.googleapis.com',
+      'res.cloudinary.com'
+    ],
     formats: ['image/webp']
   }
 }
