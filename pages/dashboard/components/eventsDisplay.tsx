@@ -80,14 +80,14 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
               <p>No image available</p>
             </div>
           ) : (
-            <Image
+            <img
               src={eventData.imgURL}
               // layout="fill"
-              width={'384px'}
-              height={'384px'}
-              loading="lazy"
-              objectFit="cover"
-              className="rounded-3xl"
+              // width={'384px'}
+              // height={'384px'}
+              // loading="lazy"
+              // objectFit="cover"
+              className="rounded-3xl w-[384px] h-[384px]"
             />
           )}
         </div>
