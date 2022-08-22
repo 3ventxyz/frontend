@@ -5,7 +5,8 @@ export default function Button({
   type = 'button',
   isExpanded = false,
   id = '',
-  auth = false
+  auth = false,
+  activeStyling = false
 }: {
   text: string
   onClick: (() => void) | undefined
@@ -14,6 +15,7 @@ export default function Button({
   isExpanded?: boolean
   id?: string
   auth?: boolean
+  activeStyling?: boolean
 }) {
   if (auth) {
     return (
@@ -37,6 +39,14 @@ export default function Button({
       onClick={onClick}
       className={`h-[40px] items-center justify-center rounded-[6px] bg-primary px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-white ${
         isExpanded ? 'w-full' : 'w-fit'
+      } ${
+        !activeStyling
+          ? !active
+            ? 'bg-white text-disabled'
+            : 'bg-black text-white'
+          : !active
+          ? 'cursor-pointer bg-black text-white'
+          : 'cursor-pointer bg-slate-50 text-disabled hover:bg-black hover:text-white'
       }`}
     >
       {text}
