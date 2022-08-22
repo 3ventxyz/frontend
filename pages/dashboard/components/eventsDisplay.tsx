@@ -82,7 +82,9 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           ) : (
             <Image
               src={eventData.imgURL}
-              layout="fill"
+              // layout="fill"
+              width={'384px'}
+              height={'384px'}
               loading="lazy"
               objectFit="cover"
               className="rounded-3xl"
