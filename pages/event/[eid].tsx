@@ -199,14 +199,14 @@ function LoadedEventPage({
           </h3>
           <div
             id="mobile-event-image"
-            className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] lg:hidden"
+            className="relative h-[310px] w-[310px] rounded-[67px]   lg:hidden"
           >
             <img
               src={event ? event.imgURL : ''}
               // layout="fill"
               // loading="lazy"
               // objectFit="cover"
-              className="rounded-[67px] h-full w-full"
+              className="h-full w-full rounded-[67px] object-cover"
             />
           </div>
           <div className="leading-[25px]">
@@ -217,10 +217,7 @@ function LoadedEventPage({
           <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
             <img
               src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
-              // layout="fill"
-              // loading="lazy"
-              // objectFit="cover"
-              className="h-full w-full rounded-[20px]"
+              className="h-full w-full rounded-[20px] object-cover"
             />
           </div>
           <div className="leading-[20px]">description of the event</div>
@@ -228,13 +225,10 @@ function LoadedEventPage({
         {children}
       </div>
       <div>
-        <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] lg:block">
+        <div className="hidden h-[400px] w-[400px] rounded-[67px] bg-slate-300 object-cover  lg:block">
           <img
             src={event ? event.imgURL : ''}
-            // layout="fill"
-            // loading="lazy"
-            // objectFit="cover"
-            className="rounded-[67px] h-full w-full"
+            className="h-full w-full rounded-[67px] object-cover"
           />
         </div>
       </div>
