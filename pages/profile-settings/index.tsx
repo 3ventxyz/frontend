@@ -11,11 +11,13 @@ const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 export default function Verify() {
   const { asPath } = useRouter()
   const router = useRouter()
-  const [url, setUrl] = useState('')
   const [checked, setChecked] = useState(false)
   const [discordVerified, setDiscordVerified] = useState(false)
   const [twitterVerified, setTwitterVerified] = useState(false)
   const auth = useAuth()
+
+  const { origin } = absoluteUrl()
+  const url = `${origin}${router.pathname}`
 
   // checks if user is verified on discord and twitter
   // if user is not verified and hash is present, run verification and update db
@@ -30,7 +32,7 @@ export default function Verify() {
       if (auth?.userModel?.discord_verified !== true) {
         if (hash !== '' && !asPath.includes('state')) {
           console.log('attempt to change discord')
-          const response = await verifyDiscord(hash, auth.uid)
+          const response = await verifyDiscord(hash, auth.uid, url)
           if (response === true) {
             if (auth?.userModel) {
               var authModelCopy = { ...auth.userModel }
@@ -46,7 +48,7 @@ export default function Verify() {
 
       if (auth?.userModel?.twitter_verified !== true) {
         if (hash !== '' && asPath.includes('state')) {
-          const response = await verifyTwitter(hash, auth.uid)
+          const response = await verifyTwitter(hash, auth.uid, url)
           if (response === true) {
             console.log('response true')
             if (auth?.userModel) {
@@ -67,11 +69,6 @@ export default function Verify() {
     if (!checked) {
       checkVerification()
     }
-  }, [])
-
-  useEffect(() => {
-    const { origin } = absoluteUrl()
-    setUrl(`${origin}${router.pathname}`)
   }, [])
 
   return (

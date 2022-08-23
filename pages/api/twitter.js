@@ -1,13 +1,13 @@
 export default async function handler(req, res) {
   const query = req.query
-  const { accessCode } = query
+  const { accessCode, redirectUrl } = query
   const url = 'https://api.twitter.com/2/oauth2/token'
 
   const formData = new URLSearchParams({
     code: accessCode,
     grant_type: 'authorization_code',
     client_id: process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID || '',
-    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL || '',
+    redirect_uri: redirectUrl,
     code_verifier: 'challenge'
   })
 

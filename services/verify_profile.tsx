@@ -1,16 +1,22 @@
 import { db } from './firebase_config'
 import { doc, updateDoc } from 'firebase/firestore'
 
-export async function verifyDiscord(accessCode: string, uid: string) {
+export async function verifyDiscord(
+  accessCode: string,
+  uid: string,
+  redirectUrl: string
+) {
   try {
     const url = 'https://discord.com/api/v10/oauth2/token'
+
+    console.log(redirectUrl)
 
     const formData = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '',
       client_secret: process.env.NEXT_PUBLIC_DISCORD_API_SECRET || '',
       grant_type: 'authorization_code',
       code: accessCode,
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL || '',
+      redirect_uri: redirectUrl,
       scope: 'identify'
     })
 
@@ -55,9 +61,15 @@ export async function verifyDiscord(accessCode: string, uid: string) {
   return false
 }
 
-export async function verifyTwitter(accessCode: string, uid: string) {
+export async function verifyTwitter(
+  accessCode: string,
+  uid: string,
+  redirectUrl: string
+) {
   try {
-    const rawResponse = await fetch('api/twitter?accessCode=' + accessCode)
+    const rawResponse = await fetch(
+      'api/twitter?accessCode=' + accessCode + '&redirectUrl=' + redirectUrl
+    )
     const response = await rawResponse.json()
     const token = response.access_token
     if (token && token !== undefined) {
