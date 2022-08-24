@@ -53,7 +53,8 @@ export default function SignInButton({
         uri: window.location.origin,
         version: '1',
         chainId,
-        nonce: state.nonce
+        nonce: state.nonce,
+        expirationTime: new Date(Date.now() + 86400000).toISOString()
       })
       const signature = await signMessageAsync({
         message: message.prepareMessage()
