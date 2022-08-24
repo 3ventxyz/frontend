@@ -1,3 +1,3 @@
 export default function Error() {
-  return <div>Error Sorry</div>
+  return <div>Error</div>
 }
