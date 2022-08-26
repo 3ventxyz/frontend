@@ -1,7 +1,9 @@
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
-} from 'react-places-autocomplete'
+} from  'react-places-autocomplete'
+
+// import { geocodeByAddress } from 'react-places-autocomplete'
 import { useState } from 'react'
 
 interface LocationData {
