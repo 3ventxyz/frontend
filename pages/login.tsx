@@ -73,7 +73,8 @@ export default function Login() {
                     twitter_verified: false,
                     past_events: [],
                     upcoming_events: [],
-                    wallet: ''
+                    wallet: '',
+                    siwe_expiration_time: ''
                   }
                   await setDoc(doc(db, 'users', result.user.uid), userObject)
                   const userModel: UserModel = {
@@ -82,7 +83,8 @@ export default function Login() {
                     discord_verified: false,
                     twitter_id: '',
                     twitter_verified: false,
-                    wallet: ''
+                    wallet: '',
+                    siwe_expiration_time: ''
                   }
                   authContext.setUserModel(userModel)
                 } else {
@@ -95,7 +97,8 @@ export default function Login() {
                     discord_verified: data?.discord_verified,
                     twitter_id: data?.twitter_id,
                     twitter_verified: data?.twitter_verified,
-                    wallet: data?.wallet
+                    wallet: data?.wallet,
+                    siwe_expiration_time: data?.siwe_expiration_time
                   }
                   authContext.setUserModel(userModel)
                 }
@@ -210,4 +213,5 @@ interface UserModel {
   twitter_id: ''
   twitter_verified: false
   wallet: string
+  siwe_expiration_time: string
 }

@@ -77,7 +77,8 @@ export default function SignInButton({
       try {
         const docRef = doc(db, 'users', auth.uid)
         await updateDoc(docRef, {
-          wallet: address
+          wallet: address,
+          siwe_expiration_time: message.expirationTime ?? ''
         })
         console.log('Data written into doc ID: ', docRef.id)
       } catch (e) {
@@ -88,6 +89,7 @@ export default function SignInButton({
       if (auth?.userModel) {
         var authModelCopy = { ...auth.userModel }
         authModelCopy.wallet = address
+        authModelCopy.siwe_expiration_time = message.expirationTime ?? ''
         auth.setUserModel(authModelCopy)
       }
     } catch (error) {

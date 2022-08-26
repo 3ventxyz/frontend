@@ -29,6 +29,7 @@ interface UserModel {
   twitter_id: ''
   twitter_verified: boolean
   wallet: string
+  siwe_expiration_time: string
 }
 
 interface AuthInterface {
