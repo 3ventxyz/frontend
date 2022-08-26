@@ -4,7 +4,11 @@ import { useRouter } from 'next/router'
 import Button from '../../components/button'
 import Link from 'next/link'
 
-export default function Login() {
+
+/*
+TODO: talk with ben about this detail...
+*/
+export default function UnusedLogin() {
   const emailRef = React.createRef<HTMLInputElement>()
   const passwordRef = React.createRef<HTMLInputElement>()
   const [error, setError] = useState('')
@@ -18,10 +22,10 @@ export default function Login() {
     try {
       setError('')
       setLoading(true)
-      await auth.login({
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value
-      })
+      // await auth.login({
+      //   email: emailRef.current?.value,
+      //   password: passwordRef.current?.value
+      // })
       console.log('log in success')
       router.push('/mint')
     } catch {

@@ -1,5 +1,5 @@
 // author: marthel
-export default function TextInput({
+export default function OutdatedTextInput({
 	id,
 	placeholder,
 	inputName,
