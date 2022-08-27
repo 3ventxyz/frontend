@@ -170,16 +170,16 @@ export default function Header() {
             </p>
           </Link>
           <Link href="/dashboard">
-          <p
-            className={
-              path === '/dashboard'
-                ? activeHeaderTextButtonStyle
-                : headerTextButtonStyle
-            }
-          >
-            Dashboard
-          </p>
-        </Link>
+            <p
+              className={
+                path === '/dashboard'
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Dashboard
+            </p>
+          </Link>
         </div>
         <Button
           active={true}
