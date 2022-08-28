@@ -1,15 +1,19 @@
 import '../styles/globals.css'
 import Head from 'next/head'
+import Header from '../components/header'
+import Footer from '../components/footer'
 import { AppProps } from 'next/app'
-import Layout from '../components/layout'
-import { EventsProvider } from '../context/eventsContext'
 import '@rainbow-me/rainbowkit/styles.css'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider, useAuth } from '../contexts/auth'
+import Layout from '../components/layout'
 import Script from 'next/script'
+
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
   [
@@ -40,21 +44,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.svg" />
+        <script
+          src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&libraries=places`}
+          async
+        ></script>
       </Head>
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
         async
       ></Script>
       <AuthProvider>
-        <EventsProvider>
-          <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains}>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </RainbowKitProvider>
-          </WagmiConfig>
-        </EventsProvider>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider chains={chains}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </RainbowKitProvider>
+        </WagmiConfig>
       </AuthProvider>
     </div>
   )
