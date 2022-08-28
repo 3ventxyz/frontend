@@ -115,7 +115,7 @@ export default function Event() {
 
   return (
     <>
-      <div className="flex w-screen flex-col bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:space-x-[291px] md:pb-[106px] md:pt-[85px]">
+      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row xl:space-x-[291px] lg:space-x-[80px] md:pb-[106px] md:pt-[85px]">
         {EventPage()}
       </div>
       <Modal
