@@ -1,33 +1,40 @@
-// author: marthel
-export default function TextInput({
-  id,
-  placeholder,
-  inputName,
-  htmlFor,
-  labelTitle,
-  width = 'w-auto',
-  height = 'h-[43px]'
-}: {
+interface TextInputProps {
   id: string
-  placeholder: string
-  inputName: string
-  htmlFor: string
-  labelTitle: string
-  width?: string
-  height?: string
-}) {
+  labelText: string
+  placeholder?: string
+  maxWidth?: number
+  textArea?: boolean
+  setValue: (value: string) => void
+}
+
+export default function TextInput({
+  labelText,
+  placeholder,
+  id,
+  maxWidth,
+  textArea = false,
+  setValue
+}: TextInputProps) {
   return (
-    <div className="flex flex-col">
-      <label className="text-[12px] font-semibold" htmlFor={htmlFor}>
-        {labelTitle}
-      </label>
-      <input
-        className={`${height} ${width} rounded-[6px] border-[2px] border-inputUnselected pl-[12px] placeholder-placeholderUnselected placeholder:text-[13px] placeholder:font-semibold focus:border-inputSelected focus:placeholder-inputSelected`}
-        id={id}
-        type="text"
-        name={inputName}
-        placeholder={placeholder}
-      />
-    </div>
+    <form className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+      <label htmlFor={id}>{labelText}</label>
+      {textArea !== true ? (
+        <input
+          onChange={(e) => setValue(e.target.value)}
+          className="focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] border-black px-2 text-gray-700 focus:outline-none"
+          id={id}
+          type="text"
+          placeholder={placeholder}
+        />
+      ) : (
+        <textarea
+          onChange={(e) => setValue(e.target.value)}
+          name="textarea"
+          className="focus:shadow-outline leading-0 h-full min-h-[100px] w-full max-w-[400px] rounded-[16px] border-[1.5px] border-black p-2 text-gray-700 focus:outline-none"
+          id={id}
+          placeholder={placeholder}
+        ></textarea>
+      )}
+    </form>
   )
 }

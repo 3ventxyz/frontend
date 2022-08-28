@@ -8,10 +8,14 @@ import { useConnectModal, ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import SignInButton from './siwe'
 
-const userMenuToggle = (userMenu: boolean, setUserMenu: any) => {
-  setUserMenu(!userMenu)
+const userMenuShow = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(true)
   return userMenu
 }
+const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(false)
+  return userMenu
+} 
 
 export default function Header() {
   const headerTextButtonStyle =
@@ -116,13 +120,13 @@ export default function Header() {
               onClick={async () => await auth.logout()}
               className="hover:cursor-pointer"
               onMouseEnter={() => {
-                userMenuToggle(userMenu, setUserMenu)
+                userMenuShow(userMenu, setUserMenu)
               }}
             />
             <div>
               <ul className={`list-none absolute border-2 border-primary top-16 right-24 bg-primaryBg hover:block ${userMenu ? '' : 'hidden'}`}               
               onMouseLeave={() => {
-                userMenuToggle(userMenu, setUserMenu)
+                userMenuHide(userMenu, setUserMenu)
               }}
               >
                 <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="#">Profile</Link></li>
