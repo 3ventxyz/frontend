@@ -129,8 +129,8 @@ export default function Header() {
                 userMenuHide(userMenu, setUserMenu)
               }}
               >
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="#">Profile</Link></li>
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="#">Settings</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile">Profile</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile-settings">Settings</Link></li>
                 <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="#">Log out</Link></li>
               </ul>
             </div>

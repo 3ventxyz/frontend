@@ -12,6 +12,7 @@ import TextInput from '../../components/textInput'
    const [name, setName] = useState('')
    const [bio, setBio] = useState('')
    const [location, setLocation] = useState('')
+   const [avatar, setAvatar] = useState('')
    const auth = useAuth()
    const uid = auth?.uid
 
@@ -24,6 +25,7 @@ import TextInput from '../../components/textInput'
           setName(docSnap.data().username)
           setBio(docSnap.data().bio)
           setLocation(docSnap.data().location)
+          setAvatar(`${docSnap.data().gravatar}?s=200`)
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -34,9 +36,8 @@ import TextInput from '../../components/textInput'
 
    return (
      <div className="w-full items-center space-y-4 px-4 text-center sm:px-0 bg-secondaryBg py-[40px]">
-      <div className="flex items-center justify-center">
-         <h3>User Profile</h3>
-         <Link href="/profile/edit"><img src={'assets/edit.svg'} className="w-[30px] cursor-pointer ml-2"/></Link>
+      <div className="w-1/2 mx-auto content-center">
+         <Link href="/profile/edit" className="float-right"><p className="cursor-pointer hover:underline text-right">edit</p></Link>
       </div>
          <div className="flex justify-around w-1/2 mx-auto content-center">
             <div className="text-left w-1/2 p-2">
@@ -47,7 +48,7 @@ import TextInput from '../../components/textInput'
                 <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Location</p>
                 <p className="p-1 text-secondary">{location}</p>
             </div>
-            <p className="w-1/2 p-2 m-auto">Avatar</p>
+            <img src={avatar} />
         </div>
         <p>Events</p>
     </div>

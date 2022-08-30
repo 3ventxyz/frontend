@@ -14,17 +14,14 @@ import TextInput from '../../components/textInput'
    address: string
  }
 
- const CreateProfile = async (uid: string, name: string, bio: string, address: string) => {
+ const CreateProfile = async (uid: string, name: string, bio: string, address = '', gravatarLink= '') => {
   try {
     const docRef = doc(db, 'users', uid)
-    if (address) {
-      await updateDoc(docRef, {
-        location: address
-      }) 
-    } 
     await updateDoc(docRef, {
       username: name,
       bio: bio,
+      location: address,
+      gravatar: gravatarLink
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -33,10 +30,25 @@ import TextInput from '../../components/textInput'
   }
  }
 
+ const fetchAvatar = (email: string, setGravatar: any) => {
+  const md5 = require( 'md5' );
+
+  function getGravatarURL( email: string ) {
+    const address = String( email ).trim().toLowerCase();
+    const hash = md5( address );
+    const url = `https://www.gravatar.com/avatar/${ hash }`;
+    console.log('url', url)
+    return url;
+  }
+  const url = getGravatarURL(email)
+  setGravatar(url)
+ }
  export default function CreateOrganization() {
    const [name, setName] = useState('')
    const [bio, setBio] = useState('')
    const [location, setLocation] = useState<LocationData>()
+   const [email, setEmail] = useState('')
+   const [gravatar, setGravatar] = useState('')
    const auth = useAuth()
    const uid = auth?.uid
    
@@ -67,13 +79,20 @@ import TextInput from '../../components/textInput'
          setLocation={setLocation}
        />
    <p className="text-left text-[16px] font-semibold py-4">Avatar</p>
-   <FileInput/>
+   <FileInput />
+   <TextInput
+          labelText="Email"
+          id="email"
+          placeholder="Email"
+          maxWidth={500}
+          textArea={false}
+          setValue={setEmail}
+        />
+    <button onClick={() => {fetchAvatar(email, setGravatar)}}>Set with Gravatar</button>
    <Link href="/profile">      
       <Button text="Save" onClick={() => {
-        if (location) {CreateProfile(uid, name, bio, location.address)} 
-    else {
-      CreateProfile(uid, name, bio, null)
-    }}} active={true}/>
+        CreateProfile(uid, name, bio, location.address, gravatar)
+   }} active={true}/>
    </Link>
      </div>
         </div>
