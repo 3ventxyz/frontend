@@ -6,6 +6,7 @@ import TextInput from '../../components/textInput'
  import { db } from '../../services/firebase_config'
  import { doc, updateDoc } from 'firebase/firestore'
  import Link from 'next/link'
+ import { useAuth } from '../../contexts/auth'
 
  interface LocationData {
    lat: number
@@ -15,11 +16,15 @@ import TextInput from '../../components/textInput'
 
  const CreateProfile = async (uid: string, name: string, bio: string, address: string) => {
   try {
-    const docRef = doc(db, 'users', uid)    
+    const docRef = doc(db, 'users', uid)
+    if (address) {
+      await updateDoc(docRef, {
+        location: address
+      }) 
+    } 
     await updateDoc(docRef, {
       username: name,
       bio: bio,
-      location: address
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -32,8 +37,9 @@ import TextInput from '../../components/textInput'
    const [name, setName] = useState('')
    const [bio, setBio] = useState('')
    const [location, setLocation] = useState<LocationData>()
-   /*TO-DO Get user id from auth context*/
-   const uid = '6Xnrn4fq1iUNPmfjyiYfM4pkr2l1'
+   const auth = useAuth()
+   const uid = auth?.uid
+   
    return (
      <div className="flex w-full flex-col items-center space-y-4 px-4 py-[43px] text-center sm:px-0 bg-secondaryBg">
         <div className="w-1/2 text-left">
@@ -63,7 +69,11 @@ import TextInput from '../../components/textInput'
    <p className="text-left text-[16px] font-semibold py-4">Avatar</p>
    <FileInput/>
    <Link href="/profile">      
-      <Button text="Save" onClick={() => {CreateProfile(uid, name, bio, location.address)}} active={true}/>
+      <Button text="Save" onClick={() => {
+        if (location) {CreateProfile(uid, name, bio, location.address)} 
+    else {
+      CreateProfile(uid, name, bio)
+    }}} active={true}/>
    </Link>
      </div>
         </div>
