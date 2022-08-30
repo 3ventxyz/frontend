@@ -61,6 +61,7 @@ import TextInput from '../../components/textInput'
          id="username"
          placeholder="Username"
          maxWidth={500}
+         width={'w-auto'}
          textArea={false}
          setValue={setName}
        />
@@ -69,6 +70,7 @@ import TextInput from '../../components/textInput'
          id="bio"
          placeholder="Bio"
          maxWidth={500}
+         width={'w-auto'}
          textArea={false}
          setValue={setBio}
        />
@@ -85,13 +87,14 @@ import TextInput from '../../components/textInput'
           id="email"
           placeholder="Email"
           maxWidth={500}
+          width={'w-auto'}
           textArea={false}
           setValue={setEmail}
         />
     <button onClick={() => {fetchAvatar(email, setGravatar)}}>Set with Gravatar</button>
    <Link href="/profile">      
       <Button text="Save" onClick={() => {
-        CreateProfile(uid, name, bio, location.address, gravatar)
+        CreateProfile(uid, name, bio, location?.address, gravatar)
    }} active={true}/>
    </Link>
      </div>
