@@ -21,6 +21,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
+          isDisabled={creatingNewEvent}
         />
       </div>
       <div>
@@ -32,6 +33,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
+          isDisabled={creatingNewEvent}
         />
       </div>
       <div>
@@ -48,7 +50,8 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
-        />
+          isDisabled={creatingNewEvent}
+          />
         <TextInput
           id={'date'}
           labelText={'date of the event'}
@@ -56,6 +59,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
+          isDisabled={creatingNewEvent}
         />
       </div>
       <div>
@@ -82,7 +86,7 @@ export default function CreateEvent() {
               console.log('new event added')
               setCreatingNewEvent(true)
             }}
-            active={true }
+            active={true}
           />
         )}
       </div>

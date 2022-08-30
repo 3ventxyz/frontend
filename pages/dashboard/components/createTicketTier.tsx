@@ -21,6 +21,7 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
             setValue={(e: any) => {
               console.log('event name: ' + e)
             }}
+            isDisabled={creatingNewEvent}
           />
           <TextInput
             id={''}
@@ -29,6 +30,7 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
             setValue={(e: any) => {
               console.log('event name: ' + e)
             }}
+            isDisabled={creatingNewEvent}
           />
           <TextInput
             id={''}
@@ -37,6 +39,7 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
             setValue={(e: any) => {
               console.log('event name: ' + e)
             }}
+            isDisabled={creatingNewEvent}
           />
           <TextInput
             id={''}
@@ -45,6 +48,7 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
             setValue={(e: any) => {
               console.log('event name: ' + e)
             }}
+            isDisabled={creatingNewEvent}
           />
         </div>
       )
