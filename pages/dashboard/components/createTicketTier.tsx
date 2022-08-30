@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import Button from '../../../components/button'
 import TextInput from '../../../components/textInput'
 
-export default function CreateTicketTier() {
+export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:boolean}) {
   const [numberOfTicketTiers, setNumberOfTicketTiers] = useState(1)
   const [ticketTierList, setTicketTierList] = useState<ReactElement[]>()
 
@@ -13,7 +13,7 @@ export default function CreateTicketTier() {
     var tmpTicketTierList = []
     for (var i = 0; i < numberOfTicketTiers; i++) {
       const newTicketTier = (
-        <div className="flex flex-row space-x-[10px]">
+        <div key={`tier ${i}`} className="flex flex-row space-x-[10px]">
           <TextInput
             id={''}
             labelText={'ticket tier name'}
@@ -63,16 +63,16 @@ export default function CreateTicketTier() {
               setNumberOfTicketTiers(numberOfTicketTiers + 1)
             }
           }}
-          active={numberOfTicketTiers < 4 ? true : false}
+          active={numberOfTicketTiers < 4 && !creatingNewEvent}
         />
         <Button
           text={'delete a ticket tier'}
           onClick={() => {
-            if (numberOfTicketTiers > 1) {
+            if (numberOfTicketTiers > 1 ) {
               setNumberOfTicketTiers(numberOfTicketTiers - 1)
             }
           }}
-          active={numberOfTicketTiers > 1 ? true : false}
+          active={numberOfTicketTiers > 1 && !creatingNewEvent}
         />
       </div>
     </div>

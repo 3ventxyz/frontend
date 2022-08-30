@@ -3,7 +3,12 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Button from '../../components/button'
 import CreateTicketTier from './components/createTicketTier'
 import FileImageInput from '../../components/fileImageInput'
+import { useState } from 'react'
+import Spinner from '../../components/spinner'
+
 export default function CreateEvent() {
+  const [creatingNewEvent, setCreatingNewEvent] = useState(false)
+
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
       <h1>Create new event</h1>
@@ -58,16 +63,29 @@ export default function CreateEvent() {
           <h4>Tickets</h4>
           <p>(You can create up to 4 ticket tiers)</p>
         </div>
-        <CreateTicketTier />
+        <CreateTicketTier  creatingNewEvent={creatingNewEvent}/>
       </div>
-      <Button
-        type="submit"
-        text={'Create new event'}
-        onClick={() => {
-          console.log('new event added')
-        }}
-        active={true}
-      />
+      <div>
+        {creatingNewEvent ? (
+          <div className='flex space-x-[10px] items-center'>
+            <Spinner width={40} height={40}/>
+            <p>
+
+             Creating new event, please do not refresh 
+            </p>
+          </div>
+        ) : (
+          <Button
+            type="submit"
+            text={'Create new event'}
+            onClick={() => {
+              console.log('new event added')
+              setCreatingNewEvent(true)
+            }}
+            active={true }
+          />
+        )}
+      </div>
     </div>
   )
 }
