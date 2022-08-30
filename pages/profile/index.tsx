@@ -5,14 +5,16 @@ import TextInput from '../../components/textInput'
  import Button from '../../components/button'
  import { db } from '../../services/firebase_config'
  import { doc, getDoc } from "firebase/firestore";
-
+ import { useAuth } from '../../contexts/auth'
+ import Link from 'next/link'
 
  export default function UserProfile() {
    const [name, setName] = useState('')
    const [bio, setBio] = useState('')
    const [location, setLocation] = useState('')
-     /*TO-DO Get user id from auth context*/
-     const uid = '6Xnrn4fq1iUNPmfjyiYfM4pkr2l1'
+   const auth = useAuth()
+   const uid = auth?.uid
+
    useEffect(() => {
     const getInfo = async () => {
         const docRef = doc(db, "users", uid);
@@ -32,15 +34,18 @@ import TextInput from '../../components/textInput'
 
    return (
      <div className="w-full items-center space-y-4 px-4 text-center sm:px-0 bg-secondaryBg py-[40px]">
+      <div className="flex items-center justify-center">
          <h3>User Profile</h3>
+         <Link href="/profile/edit"><img src={'assets/edit.svg'} className="w-[30px] cursor-pointer ml-2"/></Link>
+      </div>
          <div className="flex justify-around w-1/2 mx-auto content-center">
             <div className="text-left w-1/2 p-2">
-                <p className="text-left text-[16px] font-semibold py-2">Username</p>
-                <p className="rounded bg-primaryBg p-1 border border-primary text-secondary">{name}</p>
-                <p className="text-left text-[16px] font-semibold py-2">Bio</p>       
-                <p className="rounded bg-primaryBg p-1 border border-primary text-secondary">{bio}</p>
-                <p className="text-left text-[16px] font-semibold py-2">Location</p>
-                <p className="rounded bg-primaryBg p-1 border border-primary text-secondary">{location}</p>
+                <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Username</p>
+                <p className="p-1 text-secondary">{name}</p>
+                <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Bio</p>       
+                <p className="p-1 text-secondary">{bio}</p>
+                <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Location</p>
+                <p className="p-1 text-secondary">{location}</p>
             </div>
             <p className="w-1/2 p-2 m-auto">Avatar</p>
         </div>
