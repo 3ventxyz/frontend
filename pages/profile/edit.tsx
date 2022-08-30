@@ -72,7 +72,7 @@ import TextInput from '../../components/textInput'
       <Button text="Save" onClick={() => {
         if (location) {CreateProfile(uid, name, bio, location.address)} 
     else {
-      CreateProfile(uid, name, bio)
+      CreateProfile(uid, name, bio, null)
     }}} active={true}/>
    </Link>
      </div>
