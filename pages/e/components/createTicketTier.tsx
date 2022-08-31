@@ -5,7 +5,7 @@ import TextInput from '../../../components/textInput'
 export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:boolean}) {
   const [numberOfTicketTiers, setNumberOfTicketTiers] = useState(1)
   const [ticketTierList, setTicketTierList] = useState<ReactElement[]>()
-
+  const ticketTierLimit = 3
   useEffect(() => {
     ticketTiers()
   }, [numberOfTicketTiers])
@@ -41,15 +41,6 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
             }}
             isDisabled={creatingNewEvent}
           />
-          <TextInput
-            id={''}
-            labelText={'token id'}
-            placeholder={textInputPlaceholderList[i].token_id}
-            setValue={(e: any) => {
-              console.log('event name: ' + e)
-            }}
-            isDisabled={creatingNewEvent}
-          />
         </div>
       )
       tmpTicketTierList.push(newTicketTier)
@@ -63,11 +54,11 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
         <Button
           text={'add new ticket tier'}
           onClick={() => {
-            if (numberOfTicketTiers < 4) {
+            if (numberOfTicketTiers < ticketTierLimit) {
               setNumberOfTicketTiers(numberOfTicketTiers + 1)
             }
           }}
-          active={numberOfTicketTiers < 4 && !creatingNewEvent}
+          active={numberOfTicketTiers < ticketTierLimit && !creatingNewEvent}
         />
         <Button
           text={'delete a ticket tier'}

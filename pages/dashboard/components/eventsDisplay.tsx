@@ -71,7 +71,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
       </div>
     </div>
   ) : (
-    <Link href={`/event/${eventData.id}`}>
+    <Link href={`/e/${eventData.id}`}>
       <div className=" h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
         <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
           {eventData.imgURL === '' ? (

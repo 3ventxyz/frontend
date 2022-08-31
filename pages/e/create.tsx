@@ -5,10 +5,17 @@ import CreateTicketTier from './components/createTicketTier'
 import FileImageInput from '../../components/fileImageInput'
 import { useState } from 'react'
 import Spinner from '../../components/spinner'
+import LocationInput from '../../components/locationInput'
 
 export default function CreateEvent() {
-  const [creatingNewEvent, setCreatingNewEvent] = useState(false)
-
+  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
+  const [eventName, setEventName] = useState<String | null>(null)
+  const [organization, setOrganization] = useState<String | null>(null)
+  const [eventDescription, setEventDescription] = useState<String | null>(null)
+  const [eventLocation, setEventLocation] = useState()
+  const [fileImg, setFileImg] = useState()
+  const [eventDate, setEventDate] = useState<String | null>(null)
+  // tickets how is it going to be????
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
       <h1>Create new event</h1>
@@ -21,7 +28,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
-          isDisabled={creatingNewEvent}
+          isDisabled={isCreatingNewEvent}
         />
       </div>
       <div>
@@ -33,7 +40,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
-          isDisabled={creatingNewEvent}
+          isDisabled={isCreatingNewEvent}
         />
       </div>
       <div>
@@ -42,7 +49,26 @@ export default function CreateEvent() {
       </div>
       <div>
         <h4>Details of the event</h4>
-
+          {/* <LocationInput
+            labelText={'Location'}
+            id={'event_location'}
+            placeholder={'123 name st, city, CA, 00000'}
+            setLocation={() => {
+              // console.log('===============setting location===============')
+              // console.log(e)
+              // console.log('==============================================')
+            }}
+          /> */}
+        <TextInput
+        textArea={true}
+          id={'event_description'}
+          labelText={'Description of the event'}
+          placeholder={'description ...'}
+          setValue={(e: any) => {
+            console.log('event name: ' + e)
+          }}
+          isDisabled={isCreatingNewEvent}
+        />
         <TextInput
           id={'location'}
           labelText={'Address or location of the event'}
@@ -50,8 +76,8 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
-          isDisabled={creatingNewEvent}
-          />
+          isDisabled={isCreatingNewEvent}
+        />
         <TextInput
           id={'date'}
           labelText={'date of the event'}
@@ -59,7 +85,7 @@ export default function CreateEvent() {
           setValue={(e: any) => {
             console.log('event name: ' + e)
           }}
-          isDisabled={creatingNewEvent}
+          isDisabled={isCreatingNewEvent}
         />
       </div>
       <div>
@@ -67,16 +93,13 @@ export default function CreateEvent() {
           <h4>Tickets</h4>
           <p>(You can create up to 4 ticket tiers)</p>
         </div>
-        <CreateTicketTier  creatingNewEvent={creatingNewEvent}/>
+        <CreateTicketTier creatingNewEvent={isCreatingNewEvent} />
       </div>
       <div>
-        {creatingNewEvent ? (
-          <div className='flex space-x-[10px] items-center'>
-            <Spinner width={40} height={40}/>
-            <p>
-
-             Creating new event, please do not refresh 
-            </p>
+        {isCreatingNewEvent ? (
+          <div className="flex items-center space-x-[10px]">
+            <Spinner width={40} height={40} />
+            <p>Creating new event, please do not refresh</p>
           </div>
         ) : (
           <Button
@@ -84,7 +107,7 @@ export default function CreateEvent() {
             text={'Create new event'}
             onClick={() => {
               console.log('new event added')
-              setCreatingNewEvent(true)
+              setIsCreatingNewEvent(true)
             }}
             active={true}
           />
