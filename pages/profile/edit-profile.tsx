@@ -1,4 +1,4 @@
-import TextInput from '../../components/textInput'
+ import TextInput from '../../components/textInput'
  import LocationInput from '../../components/locationInput'
  import { useEffect, useState } from 'react'
  import FileInput from '../../components/fileInput'
@@ -8,7 +8,7 @@ import TextInput from '../../components/textInput'
  import { useAuth } from '../../contexts/auth'
  import Link from 'next/link'
 
- export default function UserProfile() {
+ export default function EditProfile() {
    const [name, setName] = useState('')
    const [bio, setBio] = useState('')
    const [location, setLocation] = useState('')
@@ -43,10 +43,32 @@ import TextInput from '../../components/textInput'
             <div className="text-left w-1/2 p-2">
                 <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Username</p>
                 <p className="p-1 text-secondary">{name}</p>
+                <TextInput
+                    labelText=""
+                    id="username"
+                    placeholder={name}
+                    maxWidth={500}
+                    width={'w-auto'}
+                    textArea={false}
+                    setValue={setName}
+                />
                 <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Bio</p>       
-                <p className="p-1 text-secondary">{bio}</p>
+                <TextInput
+                    labelText=""
+                    id="bio"
+                    placeholder="Bio"
+                    maxWidth={500}
+                    width={'w-auto'}
+                    textArea={false}
+                    setValue={setBio}
+                />
                 <p className="text-left text-[16px] font-semibold pt-2 mb-2 border-b border-primary">Location</p>
-                <p className="p-1 text-secondary">{location}</p>
+                <LocationInput
+                    labelText=""
+                    id="user_location"
+                    placeholder="Where are you based?"
+                    setLocation={setLocation}
+                />
             </div>
             <img src={avatar} />
         </div>
