@@ -93,7 +93,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           <li className="... truncate text-[24px] font-bold">
             {eventData.eventTitle}
           </li>
-          <li className="... truncate text-[14px]">{eventData.orgTitle}</li>
+          <li className="... truncate text-[14px]">{eventData.organization}</li>
           <li className="... truncate text-[14px]">{eventData.date}</li>
           <li className="... truncate text-[14px]">{eventData.address}</li>
         </ul>

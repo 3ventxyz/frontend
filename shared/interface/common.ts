@@ -14,11 +14,28 @@ export interface EventInterface {
   eventTitle: string
   eventDescription?: string
   coordinates?: {}
-  orgTitle: string
+  organization: string
   date: string
   timestamp?: Date
   address: string
   imgURL: string
+  tickets?: TicketInterface[]
+}
+
+//dummy interface for testing and uploading data to firestore
+export interface NewEventInterface {
+  eventId: string
+  uid: string
+  eventTitle: string
+  eventDescription?: string
+  organization: string
+  date: string
+  address: string
+  // ==============================
+  timestamp?: Date
+  // talk about this with ben.
+  coordinates?: {}
+  imgURL?: string
   tickets?: TicketInterface[]
 }
 

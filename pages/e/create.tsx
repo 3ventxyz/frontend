@@ -6,15 +6,20 @@ import FileImageInput from '../../components/fileImageInput'
 import { useState } from 'react'
 import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
-
+import { NewEventInterface } from '../../shared/interface/common'
+import { createNewEvent } from '../../services/create_new_event'
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
-  const [eventName, setEventName] = useState<String | null>(null)
+  const [eventTitle, setEventTitle] = useState<String | null>(null)
   const [organization, setOrganization] = useState<String | null>(null)
   const [eventDescription, setEventDescription] = useState<String | null>(null)
-  const [eventLocation, setEventLocation] = useState()
+  const [eventLocation, setEventLocation] = useState<String | null>()
   const [fileImg, setFileImg] = useState()
   const [eventDate, setEventDate] = useState<String | null>(null)
+  const [newEventData, setNewEventData] = useState<NewEventInterface | null>(
+    null
+  )
+
   // tickets how is it going to be????
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
@@ -49,7 +54,7 @@ export default function CreateEvent() {
       </div>
       <div>
         <h4>Details of the event</h4>
-          {/* <LocationInput
+        {/* <LocationInput
             labelText={'Location'}
             id={'event_location'}
             placeholder={'123 name st, city, CA, 00000'}
@@ -60,7 +65,7 @@ export default function CreateEvent() {
             }}
           /> */}
         <TextInput
-        textArea={true}
+          textArea={true}
           id={'event_description'}
           labelText={'Description of the event'}
           placeholder={'description ...'}
@@ -108,6 +113,15 @@ export default function CreateEvent() {
             onClick={() => {
               console.log('new event added')
               setIsCreatingNewEvent(true)
+              setNewEventData({
+                address: eventLocation,
+                date: eventDate,
+                eventTitle: eventTitle,
+                organization: organization,
+                uid: '',
+                eventDescription: eventDescription
+              } && null)
+              createNewEvent(newEventData)
             }}
             active={true}
           />
