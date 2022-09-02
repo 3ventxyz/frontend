@@ -1,3 +1,4 @@
+// author: Marthel
 import TextInput from '../../components/textInput'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Button from '../../components/button'
@@ -6,18 +7,18 @@ import FileImageInput from '../../components/fileImageInput'
 import { useState } from 'react'
 import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
-import { NewEventInterface } from '../../shared/interface/common'
+import { NewEventInterface, LocationData } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
+
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
-  const [eventTitle, setEventTitle] = useState<String | null>(null)
-  const [organization, setOrganization] = useState<String | null>(null)
-  const [eventDescription, setEventDescription] = useState<String | null>(null)
-  const [eventLocation, setEventLocation] = useState<String | null>()
-  const [fileImg, setFileImg] = useState()
-  const [eventDate, setEventDate] = useState<String | null>(null)
-  const [newEventData, setNewEventData] = useState<NewEventInterface | null>(
-    null
+  const [eventTitle, setEventTitle] = useState<string | null>(null)
+  const [organization, setOrganization] = useState<string | null>(null)
+  const [eventDescription, setEventDescription] = useState<string | null>(null)
+  const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
+  const [fileImg, setFileImg] = useState<any | null>(null)
+  const [eventDate, setEventDate] = useState<string | null>(null)
+  const [newEventData, setNewEventData] = useState<NewEventInterface>(
   )
 
   // tickets how is it going to be????
@@ -30,9 +31,7 @@ export default function CreateEvent() {
           id={''}
           labelText={''}
           placeholder={'e.g. crypto event 2023'}
-          setValue={(e: any) => {
-            console.log('event name: ' + e)
-          }}
+          setValue={setEventTitle}
           isDisabled={isCreatingNewEvent}
         />
       </div>
@@ -42,9 +41,7 @@ export default function CreateEvent() {
           id={''}
           labelText={''}
           placeholder={'e.g. organization inc.'}
-          setValue={(e: any) => {
-            console.log('event name: ' + e)
-          }}
+          setValue={setOrganization}
           isDisabled={isCreatingNewEvent}
         />
       </div>
@@ -54,42 +51,25 @@ export default function CreateEvent() {
       </div>
       <div>
         <h4>Details of the event</h4>
-        {/* <LocationInput
-            labelText={'Location'}
-            id={'event_location'}
-            placeholder={'123 name st, city, CA, 00000'}
-            setLocation={() => {
-              // console.log('===============setting location===============')
-              // console.log(e)
-              // console.log('==============================================')
-            }}
-          /> */}
         <TextInput
           textArea={true}
           id={'event_description'}
           labelText={'Description of the event'}
           placeholder={'description ...'}
-          setValue={(e: any) => {
-            console.log('event name: ' + e)
-          }}
+          setValue={setEventDescription}
           isDisabled={isCreatingNewEvent}
         />
-        <TextInput
-          id={'location'}
-          labelText={'Address or location of the event'}
+        <LocationInput
+          labelText={'Location'}
+          id={'event_location'}
           placeholder={'123 name st, city, CA, 00000'}
-          setValue={(e: any) => {
-            console.log('event name: ' + e)
-          }}
-          isDisabled={isCreatingNewEvent}
+          setLocation={setEventLocation}
         />
         <TextInput
           id={'date'}
           labelText={'date of the event'}
           placeholder={'mm/dd/yyyy'}
-          setValue={(e: any) => {
-            console.log('event name: ' + e)
-          }}
+          setValue={setEventDate}
           isDisabled={isCreatingNewEvent}
         />
       </div>
@@ -113,15 +93,26 @@ export default function CreateEvent() {
             onClick={() => {
               console.log('new event added')
               setIsCreatingNewEvent(true)
-              setNewEventData({
-                address: eventLocation,
+              // setNewEventData(
+              //   {
+              //     address: eventLocation,
+              //     date: eventDate,
+              //     eventTitle: eventTitle,
+              //     organization: organization,
+              //     uid: 'user id 123',
+              //     eventDescription: eventDescription,
+              //     eventLocation: eventLocation
+              //   } 
+              // )
+              createNewEvent({
+                // eventLocation: eventLocation,
                 date: eventDate,
                 eventTitle: eventTitle,
                 organization: organization,
-                uid: '',
-                eventDescription: eventDescription
-              } && null)
-              createNewEvent(newEventData)
+                uid: 'user id 123',
+                eventDescription: eventDescription,
+                eventLocation: eventLocation
+              } )
             }}
             active={true}
           />

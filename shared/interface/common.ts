@@ -8,12 +8,18 @@ export interface TicketInterface {
   isSelected?: boolean
 }
 
+export interface LocationData {
+  lat: number
+  long: number
+  address: string
+}
+
 export interface EventInterface {
   id: string
   uid?: string
   eventTitle: string
   eventDescription?: string
-  coordinates?: {}
+  EventLocation?: {}
   organization: string
   date: string
   timestamp?: Date
@@ -24,19 +30,17 @@ export interface EventInterface {
 
 //dummy interface for testing and uploading data to firestore
 export interface NewEventInterface {
-  eventId: string
-  uid: string
-  eventTitle: string
-  eventDescription?: string
-  organization: string
-  date: string
-  address: string
+  uid: string | null
+  eventTitle: string | null
+  eventDescription?: string | null
+  organization: string | null
+  date: string | null
   // ==============================
-  timestamp?: Date
-  // talk about this with ben.
-  coordinates?: {}
-  imgURL?: string
-  tickets?: TicketInterface[]
+  eventId?: string | null //this is passed in the firebase content
+  timestamp?: Date //later
+  eventLocation: LocationData | null
+  imgURL?: string | null //
+  tickets?: TicketInterface[] //later
 }
 
 export interface UserProfileEvents {
