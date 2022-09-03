@@ -1397,7 +1397,7 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
-"@types/google.maps@^3.49.1":
+"@types/google.maps@*", "@types/google.maps@^3.49.1":
   version "3.50.0"
   resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.50.0.tgz#48cbb7176e3403ae79b45017de5cf9816ac8b181"
   integrity sha512-8SQJKelTTt2ah7WDNWd2DZgUrqNaZw6sAFiTxmEtFql5Mzx2qfBIUdp5XwC4JbYy/AjJQT5wEBLwtwuOjBTOYg==
@@ -1463,6 +1463,14 @@
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
+
+"@types/react-places-autocomplete@^7.2.9":
+  version "7.2.9"
+  resolved "https://registry.yarnpkg.com/@types/react-places-autocomplete/-/react-places-autocomplete-7.2.9.tgz#5d1579f5b91b48a3bc56bc0b385b01aa516c8af4"
+  integrity sha512-N5892g3ocleoHsks7G5T9xdJ2kfRblg7yUKJQZ7nFKETIoAr/Gz/ZyogEbrkB1sEvWEJmn5FEYlMM++rZmQf8w==
+  dependencies:
+    "@types/google.maps" "*"
+    "@types/react" "*"
 
 "@types/react-scroll@^1.8.3":
   version "1.8.4"
