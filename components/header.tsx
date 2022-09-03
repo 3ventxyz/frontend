@@ -99,12 +99,10 @@ export default function Header() {
                   showBalance={false}
                 />
                 {/* TODO: this should actually check iron session + expiry */}
-                {!auth.userModel?.wallet && (
-                  <SignInButton
-                    onSuccess={(address: any) => console.log(address)}
-                    onError={(address: any) => console.log(address)}
-                  />
-                )}
+                <SignInButton
+                  onSuccess={(address: any) => console.log(address)}
+                  onError={(address: any) => console.log(address)}
+                />
               </>
             ) : (
               <Button

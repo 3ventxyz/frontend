@@ -11,10 +11,13 @@ export default function SignInButton({
   onSuccess,
   onError
 }: {
-  onSuccess: (args: { address: string }) => void
-  onError: (args: { error: Error }) => void
+  onSuccess: (args: { address?: string }) => void
+  onError: (args: { error?: Error }) => void
 }) {
   const [state, setState] = useState<{
+    address?: string
+    message?: string
+    error?: Error
     loading?: boolean
     nonce?: string
   }>({})
@@ -35,8 +38,36 @@ export default function SignInButton({
   }
 
   useEffect(() => {
+    const handler = async () => {
+      try {
+        const res = await fetch('api/me')
+        const { address } = await res.json()
+
+        if (address && isSiweValid()) {
+          setState((x) => ({ ...x, address }))
+          onSuccess({ address })
+        } else {
+          signOut()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
     fetchNonce()
+    handler()
+    window.addEventListener('focus', handler)
+
+    return () => window.removeEventListener('focus', handler)
   }, [])
+
+  const isSiweValid = () => {
+    if (auth?.userModel?.siwe_expiration_time) {
+      if (Date.parse(auth?.userModel?.siwe_expiration_time) > Date.now()) {
+        return true
+      }
+    }
+    return false
+  }
 
   const signIn = async () => {
     try {
@@ -54,7 +85,8 @@ export default function SignInButton({
         version: '1',
         chainId,
         nonce: state.nonce,
-        expirationTime: new Date(Date.now() + 86400000).toISOString()
+        expirationTime: new Date(Date.now() + 30000).toISOString()
+        // expirationTime: new Date(Date.now() + 86400000).toISOString()
       })
       const signature = await signMessageAsync({
         message: message.prepareMessage()
@@ -70,7 +102,7 @@ export default function SignInButton({
       })
       if (!verifyRes.ok) throw new Error('Error verifying message')
 
-      setState((x) => ({ ...x, loading: false }))
+      setState((x) => ({ ...x, address, loading: false }))
       onSuccess({ address })
 
       // UPDATE DB
@@ -99,6 +131,14 @@ export default function SignInButton({
     }
   }
 
+  const signOut = async () => {
+    const res = await fetch('/api/logout', {
+      method: 'GET'
+    })
+    onSuccess({})
+    setState({})
+  }
+
   // useEffect(() => {
   //   if (((state.nonce && !state.loading) || false) && !invoked) {
   //     console.log('attempt sign in')
@@ -108,10 +148,16 @@ export default function SignInButton({
   // }, [state.nonce, state.loading])
 
   return (
-    <Button
-      active={(state.nonce && !state.loading) || false}
-      text={'Verify Wallet'}
-      onClick={signIn}
-    />
+    <>
+      {isSiweValid() ? (
+        <div></div>
+      ) : (
+        <Button
+          active={(state.nonce && !state.loading) || false}
+          text={'Verify Wallet'}
+          onClick={signIn}
+        />
+      )}
+    </>
   )
 }
