@@ -212,7 +212,7 @@ function LoadedEventPage({
           <div className="flex h-[75px] w-[300px] space-x-[50px] ">
             <div className="w-[75px] rounded-full  bg-gray-600"></div>
             <div className="flex flex-col  items-center justify-center space-y-[0]">
-              <div>Hosted By:</div>
+              <div>Host:</div>
               <div>Username</div>
             </div>
           </div>

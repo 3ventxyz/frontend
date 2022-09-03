@@ -95,12 +95,11 @@ export default function CreateEvent() {
               console.log('new event added')
               setIsCreatingNewEvent(true)
               await createNewEvent({
-                date_of_event: eventDate,
-                event_title: eventTitle,
+                title: eventTitle,
                 organization: organization,
                 uid: 'user id 123',
-                event_description: eventDescription,
-                event_location: eventLocation
+                description: eventDescription,
+                location: eventLocation
               }, fileImg)
 
               router.push('/e/eventCreated')
