@@ -4,11 +4,15 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import { storage } from '../services/firebase_config'
 import Image from 'next/image'
 
-export default function FileImageInput() {
-  const [fileImg, setFileImg] = useState<File | null>(null)
+export default function FileImageInput({
+  setFileImg,
+  fileImg
+}: {
+  setFileImg: (value: File) => void
+  fileImg: File | null
+}) {
   const [imgURl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
-  const [fileErrorMsg, setFileErrorMsg] = useState<String | null>(null)
 
   return fileImg !== null ? (
     <div
@@ -41,18 +45,8 @@ export default function FileImageInput() {
       <input
         type="file"
         onChange={(event: any) => {
-          console.log(
-            'uploading picture, no big than 600px and no big than 10 mbs'
-          )
           setFileImg(event.target.files[0])
-          console.log('=========================================')
-          console.log(event.target.files)
-
-          console.log('=========================================')
-          console.log('+++++URL+++++++++++++++++++++++++++++++++++')
-          console.log(URL.createObjectURL(event.target.files[0]))
           setImgUrl(URL.createObjectURL(event.target.files[0]))
-          console.log('++++++++++++++++++++++++++++++++++++++++++')
         }}
       />
       <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">

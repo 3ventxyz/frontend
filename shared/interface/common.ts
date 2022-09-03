@@ -4,7 +4,6 @@ export interface TicketInterface {
   capLimit: number
   tokenId: string
   price: number
-  disabled?: boolean
   isSelected?: boolean
 }
 
@@ -31,15 +30,15 @@ export interface EventInterface {
 //dummy interface for testing and uploading data to firestore
 export interface NewEventInterface {
   uid: string | null
-  eventTitle: string | null
-  eventDescription?: string | null
+  event_title: string | null
+  event_description?: string | null
   organization: string | null
-  date: string | null
+  date_of_event: string | null
+  event_location: LocationData | null
   // ==============================
-  eventId?: string | null //this is passed in the firebase content
+  event_id?: string | null //this is passed in the firebase content
+  img_url?: string | null 
   timestamp?: Date //later
-  eventLocation: LocationData | null
-  imgURL?: string | null //
   tickets?: TicketInterface[] //later
 }
 

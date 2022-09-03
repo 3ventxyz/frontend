@@ -7,7 +7,7 @@ import FileImageInput from '../../components/fileImageInput'
 import { useState } from 'react'
 import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
-import { NewEventInterface, LocationData } from '../../shared/interface/common'
+import { LocationData, TicketInterface } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
 import { useRouter } from 'next/router'
 
@@ -17,11 +17,12 @@ export default function CreateEvent() {
   const [organization, setOrganization] = useState<string | null>(null)
   const [eventDescription, setEventDescription] = useState<string | null>(null)
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
-  const [fileImg, setFileImg] = useState<any | null>(null)
+  const [fileImg, setFileImg] = useState<File | null>(null)
   const [eventDate, setEventDate] = useState<string | null>(null)
-  const [newEventData, setNewEventData] = useState<NewEventInterface>()
-  const router = useRouter()
+
   // tickets how is it going to be????
+  const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
+  const router = useRouter()
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
       <h1>Create new event</h1>
@@ -47,7 +48,7 @@ export default function CreateEvent() {
       </div>
       <div>
         <h4>Event Tile Picture:</h4>
-        <FileImageInput />
+        <FileImageInput fileImg={fileImg} setFileImg={setFileImg}/>
       </div>
       <div>
         <h4>Details of the event</h4>
@@ -93,26 +94,14 @@ export default function CreateEvent() {
             onClick={async () => {
               console.log('new event added')
               setIsCreatingNewEvent(true)
-              // setNewEventData(
-              //   {
-              //     address: eventLocation,
-              //     date: eventDate,
-              //     eventTitle: eventTitle,
-              //     organization: organization,
-              //     uid: 'user id 123',
-              //     eventDescription: eventDescription,
-              //     eventLocation: eventLocation
-              //   }
-              // )
               await createNewEvent({
-                // eventLocation: eventLocation,
-                date: eventDate,
-                eventTitle: eventTitle,
+                date_of_event: eventDate,
+                event_title: eventTitle,
                 organization: organization,
                 uid: 'user id 123',
-                eventDescription: eventDescription,
-                eventLocation: eventLocation
-              })
+                event_description: eventDescription,
+                event_location: eventLocation
+              }, fileImg)
 
               router.push('/e/eventCreated')
             }}
