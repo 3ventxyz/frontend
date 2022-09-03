@@ -9,6 +9,7 @@ import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
 import { NewEventInterface, LocationData } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
+import { useRouter } from 'next/router'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -18,9 +19,8 @@ export default function CreateEvent() {
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
   const [fileImg, setFileImg] = useState<any | null>(null)
   const [eventDate, setEventDate] = useState<string | null>(null)
-  const [newEventData, setNewEventData] = useState<NewEventInterface>(
-  )
-
+  const [newEventData, setNewEventData] = useState<NewEventInterface>()
+  const router = useRouter()
   // tickets how is it going to be????
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
@@ -102,7 +102,7 @@ export default function CreateEvent() {
               //     uid: 'user id 123',
               //     eventDescription: eventDescription,
               //     eventLocation: eventLocation
-              //   } 
+              //   }
               // )
               createNewEvent({
                 // eventLocation: eventLocation,
@@ -112,7 +112,9 @@ export default function CreateEvent() {
                 uid: 'user id 123',
                 eventDescription: eventDescription,
                 eventLocation: eventLocation
-              } )
+              })
+
+              router.push('/e/eventCreated')
             }}
             active={true}
           />

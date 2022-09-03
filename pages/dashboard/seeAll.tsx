@@ -13,7 +13,7 @@ export default function SeeAll() {
   const router = useRouter()
   const events = useEvents()
   const [title, setTitle] = useState('')
-  const [eventsData, setEvents] = useState<Array<EventInterface>|null>(null)
+  const [eventsData, setEvents] = useState<Array<EventInterface> | null>(null)
   const [mode, setMode] = useState('upcoming')
 
   useEffect(() => {
