@@ -2,6 +2,7 @@ import { initializeApp } from '@firebase/app'
 import { getAnalytics, isSupported } from '@firebase/analytics'
 import { getFirestore } from '@firebase/firestore'
 import { getAuth } from '@firebase/auth'
+import { getStorage } from '@firebase/storage'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,7 +16,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-// const analytics = isSupported().then((yes) => (yes ? getAnalytics(app) : null))
+const analytics = isSupported().then((yes) => (yes ? getAnalytics(app) : null))
 const auth = getAuth(app)
+const storage = getStorage(app)
 
-export { app, db, auth }
+export { analytics, app, db, auth, storage }

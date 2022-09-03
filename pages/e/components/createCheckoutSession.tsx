@@ -4,7 +4,7 @@ import Button from '../../../components/button'
 import Spinner from '../../../components/spinner'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
-import TextInput from '../../../components/textInput'
+import OutdatedTextInput from '../../../components/outdatedTextInput'
 
 export default function CreateCheckoutSession({
   selectedTicket,
@@ -61,7 +61,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
     <div className="flex h-full w-[466px] flex-col items-center pt-[18px]">
       <form action="submit" className=" w-full space-y-[10px]">
         <div className="flex space-x-[10px]">
-          <TextInput
+          <OutdatedTextInput
             id={'first-name'}
             placeholder={'Joe'}
             inputName={'first-name'}
@@ -70,7 +70,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
             width={'w-[228px]'}
           />
 
-          <TextInput
+          <OutdatedTextInput
             id={'last-name'}
             placeholder={'Doe'}
             inputName={'last-name'}
@@ -79,7 +79,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
             width={'w-[228px]'}
           />
         </div>
-        <TextInput
+        <OutdatedTextInput
           id={'address'}
           placeholder={'street address ...'}
           inputName={'address'}
@@ -87,7 +87,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           labelTitle={'Street address'}
         />
         <div className="flex space-x-[10px]">
-          <TextInput
+          <OutdatedTextInput
             id={'city'}
             placeholder={'Seattle'}
             inputName={'city'}
@@ -95,7 +95,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
             labelTitle={'City'}
             width={'w-[228px]'}
           />
-          <TextInput
+          <OutdatedTextInput
             id={'state'}
             placeholder={'CA'}
             inputName={'state'}
@@ -105,7 +105,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           />
         </div>
         <div className="flex space-x-[10px]">
-          <TextInput
+          <OutdatedTextInput
             id={'zip-code'}
             placeholder={'zip code'}
             inputName={'zip-code'}
@@ -113,7 +113,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
             labelTitle={'Zip code'}
             width={'w-[228px]'}
           />
-          <TextInput
+          <OutdatedTextInput
             id={'country'}
             placeholder={'United States'}
             inputName={'country'}
