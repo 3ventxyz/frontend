@@ -8,6 +8,15 @@ import { useConnectModal, ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import SignInButton from './siwe'
 
+const userMenuShow = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(true)
+  return userMenu
+}
+const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(false)
+  return userMenu
+} 
+
 export default function Header() {
   const headerTextButtonStyle =
     'cursor-pointer hidden md:block text-[14px] font-semibold text-linkDisabled underline-offset-4 hover:underline'
@@ -18,7 +27,8 @@ export default function Header() {
   const auth = useAuth()
   const { openConnectModal } = useConnectModal()
   const { address } = useAccount()
-
+  const [userMenu, setUserMenu] = useState(false)
+  
   // determines which path or sub element we are focused on
   useEffect(() => {
     const pathParts = router.asPath.split('#')
@@ -107,8 +117,22 @@ export default function Header() {
               alt="avatar"
               src="/assets/auth/avatar.svg"
               width="36"
-              onClick={async () => await auth.logout()}
+              className="hover:cursor-pointer"
+              onMouseEnter={() => {
+                userMenuShow(userMenu, setUserMenu)
+              }}
             />
+            <div>
+              <ul className={`list-none absolute border-2 border-primary top-16 right-24 bg-primaryBg hover:block ${userMenu ? '' : 'hidden'}`}               
+              onMouseLeave={() => {
+                userMenuHide(userMenu, setUserMenu)
+              }}
+              >
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile">Profile</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/settings">Settings</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><p className="cursor-pointer" onClick={async () => await auth.logout()}>Log out</p></li>
+              </ul>
+            </div>
           </div>
         ) : (
           <Button

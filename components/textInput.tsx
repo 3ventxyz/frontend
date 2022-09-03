@@ -6,6 +6,7 @@ interface TextInputProps {
   textArea?: boolean
   isDisabled?: boolean
   setValue: (value: string) => void
+  width?: string
 }
 
 export default function TextInput({
@@ -15,7 +16,8 @@ export default function TextInput({
   maxWidth,
   textArea = false,
   isDisabled = false,
-  setValue
+  setValue,
+  width = "w-full"
 }: TextInputProps) {
   return (
     <form className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -23,7 +25,7 @@ export default function TextInput({
       {textArea !== true ? (
         <input
           onChange={(e) => setValue(e.target.value)}
-          className={`focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] ${
+          className={`${width} focus:shadow-outline leading-0 h-full min-h-[56px] max-w-[400px] rounded-[16px] border-[1.5px] ${
             isDisabled
               ? 'border-gray-300  text-gray-300'
               : 'border-black  text-gray-700'
@@ -37,7 +39,7 @@ export default function TextInput({
         <textarea
           onChange={(e) => setValue(e.target.value)}
           name="textarea"
-          className={`focus:shadow-outline leading-0 h-full min-h-[100px] w-full max-w-[400px] rounded-[16px] border-[1.5px]  ${
+          className={`${width} focus:shadow-outline leading-0 h-full min-h-[100px] max-w-[400px] rounded-[16px] border-[1.5px]  ${
             isDisabled
               ? 'border-gray-300  text-gray-300'
               : 'border-black  text-gray-700'
