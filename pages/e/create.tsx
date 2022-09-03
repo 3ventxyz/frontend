@@ -90,7 +90,7 @@ export default function CreateEvent() {
           <Button
             type="submit"
             text={'Create new event'}
-            onClick={() => {
+            onClick={async () => {
               console.log('new event added')
               setIsCreatingNewEvent(true)
               // setNewEventData(
@@ -104,7 +104,7 @@ export default function CreateEvent() {
               //     eventLocation: eventLocation
               //   }
               // )
-              createNewEvent({
+              await createNewEvent({
                 // eventLocation: eventLocation,
                 date: eventDate,
                 eventTitle: eventTitle,

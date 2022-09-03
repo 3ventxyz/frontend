@@ -1,6 +1,6 @@
 import { db, storage } from './firebase_config'
 import { NewEventInterface } from '../shared/interface/common'
-import { collection } from '@firebase/firestore'
+import { addDoc, collection, setDoc } from '@firebase/firestore'
 
 export async function createNewEvent(newEventData: NewEventInterface | null) {
   try {
@@ -22,11 +22,14 @@ export async function createNewEvent(newEventData: NewEventInterface | null) {
     console.log('--------------------')
     console.log('================================')
 
-    
-    // 
-    const eventsRef = collection(db, 'events')
+    //
+    // const eventsRef = collection(db, 'events')
 
+    const docRef = await addDoc(collection(db, 'events'), newEventData)
 
+    console.log('firebase::create_new_event: NEW EVENT SUCCESSFULLY CREATED')
+    console.log('docRef id: ' + docRef.id)
+    console.log('===================')
   } catch (err) {
     console.log(err)
     return false
