@@ -18,7 +18,7 @@ const CreateProfile = async (
   uid: string,
   name: string,
   bio: string,
-  address = '',
+  location?: LocationData,
   gravatarLink = ''
 ) => {
   try {
@@ -26,7 +26,7 @@ const CreateProfile = async (
     await updateDoc(docRef, {
       username: name,
       bio: bio,
-      location: address,
+      location: location,
       gravatar: gravatarLink
     })
     console.log('Data written into doc ID: ', docRef.id)
@@ -113,12 +113,12 @@ export default function CreateUser() {
           <LocationInput
             labelText=""
             id="user_location"
-            placeholder="Where are you located?"
+            placeholder={location?.address || "Where are you located?"}
             setLocation={setLocation}
           />
         </div>
         <div>
-          <img src={avatar}/>
+          <img src={avatar} />
           <TextInput
             labelText="Email"
             id="email"
@@ -128,14 +128,21 @@ export default function CreateUser() {
             textArea={false}
             setValue={setEmail}
           />
+           <Button 
+            text="Get Avatar"
+            onClick={() => {
+              fetchAvatar(email, setAvatar)
+            }}
+            active={true}
+          />
         </div>
       </div>
-      <div>
+      <div className="w-1/2 mx-auto flex flex-row space-x-2 justify-center">
         <Link href="/profile">
           <Button
             text="Save"
             onClick={() => {
-              CreateProfile(uid, name, bio, location?.address, avatar)
+              CreateProfile(uid, name, bio, location, avatar)
             }}
             active={true}
           />
