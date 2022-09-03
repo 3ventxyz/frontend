@@ -115,7 +115,7 @@ export default function Event() {
 
   return (
     <>
-      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row xl:space-x-[291px] lg:space-x-[80px] md:pb-[106px] md:pt-[85px]">
+      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[85px] lg:space-x-[80px] xl:space-x-[291px]">
         {EventPage()}
       </div>
       <Modal
@@ -209,11 +209,17 @@ function LoadedEventPage({
               className="rounded-[67px]"
             />
           </div>
+          <div className="flex h-[75px] w-[300px] space-x-[50px] ">
+            <div className="w-[75px] rounded-full  bg-gray-600"></div>
+            <div className="flex flex-col  items-center justify-center space-y-[0]">
+              <div>Hosted By:</div>
+              <div>Username</div>
+            </div>
+          </div>
           <div className="leading-[25px]">
             {event?.date} <br />
             {event?.address}
           </div>
-
           <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
             <Image
               src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
