@@ -8,10 +8,16 @@ import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../../contexts/auth'
 import Link from 'next/link'
 
+interface LocationData {
+  lat: number
+  long: number
+  address: string
+}
+
 export default function UserProfile() {
   const [name, setName] = useState('')
   const [bio, setBio] = useState('')
-  const [location, setLocation] = useState('')
+  const [location, setLocation] = useState<LocationData>()  
   const [avatar, setAvatar] = useState('')
   const auth = useAuth()
   const uid = auth?.uid
@@ -54,7 +60,7 @@ export default function UserProfile() {
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Location
           </p>
-          <p className="p-1 text-secondary">{location}</p>
+          <p className="p-1 text-secondary">{location?.address}</p>
         </div>
         <img src={avatar}/>
       </div>
