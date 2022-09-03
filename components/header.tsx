@@ -117,7 +117,6 @@ export default function Header() {
               alt="avatar"
               src="/assets/auth/avatar.svg"
               width="36"
-              onClick={async () => await auth.logout()}
               className="hover:cursor-pointer"
               onMouseEnter={() => {
                 userMenuShow(userMenu, setUserMenu)
@@ -130,8 +129,8 @@ export default function Header() {
               }}
               >
                 <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile">Profile</Link></li>
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile-settings">Settings</Link></li>
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="#">Log out</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/settings">Settings</Link></li>
+                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><p className="cursor-pointer" onClick={async () => await auth.logout()}>Log out</p></li>
               </ul>
             </div>
           </div>

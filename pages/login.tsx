@@ -99,7 +99,7 @@ export default function Login() {
                   }
                   authContext.setUserModel(userModel)
                 }
-                router.push('/settings')
+                router.push('/profile')
               })
               .catch((error) => {
                 console.log('error', error)
