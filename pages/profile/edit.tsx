@@ -99,7 +99,7 @@ export default function CreateUser() {
             Bio
           </p>
           <TextInput
-            labelText="Bio"
+            labelText=""
             id="bio"
             placeholder={bio}
             maxWidth={500}
@@ -111,7 +111,7 @@ export default function CreateUser() {
             Location
           </p>
           <LocationInput
-            labelText="Location"
+            labelText=""
             id="user_location"
             placeholder="Where are you located?"
             setLocation={setLocation}
