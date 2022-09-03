@@ -6,7 +6,7 @@ interface TextInputProps {
   textArea?: boolean
   isDisabled?: boolean
   setValue: (value: string) => void
-  width: string
+  width?: string
 }
 
 export default function TextInput({

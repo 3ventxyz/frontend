@@ -57,7 +57,6 @@ function SelectPaymentOption({ onClick }: { onClick: () => void }) {
 }
 
 function RegisterUserForm({ onClick }: { onClick: () => void }) {
-  const [variable, setVariable] = useState('')
   return (
     <div className="flex h-full w-[466px] flex-col items-center pt-[18px]">
       <form action="submit" className=" w-full space-y-[10px]">
@@ -65,56 +64,62 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           <OutdatedTextInput
             id={'first-name'}
             placeholder={'Joe'}
-            labelText={'First name'}
+            inputName={'first-name'}
+            htmlFor={'first-name'}
+            labelTitle={'First name'}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
 
           <OutdatedTextInput
             id={'last-name'}
             placeholder={'Doe'}
-            labelText={'Last name'}
+            inputName={'last-name'}
+            htmlFor={'last-name'}
+            labelTitle={'Last name'}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
         </div>
         <OutdatedTextInput
           id={'address'}
           placeholder={'street address ...'}
-          labelText={'Street address'}
-          setValue={setVariable}
-          width={'w-auto'}
+          inputName={'address'}
+          htmlFor={'address'}
+          labelTitle={'Street address'}
         />
         <div className="flex space-x-[10px]">
           <OutdatedTextInput
             id={'city'}
             placeholder={'Seattle'}
-            labelText={'City'}
+            inputName={'city'}
+            htmlFor={'city'}
+            labelTitle={'City'}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
           <OutdatedTextInput
             id={'state'}
             placeholder={'CA'}
-            labelText={'State '}
+            inputName={'state'}
+            htmlFor={'state'}
+            labelTitle={'State '}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
         </div>
         <div className="flex space-x-[10px]">
           <OutdatedTextInput
             id={'zip-code'}
             placeholder={'zip code'}
-            labelText={'Zip code'}
+            inputName={'zip-code'}
+            htmlFor={'zip-code'}
+            labelTitle={'Zip code'}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
           <OutdatedTextInput
             id={'country'}
             placeholder={'United States'}
-            labelText={'Country '}
+            inputName={'country'}
+            htmlFor={'country'}
+            labelTitle={'Country '}
             width={'w-[228px]'}
-            setValue={setVariable}
           />
         </div>
       </form>
