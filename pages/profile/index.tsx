@@ -56,7 +56,7 @@ export default function UserProfile() {
           </p>
           <p className="p-1 text-secondary">{location}</p>
         </div>
-        <img src={avatar} />
+        <img src={avatar}/>
       </div>
       <p>Events</p>
     </div>

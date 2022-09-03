@@ -118,7 +118,7 @@ export default function CreateUser() {
           />
         </div>
         <div>
-          <img src={avatar} />
+          <img src={avatar}/>
           <TextInput
             labelText="Email"
             id="email"
