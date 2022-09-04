@@ -11,8 +11,6 @@ import { AuthProvider } from '../contexts/auth'
 import { EventsProvider } from '../contexts/events'
 import Layout from '../components/layout'
 
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
   [
