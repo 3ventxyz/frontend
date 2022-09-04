@@ -10,6 +10,7 @@ import LocationInput from '../../components/locationInput'
 import { LocationData, TicketInterface } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
 import { useRouter } from 'next/router'
+// import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -18,7 +19,7 @@ export default function CreateEvent() {
   const [eventDescription, setEventDescription] = useState<string | null>(null)
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [eventDate, setEventDate] = useState<string | null>(null)
+  const [eventDate, setEventDate] = useState<Date>()
 
   // tickets how is it going to be????
   const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
@@ -48,7 +49,7 @@ export default function CreateEvent() {
       </div>
       <div>
         <h4>Event Tile Picture:</h4>
-        <FileImageInput fileImg={fileImg} setFileImg={setFileImg}/>
+        <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
       </div>
       <div>
         <h4>Details of the event</h4>
@@ -66,13 +67,27 @@ export default function CreateEvent() {
           placeholder={'123 name st, city, CA, 00000'}
           setLocation={setEventLocation}
         />
-        <TextInput
+        <div>
+          <h4>Date</h4>
+          <input
+            type="datetime-local"
+            min="2018-06-07T00:00"
+            max="2018-06-14T00:00"
+            className="text-black"
+            onChange={(e) => {
+              console.log('date changed!!!')
+              console.log(e.target.value)
+              console.log('===============')
+            }}
+          ></input>
+        </div>
+        {/* <TextInput
           id={'date'}
           labelText={'date of the event'}
           placeholder={'mm/dd/yyyy'}
           setValue={setEventDate}
           isDisabled={isCreatingNewEvent}
-        />
+        /> */}
       </div>
       <div>
         <div className="flex  items-baseline space-x-[10px]">
@@ -94,13 +109,16 @@ export default function CreateEvent() {
             onClick={async () => {
               console.log('new event added')
               setIsCreatingNewEvent(true)
-              await createNewEvent({
-                title: eventTitle,
-                organization: organization,
-                uid: 'user id 123',
-                description: eventDescription,
-                location: eventLocation
-              }, fileImg)
+              await createNewEvent(
+                {
+                  title: eventTitle,
+                  organization: organization,
+                  uid: 'user id 123',
+                  description: eventDescription,
+                  location: eventLocation
+                },
+                fileImg
+              )
 
               router.push('/e/eventCreated')
             }}
