@@ -24,7 +24,7 @@ export default function EventsDisplay({
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
 
   return (
-    <div className="flex flex-col items-stretch space-y-[20px] ">
+    <div className="flex flex-col items-center space-y-[20px]">
       {showHeader && (
         <div className="mx-auto flex w-full max-w-[1200px] flex-row items-end justify-between border-b border-disabled">
           <p className={titleSectionStyle}>{title}</p>
@@ -37,11 +37,9 @@ export default function EventsDisplay({
           )}
         </div>
       )}
-      <div className="mx-auto flex max-w-[1200px] flex-row flex-wrap justify-evenly gap-[30px] 2xl:justify-start">
+      <div className="grid h-fit w-fit grid-cols-1 place-content-center gap-[30px] lg:grid-cols-2 2xl:grid-cols-3">
         {isFetching ? (
           <>
-            <EventTile eventData={null} />
-            <EventTile eventData={null} />
             <EventTile eventData={null} />
           </>
         ) : (
@@ -57,7 +55,7 @@ export default function EventsDisplay({
 
 function EventTile({ eventData }: { eventData: EventInterface | null }) {
   return !eventData ? (
-    <div className=" h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
+    <div className=" mx-auto h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
       <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-300 sm:max-h-full">
         <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
           <TbPhoto className="h-[150px] w-[150px]" />
@@ -72,7 +70,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
     </div>
   ) : (
     <Link href={`/e/${eventData.id}`}>
-      <div className=" h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
+      <div className=" mx-auto h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
         <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
           {eventData.imgURL === '' ? (
             <div className="flex h-full w-full flex-col items-center justify-center text-gray-500">

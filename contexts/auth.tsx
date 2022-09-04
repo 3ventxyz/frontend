@@ -23,17 +23,6 @@ interface UserCredentials {
   phoneNumber?: string
 }
 
-// interface UserModel {
-//   phone_number: string
-//   discord_id: ''
-//   discord_verified: boolean
-//   twitter_id: ''
-//   twitter_verified: boolean
-//   twitter_name: string
-//   wallet: string
-//   siwe_expiration_time: string
-// }
-
 interface AuthInterface {
   currentUser?: User | null
   userModel?: UserModel | null

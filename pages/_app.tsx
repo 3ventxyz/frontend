@@ -1,19 +1,15 @@
 import '../styles/globals.css'
-import Head from 'next/head'
-import Header from '../components/header'
-import Footer from '../components/footer'
 import { AppProps } from 'next/app'
+import Script from 'next/script'
+import Head from 'next/head'
 import '@rainbow-me/rainbowkit/styles.css'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
-import { AuthProvider, useAuth } from '../contexts/auth'
-import Layout from '../components/layout'
-import Script from 'next/script'
+import { AuthProvider } from '../contexts/auth'
 import { EventsProvider } from '../contexts/events'
-
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+import Layout from '../components/layout'
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],

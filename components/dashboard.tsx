@@ -40,7 +40,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex w-screen flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
+    <div className="flex w-screen flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] text-center md:px-[112px]">
       <EventsDisplay
         title={'upcoming events'}
         route={'dashboard/seeAll'}
