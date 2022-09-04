@@ -1,11 +1,11 @@
 import TextInput from '../../components/textInput'
 import LocationInput from '../../components/locationInput'
 import { useState, useEffect } from 'react'
-import FileInput from '../../components/fileInput'
 import Button from '../../components/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useAuth } from '../../contexts/auth'
 
 interface LocationData {
@@ -79,10 +79,9 @@ export default function CreateUser() {
   }, [remakeProfile])
 
   return (
-    <div className="w-full items-center space-y-4 bg-secondaryBg px-4 py-[40px] text-center sm:px-0">
-      <div className="mx-auto w-1/2 content-center"></div>
-      <div className="mx-auto flex w-1/2 content-center justify-around">
-        <div className="w-1/2 p-2 text-left">
+    <div className="h-screen w-screen bg-secondaryBg">
+      <div className="mx-auto flex max-w-[300px] flex-col-reverse items-center justify-center lg:max-w-full lg:flex-row  lg:items-start lg:justify-center lg:space-x-24 lg:pt-14">
+        <div className="flex w-[300px] flex-col items-stretch text-left">
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Username
           </p>
@@ -91,7 +90,7 @@ export default function CreateUser() {
             id="username"
             placeholder={name}
             maxWidth={500}
-            width={'w-auto'}
+            width={'w-full'}
             textArea={false}
             setValue={setName}
           />
@@ -103,7 +102,7 @@ export default function CreateUser() {
             id="bio"
             placeholder={bio}
             maxWidth={500}
-            width={'w-auto'}
+            width={'w-full'}
             textArea={false}
             setValue={setBio}
           />
@@ -113,51 +112,61 @@ export default function CreateUser() {
           <LocationInput
             labelText=""
             id="user_location"
-            placeholder={location?.address || "Where are you located?"}
+            placeholder={location?.address || 'Where are you located?'}
             setLocation={setLocation}
           />
+          <div className="flex w-full flex-row justify-start space-x-2 pt-4">
+            <Link href="/profile">
+              <Button
+                text="Save"
+                onClick={() => {
+                  CreateProfile(uid, name, bio, location, avatar)
+                }}
+                active={true}
+              />
+            </Link>
+            <Link href="/profile">
+              <Button
+                text="Discard"
+                onClick={() => {
+                  remakeProfile = true
+                }}
+                active={true}
+              />
+            </Link>
+          </div>
         </div>
-        <div>
-          <img src={avatar} />
+        <div className="flex w-[300px] flex-col items-stretch">
+          <Image
+            src={avatar}
+            width="300px"
+            height="300px"
+            layout="intrinsic"
+            className="rounded-[15px]"
+          />
+          <p className="mt-[14px] mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Email
+          </p>
           <TextInput
-            labelText="Email"
+            labelText=""
             id="email"
             placeholder="Enter gravatar email"
             maxWidth={500}
-            width={'w-auto'}
+            width={'w-full'}
             textArea={false}
             setValue={setEmail}
           />
-           <Button 
+          <div className="h-2" />
+          <Button
             text="Get Avatar"
             onClick={() => {
               fetchAvatar(email, setAvatar)
             }}
             active={true}
           />
+          <div className="h-2" />
         </div>
       </div>
-      <div className="w-1/2 mx-auto flex flex-row space-x-2 justify-center">
-        <Link href="/profile">
-          <Button
-            text="Save"
-            onClick={() => {
-              CreateProfile(uid, name, bio, location, avatar)
-            }}
-            active={true}
-          />
-        </Link>
-        <Link href="/profile">
-          <Button
-            text="Discard"
-            onClick={() => {
-              remakeProfile = true
-            }}
-            active={true}
-          />
-        </Link>
-      </div>
-      <p>Events</p>
     </div>
   )
 }

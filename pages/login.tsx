@@ -7,6 +7,7 @@ import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
+import { UserModel } from '../shared/interface/common'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
@@ -206,12 +207,12 @@ export default function Login() {
   )
 }
 
-interface UserModel {
-  phone_number: string
-  discord_id: ''
-  discord_verified: false
-  twitter_id: ''
-  twitter_verified: false
-  wallet: string
-  siwe_expiration_time: string
-}
+// interface UserModel {
+//   phone_number: string
+//   discord_id: ''
+//   discord_verified: false
+//   twitter_id: ''
+//   twitter_verified: false
+//   wallet: string
+//   siwe_expiration_time: string
+// }

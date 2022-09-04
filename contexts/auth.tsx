@@ -13,6 +13,7 @@ import React, {
 } from 'react'
 import { auth, db } from '../services/firebase_config'
 import { useRouter } from 'next/router'
+import { UserModel } from '../shared/interface/common'
 
 interface Props {
   children?: ReactNode
@@ -22,15 +23,16 @@ interface UserCredentials {
   phoneNumber?: string
 }
 
-interface UserModel {
-  phone_number: string
-  discord_id: ''
-  discord_verified: boolean
-  twitter_id: ''
-  twitter_verified: boolean
-  wallet: string
-  siwe_expiration_time: string
-}
+// interface UserModel {
+//   phone_number: string
+//   discord_id: ''
+//   discord_verified: boolean
+//   twitter_id: ''
+//   twitter_verified: boolean
+//   twitter_name: string
+//   wallet: string
+//   siwe_expiration_time: string
+// }
 
 interface AuthInterface {
   currentUser?: User | null
