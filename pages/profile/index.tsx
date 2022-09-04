@@ -42,49 +42,47 @@ export default function UserProfile() {
   }, [])
 
   return (
-    <div className="flex w-full flex-col items-start space-y-4 bg-secondaryBg  px-4 py-[40px] text-center sm:px-0">
-      <div className="mx-auto flex w-full flex-col px-[20px] md:px-[112px]">
-        <div className="flex w-full flex-col items-start justify-start  space-y-4 px-[20px] md:px-[112px] lg:flex-row lg:space-y-0 lg:space-x-8">
-          <Image
-            src={avatar}
-            width="300px"
-            height="300px"
-            layout="intrinsic"
-            className="rounded-[15px]"
-          />
-          <div className="flex w-full max-w-[300px] flex-col items-stretch justify-start text-left">
-            <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-              Username
-            </p>
-            <p className="p-1 text-secondary">{name}</p>
-            <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-              Bio
-            </p>
-            <p className="p-1 text-secondary">{bio}</p>
-            <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-              Location
-            </p>
-            <p className="p-1 text-secondary">{location?.address}</p>
-            {twitterName && (
-              <>
-                <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-                  Twitter
-                </p>
-                <a
-                  className="p-1 text-linkText"
-                  href={`https://twitter.com/${twitterName}`}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  Twitter
-                </a>
-              </>
-            )}
-            <div className="h-4" />
-            <Link href="/profile/edit">
-              <Button text={'Edit'} onClick={() => {}} active={true} />
-            </Link>
-          </div>
+    <div className="flex w-full flex-col items-center space-y-4 bg-secondaryBg px-4 py-[40px] text-center sm:px-0">
+      <div className="flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
+        <Image
+          src={avatar}
+          width="300px"
+          height="300px"
+          layout="intrinsic"
+          className="rounded-[15px]"
+        />
+        <div className="flex w-full max-w-[300px] flex-col items-stretch justify-start text-left">
+          <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Username
+          </p>
+          <p className="p-1 text-secondary">{name}</p>
+          <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Bio
+          </p>
+          <p className="p-1 text-secondary">{bio}</p>
+          <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Location
+          </p>
+          <p className="p-1 text-secondary">{location?.address}</p>
+          {twitterName && (
+            <>
+              <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+                Twitter
+              </p>
+              <a
+                className="p-1 text-linkText"
+                href={`https://twitter.com/${twitterName}`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Twitter
+              </a>
+            </>
+          )}
+          <div className="h-4" />
+          <Link href="/profile/edit">
+            <Button text={'Edit'} onClick={() => {}} active={true} />
+          </Link>
         </div>
       </div>
       <Dashboard />
