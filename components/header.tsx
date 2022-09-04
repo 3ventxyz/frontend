@@ -77,17 +77,6 @@ export default function Header() {
               Dashboard
             </p>
           </Link>
-          <Link href="/settings">
-            <p
-              className={
-                path.includes('settings')
-                  ? activeHeaderTextButtonStyle
-                  : headerTextButtonStyle
-              }
-            >
-              Settings
-            </p>
-          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">
@@ -133,15 +122,19 @@ export default function Header() {
             >
               <div className="h-[10px]" />
               <ul className="w-full min-w-[200px] list-none rounded-[15px] border-2 border-primary bg-primaryBg p-2 hover:block">
-                <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
-                  <Link href="/profile">Profile</Link>
-                </li>
-                <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
-                  <Link href="/settings">Settings</Link>
-                </li>
+                <Link href="/profile" className="w-full">
+                  <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                    Profile
+                  </li>
+                </Link>
+                <Link href="/settings" className="w-full">
+                  <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                    Settings
+                  </li>
+                </Link>
                 <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
                   <p
-                    className="cursor-pointer"
+                    className="w-full cursor-pointer"
                     onClick={async () => await auth.logout()}
                   >
                     Log out
