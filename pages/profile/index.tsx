@@ -7,6 +7,7 @@ import { db } from '../../services/firebase_config'
 import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../../contexts/auth'
 import Link from 'next/link'
+import Dashboard from '../../components/dashboard'
 
 interface LocationData {
   lat: number
@@ -75,6 +76,7 @@ export default function UserProfile() {
         <img src={avatar} />
       </div>
       <p>Events</p>
+      <Dashboard />
     </div>
   )
 }
