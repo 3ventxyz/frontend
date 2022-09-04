@@ -10,7 +10,10 @@ import LocationInput from '../../components/locationInput'
 import { LocationData, TicketInterface } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
 import { useRouter } from 'next/router'
-// import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
+import FileInput from '../../components/fileInput'
+import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
+import { storage } from '../../services/firebase_config'
+import { useAuth } from '../../contexts/auth'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -25,6 +28,50 @@ export default function CreateEvent() {
   // tickets how is it going to be????
   const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
   const router = useRouter()
+  const auth = useAuth()
+
+  const createEvent = async () => {
+    if (!fileImg) {
+      alert('Please upload an image first!')
+    }
+    const storageRef = ref(storage, `/files/${auth.uid}/${fileImg?.name}`)
+    const fileBuffer = await fileImg?.arrayBuffer()
+    if (fileBuffer) {
+      const uploadTask = uploadBytesResumable(storageRef, fileBuffer)
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+        },
+        (err) => {
+          return ''
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+            console.log('rendered url', url)
+            setIsCreatingNewEvent(true)
+            const eventId = await createNewEvent({
+              title: title,
+              end_date: endDate,
+              start_date: startDate,
+              organization: organization,
+              uid: auth.uid,
+              description: eventDescription,
+              location: eventLocation,
+              img_url: url
+            })
+            router.push(`/e/${eventId}`)
+            return url
+          })
+        }
+      )
+    }
+    return ''
+  }
+
   return (
     <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
       <h1>Create new event</h1>
@@ -77,10 +124,6 @@ export default function CreateEvent() {
             className="text-black"
             onChange={(e: any) => {
               setStartDate(new Date(e.target.value))
-              console.log('date changed!!!')
-              console.log(e.target.value)
-              console.log(startDate)
-              console.log('===============')
             }}
           ></input>
           <h4>End Date</h4>
@@ -91,10 +134,6 @@ export default function CreateEvent() {
             className="text-black"
             onChange={(e: any) => {
               setEndDate(new Date(e.target.value))
-              console.log('date changed!!!')
-              console.log(e.target.value)
-              console.log(endDate)
-              console.log('===============')
             }}
           ></input>
         </div>
@@ -116,24 +155,7 @@ export default function CreateEvent() {
           <Button
             type="submit"
             text={'Create new event'}
-            onClick={async () => {
-              console.log('new event added')
-              setIsCreatingNewEvent(true)
-              await createNewEvent(
-                {
-                  title: title,
-                  end_date: endDate,
-                  start_date: startDate,
-                  organization: organization,
-                  uid: 'user id 123',
-                  description: eventDescription,
-                  location: eventLocation
-                },
-                fileImg
-              )
-
-              router.push('/e/eventCreated')
-            }}
+            onClick={() => createEvent()}
             active={true}
           />
         )}
