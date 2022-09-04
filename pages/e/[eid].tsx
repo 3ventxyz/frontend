@@ -194,9 +194,7 @@ function LoadedEventPage({
           id="event-details"
           className="mb-[50px] w-auto space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
         >
-          <h3>
-            {event?.eventTitle !== null ? event?.eventTitle : 'Event Title'}
-          </h3>
+          <h3>{event?.title !== null ? event?.title : 'Event Title'}</h3>
           <div
             id="mobile-event-image"
             className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] lg:hidden"
@@ -218,7 +216,7 @@ function LoadedEventPage({
           </div>
           <div className="leading-[25px]">
             {event?.date} <br />
-            {event?.address}
+            {event?.location?.address}
           </div>
           <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
             <Image
