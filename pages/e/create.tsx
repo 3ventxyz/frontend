@@ -19,9 +19,8 @@ export default function CreateEvent() {
   const [eventDescription, setEventDescription] = useState<string | null>(null)
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [startDate, setStartDate] = useState<Date>()
-  const [endDate, setEndDate] = useState<Date>()
-
+  const [startDate, setStartDate] = useState<Date>(new Date())
+  const [endDate, setEndDate] = useState<Date| null>(null)
   // tickets how is it going to be????
   const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
   const router = useRouter()
@@ -72,8 +71,8 @@ export default function CreateEvent() {
           <h4>Start Date</h4>
           <input
             type="datetime-local"
-            min="2018-06-07T00:00"
-            max="2022-06-14T00:00"
+            min="2022-09-01T00:00"
+            max="2023-06-14T00:00"
             className="text-black"
             onChange={(e: any) => {
               setStartDate(new Date(e.target.value))
@@ -86,8 +85,8 @@ export default function CreateEvent() {
           <h4>End Date</h4>
           <input
             type="datetime-local"
-            min="2018-06-07T00:00"
-            max="2018-06-14T00:00"
+            min="2022-09-01T00:00"
+            max="2023-06-14T00:00"
             className="text-black"
             onChange={(e: any) => {
               setEndDate(new Date(e.target.value))
