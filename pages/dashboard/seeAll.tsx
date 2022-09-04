@@ -2,7 +2,7 @@
 import { collection, doc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useEvents } from '../../context/eventsContext'
+import { useEvents } from '../../contexts/events'
 import { db } from '../../services/firebase_config'
 import { EventInterface } from '../../shared/interface/common'
 import EventsDisplay from './components/eventsDisplay'

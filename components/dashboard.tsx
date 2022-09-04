@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { db } from '../services/firebase_config'
 import { doc, collection } from '@firebase/firestore'
-import { useEvents } from '../context/eventsContext'
+import { useEvents } from '../contexts/events'
 import EventsDisplay from './eventsDisplay'
 
 export default function Dashboard() {
