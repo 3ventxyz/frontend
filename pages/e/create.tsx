@@ -72,8 +72,8 @@ export default function CreateEvent() {
           <h4>Start Date</h4>
           <input
             type="datetime-local"
-            min="2018-06-07T00:00"
-            max="2022-06-14T00:00"
+            min="2022-09-01T00:00"
+            max="2023-06-14T00:00"
             className="text-black"
             onChange={(e: any) => {
               setStartDate(new Date(e.target.value))
@@ -86,8 +86,8 @@ export default function CreateEvent() {
           <h4>End Date</h4>
           <input
             type="datetime-local"
-            min="2018-06-07T00:00"
-            max="2018-06-14T00:00"
+            min="2022-09-01T00:00"
+            max="2023-06-14T00:00"
             className="text-black"
             onChange={(e: any) => {
               setEndDate(new Date(e.target.value))
