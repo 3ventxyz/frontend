@@ -15,7 +15,7 @@ const userMenuShow = (userMenu: boolean, setUserMenu: any) => {
 const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
   setUserMenu(false)
   return userMenu
-} 
+}
 
 export default function Header() {
   const headerTextButtonStyle =
@@ -28,7 +28,7 @@ export default function Header() {
   const { openConnectModal } = useConnectModal()
   const { address } = useAccount()
   const [userMenu, setUserMenu] = useState(false)
-  
+
   // determines which path or sub element we are focused on
   useEffect(() => {
     const pathParts = router.asPath.split('#')
@@ -119,16 +119,34 @@ export default function Header() {
               onMouseEnter={() => {
                 userMenuShow(userMenu, setUserMenu)
               }}
-            />
-            <div>
-              <ul className={`list-none absolute border-2 border-primary top-16 right-24 bg-primaryBg hover:block ${userMenu ? '' : 'hidden'}`}               
               onMouseLeave={() => {
                 userMenuHide(userMenu, setUserMenu)
               }}
-              >
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/profile">Profile</Link></li>
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><Link href="/settings">Settings</Link></li>
-                <li className="px-2 py-1 border-b-1 border-primary hover:underline underline-offset-4 active:underline active:font-bold"><p className="cursor-pointer" onClick={async () => await auth.logout()}>Log out</p></li>
+            />
+            <div
+              className={`absolute right-28 top-14 hover:block ${
+                userMenu === false && 'hidden'
+              }`}
+              onMouseLeave={() => {
+                userMenuHide(userMenu, setUserMenu)
+              }}
+            >
+              <div className="h-[10px]" />
+              <ul className="w-full min-w-[200px] list-none rounded-[15px] border-2 border-primary bg-primaryBg p-2 hover:block">
+                <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                  <Link href="/profile">Profile</Link>
+                </li>
+                <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                  <Link href="/settings">Settings</Link>
+                </li>
+                <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                  <p
+                    className="cursor-pointer"
+                    onClick={async () => await auth.logout()}
+                  >
+                    Log out
+                  </p>
+                </li>
               </ul>
             </div>
           </div>
