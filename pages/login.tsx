@@ -72,8 +72,6 @@ export default function Login() {
                     discord_guilds: [],
                     twitter_id: '',
                     twitter_verified: false,
-                    past_events: [],
-                    upcoming_events: [],
                     wallet: '',
                     siwe_expiration_time: ''
                   }
@@ -206,13 +204,3 @@ export default function Login() {
     </div>
   )
 }
-
-// interface UserModel {
-//   phone_number: string
-//   discord_id: ''
-//   discord_verified: false
-//   twitter_id: ''
-//   twitter_verified: false
-//   wallet: string
-//   siwe_expiration_time: string
-// }

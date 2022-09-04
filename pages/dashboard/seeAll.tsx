@@ -28,7 +28,7 @@ export default function SeeAll() {
     const setData = async () => {
       let eventData: Array<EventInterface>
       setEvents(null)
-      const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
+      const userDocRef = doc(db, 'users', '9z8ahI4aQIYR11Iz0QzWuVJsh943')
 
       switch (mode) {
         case 'upcoming':
@@ -56,7 +56,7 @@ export default function SeeAll() {
   }, [mode])
 
   return (
-    <div className="flex w-screen flex-col items-center bg-secondaryBg px-[20px] pb-[106px] pt-[35px] md:px-[112px]">
+    <div className="flex w-screen flex-col items-center bg-secondaryBg px-[20px] pb-[106px] pt-[35px] text-center md:px-[112px]">
       <div className="mx-auto mb-[20px] flex w-full max-w-[1200px] flex-col items-center justify-between space-y-[10px] border-b border-disabled pb-2 sm:flex-row sm:space-y-[0px]">
         <div className="flex flex-row items-center">
           <button

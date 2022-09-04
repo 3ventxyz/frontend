@@ -6,8 +6,18 @@ import Button from '../components/button'
 import FeatureCard from '../components/featureCard'
 import PricingCard from '../components/pricingCard'
 import { useRouter } from 'next/router'
+import { useAuth } from '../contexts/auth'
 
 export default function Landing() {
+  const auth = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (auth.isLoggedIn()) {
+      router.push('/dashboard')
+    }
+  }, [])
+
   return (
     <div className="flex flex-grow flex-col">
       <HeroSection />
