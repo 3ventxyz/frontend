@@ -6,15 +6,15 @@ import { useEvents } from '../contexts/events'
 import EventsDisplay from './eventsDisplay'
 
 export default function Dashboard() {
-  const [fetched, setFetched] = useState(false)
   const events = useEvents()
+  const [fetched, setFetched] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       let pastEventsData: any
       let upcomingEventsData: any
       try {
-        const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
+        const userDocRef = doc(db, 'users', '9z8ahI4aQIYR11Iz0QzWuVJsh943')
         if (!events.cachedPastEvents) {
           pastEventsData = await events.fetchEventsData({
             collectionRef: collection(userDocRef, 'past_events')
