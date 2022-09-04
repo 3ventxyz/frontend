@@ -90,7 +90,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     const eventsList: EventInterface[] = []
     for (const eventRef of eventsRef.docs) {
       const eventDoc: any = await getDoc(eventRef.data().event_ref)
-      console
       eventsList.push(newEventData(eventDoc))
     }
     return eventsList

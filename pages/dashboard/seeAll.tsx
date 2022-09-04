@@ -28,7 +28,7 @@ export default function SeeAll() {
     const setData = async () => {
       let eventData: Array<EventInterface>
       setEvents(null)
-      const userDocRef = doc(db, 'user', 'guJqAglqTLAzoMIQA6Gi')
+      const userDocRef = doc(db, 'users', '9z8ahI4aQIYR11Iz0QzWuVJsh943')
 
       switch (mode) {
         case 'upcoming':
