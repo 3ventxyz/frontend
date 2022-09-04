@@ -1,10 +1,9 @@
-import Image from 'next/image'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useAuth } from '../contexts/auth'
 import TextInputDisplay from '../components/textInputDisplay'
 import SignInButton from '../components/siwe'
-import Verify from './profile-settings'
+import Verify from '../components/verify'
 import Button from '../components/button'
 
 export default function Settings() {
@@ -33,19 +32,18 @@ export default function Settings() {
               bodyText={auth?.userModel?.wallet || 'no wallet verified'}
             />
             {/* TODO: this should actually check iron session + expiry */}
-            {!auth?.userModel?.wallet &&
-              (address ? (
-                <SignInButton
-                  onSuccess={(address: any) => console.log(address)}
-                  onError={(address: any) => console.log(address)}
-                />
-              ) : (
-                <Button
-                  active={true}
-                  text={address ? address : 'Connect Wallet'}
-                  onClick={openConnectModal}
-                />
-              ))}
+            {address ? (
+              <SignInButton
+                onSuccess={(address: any) => console.log(address)}
+                onError={(address: any) => console.log(address)}
+              />
+            ) : (
+              <Button
+                active={true}
+                text={address ? address : 'Connect Wallet'}
+                onClick={openConnectModal}
+              />
+            )}
           </div>
           <Verify />
         </div>

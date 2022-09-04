@@ -67,7 +67,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       date: eventDoc.data()?.date,
       id: eventDoc.data()?.id,
       eventTitle: eventDoc.data()?.event_title,
-      orgTitle: eventDoc.data()?.organization,
+      organization: eventDoc.data()?.organization,
       imgURL: eventDoc.data()?.img_url
     }
     return eventData

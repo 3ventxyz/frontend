@@ -6,6 +6,7 @@ const nextConfig = {
     minimumCacheTTL: 120,
     domains: [
       'firebasestorage.googleapis.com',
+      'www.gravatar.com',
       'maps.googleapis.com',
       'res.cloudinary.com'
     ],

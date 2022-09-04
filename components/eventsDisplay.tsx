@@ -1,7 +1,7 @@
 // author: marthel
 import Link from 'next/link'
 import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
-import { EventInterface } from '../../../shared/interface/common'
+import { EventInterface } from '../shared/interface/common'
 import Image from 'next/image'
 
 export default function EventsDisplay({
@@ -64,7 +64,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
         </div>
       </div>
       <div className="flex flex-col space-y-[7px] p-[20px]  ">
-        <div className="h-[25px] w-auto rounded-md bg-gray-300 mt-[5px] mb-[5px]"></div>
+        <div className="mt-[5px] mb-[5px] h-[25px] w-auto rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>

@@ -7,6 +7,7 @@ import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
+import { UserModel } from '../shared/interface/common'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
@@ -73,7 +74,8 @@ export default function Login() {
                     twitter_verified: false,
                     past_events: [],
                     upcoming_events: [],
-                    wallet: ''
+                    wallet: '',
+                    siwe_expiration_time: ''
                   }
                   await setDoc(doc(db, 'users', result.user.uid), userObject)
                   const userModel: UserModel = {
@@ -82,7 +84,8 @@ export default function Login() {
                     discord_verified: false,
                     twitter_id: '',
                     twitter_verified: false,
-                    wallet: ''
+                    wallet: '',
+                    siwe_expiration_time: ''
                   }
                   authContext.setUserModel(userModel)
                 } else {
@@ -95,11 +98,12 @@ export default function Login() {
                     discord_verified: data?.discord_verified,
                     twitter_id: data?.twitter_id,
                     twitter_verified: data?.twitter_verified,
-                    wallet: data?.wallet
+                    wallet: data?.wallet,
+                    siwe_expiration_time: data?.siwe_expiration_time
                   }
                   authContext.setUserModel(userModel)
                 }
-                router.push('/settings')
+                router.push('/profile')
               })
               .catch((error) => {
                 console.log('error', error)
@@ -203,11 +207,12 @@ export default function Login() {
   )
 }
 
-interface UserModel {
-  phone_number: string
-  discord_id: ''
-  discord_verified: false
-  twitter_id: ''
-  twitter_verified: false
-  wallet: string
-}
+// interface UserModel {
+//   phone_number: string
+//   discord_id: ''
+//   discord_verified: false
+//   twitter_id: ''
+//   twitter_verified: false
+//   wallet: string
+//   siwe_expiration_time: string
+// }

@@ -8,6 +8,15 @@ import { useConnectModal, ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import SignInButton from './siwe'
 
+const userMenuShow = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(true)
+  return userMenu
+}
+const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
+  setUserMenu(false)
+  return userMenu
+}
+
 export default function Header() {
   const headerTextButtonStyle =
     'cursor-pointer hidden md:block text-[14px] font-semibold text-linkDisabled underline-offset-4 hover:underline'
@@ -18,6 +27,7 @@ export default function Header() {
   const auth = useAuth()
   const { openConnectModal } = useConnectModal()
   const { address } = useAccount()
+  const [userMenu, setUserMenu] = useState(false)
 
   // determines which path or sub element we are focused on
   useEffect(() => {
@@ -67,17 +77,6 @@ export default function Header() {
               Dashboard
             </p>
           </Link>
-          <Link href="/settings">
-            <p
-              className={
-                path.includes('settings')
-                  ? activeHeaderTextButtonStyle
-                  : headerTextButtonStyle
-              }
-            >
-              Settings
-            </p>
-          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">
@@ -89,12 +88,10 @@ export default function Header() {
                   showBalance={false}
                 />
                 {/* TODO: this should actually check iron session + expiry */}
-                {!auth.userModel?.wallet && (
-                  <SignInButton
-                    onSuccess={(address: any) => console.log(address)}
-                    onError={(address: any) => console.log(address)}
-                  />
-                )}
+                <SignInButton
+                  onSuccess={(address: any) => console.log(address)}
+                  onError={(address: any) => console.log(address)}
+                />
               </>
             ) : (
               <Button
@@ -107,8 +104,44 @@ export default function Header() {
               alt="avatar"
               src="/assets/auth/avatar.svg"
               width="36"
-              onClick={async () => await auth.logout()}
+              className="hover:cursor-pointer"
+              onMouseEnter={() => {
+                userMenuShow(userMenu, setUserMenu)
+              }}
+              onMouseLeave={() => {
+                userMenuHide(userMenu, setUserMenu)
+              }}
             />
+            <div
+              className={`absolute right-28 top-14 hover:block ${
+                userMenu === false && 'hidden'
+              }`}
+              onMouseLeave={() => {
+                userMenuHide(userMenu, setUserMenu)
+              }}
+            >
+              <div className="h-[10px]" />
+              <ul className="w-full min-w-[200px] list-none rounded-[15px] border-2 border-primary bg-primaryBg p-2 hover:block">
+                <Link href="/profile" className="w-full">
+                  <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                    Profile
+                  </li>
+                </Link>
+                <Link href="/settings" className="w-full">
+                  <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                    Settings
+                  </li>
+                </Link>
+                <li className="border-b-1 cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
+                  <p
+                    className="w-full cursor-pointer"
+                    onClick={async () => await auth.logout()}
+                  >
+                    Log out
+                  </p>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           <Button
