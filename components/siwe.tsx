@@ -5,7 +5,6 @@ import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 import { SiweMessage } from 'siwe'
 import { db } from '../services/firebase_config'
 import { doc, updateDoc } from 'firebase/firestore'
-import { sign } from 'crypto'
 
 export default function SignInButton({
   onSuccess,
@@ -85,8 +84,7 @@ export default function SignInButton({
         version: '1',
         chainId,
         nonce: state.nonce,
-        expirationTime: new Date(Date.now() + 30000).toISOString()
-        // expirationTime: new Date(Date.now() + 86400000).toISOString()
+        expirationTime: new Date(Date.now() + 86400000).toISOString()
       })
       const signature = await signMessageAsync({
         message: message.prepareMessage()
@@ -149,9 +147,7 @@ export default function SignInButton({
 
   return (
     <>
-      {isSiweValid() ? (
-        <div></div>
-      ) : (
+      {!isSiweValid() && (
         <Button
           active={(state.nonce && !state.loading) || false}
           text={'Verify Wallet'}
