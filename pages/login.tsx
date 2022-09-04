@@ -206,13 +206,3 @@ export default function Login() {
     </div>
   )
 }
-
-// interface UserModel {
-//   phone_number: string
-//   discord_id: ''
-//   discord_verified: false
-//   twitter_id: ''
-//   twitter_verified: false
-//   wallet: string
-//   siwe_expiration_time: string
-// }
