@@ -17,8 +17,9 @@ interface LocationData {
 export default function UserProfile() {
   const [name, setName] = useState('')
   const [bio, setBio] = useState('')
-  const [location, setLocation] = useState<LocationData>()  
+  const [location, setLocation] = useState<LocationData>()
   const [avatar, setAvatar] = useState('')
+  const [twitterName, setTwitterName] = useState('')
   const auth = useAuth()
   const uid = auth?.uid
 
@@ -32,6 +33,7 @@ export default function UserProfile() {
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
         setAvatar(`${docSnap.data().gravatar}?s=200`)
+        setTwitterName(docSnap.data().twitter_name)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -61,8 +63,16 @@ export default function UserProfile() {
             Location
           </p>
           <p className="p-1 text-secondary">{location?.address}</p>
+          {twitterName && (
+            <>
+              <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+                Twitter
+              </p>
+              <p className="p-1 text-secondary">Follow {twitterName}</p>
+            </>
+          )}
         </div>
-        <img src={avatar}/>
+        <img src={avatar} />
       </div>
       <p>Events</p>
     </div>

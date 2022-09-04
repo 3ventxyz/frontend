@@ -82,7 +82,8 @@ export async function verifyTwitter(
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
           twitter_verified: true,
-          twitter_id: twitterIdJson.data.id
+          twitter_id: twitterIdJson.data.id,
+          twitter_name: twitterIdJson.data.username
         })
         console.log('Data written into doc ID: ', docRef.id)
         return true

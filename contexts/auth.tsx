@@ -28,6 +28,7 @@ interface UserModel {
   discord_verified: boolean
   twitter_id: ''
   twitter_verified: boolean
+  twitter_name: string
   wallet: string
   siwe_expiration_time: string
 }
