@@ -16,13 +16,12 @@ export interface LocationData {
 export interface EventInterface {
   id: string
   uid?: string
-  eventTitle: string
-  eventDescription?: string
-  EventLocation?: {}
+  title: string
+  description?: string
+  location: LocationData,
   organization: string
   date: string
   timestamp?: Date
-  address: string
   imgURL: string
   tickets?: TicketInterface[]
 }

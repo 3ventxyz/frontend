@@ -64,7 +64,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
         </div>
       </div>
       <div className="flex flex-col space-y-[7px] p-[20px]  ">
-        <div className="h-[25px] w-auto rounded-md bg-gray-300 mt-[5px] mb-[5px]"></div>
+        <div className="mt-[5px] mb-[5px] h-[25px] w-auto rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
         <div className="h-[13px] w-full rounded-md bg-gray-300"></div>
@@ -91,11 +91,14 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
         </div>
         <ul className="p-[20px]">
           <li className="... truncate text-[24px] font-bold">
-            {eventData.eventTitle}
+            {eventData.title}
           </li>
           <li className="... truncate text-[14px]">{eventData.organization}</li>
+          <li className="... truncate text-[14px]">{eventData.description}</li>
           <li className="... truncate text-[14px]">{eventData.date}</li>
-          <li className="... truncate text-[14px]">{eventData.address}</li>
+          <li className="... truncate text-[14px]">
+            {eventData.location?.address} address
+          </li>
         </ul>
       </div>
     </Link>

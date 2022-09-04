@@ -89,11 +89,14 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
         </div>
         <ul className="p-[20px]">
           <li className="... truncate text-[24px] font-bold">
-            {eventData.eventTitle}
+            {eventData.title}
           </li>
           <li className="... truncate text-[14px]">{eventData.organization}</li>
+          <li className="... truncate text-[14px]">{eventData.description}</li>
           <li className="... truncate text-[14px]">{eventData.date}</li>
-          <li className="... truncate text-[14px]">{eventData.address}</li>
+          <li className="... truncate text-[14px]">
+            {eventData.location?.address} address
+          </li>
         </ul>
       </div>
     </Link>

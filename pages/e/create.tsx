@@ -14,13 +14,14 @@ import { useRouter } from 'next/router'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
-  const [eventTitle, setEventTitle] = useState<string | null>(null)
+  const [title, setTitle] = useState<string | null>(null)
   const [organization, setOrganization] = useState<string | null>(null)
   const [eventDescription, setEventDescription] = useState<string | null>(null)
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [startDate, setStartDate] = useState<Date>(new Date())
-  const [endDate, setEndDate] = useState<Date| null>(null)
+  const [startDate, setStartDate] = useState<Date>()
+  const [endDate, setEndDate] = useState<Date>()
+
   // tickets how is it going to be????
   const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
   const router = useRouter()
@@ -33,7 +34,7 @@ export default function CreateEvent() {
           id={''}
           labelText={''}
           placeholder={'e.g. crypto event 2023'}
-          setValue={setEventTitle}
+          setValue={setTitle}
           isDisabled={isCreatingNewEvent}
         />
       </div>
@@ -120,9 +121,9 @@ export default function CreateEvent() {
               setIsCreatingNewEvent(true)
               await createNewEvent(
                 {
-                  title: eventTitle,
+                  title: title,
                   end_date: endDate,
-                  start_date:startDate,
+                  start_date: startDate,
                   organization: organization,
                   uid: 'user id 123',
                   description: eventDescription,
