@@ -72,8 +72,6 @@ export default function Login() {
                     discord_guilds: [],
                     twitter_id: '',
                     twitter_verified: false,
-                    past_events: [],
-                    upcoming_events: [],
                     wallet: '',
                     siwe_expiration_time: ''
                   }
