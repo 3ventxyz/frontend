@@ -55,17 +55,19 @@ export default function Header() {
               <p className="text-[30px] font-medium tracking-[1px]">3vent</p>
             </div>
           </Link>
-          <Link href="/">
-            <p
-              className={
-                path === '/' || path === 'features'
-                  ? activeHeaderTextButtonStyle
-                  : headerTextButtonStyle
-              }
-            >
-              Home
-            </p>
-          </Link>
+          {!auth.isLoggedIn() && (
+            <Link href="/">
+              <p
+                className={
+                  path === '/' || path === 'features'
+                    ? activeHeaderTextButtonStyle
+                    : headerTextButtonStyle
+                }
+              >
+                Home
+              </p>
+            </Link>
+          )}
           <Link href="/dashboard">
             <p
               className={
