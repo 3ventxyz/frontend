@@ -11,6 +11,7 @@ import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider, useAuth } from '../contexts/auth'
 import Layout from '../components/layout'
 import Script from 'next/script'
+import { EventsProvider } from '../contexts/events'
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
@@ -50,13 +51,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         async
       ></Script>
       <AuthProvider>
-        <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider chains={chains}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </RainbowKitProvider>
-        </WagmiConfig>
+        <EventsProvider>
+          <WagmiConfig client={wagmiClient}>
+            <RainbowKitProvider chains={chains}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </RainbowKitProvider>
+          </WagmiConfig>
+        </EventsProvider>
       </AuthProvider>
     </div>
   )
