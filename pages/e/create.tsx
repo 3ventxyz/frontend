@@ -19,7 +19,8 @@ export default function CreateEvent() {
   const [eventDescription, setEventDescription] = useState<string | null>(null)
   const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [eventDate, setEventDate] = useState<Date>()
+  const [startDate, setStartDate] = useState<Date>()
+  const [endDate, setEndDate] = useState<Date>()
 
   // tickets how is it going to be????
   const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
@@ -68,26 +69,35 @@ export default function CreateEvent() {
           setLocation={setEventLocation}
         />
         <div>
-          <h4>Date</h4>
+          <h4>Start Date</h4>
+          <input
+            type="datetime-local"
+            min="2018-06-07T00:00"
+            max="2022-06-14T00:00"
+            className="text-black"
+            onChange={(e: any) => {
+              setStartDate(new Date(e.target.value))
+              console.log('date changed!!!')
+              console.log(e.target.value)
+              console.log(startDate)
+              console.log('===============')
+            }}
+          ></input>
+          <h4>End Date</h4>
           <input
             type="datetime-local"
             min="2018-06-07T00:00"
             max="2018-06-14T00:00"
             className="text-black"
-            onChange={(e) => {
+            onChange={(e: any) => {
+              setEndDate(new Date(e.target.value))
               console.log('date changed!!!')
               console.log(e.target.value)
+              console.log(endDate)
               console.log('===============')
             }}
           ></input>
         </div>
-        {/* <TextInput
-          id={'date'}
-          labelText={'date of the event'}
-          placeholder={'mm/dd/yyyy'}
-          setValue={setEventDate}
-          isDisabled={isCreatingNewEvent}
-        /> */}
       </div>
       <div>
         <div className="flex  items-baseline space-x-[10px]">
@@ -112,6 +122,8 @@ export default function CreateEvent() {
               await createNewEvent(
                 {
                   title: eventTitle,
+                  end_date: endDate,
+                  start_date:startDate,
                   organization: organization,
                   uid: 'user id 123',
                   description: eventDescription,
