@@ -33,19 +33,18 @@ export default function Settings() {
               bodyText={auth?.userModel?.wallet || 'no wallet verified'}
             />
             {/* TODO: this should actually check iron session + expiry */}
-            {!auth?.userModel?.wallet &&
-              (address ? (
-                <SignInButton
-                  onSuccess={(address: any) => console.log(address)}
-                  onError={(address: any) => console.log(address)}
-                />
-              ) : (
-                <Button
-                  active={true}
-                  text={address ? address : 'Connect Wallet'}
-                  onClick={openConnectModal}
-                />
-              ))}
+            {address ? (
+              <SignInButton
+                onSuccess={(address: any) => console.log(address)}
+                onError={(address: any) => console.log(address)}
+              />
+            ) : (
+              <Button
+                active={true}
+                text={address ? address : 'Connect Wallet'}
+                onClick={openConnectModal}
+              />
+            )}
           </div>
           <Verify />
         </div>

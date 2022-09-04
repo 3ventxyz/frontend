@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { SiweMessage } from 'siwe'
+import { ironOptions } from '../../../services/iron_options'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
@@ -15,6 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           return res.status(422).json({ message: 'Invalid nonce.' })
 
         req.session.siwe = fields
+        req.session.cookie.expires = new Date(fields.expirationTime as string)
         await req.session.save()
         res.json({ ok: true })
       } catch (_error) {
@@ -25,14 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
-}
-
-const ironOptions = {
-  cookieName: 'siwe',
-  password: 'complex_password_at_least_32_characters_long',
-  cookieOptions: {
-    secure: process.env.NODE_ENV === 'production',
-  },
 }
 
 export default withIronSessionApiRoute(handler, ironOptions)
