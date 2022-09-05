@@ -19,9 +19,9 @@ const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
 
 export default function Header() {
   const headerTextButtonStyle =
-    'cursor-pointer hidden md:block text-[14px] font-semibold text-linkDisabled underline-offset-4 hover:underline'
+    'cursor-pointer hidden md:block text-[14px] font-semibold pt-1 text-linkDisabled underline-offset-4 hover:underline'
   const activeHeaderTextButtonStyle =
-    'cursor-pointer hidden md:block text-[14px] font-semibold text-primary underline-offset-4 underline'
+    'cursor-pointer hidden md:block text-[14px] font-semibold pt-1 text-primary underline-offset-4 underline'
   const router = useRouter()
   const [path, setPath] = useState('')
   const auth = useAuth()
