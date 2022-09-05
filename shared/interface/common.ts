@@ -13,6 +13,11 @@ export interface LocationData {
   address: string
 }
 
+export interface TimeStamp {
+  nanoseconds: number
+  seconds: number
+}
+
 export interface EventInterface {
   id: string
   uid?: string
@@ -20,9 +25,10 @@ export interface EventInterface {
   description?: string
   location: LocationData,
   organization: string
-  date: string
+  start_date?: TimeStamp,
+  end_date?: TimeStamp,
   timestamp?: Date
-  imgURL: string
+  img_url: string
   tickets?: TicketInterface[]
 }
 
