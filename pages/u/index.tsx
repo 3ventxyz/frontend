@@ -42,16 +42,18 @@ export default function UserProfile() {
   }, [])
 
   return (
-    <div className="flex w-full flex-col items-center space-y-4 bg-secondaryBg px-4 py-[40px] text-center sm:px-0">
-      <div className="flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
-        <Image
-          src={avatar}
-          width="300px"
-          height="300px"
-          layout="intrinsic"
-          className="rounded-[15px]"
-        />
-        <div className="flex w-full max-w-[300px] flex-col items-stretch justify-start text-left">
+    <div className="flex w-full flex-col items-start space-y-4 bg-secondaryBg px-4 py-[40px] text-center sm:px-0">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
+        <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
+          <Image
+            src={avatar}
+            layout="fill"
+            loading="lazy"
+            objectFit="cover"
+            className="rounded-3xl"
+          />
+        </div>
+        <div className="flex w-full max-w-[380px] flex-col items-stretch justify-start text-left">
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Username
           </p>
