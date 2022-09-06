@@ -116,7 +116,7 @@ export default function CreateUser() {
             setLocation={setLocation}
           />
           <div className="flex w-full flex-row justify-start space-x-2 pt-4">
-            <Link href="/profile">
+            <Link href="/u">
               <Button
                 text="Save"
                 onClick={() => {
@@ -125,7 +125,7 @@ export default function CreateUser() {
                 active={true}
               />
             </Link>
-            <Link href="/profile">
+            <Link href="/u">
               <Button
                 text="Discard"
                 onClick={() => {

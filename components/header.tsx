@@ -124,7 +124,7 @@ export default function Header() {
             >
               <div className="h-[10px]" />
               <ul className="w-full min-w-[200px] list-none rounded-[15px] border-2 border-primary bg-primaryBg p-2 hover:block">
-                <Link href="/profile" className="w-full">
+                <Link href="/u" className="w-full">
                   <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
                     Profile
                   </li>

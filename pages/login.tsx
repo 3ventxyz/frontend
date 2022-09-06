@@ -101,7 +101,7 @@ export default function Login() {
                   }
                   authContext.setUserModel(userModel)
                 }
-                router.push('/profile')
+                router.push('/u')
               })
               .catch((error) => {
                 console.log('error', error)
