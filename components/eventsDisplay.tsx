@@ -41,6 +41,8 @@ export default function EventsDisplay({
         {isFetching ? (
           <>
             <EventTile eventData={null} />
+            <EventTile eventData={null} />
+            <EventTile eventData={null} />
           </>
         ) : (
           eventsData &&
@@ -69,17 +71,17 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
       </div>
     </div>
   ) : (
-    <Link href={`/e/${eventData.id}`}>
+    <Link href={`/e/${eventData.event_id}`}>
       <div className=" mx-auto h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
         <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
-          {eventData.imgURL === '' ? (
+          {eventData.img_url === '' ? (
             <div className="flex h-full w-full flex-col items-center justify-center text-gray-500">
               <TbPhotoOff className="h-[150px] w-[150px] " />
               <p>No image available</p>
             </div>
           ) : (
             <Image
-              src={eventData.imgURL}
+              src={eventData.img_url}
               layout="fill"
               loading="lazy"
               objectFit="cover"
@@ -93,7 +95,7 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           </li>
           <li className="... truncate text-[14px]">{eventData.organization}</li>
           <li className="... truncate text-[14px]">{eventData.description}</li>
-          <li className="... truncate text-[14px]">{eventData.date}</li>
+          {/* <li className="... truncate text-[14px]">{eventData?.start_date}</li> */}
           <li className="... truncate text-[14px]">
             {eventData.location?.address} address
           </li>

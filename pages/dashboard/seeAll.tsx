@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useEvents } from '../../contexts/events'
 import { db } from '../../services/firebase_config'
 import { EventInterface } from '../../shared/interface/common'
-import EventsDisplay from './components/eventsDisplay'
+import EventsDisplay from '../../components/eventsDisplay'
 import { HiChevronLeft } from 'react-icons/hi'
 import Button from '../../components/button'
 
