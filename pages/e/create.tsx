@@ -13,11 +13,13 @@ import { storage } from '../../services/firebase_config'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import EventsDisplay from '../../components/eventsDisplay'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
   const [organization, setOrganization] = useState<string>('')
+  const [eventId, setEventId] = useState<string>('')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [eventLocation, setEventLocation] = useState<LocationData>({
     address: '',
@@ -55,16 +57,17 @@ export default function CreateEvent() {
           getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
             console.log('rendered url', url)
             setIsCreatingNewEvent(true)
-            const eventId = await createNewEvent({
+            await createNewEvent({
               title: title,
               end_date: endDate,
               start_date: startDate,
-              organization: organization,
+              organization: '',
               uid: auth.uid,
               description: eventDescription,
               location: eventLocation,
               img_url: url,
-              ticket_max: ticketMax
+              ticket_max: ticketMax,
+              event_id: eventId
             })
             router.push(`/e/${eventId}`)
             return url
@@ -87,10 +90,10 @@ export default function CreateEvent() {
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
-          id={'event_organization'}
-          labelText={'Organization Name'}
-          placeholder={''}
-          setValue={setOrganization}
+          id={'event_id'}
+          labelText={'Event ID:'}
+          placeholder={'www.3vent.xyz/e/'}
+          setValue={setEventId}
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
