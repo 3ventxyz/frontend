@@ -19,6 +19,7 @@ import { useEvents } from '../../contexts/events'
 import Button from '../../components/button'
 import CreateCheckoutSession from './components/createCheckoutSession'
 import Spinner from '../../components/spinner'
+import Link from 'next/link'
 
 enum EventPageEnum {
   fetchingData,
@@ -215,7 +216,7 @@ function LoadedEventPage({
           <h3>{event?.title !== null ? event?.title : 'Event Title'}</h3>
           <div
             id="mobile-event-image"
-            className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] lg:hidden"
+            className="relative h-[310px] w-[310px] rounded-[67px] px-[50px] py-[50px] lg:hidden"
           >
             <Image
               src={event ? event.img_url : ''}
@@ -225,18 +226,20 @@ function LoadedEventPage({
               className="rounded-[67px]"
             />
           </div>
-          <div className="flex h-fit w-fit flex-row items-start justify-start space-x-4">
-            <div className="relative h-[35px] w-[35px] rounded-full bg-gray-200">
+          <Link href={`/u/${event?.uid}`}>
+            <div className="flex h-fit w-fit cursor-pointer flex-row items-center justify-start space-x-4 rounded-3xl">
               <Image
                 src={url}
-                layout="fill"
+                layout="fixed"
+                width="35px"
+                height="35px"
                 loading="lazy"
-                objectFit="cover"
-                className="rounded-full"
+                className="rounded-full bg-gray-200"
               />
+              {/* </div> */}
+              <p className="">{hostName}</p>
             </div>
-            <p className="">{hostName}</p>
-          </div>
+          </Link>
           <div className="leading-[25px]">
             {event?.start_date?.toDateString()}
             <br />
