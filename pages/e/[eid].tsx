@@ -186,7 +186,6 @@ function LoadedEventPage({
   children: ReactElement
 }): JSX.Element {
   console.log(event?.start_date)
-  console.log(event?.start_date?.seconds)
   return (
     <>
       <div className="flex h-full max-w-[373px] flex-col items-center lg:items-start ">
@@ -214,10 +213,10 @@ function LoadedEventPage({
               <div>Username</div>
             </div>
           </div>
-          <div className="leading-[25px]">
+          {/* <div className="leading-[25px]">
             {event?.start_date?.seconds &&
               new Date(event?.start_date?.seconds * 1000).toLocaleString()}
-          </div>
+          </div> */}
           <div className="leading-[25px]">{event?.location?.address}</div>
           <div className="relative h-[200px] w-[200px] rounded-[20px] bg-green-100">
             <Image

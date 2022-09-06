@@ -79,6 +79,17 @@ export default function Header() {
               Dashboard
             </p>
           </Link>
+          <Link href="/e/create">
+            <p
+              className={
+                path === '/e/create'
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Create an Event
+            </p>
+          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">

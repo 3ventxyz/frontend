@@ -1,8 +1,8 @@
 import { db, storage } from './firebase_config'
-import { NewEventInterface } from '../shared/interface/common'
+import { EventInterface } from '../shared/interface/common'
 import { addDoc, collection, setDoc } from '@firebase/firestore'
 
-export async function createNewEvent(newEventData: NewEventInterface | null) {
+export async function createNewEvent(newEventData: EventInterface | null) {
   try {
     if (!newEventData) {
       throw 'error event data is empty'

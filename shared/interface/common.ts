@@ -19,32 +19,16 @@ export interface TimeStamp {
 }
 
 export interface EventInterface {
-  id: string
-  uid?: string
-  title: string
-  description?: string
+  uid: string,
+  title: string,
+  description?: string,
   location: LocationData,
-  organization: string
-  start_date?: TimeStamp,
-  end_date?: TimeStamp,
-  timestamp?: Date
-  img_url: string
-  tickets?: TicketInterface[]
-}
-
-//dummy interface for testing and uploading data to firestore
-export interface NewEventInterface {
-  uid: string | null
-  title: string | null
-  description?: string | null
-  organization: string | null
-  start_date?: Date | null
-  end_date?: Date | null
-  location: LocationData | null
-  // ==============================
-  event_id?: string | null //this is passed in the firebase content
-  img_url?: string | null
-  tickets?: TicketInterface[] //later
+  organization?: string,
+  start_date: Date,
+  end_date: Date,
+  img_url: string,
+  ticket_max: number,
+  event_id?: string
 }
 
 export interface UserProfileEvents {
