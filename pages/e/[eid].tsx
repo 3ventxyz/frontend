@@ -185,7 +185,26 @@ function LoadedEventPage({
   event: EventInterface | null
   children: ReactElement
 }): JSX.Element {
-  console.log(event?.start_date)
+  const [url, setUrl] = useState('')
+  const [hostName, setHostName] = useState('')
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const docRef = doc(db, 'users', event?.uid || '')
+      const docSnap = await getDoc(docRef)
+
+      if (docSnap.exists()) {
+        setUrl(`${docSnap.data().gravatar}?s=200`)
+        setHostName(docSnap.data().username)
+      } else {
+        console.log('No such document!')
+      }
+    }
+    if (event?.uid) {
+      fetchData()
+    }
+  }, [event?.uid])
+
   return (
     <>
       <div className="flex h-full max-w-[373px] flex-col items-center lg:items-start ">
@@ -206,17 +225,23 @@ function LoadedEventPage({
               className="rounded-[67px]"
             />
           </div>
-          <div className="flex h-[75px] w-[300px] space-x-[50px] ">
-            <div className="w-[75px] rounded-full  bg-gray-600"></div>
-            <div className="flex flex-col  items-center justify-center space-y-[0]">
-              <div>Host:</div>
-              <div>Username</div>
+          <div className="flex h-fit w-fit flex-row items-start justify-start space-x-4">
+            <div className="relative h-[35px] w-[35px] rounded-full bg-gray-200">
+              <Image
+                src={url}
+                layout="fill"
+                loading="lazy"
+                objectFit="cover"
+                className="rounded-full"
+              />
             </div>
+            <p className="">{hostName}</p>
           </div>
-          {/* <div className="leading-[25px]">
-            {event?.start_date?.seconds &&
-              new Date(event?.start_date?.seconds * 1000).toLocaleString()}
-          </div> */}
+          <div className="leading-[25px]">
+            {event?.start_date?.toDateString()}
+            <br />
+            {event?.start_date?.toLocaleTimeString()}
+          </div>
           <div className="leading-[25px]">{event?.location?.address}</div>
           <div className="relative h-[200px] w-[200px] rounded-[20px] bg-green-100">
             <Image

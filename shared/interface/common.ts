@@ -1,3 +1,5 @@
+import { Timestamp } from "@firebase/firestore"
+
 export interface TicketInterface {
   ticketTitle: string
   registeredUsers: number
