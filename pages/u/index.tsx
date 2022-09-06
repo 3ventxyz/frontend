@@ -4,6 +4,9 @@ import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../../contexts/auth'
 import Dashboard from '../../components/dashboard'
 import ProfileDisplay from './components/profileDisplay'
+import Button from '../../components/button'
+import { Router } from 'next/router'
+import Link from 'next/link'
 
 interface LocationData {
   lat: number
@@ -47,6 +50,7 @@ export default function UserProfile() {
         img={avatar}
         address={location?.address || 'NA'}
         twitterName={twitterName}
+        edit={true}
       />
       <Dashboard />
     </div>

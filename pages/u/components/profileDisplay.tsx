@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import Link from 'next/link'
+import Button from '../../../components/button'
 
 function TextDisplay({ label, value }: { label: string; value: string }) {
   return (
@@ -16,13 +18,15 @@ export default function ProfileDisplay({
   bio,
   address,
   twitterName,
-  img
+  img,
+  edit = false
 }: {
   name: string
   bio: string
   address: string
   twitterName: string
   img: string
+  edit?: boolean
 }) {
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
@@ -55,6 +59,17 @@ export default function ProfileDisplay({
           </>
         )}
         <div className="h-4" />
+        {edit && (
+          <Link href="/u/edit">
+            <Button
+              text={'Edit Profile'}
+              onClick={() => {
+                return
+              }}
+              active={true}
+            />
+          </Link>
+        )}
       </div>
     </div>
   )
