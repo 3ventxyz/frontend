@@ -15,36 +15,13 @@ interface LocationData {
   address: string
 }
 
-const CreateProfile = async (
-  uid: string,
-  name: string,
-  bio: string,
-  location?: LocationData,
-  email = '',
-  gravatarLink = ''
-) => {
-  try {
-    const docRef = doc(db, 'users', uid)
-    await updateDoc(docRef, {
-      username: name,
-      bio: bio,
-      location: location,
-      gravatar: gravatarLink,
-      email: email
-    })
-    console.log('Data written into doc ID: ', docRef.id)
-    return true
-  } catch (e) {
-    console.error('Error adding data: ', e)
-  }
-}
-
 export default function CreateUser() {
   const [name, setName] = useState('')
   const [bio, setBio] = useState('')
   const [location, setLocation] = useState<LocationData>()
   const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState('')
+  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
