@@ -15,18 +15,28 @@ interface LocationData {
   address: string
 }
 
-const fetchAvatar = (email: string, setGravatar: any) => {
-  const md5 = require('md5')
-
-  function getGravatarURL(email: string) {
-    const address = String(email).trim().toLowerCase()
-    const hash = md5(address)
-    const url = `https://www.gravatar.com/avatar/${hash}?d=mp`
-    console.log('url', url)
-    return url
+const CreateProfile = async (
+  uid: string,
+  name: string,
+  bio: string,
+  location?: LocationData,
+  email = '',
+  gravatarLink = ''
+) => {
+  try {
+    const docRef = doc(db, 'users', uid)
+    await updateDoc(docRef, {
+      username: name,
+      bio: bio,
+      location: location,
+      gravatar: gravatarLink,
+      email: email
+    })
+    console.log('Data written into doc ID: ', docRef.id)
+    return true
+  } catch (e) {
+    console.error('Error adding data: ', e)
   }
-  const url = getGravatarURL(email)
-  setGravatar(url)
 }
 
 export default function CreateUser() {
