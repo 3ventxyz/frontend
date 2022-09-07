@@ -34,7 +34,7 @@ export default function CreateEvent() {
   const [showModal, setShowModal] = useState<boolean>(false)
   const router = useRouter()
   const auth = useAuth()
-
+  const [localImgUrl, setLocalImgUrl] = useState<string | null>(null)
   const handleOnClose = () => setShowModal(false)
 
   const createEvent = async () => {
@@ -133,7 +133,11 @@ export default function CreateEvent() {
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <p>Event Image:</p>
-          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+          <FileImageInput
+            fileImg={fileImg}
+            setFileImg={setFileImg}
+            setFileImgUrl={setLocalImgUrl}
+          />
           {!fileImg ? (
             <div></div>
           ) : (
@@ -185,7 +189,11 @@ export default function CreateEvent() {
         width="w-[700px]"
         height="h-[600px]"
       >
-        <ImageCropper fileImg={fileImg} handleOnClose={handleOnClose} setFileImg={setFileImg} />
+        <ImageCropper
+          fileImg={localImgUrl}
+          handleOnClose={handleOnClose}
+          setFileImg={setLocalImgUrl}
+        />
       </Modal>
     </div>
   )
