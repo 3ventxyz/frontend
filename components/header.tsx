@@ -19,9 +19,9 @@ const userMenuHide = (userMenu: boolean, setUserMenu: any) => {
 
 export default function Header() {
   const headerTextButtonStyle =
-    'cursor-pointer hidden md:block text-[14px] font-semibold text-linkDisabled underline-offset-4 hover:underline'
+    'cursor-pointer hidden md:block text-[14px] font-semibold pt-1 text-linkDisabled underline-offset-4 hover:underline'
   const activeHeaderTextButtonStyle =
-    'cursor-pointer hidden md:block text-[14px] font-semibold text-primary underline-offset-4 underline'
+    'cursor-pointer hidden md:block text-[14px] font-semibold pt-1 text-primary underline-offset-4 underline'
   const router = useRouter()
   const [path, setPath] = useState('')
   const auth = useAuth()
@@ -79,6 +79,17 @@ export default function Header() {
               Dashboard
             </p>
           </Link>
+          <Link href="/e/create">
+            <p
+              className={
+                path === '/e/create'
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Create an Event
+            </p>
+          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">
@@ -124,7 +135,7 @@ export default function Header() {
             >
               <div className="h-[10px]" />
               <ul className="w-full min-w-[200px] list-none rounded-[15px] border-2 border-primary bg-primaryBg p-2 hover:block">
-                <Link href="/profile" className="w-full">
+                <Link href="/u" className="w-full">
                   <li className="border-b-1 w-full cursor-pointer border-primary px-2 py-1 underline-offset-4 hover:underline active:font-bold active:underline">
                     Profile
                   </li>

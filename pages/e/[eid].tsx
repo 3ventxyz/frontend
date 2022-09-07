@@ -27,8 +27,6 @@ enum EventPageEnum {
 }
 
 export default function Event() {
-  // user id (this will probably be useContext)
-
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
@@ -187,6 +185,7 @@ function LoadedEventPage({
   event: EventInterface | null
   children: ReactElement
 }): JSX.Element {
+  console.log(event?.start_date)
   return (
     <>
       <div className="flex h-full max-w-[373px] flex-col items-center lg:items-start ">
@@ -200,7 +199,7 @@ function LoadedEventPage({
             className="relative h-[310px] w-[310px] rounded-[67px]  px-[50px] py-[50px] lg:hidden"
           >
             <Image
-              src={event ? event.imgURL : ''}
+              src={event ? event.img_url : ''}
               layout="fill"
               loading="lazy"
               objectFit="cover"
@@ -214,13 +213,14 @@ function LoadedEventPage({
               <div>Username</div>
             </div>
           </div>
-          <div className="leading-[25px]">
-            {event?.date} <br />
-            {event?.location?.address}
-          </div>
-          <div className="relative h-[100px] w-[100px] rounded-[20px] bg-green-100">
+          {/* <div className="leading-[25px]">
+            {event?.start_date?.seconds &&
+              new Date(event?.start_date?.seconds * 1000).toLocaleString()}
+          </div> */}
+          <div className="leading-[25px]">{event?.location?.address}</div>
+          <div className="relative h-[200px] w-[200px] rounded-[20px] bg-green-100">
             <Image
-              src={`https://maps.googleapis.com/maps/api/staticmap?center=City+Hall,New+York,NY&zoom=15&size=205x205&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+              src={`https://maps.googleapis.com/maps/api/staticmap?center=${event?.location?.lat},${event?.location?.long}&zoom=15&size=300x300&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
               layout="fill"
               loading="lazy"
               objectFit="cover"
@@ -234,7 +234,7 @@ function LoadedEventPage({
       <div>
         <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] lg:block">
           <Image
-            src={event ? event.imgURL : ''}
+            src={event ? event.img_url : ''}
             layout="fill"
             loading="lazy"
             objectFit="cover"

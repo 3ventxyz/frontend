@@ -1,142 +1,167 @@
 // author: Marthel
 import TextInput from '../../components/textInput'
-import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Button from '../../components/button'
-import CreateTicketTier from './components/createTicketTier'
 import FileImageInput from '../../components/fileImageInput'
 import { useState } from 'react'
 import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
-import { LocationData, TicketInterface } from '../../shared/interface/common'
+import { LocationData } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
 import { useRouter } from 'next/router'
-// import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
+import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
+import { storage } from '../../services/firebase_config'
+import { useAuth } from '../../contexts/auth'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
-  const [title, setTitle] = useState<string | null>(null)
-  const [organization, setOrganization] = useState<string | null>(null)
-  const [eventDescription, setEventDescription] = useState<string | null>(null)
-  const [eventLocation, setEventLocation] = useState<LocationData | null>(null)
+  const [title, setTitle] = useState<string>('')
+  const [organization, setOrganization] = useState<string>('')
+  const [eventDescription, setEventDescription] = useState<string>('')
+  const [eventLocation, setEventLocation] = useState<LocationData>({
+    address: '',
+    lat: 0,
+    long: 0
+  })
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [startDate, setStartDate] = useState<Date>()
-  const [endDate, setEndDate] = useState<Date>()
+  const [ticketMax, setTicketMax] = useState<number>(0)
+  const [startDate, setStartDate] = useState<Date>(new Date())
+  const [endDate, setEndDate] = useState<Date>(new Date())
 
-  // tickets how is it going to be????
-  const [ticketsData, setTicketsData] = useState<TicketInterface[] | null>()
   const router = useRouter()
+  const auth = useAuth()
+
+  const createEvent = async () => {
+    if (!fileImg) {
+      alert('Please upload an image first!')
+    }
+    const storageRef = ref(storage, `/files/${auth.uid}/${fileImg?.name}`)
+    const fileBuffer = await fileImg?.arrayBuffer()
+    if (fileBuffer) {
+      const uploadTask = uploadBytesResumable(storageRef, fileBuffer)
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+        },
+        (err) => {
+          return ''
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+            console.log('rendered url', url)
+            setIsCreatingNewEvent(true)
+            const eventId = await createNewEvent({
+              title: title,
+              end_date: endDate,
+              start_date: startDate,
+              organization: organization,
+              uid: auth.uid,
+              description: eventDescription,
+              location: eventLocation,
+              img_url: url,
+              ticket_max: ticketMax
+            })
+            router.push(`/e/${eventId}`)
+            return url
+          })
+        }
+      )
+    }
+    return ''
+  }
+
   return (
-    <div className="flex w-screen flex-col items-start space-y-[15px] bg-secondaryBg pb-[100px] pt-[35px] pl-[150px]">
-      <h1>Create new event</h1>
-      <div className="">
-        <h4>Event Name:</h4>
+    <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
+      <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
+        <h3 className="w-full text-center">Create an Event</h3>
         <TextInput
-          id={''}
-          labelText={''}
-          placeholder={'e.g. crypto event 2023'}
+          id={'event_name'}
+          labelText={'Event Title'}
+          placeholder={''}
           setValue={setTitle}
           isDisabled={isCreatingNewEvent}
         />
-      </div>
-      <div>
-        <h4>Organization:</h4>
         <TextInput
-          id={''}
-          labelText={''}
-          placeholder={'e.g. organization inc.'}
+          id={'event_organization'}
+          labelText={'Organization Name'}
+          placeholder={''}
           setValue={setOrganization}
           isDisabled={isCreatingNewEvent}
         />
-      </div>
-      <div>
-        <h4>Event Tile Picture:</h4>
-        <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
-      </div>
-      <div>
-        <h4>Details of the event</h4>
         <TextInput
           textArea={true}
           id={'event_description'}
-          labelText={'Description of the event'}
-          placeholder={'description ...'}
+          labelText={'Description'}
+          placeholder={''}
           setValue={setEventDescription}
           isDisabled={isCreatingNewEvent}
         />
         <LocationInput
           labelText={'Location'}
           id={'event_location'}
-          placeholder={'123 name st, city, CA, 00000'}
+          placeholder={''}
           setLocation={setEventLocation}
         />
-        <div>
-          <h4>Start Date</h4>
-          <input
-            type="datetime-local"
-            min="2022-09-01T00:00"
-            max="2023-06-14T00:00"
-            className="text-black"
-            onChange={(e: any) => {
-              setStartDate(new Date(e.target.value))
-              console.log('date changed!!!')
-              console.log(e.target.value)
-              console.log(startDate)
-              console.log('===============')
-            }}
-          ></input>
-          <h4>End Date</h4>
-          <input
-            type="datetime-local"
-            min="2022-09-01T00:00"
-            max="2023-06-14T00:00"
-            className="text-black"
-            onChange={(e: any) => {
-              setEndDate(new Date(e.target.value))
-              console.log('date changed!!!')
-              console.log(e.target.value)
-              console.log(endDate)
-              console.log('===============')
-            }}
-          ></input>
-        </div>
-      </div>
-      <div>
-        <div className="flex  items-baseline space-x-[10px]">
-          <h4>Tickets</h4>
-          <p>(You can create up to 4 ticket tiers)</p>
-        </div>
-        <CreateTicketTier creatingNewEvent={isCreatingNewEvent} />
-      </div>
-      <div>
-        {isCreatingNewEvent ? (
-          <div className="flex items-center space-x-[10px]">
-            <Spinner width={40} height={40} />
-            <p>Creating new event, please do not refresh</p>
-          </div>
-        ) : (
-          <Button
-            type="submit"
-            text={'Create new event'}
-            onClick={async () => {
-              console.log('new event added')
-              setIsCreatingNewEvent(true)
-              await createNewEvent(
-                {
-                  title: title,
-                  end_date: endDate,
-                  start_date: startDate,
-                  organization: organization,
-                  uid: 'user id 123',
-                  description: eventDescription,
-                  location: eventLocation
-                },
-                fileImg
-              )
-
-              router.push('/e/eventCreated')
-            }}
-            active={true}
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>Start Date</p>
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date) => setStartDate(date)}
+            showTimeSelect
+            dateFormat="Pp"
           />
-        )}
+        </div>
+
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>End Date</p>
+          <DatePicker
+            selected={endDate}
+            onChange={(date: Date) => setEndDate(date)}
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>Event Image:</p>
+          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>Tickets:</p>
+          <input
+            onChange={(e) => {
+              setTicketMax(parseInt(e.target.value))
+            }}
+            className={`focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] ${
+              isCreatingNewEvent
+                ? 'border-gray-300  text-gray-300'
+                : 'border-black  text-gray-700'
+            } px-2  focus:outline-none`}
+            id={'event_ticket_max'}
+            type="number"
+            placeholder={'0'}
+            disabled={isCreatingNewEvent}
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          {isCreatingNewEvent ? (
+            <>
+              <Spinner width={40} height={40} />
+              <p>Creating new event, please do not refresh</p>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              text={'Create new event'}
+              onClick={() => createEvent()}
+              active={true}
+            />
+          )}
+        </div>
       </div>
     </div>
   )
