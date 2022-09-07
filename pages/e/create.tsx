@@ -1,4 +1,4 @@
-// author: Marthel
+// author: Marthel, Ben
 import TextInput from '../../components/textInput'
 import Button from '../../components/button'
 import FileImageInput from '../../components/fileImageInput'
@@ -13,6 +13,8 @@ import { storage } from '../../services/firebase_config'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import ImageCropper from '../../components/imageCropper'
+import Modal from '../../components/modal'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -29,8 +31,11 @@ export default function CreateEvent() {
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
 
+  const [showModal, setShowModal] = useState<boolean>(false)
   const router = useRouter()
   const auth = useAuth()
+
+  const handleOnClose = () => setShowModal(false)
 
   const createEvent = async () => {
     if (!fileImg) {
@@ -129,6 +134,17 @@ export default function CreateEvent() {
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <p>Event Image:</p>
           <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+          {!fileImg ? (
+            <div></div>
+          ) : (
+            <Button
+              text="crop"
+              onClick={() => {
+                setShowModal(true)
+              }}
+              active={true}
+            />
+          )}
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <p>Tickets:</p>
@@ -163,6 +179,14 @@ export default function CreateEvent() {
           )}
         </div>
       </div>
+      <Modal
+        visible={showModal}
+        onClose={handleOnClose}
+        width="w-[700px]"
+        height="h-[600px]"
+      >
+        <ImageCropper fileImg={fileImg} handleOnClose={handleOnClose} setFileImg={setFileImg} />
+      </Modal>
     </div>
   )
 }

@@ -38,6 +38,7 @@
     "next-absolute-url": "^1.2.2",
     "react": "18.2.0",
     "react-code-input": "^3.10.1",
+    "react-cropper": "^2.1.8",
     "react-datepicker": "^4.8.0",
     "react-datetime-picker": "^3.5.0",
     "react-dom": "18.2.0",
