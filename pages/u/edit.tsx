@@ -7,6 +7,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '../../contexts/auth'
+import Modal from '../../components/modal'
 
 interface LocationData {
   lat: number
@@ -58,6 +59,7 @@ export default function CreateUser() {
   const [location, setLocation] = useState<LocationData>()
   const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState('')
+  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
@@ -146,10 +148,16 @@ export default function CreateUser() {
             layout="intrinsic"
             className="rounded-[15px]"
           />
+                <Modal
+        visible={modal}
+        onClose={() => setModal(false)}
+        width="w-[500px]"
+        height="h-[500px]"
+      >
+        <p onClick={() => setModal(false)}>close</p>
           <p className="mt-[14px] mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Email
-          </p>
-          <TextInput
+            <TextInput
             labelText=""
             id="email"
             placeholder="Enter email"
@@ -160,12 +168,20 @@ export default function CreateUser() {
           />
           <div className="h-2" />
           <Button
-            text="Upload Profile Picture"
+            text="Send"
             onClick={() => {
               fetchAvatar(email, setAvatar)
             }}
             active={true}
           />
+          </p>
+          </Modal>
+          <Button
+                    text="Upload Profile Picture"
+                    onClick={() => {
+                      setModal(true)
+                    }}
+                    active={true} />
           <div className="h-2" />
         </div>
       </div>
