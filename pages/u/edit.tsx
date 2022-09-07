@@ -20,6 +20,7 @@ export default function CreateUser() {
   const [bio, setBio] = useState('')
   const [location, setLocation] = useState<LocationData>()
   const [avatar, setAvatar] = useState('')
+  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
