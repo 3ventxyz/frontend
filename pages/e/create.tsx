@@ -8,16 +8,16 @@ import LocationInput from '../../components/locationInput'
 import { LocationData } from '../../shared/interface/common'
 import { createNewEvent } from '../../services/create_new_event'
 import { useRouter } from 'next/router'
-import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { storage } from '../../services/firebase_config'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { uploadImage } from '../../services/upload_image'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
   const [organization, setOrganization] = useState<string>('')
+  const [eventId, setEventId] = useState<string>('')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [eventLocation, setEventLocation] = useState<LocationData>({
     address: '',
@@ -33,46 +33,24 @@ export default function CreateEvent() {
   const auth = useAuth()
 
   const createEvent = async () => {
-    if (!fileImg) {
-      alert('Please upload an image first!')
-    }
-    const storageRef = ref(storage, `/files/${auth.uid}/${fileImg?.name}`)
-    const fileBuffer = await fileImg?.arrayBuffer()
-    if (fileBuffer) {
-      const uploadTask = uploadBytesResumable(storageRef, fileBuffer)
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-        },
-        (err) => {
-          return ''
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-            console.log('rendered url', url)
-            setIsCreatingNewEvent(true)
-            const eventId = await createNewEvent({
-              title: title,
-              end_date: endDate,
-              start_date: startDate,
-              organization: organization,
-              uid: auth.uid,
-              description: eventDescription,
-              location: eventLocation,
-              img_url: url,
-              ticket_max: ticketMax
-            })
-            router.push(`/e/${eventId}`)
-            return url
-          })
-        }
-      )
-    }
-    return ''
+    setIsCreatingNewEvent(true)
+    const path = `${auth.uid}/${fileImg?.name}`
+    await uploadImage(fileImg, path, async (url: string) => {
+      const returnedId = await createNewEvent({
+        title: title,
+        end_date: endDate,
+        start_date: startDate,
+        organization: '',
+        uid: auth.uid,
+        description: eventDescription,
+        location: eventLocation,
+        img_url: url,
+        ticket_max: ticketMax,
+        event_id: eventId
+      })
+      console.log('returned id', returnedId)
+      router.push(`/e/${returnedId}`)
+    })
   }
 
   return (
@@ -87,10 +65,10 @@ export default function CreateEvent() {
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
-          id={'event_organization'}
-          labelText={'Organization Name'}
-          placeholder={''}
-          setValue={setOrganization}
+          id={'event_id'}
+          labelText={'Event ID:'}
+          placeholder={'www.3vent.xyz/e/'}
+          setValue={setEventId}
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
