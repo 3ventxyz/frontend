@@ -7,7 +7,7 @@ import {
   collection,
   DocumentData
 } from '@firebase/firestore'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
 import { db } from '../../services/firebase_config'
@@ -188,6 +188,7 @@ function LoadedEventPage({
 }): JSX.Element {
   const [url, setUrl] = useState('')
   const [hostName, setHostName] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -199,6 +200,7 @@ function LoadedEventPage({
         setHostName(docSnap.data().username)
       } else {
         console.log('No such document!')
+        router.push('/dashboard')
       }
     }
     if (event?.uid) {
@@ -236,7 +238,6 @@ function LoadedEventPage({
                 loading="lazy"
                 className="rounded-full bg-gray-200"
               />
-              {/* </div> */}
               <p className="">{hostName}</p>
             </div>
           </Link>
