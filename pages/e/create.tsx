@@ -13,7 +13,7 @@ import { storage } from '../../services/firebase_config'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import EventsDisplay from '../../components/eventsDisplay'
+import { uploadImage } from '../../services/upload_image'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -35,47 +35,24 @@ export default function CreateEvent() {
   const auth = useAuth()
 
   const createEvent = async () => {
-    if (!fileImg) {
-      alert('Please upload an image first!')
-    }
-    const storageRef = ref(storage, `/files/${auth.uid}/${fileImg?.name}`)
-    const fileBuffer = await fileImg?.arrayBuffer()
-    if (fileBuffer) {
-      const uploadTask = uploadBytesResumable(storageRef, fileBuffer)
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-        },
-        (err) => {
-          return ''
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-            console.log('rendered url', url)
-            setIsCreatingNewEvent(true)
-            await createNewEvent({
-              title: title,
-              end_date: endDate,
-              start_date: startDate,
-              organization: '',
-              uid: auth.uid,
-              description: eventDescription,
-              location: eventLocation,
-              img_url: url,
-              ticket_max: ticketMax,
-              event_id: eventId
-            })
-            router.push(`/e/${eventId}`)
-            return url
-          })
-        }
-      )
-    }
-    return ''
+    setIsCreatingNewEvent(true)
+    const path = `${auth.uid}/${fileImg?.name}`
+    await uploadImage(fileImg, path, async (url: string) => {
+      const returnedId = await createNewEvent({
+        title: title,
+        end_date: endDate,
+        start_date: startDate,
+        organization: '',
+        uid: auth.uid,
+        description: eventDescription,
+        location: eventLocation,
+        img_url: url,
+        ticket_max: ticketMax,
+        event_id: eventId
+      })
+      console.log('returned id', returnedId)
+      router.push(`/e/${returnedId}`)
+    })
   }
 
   return (
