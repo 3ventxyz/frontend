@@ -20,12 +20,13 @@ export default function UserProfile() {
   const [twitterName, setTwitterName] = useState('')
   const auth = useAuth()
   const uid = auth?.uid
+  const [imgUrl, setImgUrl] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
+      const storage = getStorage();
       const docRef = doc(db, 'users', uid)
       const docSnap = await getDoc(docRef)
-
       if (docSnap.exists()) {
         setName(docSnap.data().username)
         setBio(docSnap.data().bio)

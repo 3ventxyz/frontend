@@ -8,6 +8,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '../../contexts/auth'
 import Modal from '../../components/modal'
+import FileImageInput from '../../components/fileImageInput'
+import { getStorage, ref } from "firebase/storage";
 
 interface LocationData {
   lat: number
@@ -21,9 +23,13 @@ const CreateProfile = async (
   bio: string,
   location?: LocationData,
   email = '',
-  gravatarLink = ''
+  gravatarLink = '',
+  //fileImg = File
 ) => {
   try {
+    //console.log('file', `${uid}/${fileImg}`)
+    //const pathReference = ref(storage, );
+
     const docRef = doc(db, 'users', uid)
     await updateDoc(docRef, {
       username: name,
@@ -63,6 +69,8 @@ export default function CreateUser() {
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
+  const [fileImg, setFileImg] = useState<File | null>(null)
+  const [imgUrl, setImgUrl] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
@@ -140,50 +148,11 @@ export default function CreateUser() {
             </Link>
           </div>
         </div>
-        <div className="flex w-[300px] flex-col items-stretch">
-          <Image
-            src={avatar}
-            width="300px"
-            height="300px"
-            layout="intrinsic"
-            className="rounded-[15px]"
-          />
-                <Modal
-        visible={modal}
-        onClose={() => setModal(false)}
-        width="w-[500px]"
-        height="h-[500px]"
-      >
-        <p onClick={() => setModal(false)}>close</p>
-          <p className="mt-[14px] mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-            Email
-            <TextInput
-            labelText=""
-            id="email"
-            placeholder="Enter email"
-            maxWidth={500}
-            width={'w-full'}
-            textArea={false}
-            setValue={setEmail}
-          />
-          <div className="h-2" />
-          <Button
-            text="Send"
-            onClick={() => {
-              fetchAvatar(email, setAvatar)
-            }}
-            active={true}
-          />
-          </p>
-          </Modal>
-          <Button
-                    text="Upload Profile Picture"
-                    onClick={() => {
-                      setModal(true)
-                    }}
-                    active={true} />
-          <div className="h-2" />
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>Event Image:</p>
+          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
+      { /* <button onClick={() => {console.log(fileImg.name)}}>HOLI</button>*/}
       </div>
     </div>
   )
