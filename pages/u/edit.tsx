@@ -73,7 +73,7 @@ export default function CreateUser() {
     location?: LocationData
   ) => {
     try {
-      await uploadImage(fileImg, fileImg?.name ?? '', async (url: string) => {
+      await uploadImage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
         setImgUrl(url)
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
