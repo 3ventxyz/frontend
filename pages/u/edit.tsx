@@ -10,39 +10,12 @@ import { useAuth } from '../../contexts/auth'
 import Modal from '../../components/modal'
 import FileImageInput from '../../components/fileImageInput'
 import { getStorage, ref } from "firebase/storage";
+import { uploadImage } from '../../services/upload_image'
 
 interface LocationData {
   lat: number
   long: number
   address: string
-}
-
-const CreateProfile = async (
-  uid: string,
-  name: string,
-  bio: string,
-  location?: LocationData,
-  email = '',
-  gravatarLink = '',
-  //fileImg = File
-) => {
-  try {
-    //console.log('file', `${uid}/${fileImg}`)
-    //const pathReference = ref(storage, );
-
-    const docRef = doc(db, 'users', uid)
-    await updateDoc(docRef, {
-      username: name,
-      bio: bio,
-      location: location,
-      gravatar: gravatarLink,
-      email: email
-    })
-    console.log('Data written into doc ID: ', docRef.id)
-    return true
-  } catch (e) {
-    console.error('Error adding data: ', e)
-  }
 }
 
 const fetchAvatar = (email: string, setGravatar: any) => {
@@ -90,6 +63,35 @@ export default function CreateUser() {
     getInfo()
   }, [remakeProfile])
 
+  const CreateProfile = async (
+    email = '',
+    gravatarLink = '',
+    fileImg: File | null,
+    uid: string,
+    name: string,
+    bio: string,
+    location?: LocationData
+  ) => {
+    try {
+      await uploadImage(fileImg, fileImg?.name ?? '', async (url: string) => {
+        setImgUrl(url)
+        const docRef = doc(db, 'users', uid)
+        await updateDoc(docRef, {
+          username: name,
+          bio: bio,
+          location: location,
+          avatar: url,
+          email: email
+        })
+        console.log('Data written into doc ID: ', docRef.id)
+      })
+      console.log('img',imgUrl)
+      return true
+    } catch (e) {
+      console.error('Error adding data: ', e)
+    }
+  }
+  
   return (
     <div className="h-screen w-screen bg-secondaryBg">
       <div className="mx-auto flex max-w-[300px] flex-col-reverse items-center justify-center lg:max-w-full lg:flex-row  lg:items-start lg:justify-center lg:space-x-24 lg:pt-14">
@@ -132,7 +134,7 @@ export default function CreateUser() {
               <Button
                 text="Save"
                 onClick={() => {
-                  CreateProfile(uid, name, bio, location, email, avatar)
+                  CreateProfile(email, avatar, fileImg, uid, name, bio, location)
                 }}
                 active={true}
               />

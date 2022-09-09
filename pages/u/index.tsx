@@ -31,7 +31,7 @@ export default function UserProfile() {
         setName(docSnap.data().username)
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
-        setAvatar(`${docSnap.data().gravatar}?s=200`)
+        setAvatar(docSnap.data().avatar)
         setTwitterName(docSnap.data().twitter_name)
       } else {
         // doc.data() will be undefined in this case
