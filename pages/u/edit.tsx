@@ -19,6 +19,7 @@ const CreateProfile = async (
   name: string,
   bio: string,
   location?: LocationData,
+  email = '',
   gravatarLink = ''
 ) => {
   try {
@@ -27,7 +28,8 @@ const CreateProfile = async (
       username: name,
       bio: bio,
       location: location,
-      gravatar: gravatarLink
+      gravatar: gravatarLink,
+      email: email
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -42,7 +44,7 @@ const fetchAvatar = (email: string, setGravatar: any) => {
   function getGravatarURL(email: string) {
     const address = String(email).trim().toLowerCase()
     const hash = md5(address)
-    const url = `https://www.gravatar.com/avatar/${hash}`
+    const url = `https://www.gravatar.com/avatar/${hash}?d=mp`
     console.log('url', url)
     return url
   }
@@ -120,7 +122,7 @@ export default function CreateUser() {
               <Button
                 text="Save"
                 onClick={() => {
-                  CreateProfile(uid, name, bio, location, avatar)
+                  CreateProfile(uid, name, bio, location, email, avatar)
                 }}
                 active={true}
               />
@@ -150,7 +152,7 @@ export default function CreateUser() {
           <TextInput
             labelText=""
             id="email"
-            placeholder="Enter gravatar email"
+            placeholder="Enter email"
             maxWidth={500}
             width={'w-full'}
             textArea={false}
@@ -158,7 +160,7 @@ export default function CreateUser() {
           />
           <div className="h-2" />
           <Button
-            text="Get Avatar"
+            text="Upload Profile Picture"
             onClick={() => {
               fetchAvatar(email, setAvatar)
             }}

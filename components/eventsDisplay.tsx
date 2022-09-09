@@ -95,7 +95,10 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           </li>
           <li className="... truncate text-[14px]">{eventData.organization}</li>
           <li className="... truncate text-[14px]">{eventData.description}</li>
-          {/* <li className="... truncate text-[14px]">{eventData?.start_date}</li> */}
+          <li className="... truncate text-[14px]">
+            {eventData?.start_date?.toLocaleDateString()}
+            {eventData?.start_date?.toDateString()}
+          </li>
           <li className="... truncate text-[14px]">
             {eventData.location?.address} address
           </li>
