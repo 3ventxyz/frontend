@@ -168,7 +168,7 @@ export default function CreateUser() {
           />
           <div className="h-2" />
           <Button
-            text="Send"
+            text="Upload Profile Picture"
             onClick={() => {
               fetchAvatar(email, setAvatar)
             }}
