@@ -1,4 +1,4 @@
-import { collection, getDocs } from '@firebase/firestore'
+import { collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/auth'
 import { db } from '../../services/firebase_config'
@@ -34,10 +34,17 @@ export default function Allowlists() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const deleteAllowlist = async (id: string | undefined) => {
+    if (id) {
+      await deleteDoc(doc(db, 'lists', id))
+      window.location.reload()
+    }
+  }
+
   return (
     <>
-      <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-20">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-row items-end justify-between border-b border-disabled">
+      <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
+        <div className="mx-auto flex w-full  flex-row items-end justify-between border-b border-disabled">
           <p className="text-[25px] font-bold md:text-[32px]">Allowlists</p>
           <Image
             onClick={() => setShowModal(true)}
@@ -47,7 +54,6 @@ export default function Allowlists() {
             width="80"
           />
         </div>
-
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-left text-sm text-gray-500 ">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
@@ -82,7 +88,8 @@ export default function Allowlists() {
                         width="20"
                       />
                       <Image
-                        alt="add"
+                        onClick={() => deleteAllowlist(e.allowlist_id)}
+                        alt="delete"
                         src="/assets/trash.svg"
                         height="20"
                         width="20"

@@ -17,21 +17,16 @@ export default function CreateAllowlistForm({
   const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
 
-  const createAllowlist = async () => {
-    await addDoc(listsCollectionRef, {
-      title: titleRef.current?.value,
-      description: descriptionRef.current?.value,
-      allowlist: allowlistRef.current?.value.split(','),
-      user_id: doc(db, 'users', auth.uid)
-    })
-  }
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     try {
       setLoading(true)
-      await createAllowlist()
+      await addDoc(listsCollectionRef, {
+        title: titleRef.current?.value,
+        description: descriptionRef.current?.value,
+        allowlist: allowlistRef.current?.value.split(','),
+        user_id: doc(db, 'users', auth.uid)
+      })
       onSuccess()
     } catch (error) {
       console.log(error)
