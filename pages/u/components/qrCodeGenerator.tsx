@@ -3,6 +3,8 @@ import QRCode from 'qrcode.react'
 import Button from '../../../components/button'
 import { uploadQRImage } from '../../../services/upload_qr_image'
 import { useAuth } from '../../../contexts/auth'
+import { db } from '../../../services/firebase_config'
+import { doc, updateDoc } from '@firebase/firestore'
 export default function QRCodeGenerator({ uid }: { uid: string }) {
   const qrRef = useRef<any>()
   const auth = useAuth()
@@ -10,6 +12,12 @@ export default function QRCodeGenerator({ uid }: { uid: string }) {
     evt.preventDefault()
     let canvas = qrRef.current.querySelector('canvas')
     uploadQRImage(canvas, `${auth.uid}/qrCode`, async (url) => {
+      try {
+        const userDocRef = await doc(db, 'users', auth.uid)
+        updateDoc(userDocRef, { qr_code: url })
+      } catch (e) {
+        alert(e)
+      }
       console.log('SUCCESS URL:', url)
     })
   }
