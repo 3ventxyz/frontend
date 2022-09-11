@@ -52,7 +52,7 @@ export interface AllowlistInterface {
   title: string
   description?: string
   allowlist_id?: string
-  allowlist: Array<string>
+  allowlist: Array<Map<string, string | Array<string>>>
   merkle_root: string
 }
 

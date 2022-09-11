@@ -84,19 +84,32 @@ export default function Allowlist() {
               <th scope="col" className="py-3 px-6">
                 Addresses
               </th>
+              <th scope="col" className="py-3 px-6">
+                Merkle Proof
+              </th>
             </tr>
           </thead>
           <tbody>
-            {allowlist?.allowlist.map((e, i) => (
-              <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
-                <th
-                  scope="row"
-                  className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
-                >
-                  {e.toUpperCase()}
-                </th>
-              </tr>
-            ))}
+            {allowlist?.allowlist.map((e, i, array) => {
+              const address = (e as any)['address']
+              const merkleProof = (e as any)['merkle_proof']
+              return (
+                <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
+                  <th
+                    scope="row"
+                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
+                  >
+                    {address}
+                  </th>
+                  <th
+                    scope="row"
+                    className="py-4 px-6 font-medium text-gray-900 "
+                  >
+                    {merkleProof.join('\n')}
+                  </th>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

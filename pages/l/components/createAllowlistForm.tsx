@@ -35,11 +35,17 @@ export default function CreateAllowlistForm({
     e.preventDefault()
     try {
       setLoading(true)
+      // Gets the input string with all address and removes extra spaces,
+      // apostrophes, repeated and invalid addresses
       const allowlist = allowlistRef.current?.value
         .split(',')
+        .map((e, i) => {
+          return e.trim().replaceAll("'", '')
+        })
         .filter((val, id, array) => {
           return array.indexOf(val) === id && isValidAddress(val)
         })
+      console.log(allowlist)
 
       if (allowlist && allowlist.length > 0) {
         const merkle = new MerkleGenerator(allowlist)
@@ -48,15 +54,20 @@ export default function CreateAllowlistForm({
         await addDoc(listsCollectionRef, {
           title: titleRef.current?.value,
           description: descriptionRef.current?.value,
-          allowlist: allowlist,
+          allowlist: allowlist.map((address, index) => {
+            const merkleProof = merkle.proofGenerator(address)
+            if (merkleProof)
+              return { address: address, merkle_proof: merkleProof }
+          }),
           uid: doc(db, 'users', auth.uid),
-          merkle_root: `0x${merkle.rootGenerator()}`
+          merkle_root: `${merkle.rootGenerator()}`
         })
         onSuccess()
       } else {
         setError('Any of the addresses are valid')
       }
     } catch (error) {
+      console.log(error)
       setError('Could not create the allowlist')
     }
     setLoading(false)
