@@ -6,11 +6,13 @@ import { AllowlistsInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
 import CreateAllowlistForm from './components/createAllowlistForm'
+import { useRouter } from 'next/router'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
   const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function Allowlists() {
         // Get user allowlists
         data.docs
           .map((doc) => ({
-            uid: doc.data().user_id.id,
+            uid: doc.data().uid.id,
             title: doc.data().title,
             description: doc.data().description,
             allowlist_id: doc.id,
@@ -82,6 +84,7 @@ export default function Allowlists() {
                   <td className="flex flex-row justify-end py-4 px-6">
                     <div className="flex w-[50px] flex-row justify-between">
                       <Image
+                        onClick={() => router.push(`l/${e.allowlist_id}`)}
                         alt="details"
                         src="/assets/eye.svg"
                         height="20"

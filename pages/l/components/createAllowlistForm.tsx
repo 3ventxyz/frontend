@@ -25,7 +25,7 @@ export default function CreateAllowlistForm({
         title: titleRef.current?.value,
         description: descriptionRef.current?.value,
         allowlist: allowlistRef.current?.value.split(','),
-        user_id: doc(db, 'users', auth.uid)
+        uid: doc(db, 'users', auth.uid)
       })
       onSuccess()
     } catch (error) {
