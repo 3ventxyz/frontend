@@ -54,3 +54,5 @@ export interface AllowlistInterface {
   allowlist_id?: string
   allowlist: Array<string>
 }
+
+export interface AllowlistsInterface extends Array<AllowlistInterface> {}
