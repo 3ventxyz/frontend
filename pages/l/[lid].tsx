@@ -26,7 +26,8 @@ export default function Allowlist() {
           title: allowlistDoc.data()?.title,
           description: allowlistDoc.data()?.description,
           allowlist_id: allowlistDoc.id,
-          allowlist: allowlistDoc.data()?.allowlist
+          allowlist: allowlistDoc.data()?.allowlist,
+          merkle_root: allowlistDoc.data()?.merkle_root
         })
       } catch (error) {
         console.log(error)
@@ -64,6 +65,9 @@ export default function Allowlist() {
                 {allowlist?.title}
                 <p className="mt-1 text-sm font-normal text-gray-500 ">
                   {allowlist?.description}
+                </p>
+                <p className="mt-6 text-sm font-normal ">
+                  Merkle Root: {allowlist?.merkle_root}
                 </p>
               </div>
               <Image

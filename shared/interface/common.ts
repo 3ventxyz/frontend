@@ -53,6 +53,7 @@ export interface AllowlistInterface {
   description?: string
   allowlist_id?: string
   allowlist: Array<string>
+  merkle_root: string
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}

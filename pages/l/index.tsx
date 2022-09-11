@@ -33,7 +33,8 @@ export default function Allowlists() {
           title: doc.data().title,
           description: doc.data().description,
           allowlist_id: doc.id,
-          allowlist: doc.data().allowlist
+          allowlist: doc.data().allowlist,
+          merkle_root: doc.data().merkle_root
         }))
         .filter((doc) => doc.uid === auth.uid)
     )

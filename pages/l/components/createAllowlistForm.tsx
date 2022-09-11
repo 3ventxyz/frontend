@@ -5,6 +5,7 @@ import { collection, addDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../../../contexts/auth'
 import Web3 from 'web3'
 import ErrorAlert from '../../../components/alerts/errorAlert'
+import MerkleGenerator from '../../../services/merkle_generator'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -40,12 +41,16 @@ export default function CreateAllowlistForm({
           return array.indexOf(val) === id && isValidAddress(val)
         })
 
-      if (allowlist?.length ?? 0 > 0) {
+      if (allowlist && allowlist.length > 0) {
+        const merkle = new MerkleGenerator(allowlist)
+        console.log(merkle.merkleTree.toString())
+
         await addDoc(listsCollectionRef, {
           title: titleRef.current?.value,
           description: descriptionRef.current?.value,
           allowlist: allowlist,
-          uid: doc(db, 'users', auth.uid)
+          uid: doc(db, 'users', auth.uid),
+          merkle_root: `0x${merkle.rootGenerator()}`
         })
         onSuccess()
       } else {
