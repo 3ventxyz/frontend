@@ -3,6 +3,8 @@ import Button from '../../../components/button'
 import { db } from '../../../services/firebase_config'
 import { collection, addDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../../../contexts/auth'
+import Web3 from 'web3'
+import ErrorAlert from '../../../components/alerts/errorAlert'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -14,22 +16,43 @@ export default function CreateAllowlistForm({
   const allowlistRef = React.createRef<HTMLTextAreaElement>()
 
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
+
+  const isValidAddress = (adr: string) => {
+    try {
+      const web3 = new Web3()
+      web3.utils.toChecksumAddress(adr)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       setLoading(true)
-      await addDoc(listsCollectionRef, {
-        title: titleRef.current?.value,
-        description: descriptionRef.current?.value,
-        allowlist: allowlistRef.current?.value.split(','),
-        uid: doc(db, 'users', auth.uid)
-      })
-      onSuccess()
+      const allowlist = allowlistRef.current?.value
+        .split(',')
+        .filter((val, id, array) => {
+          return array.indexOf(val) === id && isValidAddress(val)
+        })
+
+      if (allowlist?.length ?? 0 > 0) {
+        await addDoc(listsCollectionRef, {
+          title: titleRef.current?.value,
+          description: descriptionRef.current?.value,
+          allowlist: allowlist,
+          uid: doc(db, 'users', auth.uid)
+        })
+        onSuccess()
+      } else {
+        setError('Any of the addresses are valid')
+      }
     } catch (error) {
-      console.log(error)
+      setError('Could not create the allowlist')
     }
     setLoading(false)
   }
@@ -88,6 +111,13 @@ export default function CreateAllowlistForm({
         active={!loading}
         onClick={() => null}
       ></Button>
+      {error && (
+        <ErrorAlert
+          title="Oops!"
+          description={error}
+          onClose={() => setError('')}
+        />
+      )}
     </form>
   )
 }

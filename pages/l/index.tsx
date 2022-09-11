@@ -16,30 +16,31 @@ export default function Allowlists() {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    const getAllowlists = async () => {
-      const data = await getDocs(listsCollectionRef)
-
-      setAllowlists(
-        // Get user allowlists
-        data.docs
-          .map((doc) => ({
-            uid: doc.data().uid.id,
-            title: doc.data().title,
-            description: doc.data().description,
-            allowlist_id: doc.id,
-            allowlist: doc.data().allowlist
-          }))
-          .filter((doc) => doc.uid === auth.uid)
-      )
-    }
     getAllowlists()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const getAllowlists = async () => {
+    const data = await getDocs(listsCollectionRef)
+
+    setAllowlists(
+      // Get user allowlists
+      data.docs
+        .map((doc) => ({
+          uid: doc.data().uid.id,
+          title: doc.data().title,
+          description: doc.data().description,
+          allowlist_id: doc.id,
+          allowlist: doc.data().allowlist
+        }))
+        .filter((doc) => doc.uid === auth.uid)
+    )
+  }
+
   const deleteAllowlist = async (id: string | undefined) => {
     if (id) {
       await deleteDoc(doc(db, 'lists', id))
-      window.location.reload()
+      await getAllowlists()
     }
   }
 
