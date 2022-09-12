@@ -45,11 +45,9 @@ export default function CreateAllowlistForm({
         .filter((val, id, array) => {
           return array.indexOf(val) === id && isValidAddress(val)
         })
-      console.log(allowlist)
 
       if (allowlist && allowlist.length > 0) {
         const merkle = new MerkleGenerator(allowlist)
-        console.log(merkle.merkleTree.toString())
 
         await addDoc(listsCollectionRef, {
           title: titleRef.current?.value,
