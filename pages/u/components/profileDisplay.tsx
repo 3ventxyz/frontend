@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Button from '../../../components/button'
 import Modal from '../../../components/modal'
 import DisplayQRCode from './displayQRCode'
+import EmailVerification from './emailVerification';
 
 function TextDisplay({ label, value }: { label: string; value: string }) {
   return (
@@ -40,50 +41,40 @@ export default function ProfileDisplay({
   }
   return (
     <div>
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
-        <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
-          <Image
-            src={img}
-            layout="fill"
-            loading="lazy"
-            objectFit="cover"
-            className="rounded-3xl"
-          />
-        </div>
-        <div className="flex w-full max-w-[380px] flex-col items-stretch justify-start text-left">
-          <TextDisplay label="Username" value={name} />
-          <TextDisplay label="Bio" value={bio} />
-          <TextDisplay label="Location" value={address || 'NA'} />
-          {twitterName && (
-            <>
-              <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-                Twitter
-              </p>
-              <a
-                className="p-1 text-linkText"
-                href={`https://twitter.com/${twitterName}`}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Twitter
-              </a>
-            </>
-          )}
-          <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-            Email
-          </p>
-          <div className="flex justify-between">
-            <p className="p-1 text-secondary">{email}</p>
-            {/* TODO - Change button when verified */}
-            <Button
-              text={'Verify'}
-              onClick={() => {
-                console.log('verifying')
-              }}
-              active={true}
-            />
-          </div>
-          <div className="h-4" />
+    <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
+      <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
+        <Image
+          src={img}
+          layout="fill"
+          loading="lazy"
+          objectFit="cover"
+          className="rounded-3xl"
+        />
+      </div>
+      <div className="flex w-full max-w-[380px] flex-col items-stretch justify-start text-left">
+        <TextDisplay label="Username" value={name} />
+        <TextDisplay label="Bio" value={bio} />
+        <TextDisplay label="Location" value={address || 'NA'} />
+        {twitterName && (
+          <>
+            <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+              Twitter
+            </p>
+            <a
+              className="p-1 text-linkText"
+              href={`https://twitter.com/${twitterName}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              Twitter
+            </a>
+          </>
+        )}
+        <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+          Email
+        </p>
+        <EmailVerification />
+        <div className="h-4" />
           {edit && (
             <div className="flex flex-row space-x-[10px]">
               <div>
@@ -109,6 +100,7 @@ export default function ProfileDisplay({
             </div>
           )}
         </div>
+    </div>
         <Modal
           visible={showModal}
           onClose={onCloseModal}
@@ -117,7 +109,6 @@ export default function ProfileDisplay({
         >
           <DisplayQRCode />
         </Modal>
-      </div>
     </div>
   )
 }
