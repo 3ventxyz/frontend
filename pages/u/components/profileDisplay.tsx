@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import Button from '../../../components/button'
 import Modal from '../../../components/modal'
-import QRCodeGenerator from './qrCodeGenerator'
+import DisplayQRCode from './displayQRCode'
 
 function TextDisplay({ label, value }: { label: string; value: string }) {
   return (
@@ -22,7 +22,6 @@ export default function ProfileDisplay({
   address,
   twitterName,
   img,
-  uid = '',
   edit = false
 }: {
   name: string
@@ -30,7 +29,6 @@ export default function ProfileDisplay({
   address: string
   twitterName: string
   img: string
-  uid?: string
   edit?: boolean
 }) {
   const [showModal, setShowModal] = useState(false)
@@ -102,7 +100,7 @@ export default function ProfileDisplay({
         width={'w-[500px]'}
         height={'h-[500px]'}
       >
-        <QRCodeGenerator uid={uid} />
+        <DisplayQRCode />
       </Modal>
     </>
   )

@@ -48,7 +48,6 @@ export default function UserProfile() {
         img={avatar}
         address={location?.address || 'NA'}
         twitterName={twitterName}
-        uid={uid}
         edit={true}
       />
       <Dashboard />
