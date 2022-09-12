@@ -18,13 +18,13 @@ export default function UserProfile() {
   const [location, setLocation] = useState<LocationData>()
   const [avatar, setAvatar] = useState('')
   const [twitterName, setTwitterName] = useState('')
+  const [email, setEmail] = useState('')
+
   const auth = useAuth()
   const uid = auth?.uid
-  const [imgUrl, setImgUrl] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
-      const storage = getStorage();
       const docRef = doc(db, 'users', uid)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
@@ -33,6 +33,7 @@ export default function UserProfile() {
         setLocation(docSnap.data().location)
         setAvatar(docSnap.data().avatar)
         setTwitterName(docSnap.data().twitter_name)
+        setEmail(docSnap.data().email)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -50,6 +51,7 @@ export default function UserProfile() {
         address={location?.address || 'NA'}
         twitterName={twitterName}
         edit={true}
+        email={email}
       />
       <Dashboard />
     </div>

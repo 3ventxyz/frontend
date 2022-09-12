@@ -22,7 +22,8 @@ export default function ProfileDisplay({
   address,
   twitterName,
   img,
-  edit = false
+  edit = false,
+  email
 }: {
   name: string
   bio: string
@@ -30,6 +31,7 @@ export default function ProfileDisplay({
   twitterName: string
   img: string
   edit?: boolean
+  email: string
 }) {
   const [showModal, setShowModal] = useState(false)
 
@@ -37,7 +39,7 @@ export default function ProfileDisplay({
     setShowModal(false)
   }
   return (
-    <>
+    <div>
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
         <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
           <Image
@@ -67,6 +69,20 @@ export default function ProfileDisplay({
               </a>
             </>
           )}
+          <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Email
+          </p>
+          <div className="flex justify-between">
+            <p className="p-1 text-secondary">{email}</p>
+            {/* TODO - Change button when verified */}
+            <Button
+              text={'Verify'}
+              onClick={() => {
+                console.log('verifying')
+              }}
+              active={true}
+            />
+          </div>
           <div className="h-4" />
           {edit && (
             <div className="flex flex-row space-x-[10px]">
@@ -93,15 +109,15 @@ export default function ProfileDisplay({
             </div>
           )}
         </div>
+        <Modal
+          visible={showModal}
+          onClose={onCloseModal}
+          width={'w-[500px]'}
+          height={'h-[500px]'}
+        >
+          <DisplayQRCode />
+        </Modal>
       </div>
-      <Modal
-        visible={showModal}
-        onClose={onCloseModal}
-        width={'w-[500px]'}
-        height={'h-[500px]'}
-      >
-        <DisplayQRCode />
-      </Modal>
-    </>
+    </div>
   )
 }

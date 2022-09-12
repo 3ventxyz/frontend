@@ -5,11 +5,8 @@ import Button from '../../components/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useAuth } from '../../contexts/auth'
-import Modal from '../../components/modal'
 import FileImageInput from '../../components/fileImageInput'
-import { getStorage, ref } from "firebase/storage";
 import { uploadImage } from '../../services/upload_image'
 
 interface LocationData {
@@ -38,12 +35,10 @@ export default function CreateUser() {
   const [location, setLocation] = useState<LocationData>()
   const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState('')
-  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [imgUrl, setImgUrl] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
@@ -63,9 +58,8 @@ export default function CreateUser() {
     getInfo()
   }, [remakeProfile])
 
-  const CreateProfile = async (
+  const createProfile = async (
     email = '',
-    gravatarLink = '',
     fileImg: File | null,
     uid: string,
     name: string,
@@ -74,7 +68,6 @@ export default function CreateUser() {
   ) => {
     try {
       await uploadImage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
-        setImgUrl(url)
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
           username: name,
@@ -85,7 +78,6 @@ export default function CreateUser() {
         })
         console.log('Data written into doc ID: ', docRef.id)
       })
-      console.log('img',imgUrl)
       return true
     } catch (e) {
       console.error('Error adding data: ', e)
@@ -120,6 +112,18 @@ export default function CreateUser() {
             textArea={false}
             setValue={setBio}
           />
+           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Email
+          </p>
+          <TextInput
+            labelText=""
+            id="email"
+            placeholder={bio}
+            maxWidth={500}
+            width={'w-full'}
+            textArea={false}
+            setValue={setEmail}
+          />
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Location
           </p>
@@ -134,7 +138,7 @@ export default function CreateUser() {
               <Button
                 text="Save"
                 onClick={() => {
-                  CreateProfile(email, avatar, fileImg, uid, name, bio, location)
+                  createProfile(email, fileImg, uid, name, bio, location)
                 }}
                 active={true}
               />
@@ -154,7 +158,6 @@ export default function CreateUser() {
           <p>Event Image:</p>
           <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
-      { /* <button onClick={() => {console.log(fileImg.name)}}>HOLI</button>*/}
       </div>
     </div>
   )
