@@ -5,37 +5,14 @@ import Button from '../../components/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useAuth } from '../../contexts/auth'
+import FileImageInput from '../../components/fileImageInput'
+import { uploadImage } from '../../services/upload_image'
 
 interface LocationData {
   lat: number
   long: number
   address: string
-}
-
-const CreateProfile = async (
-  uid: string,
-  name: string,
-  bio: string,
-  location?: LocationData,
-  email = '',
-  gravatarLink = ''
-) => {
-  try {
-    const docRef = doc(db, 'users', uid)
-    await updateDoc(docRef, {
-      username: name,
-      bio: bio,
-      location: location,
-      gravatar: gravatarLink,
-      email: email
-    })
-    console.log('Data written into doc ID: ', docRef.id)
-    return true
-  } catch (e) {
-    console.error('Error adding data: ', e)
-  }
 }
 
 const fetchAvatar = (email: string, setGravatar: any) => {
@@ -61,6 +38,7 @@ export default function CreateUser() {
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
+  const [fileImg, setFileImg] = useState<File | null>(null)
 
   useEffect(() => {
     const getInfo = async () => {
@@ -80,6 +58,32 @@ export default function CreateUser() {
     getInfo()
   }, [remakeProfile])
 
+  const createProfile = async (
+    email = '',
+    fileImg: File | null,
+    uid: string,
+    name: string,
+    bio: string,
+    location?: LocationData
+  ) => {
+    try {
+      await uploadImage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
+        const docRef = doc(db, 'users', uid)
+        await updateDoc(docRef, {
+          username: name,
+          bio: bio,
+          location: location,
+          avatar: url,
+          email: email
+        })
+        console.log('Data written into doc ID: ', docRef.id)
+      })
+      return true
+    } catch (e) {
+      console.error('Error adding data: ', e)
+    }
+  }
+  
   return (
     <div className="h-screen w-screen bg-secondaryBg">
       <div className="mx-auto flex max-w-[300px] flex-col-reverse items-center justify-center lg:max-w-full lg:flex-row  lg:items-start lg:justify-center lg:space-x-24 lg:pt-14">
@@ -108,6 +112,18 @@ export default function CreateUser() {
             textArea={false}
             setValue={setBio}
           />
+           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
+            Email
+          </p>
+          <TextInput
+            labelText=""
+            id="email"
+            placeholder={bio}
+            maxWidth={500}
+            width={'w-full'}
+            textArea={false}
+            setValue={setEmail}
+          />
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Location
           </p>
@@ -122,7 +138,7 @@ export default function CreateUser() {
               <Button
                 text="Save"
                 onClick={() => {
-                  CreateProfile(uid, name, bio, location, email, avatar)
+                  createProfile(email, fileImg, uid, name, bio, location)
                 }}
                 active={true}
               />
@@ -138,35 +154,9 @@ export default function CreateUser() {
             </Link>
           </div>
         </div>
-        <div className="flex w-[300px] flex-col items-stretch">
-          <Image
-            src={avatar}
-            width="300px"
-            height="300px"
-            layout="intrinsic"
-            className="rounded-[15px]"
-          />
-          <p className="mt-[14px] mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-            Email
-          </p>
-          <TextInput
-            labelText=""
-            id="email"
-            placeholder="Enter email"
-            maxWidth={500}
-            width={'w-full'}
-            textArea={false}
-            setValue={setEmail}
-          />
-          <div className="h-2" />
-          <Button
-            text="Upload Profile Picture"
-            onClick={() => {
-              fetchAvatar(email, setAvatar)
-            }}
-            active={true}
-          />
-          <div className="h-2" />
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <p>Event Image:</p>
+          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ export default function Settings() {
   const { address } = useAccount()
 
   return (
-    <div className="flex flex-grow bg-secondaryBg pt-[78px]">
+    <div className="flex flex-grow bg-secondaryBg py-[78px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-8 px-2 sm:px-0">
         {/* TITLE AND HEADER */}
         <h3 className="w-full border-b border-disabled">Settings</h3>
