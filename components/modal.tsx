@@ -25,7 +25,7 @@ export default function Modal({
     <div
       id="container"
       onClick={handleOnClose}
-      className="fixed inset-0 mt-[75px] flex items-center justify-center  bg-opacity-30 backdrop-blur-sm"
+      className="z-10 fixed inset-0 mt-[75px] flex items-center justify-center  bg-opacity-30 backdrop-blur-sm"
     >
       <div
         className={`${height} ${width} rounded-[20px] bg-white p-2 shadow-xl`}
