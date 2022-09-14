@@ -19,15 +19,15 @@ export interface TimeStamp {
 }
 
 export interface EventInterface {
-  uid: string,
-  title: string,
-  description?: string,
-  location: LocationData,
-  organization?: string,
-  start_date: Date,
-  end_date: Date,
-  img_url: string,
-  ticket_max: number,
+  uid: string
+  title: string
+  description?: string
+  location: LocationData
+  organization?: string
+  start_date: Date
+  end_date: Date
+  img_url: string
+  ticket_max: number
   event_id?: string
 }
 
@@ -46,3 +46,14 @@ export interface UserModel {
   wallet: string
   siwe_expiration_time: string
 }
+
+export interface AllowlistInterface {
+  uid: string
+  title: string
+  description?: string
+  allowlist_id?: string
+  allowlist: Array<Map<string, string | Array<string>>>
+  merkle_root: string
+}
+
+export interface AllowlistsInterface extends Array<AllowlistInterface> {}

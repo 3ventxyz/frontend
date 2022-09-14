@@ -1,12 +1,10 @@
+// author: constanza
 import { useEffect, useState } from 'react'
 import { db } from '../../services/firebase_config'
 import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../../contexts/auth'
 import Dashboard from '../../components/dashboard'
 import ProfileDisplay from './components/profileDisplay'
-import Button from '../../components/button'
-import { Router } from 'next/router'
-import Link from 'next/link'
 
 interface LocationData {
   lat: number
@@ -20,6 +18,8 @@ export default function UserProfile() {
   const [location, setLocation] = useState<LocationData>()
   const [avatar, setAvatar] = useState('')
   const [twitterName, setTwitterName] = useState('')
+  const [email, setEmail] = useState('')
+
   const auth = useAuth()
   const uid = auth?.uid
 
@@ -27,13 +27,13 @@ export default function UserProfile() {
     const getInfo = async () => {
       const docRef = doc(db, 'users', uid)
       const docSnap = await getDoc(docRef)
-
       if (docSnap.exists()) {
         setName(docSnap.data().username)
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
-        setAvatar(`${docSnap.data().gravatar}?s=200`)
+        setAvatar(docSnap.data().avatar)
         setTwitterName(docSnap.data().twitter_name)
+        setEmail(docSnap.data().email)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -51,6 +51,7 @@ export default function UserProfile() {
         address={location?.address || 'NA'}
         twitterName={twitterName}
         edit={true}
+        email={email}
       />
       <Dashboard />
     </div>
