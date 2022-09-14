@@ -21,7 +21,6 @@ export default function CreateUser() {
   const [location, setLocation] = useState<LocationData>()
   const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState('')
-  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
