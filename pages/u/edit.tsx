@@ -50,6 +50,7 @@ export default function CreateUser() {
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
         setAvatar(`${docSnap.data().gravatar}?s=200`)
+        setEmail(docSnap.data().email)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -118,7 +119,7 @@ export default function CreateUser() {
           <TextInput
             labelText=""
             id="email"
-            placeholder={bio}
+            placeholder={email}
             maxWidth={500}
             width={'w-full'}
             textArea={false}
