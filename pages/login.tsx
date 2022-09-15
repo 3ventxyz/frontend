@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useEffect } from 'react'
+import React, { FormEvent, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
 import Button from '../components/button'
@@ -8,6 +8,7 @@ import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 import { UserModel } from '../shared/interface/common'
+import QRCode from 'qrcode.react'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
@@ -21,6 +22,7 @@ export default function Login() {
   })
   const router = useRouter()
   const authContext = useAuth()
+  const qrRef = useRef<any>()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
 
   // configure recaptcha
@@ -85,7 +87,15 @@ export default function Login() {
                     wallet: '',
                     siwe_expiration_time: ''
                   }
-                  authContext.setUserModel(userModel)
+
+                  // authContext.setUserModel(userModel)
+                  //  TODO MOVE THE QR CODE BUILD !!!
+
+                  console.log(
+                    'new user created:',
+                    authContext.uid,
+                    '. Lets create the qr code :)'
+                  )
                 } else {
                   const userDocRef = doc(db, 'users', result.user.uid)
                   const userDocSnap = await getDoc(userDocRef)
@@ -201,6 +211,14 @@ export default function Login() {
           </div>
         </div>
       )}
+      <div
+        className={`qr-container__qr-code 
+             hidden
+          `}
+        ref={qrRef}
+      >
+        {qrCode}
+      </div>
     </div>
   )
 }

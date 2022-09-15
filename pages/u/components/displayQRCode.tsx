@@ -7,6 +7,7 @@ import { db } from '../../../services/firebase_config'
 import { doc, getDoc, updateDoc } from '@firebase/firestore'
 import Spinner from '../../../components/spinner'
 import Image from 'next/image'
+import QRCodeStyling from 'qr-code-styling'
 
 export default function DisplayQRCode() {
   const auth = useAuth()
@@ -46,28 +47,37 @@ export default function DisplayQRCode() {
 function GenerateNewQRCode({ uid, qrRef }: { uid: string; qrRef: any }) {
   const [newQrCodeGenerated, setNewQRCodeGenerated] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
-  const qrCode = (
-    <QRCode
-      id="qrCodeId"
-      size={300}
-      value={`https://www.3vent.xyz/u/${uid}`}
-      bgColor="white"
-      includeMargin={true}
-      fgColor="black"
-      level="H"
-      imageSettings={{
-        src: 'assets/logo-icon.svg',
-        excavate: true,
-        width: 400 * 0.1,
-        height: 400 * 0.1
-      }}
-    />
+  const qrCode = new QRCodeStyling(
+    {
+      width: 300,
+      height: 300,
+      image: 'assets/logo-icon.svg',
+      data: `https://www.3vent.xyz/u/${uid}`,
+      type: 'canvas',
+      dotsOptions: { color: '#000000' }
+    }
+    // <QRCode
+    //   id="qrCodeId"
+    //   size={300}
+    //   value={`https://www.3vent.xyz/u/${uid}`}
+    //   bgColor="white"
+    //   includeMargin={true}
+    //   fgColor="black"
+    //   level="H"
+    //   imageSettings={{
+    //     src: 'assets/logo-icon.svg',
+    //     excavate: true,
+    //     width: 400 * 0.1,
+    //     height: 400 * 0.1
+    //   }}
+    // />
   )
 
   const uploadQRCode = (evt: FormEvent) => {
     evt.preventDefault()
     setIsGenerating(true)
-    let canvas = qrRef.current.querySelector('canvas')
+    // let canvas = qrRef.current.querySelector('canvas')
+    let canvas = qrCode._canvas
     uploadQRImage(canvas, `${uid}/qrCode`, async (url) => {
       try {
         const userDocRef = await doc(db, 'users', uid)
@@ -80,7 +90,7 @@ function GenerateNewQRCode({ uid, qrRef }: { uid: string; qrRef: any }) {
       console.log('SUCCESS URL:', url)
     })
   }
-
+  console.log('before return: ',uid);
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <div className="grow"></div>
@@ -111,7 +121,8 @@ function GenerateNewQRCode({ uid, qrRef }: { uid: string; qrRef: any }) {
           }`}
           ref={qrRef}
         >
-          {qrCode}
+          uploaded
+          {/* {qrCode} */}
         </div>
       </div>
       <p className="text-red-400">Please DO NOT share this to the public.</p>
