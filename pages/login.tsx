@@ -3,12 +3,14 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
 import Button from '../components/button'
 import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
-import { doc, setDoc, getDoc } from '@firebase/firestore'
+import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 import { UserModel } from '../shared/interface/common'
 import QRCode from 'qrcode.react'
+import QRCodeStyling from 'qr-code-styling'
+import { uploadQRImage } from '../services/upload_qr_image'
 
 export default function Login() {
   const [confirmationCode, setConfirmationCode] = useState('')
@@ -63,6 +65,16 @@ export default function Login() {
                 console.log('USER ID:', result.user.uid)
                 const userRef = doc(db, 'users', result.user.uid)
                 const docSnap = await getDoc(userRef)
+                const qrCode = new QRCodeStyling({
+                  width: 300,
+                  height: 300,
+                  image: 'assets/logo-icon.svg',
+                  data: `https://www.3vent.xyz/u/${result.user.uid}`,
+                  type: 'canvas',
+                  dotsOptions: { color: '#000000' },
+                  margin: 20,
+                })
+                let canvas = qrCode._canvas
 
                 // create new user document if sign up
                 if (!docSnap.exists()) {
@@ -87,14 +99,22 @@ export default function Login() {
                     wallet: '',
                     siwe_expiration_time: ''
                   }
-
-                  // authContext.setUserModel(userModel)
-                  //  TODO MOVE THE QR CODE BUILD !!!
-
-                  console.log(
-                    'new user created:',
-                    authContext.uid,
-                    '. Lets create the qr code :)'
+                  await uploadQRImage(
+                    canvas,
+                    `${result.user.uid}/qrCode`,
+                    async (url) => {
+                      try {
+                        const userDocRef = await doc(
+                          db,
+                          'users',
+                          result.user.uid
+                        )
+                        updateDoc(userDocRef, { qr_code: url })
+                      } catch (e) {
+                        alert(e)
+                      }
+                      console.log('SUCCESS URL:', url)
+                    }
                   )
                 } else {
                   const userDocRef = doc(db, 'users', result.user.uid)
@@ -211,14 +231,6 @@ export default function Login() {
           </div>
         </div>
       )}
-      <div
-        className={`qr-container__qr-code 
-             hidden
-          `}
-        ref={qrRef}
-      >
-        {qrCode}
-      </div>
     </div>
   )
 }
