@@ -7,6 +7,8 @@ import { sendSignInLinkToEmail } from 'firebase/auth'
 import { auth } from '../../../services/firebase_config'
 import { useRouter } from 'next/router'
 import absoluteUrl from 'next-absolute-url'
+import TextInputDisplay from '../../../components/textInputDisplay'
+import TextInput from '../../../components/textInput'
 
 export default function EmailVerification() {
   const [email, setEmail] = useState('')
@@ -16,7 +18,7 @@ export default function EmailVerification() {
   const { asPath } = useRouter()
   const { origin } = absoluteUrl()
   const router = useRouter()
-
+  const [changeEmail, setChangeEmail] = useState(false)
   const fullUrl = `${origin}${router.pathname}`
 
   useEffect(() => {
@@ -61,6 +63,30 @@ export default function EmailVerification() {
     url: fullUrl,
     handleCodeInApp: true
   }
+  const saveEmail = async () => {
+    try {
+      const docRef = doc(db, 'users', uid)
+      await updateDoc(docRef, {
+        email: email
+      })
+      setChangeEmail(false)
+      console.log('Data written into doc ID: ', docRef.id)
+      return true
+    } catch (e) {
+      console.error('Error adding data: ', e)
+    }
+  }
+
+  const discardEmail = async () => {
+    const docRef = doc(db, 'users', uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setEmail(docSnap.data().email)
+    } else {
+      console.log('No such document!')
+    }
+    setChangeEmail(false)
+  }
 
   const verifyEmail = async () => {
     try {
@@ -71,25 +97,59 @@ export default function EmailVerification() {
   }
 
   return (
-    <div className="flex justify-between">
-      <p className="p-1 text-secondary">{email}</p>
-      {
-        verifiedEmail ? 
+    <>
+    {
+      changeEmail ? 
+      <div className="flex w-full flex-col items-start space-y-1 text-[16px] font-semibold">
+        <p>Email</p>
+        <TextInput
+          labelText=""
+          id="email"
+          placeholder={email}
+          maxWidth={''}
+          width={'w-full'}
+          textArea={false}
+          setValue={setEmail}
+        />
+        <div className="mt-2 space-x-2">
         <Button
-        text={'Verified'}
-        onClick={() => {
-          
-        }}
-        active={false}
-      /> :
+          text={'Save'}
+          onClick={() => {
+            saveEmail()
+          }}
+          active={true}
+        />
         <Button
-        text={'Verify'}
-        onClick={() => {
-          verifyEmail()
-        }}
-        active={true}
-      /> 
-      }
-    </div>
+          text={'Discard'}
+          onClick={() => {
+            discardEmail()
+          }}
+          active={true}
+        />
+        </div>
+      </div>
+      :
+      <div>
+        <TextInputDisplay
+          labelText={'Email'}
+          bodyText={email || 'no email connected'}
+        />
+        <div className="mt-2 space-x-2">
+          {verifiedEmail ? (
+            <Button text={'Email verified'} onClick={() => {}} active={false} />
+          ) : (
+            <Button
+              text={'Verify email'}
+              onClick={() => {
+                verifyEmail()
+              }}
+              active={true}
+            />
+          )}
+          <Button text={'Add/Change email'} onClick={() => {setChangeEmail(true)}} active={true} />
+        </div>
+      </div>
+    }
+    </>
   )
 }

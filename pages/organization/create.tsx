@@ -22,7 +22,6 @@ export default function CreateOrganization() {
         labelText="Name"
         id="org_name"
         placeholder="3vent"
-        maxWidth={500}
         textArea={false}
         setValue={setName}
       />
