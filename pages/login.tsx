@@ -8,8 +8,7 @@ import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 import { UserModel } from '../shared/interface/common'
-import QRCode from 'qrcode.react'
-import QRCodeStyling from 'qr-code-styling'
+// import QRCodeStyling from 'qr-code-styling'
 import { uploadQRImage } from '../services/upload_qr_image'
 
 export default function Login() {
@@ -24,8 +23,28 @@ export default function Login() {
   })
   const router = useRouter()
   const authContext = useAuth()
-  const qrRef = useRef<any>()
+  const ref = useRef<any>()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
+  const [userId, setUserId] = useState<any>('')
+  const [qrCode, setQrCodeImg] = useState<any>()
+  
+  useEffect(() => {
+    // Dynamically import qr-code-styling only client-side
+    if (typeof window !== 'undefined') {
+      import('qr-code-styling').then(({ default: QRCodeStyling }) => {
+        const qrCode = new QRCodeStyling({
+          width: 300,
+          height: 300,
+          image: 'assets/logo-icon.svg',
+          data: `https://www.3vent.xyz/u/${userId}`,
+          type: 'canvas',
+          dotsOptions: { color: '#000000' },
+          margin: 20
+        })
+        setQrCodeImg(qrCode)
+      })
+    }
+  }, [userId])
 
   // configure recaptcha
   useEffect(() => {
@@ -65,15 +84,7 @@ export default function Login() {
                 console.log('USER ID:', result.user.uid)
                 const userRef = doc(db, 'users', result.user.uid)
                 const docSnap = await getDoc(userRef)
-                const qrCode = new QRCodeStyling({
-                  width: 300,
-                  height: 300,
-                  image: 'assets/logo-icon.svg',
-                  data: `https://www.3vent.xyz/u/${result.user.uid}`,
-                  type: 'canvas',
-                  dotsOptions: { color: '#000000' },
-                  margin: 20,
-                })
+                setUserId(result.user.uid)
                 let canvas = qrCode._canvas
 
                 // create new user document if sign up
