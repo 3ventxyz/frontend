@@ -40,7 +40,7 @@ export default function ProfileDisplay({
     setShowModal(false)
   }
   return (
-    <div>
+    <>
     <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 xl:justify-start">
       <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
         <Image
@@ -109,6 +109,6 @@ export default function ProfileDisplay({
         >
           <DisplayQRCode />
         </Modal>
-    </div>
+    </>
   )
 }
