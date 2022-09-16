@@ -17,7 +17,7 @@ import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_event
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
-  const [organization, setOrganization] = useState<string>('')
+  const [userName, setUserName] = useState<string>('')
   const [eventId, setEventId] = useState<string>('')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [eventLocation, setEventLocation] = useState<LocationData>({
@@ -33,7 +33,38 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
+
+
+  const validateForm = ()=>{
+    if(title === ''){
+      console.error('title is empty')
+      return false;
+    }
+    if(!fileImg){
+      console.error('file img is null')
+      return false;
+    }
+    if(ticketMax === 0){
+      console.error('ticket supply is 0')
+      return false;
+    }
+    if(eventLocation === ({address: '',
+    lat: 0,
+    long: 0})){
+      console.error('evenlocation is NULL')
+      return false;
+    }
+    
+    return true;
+  }
+
   const createEvent = async () => {
+    // TODO (sep, 16) continue with the createEvent validator
+    //  ========================================
+    // alert('test this is error')
+    // await CheckEventId(eventId)
+    // return ;
+    //  ========================================
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
     try {
@@ -106,7 +137,6 @@ export default function CreateEvent() {
             dateFormat="Pp"
           />
         </div>
-
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <p>End Date</p>
           <DatePicker

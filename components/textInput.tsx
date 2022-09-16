@@ -3,6 +3,7 @@ interface TextInputProps {
   labelText: string
   placeholder?: string
   maxWidth?: number
+  errorMsg?: string
   textArea?: boolean
   isDisabled?: boolean
   setValue: (value: string) => void
@@ -14,10 +15,11 @@ export default function TextInput({
   placeholder,
   id,
   maxWidth,
+  errorMsg = '',
   textArea = false,
   isDisabled = false,
   setValue,
-  width = "w-full"
+  width = 'w-full'
 }: TextInputProps) {
   return (
     <form className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -49,6 +51,9 @@ export default function TextInput({
           disabled={isDisabled}
         ></textarea>
       )}
+      <div className={`${errorMsg === '' ? 'hidden' : 'block'} ml-[20px] text-red-600`}>
+        {errorMsg}
+      </div>
     </form>
   )
 }
