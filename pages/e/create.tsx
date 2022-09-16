@@ -12,6 +12,7 @@ import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
+import CheckEventId from '../../services/check_event_id'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -33,10 +34,16 @@ export default function CreateEvent() {
   const auth = useAuth()
 
   const createEvent = async () => {
+    alert('test this is error')
+    await CheckEventId(eventId)
+    return ;
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
-    await uploadImage(fileImg, path, async (url: string) => {
-      const returnedId = await createNewEvent({
+    try{
+      //check if eventIdExists
+
+      await uploadImage(fileImg, path, async (url: string) => {
+        const returnedId = await createNewEvent({
         title: title,
         end_date: endDate,
         start_date: startDate,
@@ -51,12 +58,17 @@ export default function CreateEvent() {
       console.log('returned id', returnedId)
       router.push(`/e/${returnedId}`)
     })
+  } catch(e){
+    alert('error');
+    setIsCreatingNewEvent(false)
+  }
   }
 
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <h3 className="w-full text-center">Create an Event</h3>
+        {/* for each textInput we need to add an error field that is shown in the bottom */}
         <TextInput
           id={'event_name'}
           labelText={'Event Title'}
