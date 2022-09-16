@@ -29,8 +29,7 @@ export default function Allowlist() {
           title: allowlistDoc.data()?.title,
           description: allowlistDoc.data()?.description,
           allowlist_id: allowlistDoc.id,
-          allowlist: allowlistDoc.data()?.allowlist,
-          merkle_root: allowlistDoc.data()?.merkle_root
+          allowlist: allowlistDoc.data()?.allowlist
         })
       } catch (error) {
         console.log(error)
@@ -70,9 +69,6 @@ export default function Allowlist() {
                   <p className="mt-1 text-sm font-normal text-gray-500 ">
                     {allowlist?.description}
                   </p>
-                  <p className="mt-6 text-sm font-normal ">
-                    Merkle Root: {allowlist?.merkle_root}
-                  </p>
                 </div>
                 <Image
                   onClick={() => setShowDeleteModal(true)}
@@ -88,28 +84,17 @@ export default function Allowlist() {
                 <th scope="col" className="py-3 px-6">
                   Addresses
                 </th>
-                <th scope="col" className="py-3 px-6">
-                  Merkle Proof
-                </th>
               </tr>
             </thead>
             <tbody>
               {allowlist?.allowlist.map((e, i, array) => {
-                const address = (e as any)['address']
-                const merkleProof = (e as any)['merkle_proof']
                 return (
                   <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
                     <th
                       scope="row"
                       className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
                     >
-                      {address}
-                    </th>
-                    <th
-                      scope="row"
-                      className="py-4 px-6 font-medium text-gray-900 "
-                    >
-                      {merkleProof.join('\n')}
+                      {e}
                     </th>
                   </tr>
                 )
