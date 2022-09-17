@@ -33,10 +33,15 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
-  const createEvent = async () => {
-    alert('test this is error')
-    await CheckEventId(eventId)
-    return ;
+  const createEvent = async () => {    
+    // TODO (sep, 16) continue with the createEvent validator
+    //  ========================================
+    // alert('test this is error')
+    // await CheckEventId(eventId)
+    // return ;
+    //  ========================================
+
+    
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
     try{
@@ -47,7 +52,6 @@ export default function CreateEvent() {
         title: title,
         end_date: endDate,
         start_date: startDate,
-        organization: '',
         uid: auth.uid,
         description: eventDescription,
         location: eventLocation,
@@ -55,8 +59,8 @@ export default function CreateEvent() {
         ticket_max: ticketMax,
         event_id: eventId
       })
-      console.log('returned id', returnedId)
-      router.push(`/e/${returnedId}`)
+      console.log('returned id:', eventId)
+      router.push(`/e/${eventId}`)
     })
   } catch(e){
     alert('error');

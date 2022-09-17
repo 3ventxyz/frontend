@@ -68,7 +68,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       uid: eventDoc.data()?.uid,
       title: eventDoc.data()?.title,
       location: eventDoc.data()?.location,
-      organization: eventDoc.data()?.organization,
       img_url: eventDoc.data()?.img_url,
       end_date: eventDoc.data()?.end_date?.toDate(),
       ticket_max: 0

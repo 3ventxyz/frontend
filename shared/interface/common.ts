@@ -23,7 +23,6 @@ export interface EventInterface {
   title: string
   description?: string
   location: LocationData
-  organization?: string
   start_date: Date
   end_date: Date
   img_url: string

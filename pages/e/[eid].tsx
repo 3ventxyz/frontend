@@ -154,7 +154,6 @@ function LoadingEventPage() {
             <div className="h-[19px] w-[100px] rounded-lg bg-gray-300"></div>
             <div className="h-[19px] w-[280px] rounded-lg bg-gray-300"></div>
           </div>
-
           <div className="flex h-[100px] w-[100px] items-center justify-center rounded-[20px] bg-green-200">
             <TbMap className="h-[50px] w-[50px]" />
           </div>
@@ -163,7 +162,6 @@ function LoadingEventPage() {
             <div className="h-[19px] w-full rounded-lg bg-gray-300 leading-[20px]"></div>
           </div>
         </div>
-
         <div className="flex h-[364px] w-[320px] flex-col items-center justify-center space-y-[19px] md:w-[373px]">
           <Spinner />
         </div>
@@ -186,7 +184,7 @@ function LoadedEventPage({
   event: EventInterface | null
   children: ReactElement
 }): JSX.Element {
-  const [url, setUrl] = useState('')
+  const [profileUrlImg, setProfileUrlImg] = useState('')
   const [hostName, setHostName] = useState('')
   const router = useRouter()
 
@@ -196,7 +194,7 @@ function LoadedEventPage({
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
-        setUrl(`${docSnap.data().gravatar}?s=200`)
+        setProfileUrlImg(`${docSnap.data().avatar}`)
         setHostName(docSnap.data().username)
       } else {
         console.log('No such document!')
@@ -231,7 +229,7 @@ function LoadedEventPage({
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-fit w-fit cursor-pointer flex-row items-center justify-start space-x-4 rounded-3xl">
               <Image
-                src={url}
+                src={profileUrlImg}
                 layout="fixed"
                 width="35px"
                 height="35px"

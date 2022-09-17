@@ -8,12 +8,15 @@ export async function uploadImage(
 ) {
   if (!fileImg) {
     alert('Please upload an image first!')
+    return
   }
   const storageRef = ref(storage, `/files/${path}`)
   const fileBuffer = await fileImg?.arrayBuffer()
 
   if (fileBuffer) {
-    const uploadTask = uploadBytesResumable(storageRef, fileBuffer)
+    const uploadTask = uploadBytesResumable(storageRef, fileBuffer, {
+      contentType: 'image/jpeg'
+    })
     uploadTask.on(
       'state_changed',
       (snapshot) => {
