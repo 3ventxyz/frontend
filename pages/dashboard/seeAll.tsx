@@ -8,10 +8,12 @@ import { EventInterface } from '../../shared/interface/common'
 import EventsDisplay from '../../components/eventsDisplay'
 import { HiChevronLeft } from 'react-icons/hi'
 import Button from '../../components/button'
+import { useAuth } from '../../contexts/auth'
 
 export default function SeeAll() {
   const router = useRouter()
   const events = useEvents()
+  const auth = useAuth()
   const [title, setTitle] = useState('')
   const [eventsData, setEvents] = useState<Array<EventInterface> | null>(null)
   const [mode, setMode] = useState('upcoming')
@@ -28,7 +30,7 @@ export default function SeeAll() {
     const setData = async () => {
       let eventData: Array<EventInterface>
       setEvents(null)
-      const userDocRef = doc(db, 'users', '9z8ahI4aQIYR11Iz0QzWuVJsh943')
+      const userDocRef = doc(db, 'users', auth.uid)
 
       switch (mode) {
         case 'upcoming':
@@ -92,6 +94,7 @@ export default function SeeAll() {
         eventsData={eventsData}
         showHeader={false}
         isFetching={eventsData === null}
+        emptyMessage={'There are no events to display here'}
       />
     </div>
   )

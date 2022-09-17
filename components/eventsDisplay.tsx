@@ -46,9 +46,12 @@ export default function EventsDisplay({
             <EventTile eventData={null} />
             <EventTile eventData={null} />
           </>
-        ) : !eventsData ? (
-          <>{emptyMessage}</>
+        ) : eventsData?.length === 0 ? (
+          <div className='flex justify-center  items-center w-full '>
+            <h4>{emptyMessage}</h4>
+          </div>
         ) : (
+          eventsData &&
           eventsData.map((eventData, index) => {
             return <EventTile key={index.toString()} eventData={eventData} />
           })
