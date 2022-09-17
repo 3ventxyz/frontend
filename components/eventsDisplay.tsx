@@ -93,7 +93,6 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           <li className="... truncate text-[24px] font-bold">
             {eventData.title}
           </li>
-          <li className="... truncate text-[14px]">{eventData.organization}</li>
           <li className="... truncate text-[14px]">{eventData.description}</li>
           <li className="... truncate text-[14px]">
             {eventData?.start_date?.toLocaleDateString()}
