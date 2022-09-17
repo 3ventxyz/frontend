@@ -13,6 +13,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
 import CheckEventId from '../../services/check_event_id'
+import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -33,7 +34,7 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
-  const createEvent = async () => {    
+  const createEvent = async () => {
     // TODO (sep, 16) continue with the createEvent validator
     //  ========================================
     // alert('test this is error')
@@ -41,31 +42,37 @@ export default function CreateEvent() {
     // return ;
     //  ========================================
 
-    
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
-    try{
+    try {
       //check if eventIdExists
 
       await uploadImage(fileImg, path, async (url: string) => {
         const returnedId = await createNewEvent({
-        title: title,
-        end_date: endDate,
-        start_date: startDate,
-        uid: auth.uid,
-        description: eventDescription,
-        location: eventLocation,
-        img_url: url,
-        ticket_max: ticketMax,
-        event_id: eventId
+          title: title,
+          end_date: endDate,
+          start_date: startDate,
+          uid: auth.uid,
+          description: eventDescription,
+          location: eventLocation,
+          img_url: url,
+          ticket_max: ticketMax,
+          event_id: eventId
+        })
+        await addEventToUpcomingEvents({
+          eventTitle: title,
+          uid: auth.uid,
+          eventId: eventId,
+          startDate: startDate,
+          endDate: endDate
+        })
+        console.log('returned id:', eventId)
+        router.push(`/e/${eventId}`)
       })
-      console.log('returned id:', eventId)
-      router.push(`/e/${eventId}`)
-    })
-  } catch(e){
-    alert('error');
-    setIsCreatingNewEvent(false)
-  }
+    } catch (e) {
+      alert('error')
+      setIsCreatingNewEvent(false)
+    }
   }
 
   return (

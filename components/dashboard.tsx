@@ -4,9 +4,11 @@ import { db } from '../services/firebase_config'
 import { doc, collection } from '@firebase/firestore'
 import { useEvents } from '../contexts/events'
 import EventsDisplay from './eventsDisplay'
+import { useAuth } from '../contexts/auth'
 
 export default function Dashboard() {
   const events = useEvents()
+  const auth = useAuth()
   const [fetched, setFetched] = useState(false)
 
   useEffect(() => {
@@ -14,7 +16,7 @@ export default function Dashboard() {
       let pastEventsData: any
       let upcomingEventsData: any
       try {
-        const userDocRef = doc(db, 'users', '9z8ahI4aQIYR11Iz0QzWuVJsh943')
+        const userDocRef = doc(db, 'users', auth.uid)
         if (!events.cachedPastEvents) {
           pastEventsData = await events.fetchEventsData({
             collectionRef: collection(userDocRef, 'past_events')
@@ -48,7 +50,8 @@ export default function Dashboard() {
         eventsData={events.cachedUpcomingEvents}
         seeAllOption={true}
         isFetching={!fetched}
-      />
+        emptyMessage={'You don\'t have any upcoming events, why don\'t you create one?'}
+        />
       <EventsDisplay
         title={'past events'}
         route={'dashboard/seeAll'}
@@ -56,6 +59,7 @@ export default function Dashboard() {
         eventsData={events.cachedPastEvents}
         seeAllOption={true}
         isFetching={!fetched}
+        emptyMessage={'You don\'t have any past events yet.'}
       />
     </div>
   )

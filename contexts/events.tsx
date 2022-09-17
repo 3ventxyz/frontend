@@ -83,11 +83,8 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     numberOfEvents?: number
   }) => {
     const eventsRef = await getDocs(
-      query(
-        collectionRef,
-        orderBy('date_of_event', 'desc'),
-        limit(numberOfEvents)
-      )
+      // collectionRef
+      query(collectionRef, orderBy('start_date', 'desc'), limit(numberOfEvents))
     )
     const eventsList: EventInterface[] = []
     for (const eventRef of eventsRef.docs) {

@@ -11,7 +11,8 @@ export default function EventsDisplay({
   eventsData,
   seeAllOption = false,
   showHeader = true,
-  isFetching
+  isFetching,
+  emptyMessage
 }: {
   title: string
   route: string
@@ -20,6 +21,7 @@ export default function EventsDisplay({
   seeAllOption?: boolean
   showHeader?: boolean
   isFetching: boolean
+  emptyMessage: string
 }) {
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
 
@@ -44,8 +46,9 @@ export default function EventsDisplay({
             <EventTile eventData={null} />
             <EventTile eventData={null} />
           </>
+        ) : !eventsData ? (
+          <>{emptyMessage}</>
         ) : (
-          eventsData &&
           eventsData.map((eventData, index) => {
             return <EventTile key={index.toString()} eventData={eventData} />
           })
