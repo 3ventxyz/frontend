@@ -64,13 +64,13 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
       start_date: eventDoc.data()?.start_date?.toDate(),
-      event_id: eventDoc.data()?.id,
+      event_id: eventDoc.data()?.event_id,
       uid: eventDoc.data()?.uid,
       title: eventDoc.data()?.title,
       location: eventDoc.data()?.location,
       img_url: eventDoc.data()?.img_url,
       end_date: eventDoc.data()?.end_date?.toDate(),
-      ticket_max: 0
+      ticket_max: eventDoc.data()?.ticket_max,
     }
     return eventData
   }

@@ -27,7 +27,7 @@ export interface EventInterface {
   end_date: Date
   img_url: string
   ticket_max: number
-  event_id?: string
+  event_id: string
 }
 
 export interface UserProfileEvents {

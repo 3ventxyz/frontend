@@ -12,7 +12,6 @@ import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
-import CheckEventId from '../../services/check_event_id'
 import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
 
 export default function CreateEvent() {
@@ -35,18 +34,9 @@ export default function CreateEvent() {
   const auth = useAuth()
 
   const createEvent = async () => {
-    // TODO (sep, 16) continue with the createEvent validator
-    //  ========================================
-    // alert('test this is error')
-    // await CheckEventId(eventId)
-    // return ;
-    //  ========================================
-
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
     try {
-      //check if eventIdExists
-
       await uploadImage(fileImg, path, async (url: string) => {
         const returnedId = await createNewEvent({
           title: title,
@@ -79,7 +69,6 @@ export default function CreateEvent() {
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <h3 className="w-full text-center">Create an Event</h3>
-        {/* for each textInput we need to add an error field that is shown in the bottom */}
         <TextInput
           id={'event_name'}
           labelText={'Event Title'}

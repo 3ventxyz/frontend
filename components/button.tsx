@@ -9,7 +9,7 @@ export default function Button({
   activeStyling = false
 }: {
   text: string
-  onClick: (() => void) | undefined
+  onClick?: (() => void) | undefined
   active: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
   isExpanded?: boolean

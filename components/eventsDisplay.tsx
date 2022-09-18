@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
 import { EventInterface } from '../shared/interface/common'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 export default function EventsDisplay({
   title,
@@ -62,6 +63,9 @@ export default function EventsDisplay({
 }
 
 function EventTile({ eventData }: { eventData: EventInterface | null }) {
+
+
+  useEffect
   return !eventData ? (
     <div className=" mx-auto h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
       <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-300 sm:max-h-full">

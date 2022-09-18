@@ -45,16 +45,17 @@ export default function Event() {
 
   const { eid } = router.query
 
-  const newTicketOption = (ticketDoc: any) => {
-    const ticketData: TicketInterface = {
-      ticketTitle: ticketDoc.data().ticket_title,
-      registeredUsers: ticketDoc.data().registered_users,
-      capLimit: ticketDoc.data().cap_limit,
-      tokenId: ticketDoc.data().token_id,
-      price: ticketDoc.data().ticket_price
-    }
-    return ticketData
-  }
+  // not used
+  // const newTicketOption = (ticketDoc: any) => {
+  //   const ticketData: TicketInterface = {
+  //     ticketTitle: ticketDoc.data().ticket_title,
+  //     registeredUsers: ticketDoc.data().registered_users,
+  //     capLimit: ticketDoc.data().cap_limit,
+  //     tokenId: ticketDoc.data().token_id,
+  //     price: ticketDoc.data().ticket_price
+  //   }
+  //   return ticketData
+  // }
 
   const EventPage = () => {
     switch (eventPageStatus) {
@@ -97,13 +98,19 @@ export default function Event() {
       const fetchedTicketListData: Array<TicketInterface> = []
       if (!eventData) return
       setEvent(eventData)
-
-      // fetch ticket data.
-      const ticketDocs = await getDocs(collection(db, 'tickets'))
-
-      ticketDocs.forEach((ticketDoc) => {
-        fetchedTicketListData.push(newTicketOption(ticketDoc))
-      })
+      let ticket: TicketInterface = {
+        ticketTitle: 'Free Attendee',
+        registeredUsers: 0,
+        capLimit: eventData.ticket_max,
+        tokenId: '',
+        price: 0
+      }
+      fetchedTicketListData.push(ticket)
+      // IDEA:
+      // const ticketDocs = await getDocs(collection(db, 'tickets'))
+      // ticketDocs.forEach((ticketDoc) => {
+      //   fetchedTicketListData.push(newTicketOption(ticketDoc))
+      // })
       setTicketListData(fetchedTicketListData)
       setEventPageStatus(EventPageEnum.fetchedData)
     }
