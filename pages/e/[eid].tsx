@@ -26,6 +26,7 @@ enum EventPageEnum {
 }
 
 export default function Event() {
+  const [QRImgUrl, setQRImgUrl] = useState('')
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
@@ -63,7 +64,7 @@ export default function Event() {
       case EventPageEnum.purchasedTicket:
         return (
           <LoadedEventPage event={event}>
-            <PurchasedTicketConfirmation selectedTicket={selectedTicket} />
+            <PurchasedTicketConfirmation selectedTicket={selectedTicket} QRImgUrl={QRImgUrl}/>
           </LoadedEventPage>
         )
       default:
@@ -79,9 +80,15 @@ export default function Event() {
 
   useEffect(() => {
     const fetchData = async () => {
+
+
+      const docRef = doc(db, 'users', auth.uid)
+      const userDoc = await getDoc(docRef)
+      const uid_qr_code = userDoc.data()?.qr_code
+      setQRImgUrl(uid_qr_code)
       const eventId: any = eid
-      const docRef = doc(db, 'events', eventId)
-      const eventDoc = await getDoc(docRef)
+      const eventRef = doc(db, 'events', eventId)
+      const eventDoc = await getDoc(eventRef)
       const eventData = events.newEventData(eventDoc)
       const fetchedTicketListData: Array<TicketInterface> = []
       if (!eventData) return
@@ -317,10 +324,10 @@ function SelectAndPurchaseTicket({
 }
 
 function PurchasedTicketConfirmation({
-  selectedTicket, imgQR,
+  selectedTicket, QRImgUrl,
 }: {
   selectedTicket: TicketInterface | null
-  imgQR?: string | null
+  QRImgUrl: string
 }) {
   return (
     <div className="flex flex-col space-y-[26px]">
@@ -335,7 +342,7 @@ function PurchasedTicketConfirmation({
           Present this QR code to enter your event
         </div>
         <div className="relative h-[242px] w-[242px]">
-          <Image src={'/assets/qr-code.png'} layout="fill" objectFit="cover" />
+          <Image src={QRImgUrl} layout="fill" objectFit="cover" />
         </div>
       </div>
     </div>
