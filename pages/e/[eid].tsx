@@ -3,9 +3,6 @@ import { TbPhotoOff, TbPhoto, TbMap } from 'react-icons/tb'
 import {
   doc,
   getDoc,
-  getDocs,
-  collection,
-  DocumentData
 } from '@firebase/firestore'
 import Router, { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
@@ -20,6 +17,7 @@ import Button from '../../components/button'
 import CreateCheckoutSession from './components/createCheckoutSession'
 import Spinner from '../../components/spinner'
 import Link from 'next/link'
+import { useAuth } from '../../contexts/auth'
 
 enum EventPageEnum {
   fetchingData,
@@ -42,20 +40,10 @@ export default function Event() {
   >(null)
   const router = useRouter()
   const events = useEvents()
+  const auth = useAuth()
+  // var eidInit:any;
 
   const { eid } = router.query
-
-  // not used
-  // const newTicketOption = (ticketDoc: any) => {
-  //   const ticketData: TicketInterface = {
-  //     ticketTitle: ticketDoc.data().ticket_title,
-  //     registeredUsers: ticketDoc.data().registered_users,
-  //     capLimit: ticketDoc.data().cap_limit,
-  //     tokenId: ticketDoc.data().token_id,
-  //     price: ticketDoc.data().ticket_price
-  //   }
-  //   return ticketData
-  // }
 
   const EventPage = () => {
     switch (eventPageStatus) {
@@ -106,15 +94,11 @@ export default function Event() {
         price: 0
       }
       fetchedTicketListData.push(ticket)
-      // IDEA:
-      // const ticketDocs = await getDocs(collection(db, 'tickets'))
-      // ticketDocs.forEach((ticketDoc) => {
-      //   fetchedTicketListData.push(newTicketOption(ticketDoc))
-      // })
       setTicketListData(fetchedTicketListData)
       setEventPageStatus(EventPageEnum.fetchedData)
     }
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+      
       fetchData()
     }
   }, [eid])
@@ -134,6 +118,9 @@ export default function Event() {
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
+          uid={auth.uid}
+          eventId={event? event.event_id : ' '}
+          
         />
       </Modal>
     </>
@@ -330,9 +317,10 @@ function SelectAndPurchaseTicket({
 }
 
 function PurchasedTicketConfirmation({
-  selectedTicket
+  selectedTicket, imgQR,
 }: {
   selectedTicket: TicketInterface | null
+  imgQR?: string | null
 }) {
   return (
     <div className="flex flex-col space-y-[26px]">
@@ -340,14 +328,6 @@ function PurchasedTicketConfirmation({
       <div className="space-y-[13px]">
         <div className="text-[14px] font-bold">
           add your ticket to your apple wallet
-        </div>
-        <div className="relative h-[34px] w-[114px]">
-          apple wallet
-          <Image
-            src={'/assets/featureIcons/apple-wallet.svg'}
-            layout="fill"
-            objectFit="cover"
-          />
         </div>
       </div>
       <div className="space-y-[13px]">

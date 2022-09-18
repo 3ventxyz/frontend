@@ -5,6 +5,7 @@ import Spinner from '../../../components/spinner'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
 import TicketRegTextInput from '../../../components/ticketRegTextInput'
+import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 
 enum CheckoutPageEnum {
   confirmTicketPage,
@@ -15,11 +16,15 @@ enum CheckoutPageEnum {
 }
 export default function CreateCheckoutSession({
   selectedTicket,
+  uid,
+  eventId,
   onClose,
   confirmSelectedTicketPurchase
 }: {
   selectedTicket: TicketInterface | null
   onClose: () => void
+  uid: string
+  eventId: string
   confirmSelectedTicketPurchase: () => void
 }) {
   const [checkoutPage, setcheckoutPage] = useState<CheckoutPageEnum>()
@@ -27,41 +32,29 @@ export default function CreateCheckoutSession({
   const registeringAttendeeForm = async (event: any) => {
     event.preventDefault()
     setcheckoutPage(CheckoutPageEnum.loadingPage)
-    console.log('registeringAttendeeForm submitted data===================')
-    console.log("first_name: ",event.target.first_name.value)
-    console.log("last_name: ",event.target.last_name.value)
-    console.log("address: ",event.target.address.value)
-    console.log("city: ",event.target.city.value)
-    console.log("state: ",event.target.state.value)
-    console.log("zip_code: ",event.target.zip_code.value)
-    console.log("country: ",event.target.country.value)
-    console.log('===================')
-    
 
-
-    //at the bottom 
+    await registerAttendeeToEvent(
+      {
+        first_name: event.target.first_name.value,
+        last_name: event.target.last_name.value,
+        address: event.target.address.value,
+        state: event.target.state.value,
+        city: event.target.city.value,
+        phone_number: event.target.phone_number.value,
+        zip_code: event.target.zip_code.value,
+        uid: uid
+      },
+      eventId
+    )
+    setcheckoutPage(CheckoutPageEnum.confirmationPage)
   }
 
   const checkoutSessionPage = () => {
     switch (checkoutPage) {
       case CheckoutPageEnum.formPage:
-        // in this case
-        return (
-          <RegisterUserForm
-            onSubmit={registeringAttendeeForm}
-            onClick={() => {
-              setcheckoutPage(CheckoutPageEnum.loadingPage)
-            }}
-          />
-        )
+        return <RegisterUserForm onSubmit={registeringAttendeeForm} />
       case CheckoutPageEnum.loadingPage:
-        return (
-          <DisplayIsLoading
-            onClick={() => {
-              setcheckoutPage(CheckoutPageEnum.confirmationPage)
-            }}
-          />
-        )
+        return <DisplayIsLoading />
       case CheckoutPageEnum.confirmationPage:
         return (
           <DisplayStatus
@@ -100,7 +93,7 @@ function SelectPaymentOption({ onClick }: { onClick: () => void }) {
     <div className="flex h-full flex-col items-center">
       <div className="grow"></div>
       <div>
-        This event is free to register, you don't need to add any payment info.
+        {'This event is free to register, you don\'t need to add any payment info.'}
       </div>
       <div className="grow"></div>
       <Button text={'Continue'} onClick={onClick} active={true} />
@@ -108,13 +101,7 @@ function SelectPaymentOption({ onClick }: { onClick: () => void }) {
   )
 }
 
-function RegisterUserForm({
-  onClick,
-  onSubmit
-}: {
-  onClick: () => void
-  onSubmit: (event: any) => void
-}) {
+function RegisterUserForm({ onSubmit }: { onSubmit: (event: any) => void }) {
   return (
     <div className="flex h-full w-[466px] flex-col items-center pt-[18px]">
       <form
@@ -176,38 +163,31 @@ function RegisterUserForm({
             width={'w-[228px]'}
           />
           <TicketRegTextInput
-            id={'country'}
-            placeholder={'United States'}
-            inputName={'country'}
-            htmlFor={'country'}
-            labelTitle={'Country '}
+            id={'phone_number'}
+            placeholder={'(323) 000 0000'}
+            inputName={'phone_number'}
+            htmlFor={'phone_number'}
+            labelTitle={'Phone number '}
             width={'w-[228px]'}
           />
         </div>
         <div className="grow"></div>
         <div>
-          <Button
-            text={'Register new attendee'}
-            type="submit"
-            // onClick={() => {}}
-            // onClick={onClick}
-            active={true}
-          />
+          <Button text={'Register new attendee'} type="submit" active={true} />
         </div>
       </form>
     </div>
   )
 }
 
-//a use effect should be used for the user
-function DisplayIsLoading({ onClick }: { onClick: () => void }) {
+function DisplayIsLoading() {
   return (
     <div className="flex h-full flex-col">
       <div className="grow"></div>
       <Spinner />
       <div className="grow"></div>
       <div>
-        <Button text={'Pending'} onClick={onClick} active={true} />
+        <Button text={'Please wait ...'} onClick={() => {}} active={false} />
       </div>
     </div>
   )
