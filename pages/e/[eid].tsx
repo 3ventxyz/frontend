@@ -1,9 +1,6 @@
 // author: marthel
 import { TbPhotoOff, TbPhoto, TbMap } from 'react-icons/tb'
-import {
-  doc,
-  getDoc,
-} from '@firebase/firestore'
+import { doc, getDoc } from '@firebase/firestore'
 import Router, { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
@@ -18,6 +15,7 @@ import CreateCheckoutSession from './components/createCheckoutSession'
 import Spinner from '../../components/spinner'
 import Link from 'next/link'
 import { useAuth } from '../../contexts/auth'
+import checkRegisteredAttendee from '../../services/check_registered_attendee'
 
 enum EventPageEnum {
   fetchingData,
@@ -64,7 +62,10 @@ export default function Event() {
       case EventPageEnum.purchasedTicket:
         return (
           <LoadedEventPage event={event}>
-            <PurchasedTicketConfirmation selectedTicket={selectedTicket} QRImgUrl={QRImgUrl}/>
+            <PurchasedTicketConfirmation
+              selectedTicket={selectedTicket}
+              QRImgUrl={QRImgUrl}
+            />
           </LoadedEventPage>
         )
       default:
@@ -80,8 +81,6 @@ export default function Event() {
 
   useEffect(() => {
     const fetchData = async () => {
-
-
       const docRef = doc(db, 'users', auth.uid)
       const userDoc = await getDoc(docRef)
       const uid_qr_code = userDoc.data()?.qr_code
@@ -91,6 +90,8 @@ export default function Event() {
       const eventDoc = await getDoc(eventRef)
       const eventData = events.newEventData(eventDoc)
       const fetchedTicketListData: Array<TicketInterface> = []
+      var isUserRegistered: boolean
+
       if (!eventData) return
       setEvent(eventData)
       let ticket: TicketInterface = {
@@ -102,10 +103,17 @@ export default function Event() {
       }
       fetchedTicketListData.push(ticket)
       setTicketListData(fetchedTicketListData)
-      setEventPageStatus(EventPageEnum.fetchedData)
+      isUserRegistered = await checkRegisteredAttendee({
+        uid: auth.uid,
+        eid: eventId
+      })
+      if (isUserRegistered) {
+        setEventPageStatus(EventPageEnum.purchasedTicket)
+      } else {
+        setEventPageStatus(EventPageEnum.fetchedData)
+      }
     }
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
-      
       fetchData()
     }
   }, [eid])
@@ -126,8 +134,7 @@ export default function Event() {
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
-          eventId={event? event.event_id : ' '}
-          
+          eventId={event ? event.event_id : ' '}
         />
       </Modal>
     </>
@@ -324,7 +331,8 @@ function SelectAndPurchaseTicket({
 }
 
 function PurchasedTicketConfirmation({
-  selectedTicket, QRImgUrl,
+  selectedTicket,
+  QRImgUrl
 }: {
   selectedTicket: TicketInterface | null
   QRImgUrl: string
