@@ -19,16 +19,16 @@ export default function CreateAllowlistForm({
   const [error, setError] = useState('')
   const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
+  const web3 = new Web3()
 
-  // const isValidAddress = (adr: string) => {
-  //   try {
-  //     const web3 = new Web3()
-  //     web3.utils.toChecksumAddress(adr)
-  //     return true
-  //   } catch (e) {
-  //     return false
-  //   }
-  // }
+  const isValidAddress = (adr: string) => {
+    try {
+      web3.utils.toChecksumAddress(adr)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -42,8 +42,8 @@ export default function CreateAllowlistForm({
           return e.trim().replaceAll("'", '')
         })
         .filter((val, id, array) => {
-          return array.indexOf(val) === id
-          // return array.indexOf(val) === id && isValidAddress(val)
+          // return array.indexOf(val) === id
+          return array.indexOf(val) === id && isValidAddress(val)
         })
 
       if (allowlist && allowlist.length > 0) {
