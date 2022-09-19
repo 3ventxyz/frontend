@@ -6,16 +6,16 @@ import { AllowlistsInterface } from '../../shared/interface/common'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-// import Modal from '../../components/modal'
+import Modal from '../../components/modal'
 // import CreateAllowlistForm from './components/createAllowlistForm'
-// import DeleteConfirmation from './components/deleteConfirmation'
+import DeleteConfirmation from './components/deleteConfirmation'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
   const auth = useAuth()
   const router = useRouter()
   // const [showModal, setShowModal] = useState(false)
-  // const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
   const listsCollectionRef = collection(db, 'lists')
 
@@ -112,7 +112,7 @@ export default function Allowlists() {
                       <Image
                         onClick={() => {
                           setCurrentAllowlist(e?.allowlist_id)
-                          // setShowDeleteModal(true)
+                          setShowDeleteModal(true)
                         }}
                         alt="delete"
                         src="/assets/trash.svg"
@@ -127,7 +127,7 @@ export default function Allowlists() {
           </table>
         </div>
       </div>
-      {/* <Modal
+      {/* {/* <Modal
         visible={showModal}
         onClose={() => setShowModal(false)}
         width="w-3/4"
@@ -139,7 +139,7 @@ export default function Allowlists() {
             setShowModal(false)
           }}
         />
-      </Modal>
+      </Modal> */}
       <Modal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
@@ -151,7 +151,7 @@ export default function Allowlists() {
           onClose={() => setShowDeleteModal(false)}
           text="Are you sure you want to delete?"
         />
-      </Modal> */}
+      </Modal>
     </>
   )
 }
