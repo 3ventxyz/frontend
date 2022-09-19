@@ -131,12 +131,13 @@ export default function Allowlists() {
         width="w-3/4"
         height=""
       >
-        <CreateAllowlistForm
+        <div>Create</div>
+        {/* <CreateAllowlistForm
           onSuccess={() => {
-            // getAllowlists()
-            // setShowModal(false)
+            getAllowlists()
+            setShowModal(false)
           }}
-        />
+        /> */}
       </Modal>
       <Modal
         visible={showDeleteModal}
