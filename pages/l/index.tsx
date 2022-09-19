@@ -1,8 +1,8 @@
-// import { collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
-// import { useEffect, useState } from 'react'
-// import { useAuth } from '../../contexts/auth'
-// import { db } from '../../services/firebase_config'
-// import { AllowlistsInterface } from '../../shared/interface/common'
+import { collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../../contexts/auth'
+import { db } from '../../services/firebase_config'
+import { AllowlistsInterface } from '../../shared/interface/common'
 // import { useRouter } from 'next/router'
 
 // import Image from 'next/image'
@@ -11,46 +11,47 @@
 // import DeleteConfirmation from './components/deleteConfirmation'
 
 export default function Allowlists() {
-  // const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
-  // const auth = useAuth()
+  const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
+  const auth = useAuth()
   // const router = useRouter()
   // const [showModal, setShowModal] = useState(false)
   // const [showDeleteModal, setShowDeleteModal] = useState(false)
   // const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
-  // const listsCollectionRef = collection(db, 'lists')
+  const listsCollectionRef = collection(db, 'lists')
 
-  // const getAllowlists = async () => {
-  //   // console.log('starting getAllowlists')
-  //   try {
-  //     if (auth.currentUser) {
-  //       const data = await getDocs(listsCollectionRef)
+  const getAllowlists = async () => {
+    // console.log('starting getAllowlists')
+    try {
+      if (auth.currentUser) {
+        const data = await getDocs(listsCollectionRef)
 
-  //       setAllowlists(
-  //         []
-  //         // Get user allowlists
-  //         // data.docs.map((doc) => ({
-  //         //   uid: doc.data()?.uid?.id,
-  //         //   title: doc.data()?.title,
-  //         //   description: doc.data()?.description,
-  //         //   allowlist_id: doc.id,
-  //         //   allowlist: doc.data()?.allowlist
-  //         // }))
-  //         // .filter((doc) => doc.uid === auth.uid)
-  //       )
-  //     }
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  //   // console.log(allowlists.toString())
+        setAllowlists(
+          // Get user allowlists
+          data.docs
+            .map((doc) => ({
+              uid: doc.data()?.uid?.id,
+              title: doc.data()?.title,
+              description: doc.data()?.description,
+              allowlist_id: doc.id,
+              allowlist: doc.data()?.allowlist
+            }))
+            .filter((doc) => doc.uid === auth.uid)
+        )
+        console.log(allowlists)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+    // console.log(allowlists.toString())
 
-  //   // console.log('end getAllowlists')
-  // }
+    // console.log('end getAllowlists')
+  }
 
-  // useEffect(() => {
-  //   // console.log('starting useEffect')
-  //   getAllowlists()
-  //   // console.log('end useEffect')
-  // }, [])
+  useEffect(() => {
+    // console.log('starting useEffect')
+    getAllowlists()
+    // console.log('end useEffect')
+  }, [])
 
   // const deleteAllowlist = async (id: string | undefined) => {
   //   if (id) {
