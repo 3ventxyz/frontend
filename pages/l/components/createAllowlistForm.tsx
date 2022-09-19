@@ -3,8 +3,8 @@ import Button from '../../../components/button'
 import { db } from '../../../services/firebase_config'
 import { collection, addDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../../../contexts/auth'
-import Web3 from 'web3'
 import ErrorAlert from '../../../components/alerts/errorAlert'
+import { ethers } from 'ethers'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -19,12 +19,10 @@ export default function CreateAllowlistForm({
   const [error, setError] = useState('')
   const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
-  const web3 = new Web3()
 
   const isValidAddress = (adr: string) => {
     try {
-      web3.utils.toChecksumAddress(adr)
-      return true
+      return ethers.utils.isAddress(adr)
     } catch (e) {
       return false
     }
