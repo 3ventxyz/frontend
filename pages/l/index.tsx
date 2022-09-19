@@ -8,14 +8,14 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Modal from '../../components/modal'
 import CreateAllowlistForm from './components/createAllowlistForm'
-import DeleteConfirmation from './components/deleteConfirmation'
+// import DeleteConfirmation from './components/deleteConfirmation'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
   const auth = useAuth()
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  // const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
   const listsCollectionRef = collection(db, 'lists')
 
@@ -60,15 +60,13 @@ export default function Allowlists() {
     }
   }
 
-  // return <div>Hello</div>
-
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
         <div className="mx-auto flex w-full  flex-row items-end justify-between border-b border-disabled">
           <p className="text-[25px] font-bold md:text-[32px]">Allowlists</p>
           <Image
-            // onClick={() => setShowModal(true)}
+            onClick={() => setShowModal(true)}
             alt="add"
             src="/assets/add.svg"
             height="40"
@@ -112,7 +110,7 @@ export default function Allowlists() {
                       <Image
                         onClick={() => {
                           setCurrentAllowlist(e?.allowlist_id)
-                          setShowDeleteModal(true)
+                          // setShowDeleteModal(true)
                         }}
                         alt="delete"
                         src="/assets/trash.svg"
@@ -140,7 +138,7 @@ export default function Allowlists() {
           }}
         />
       </Modal>
-      <Modal
+      {/* <Modal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         width=""
@@ -151,7 +149,7 @@ export default function Allowlists() {
           onClose={() => setShowDeleteModal(false)}
           text="Are you sure you want to delete?"
         />
-      </Modal>
+      </Modal> */}
     </>
   )
 }
