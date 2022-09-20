@@ -77,6 +77,9 @@ export async function verifyTwitter(
       const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
       const twitterIdJson = await getTwitterId.json()
 
+      /* get twitter following
+      const getTwitterFollowing = await fetch('api/twitter-id?accessCode=' + token + 'id=' + twitterIdJson.data.id)
+      console.log('Following', getTwitterFollowing)*/
       /*change value on database*/
       try {
         const docRef = doc(db, 'users', uid)
