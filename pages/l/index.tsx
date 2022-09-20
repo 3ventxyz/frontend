@@ -20,7 +20,6 @@ export default function Allowlists() {
   const listsCollectionRef = collection(db, 'lists')
 
   const getAllowlists = async () => {
-    // console.log('starting getAllowlists')
     try {
       if (auth.currentUser) {
         const data = await getDocs(listsCollectionRef)
@@ -42,15 +41,11 @@ export default function Allowlists() {
     } catch (e) {
       console.log(e)
     }
-    // console.log(allowlists.toString())
-
-    // console.log('end getAllowlists')
   }
 
   useEffect(() => {
-    // console.log('starting useEffect')
     getAllowlists()
-    // console.log('end useEffect')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const deleteAllowlist = async (id: string | undefined) => {

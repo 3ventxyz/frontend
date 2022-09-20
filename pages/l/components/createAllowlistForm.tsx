@@ -40,7 +40,6 @@ export default function CreateAllowlistForm({
           return e.trim().replaceAll("'", '')
         })
         .filter((val, id, array) => {
-          // return array.indexOf(val) === id
           return array.indexOf(val) === id && isValidAddress(val)
         })
 
