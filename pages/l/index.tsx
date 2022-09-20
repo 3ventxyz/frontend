@@ -3,50 +3,43 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/auth'
 import { db } from '../../services/firebase_config'
 import { AllowlistsInterface } from '../../shared/interface/common'
-import { useRouter } from 'next/router'
-
 import Image from 'next/image'
 import Modal from '../../components/modal'
 import CreateAllowlistForm from './components/createAllowlistForm'
+import { useRouter } from 'next/router'
 import DeleteConfirmation from './components/deleteConfirmation'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
+  const listsCollectionRef = collection(db, 'lists')
   const auth = useAuth()
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
-  const listsCollectionRef = collection(db, 'lists')
-
-  const getAllowlists = async () => {
-    try {
-      if (auth.currentUser) {
-        const data = await getDocs(listsCollectionRef)
-
-        setAllowlists(
-          // Get user allowlists
-          data.docs
-            .map((doc) => ({
-              uid: doc.data()?.uid?.id,
-              title: doc.data()?.title,
-              description: doc.data()?.description,
-              allowlist_id: doc.id,
-              allowlist: doc.data()?.allowlist
-            }))
-            .filter((doc) => doc.uid === auth.uid)
-        )
-        console.log(allowlists)
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   useEffect(() => {
     getAllowlists()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getAllowlists = async () => {
+    const data = await getDocs(listsCollectionRef)
+
+    setAllowlists(
+      // Get user allowlists
+      data.docs
+        .map((doc) => ({
+          uid: doc.data().uid.id,
+          title: doc.data().title,
+          description: doc.data().description,
+          allowlist_id: doc.id,
+          allowlist: doc.data().allowlist,
+          merkle_root: doc.data().merkle_root
+        }))
+        .filter((doc) => doc.uid === auth.uid)
+    )
+  }
 
   const deleteAllowlist = async (id: string | undefined) => {
     if (id) {
