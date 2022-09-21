@@ -21,8 +21,15 @@ export default class AllowlistService {
     this.listsCollectionRef = collection(db, 'lists')
   }
 
+  checkAuth = () => {
+    if (!this.auth.currentUser) {
+      throw 'User not logged in'
+    }
+  }
+
   create = async (addresses: string, title: string, description: string) => {
     try {
+      this.checkAuth()
       // Gets the input string with all address and removes extra spaces,
       // apostrophes, repeated and invalid addresses
       const allowlist = addresses
@@ -47,7 +54,10 @@ export default class AllowlistService {
       }
     } catch (error) {
       console.log(error)
-      return { success: false, message: 'Could not create the allowlist' }
+      return {
+        success: false,
+        message: `Could not create the allowlist: ${error}`
+      }
     }
   }
 
@@ -61,6 +71,7 @@ export default class AllowlistService {
 
   delete = async (id: string | undefined) => {
     try {
+      this.checkAuth()
       if (id) {
         await deleteDoc(doc(db, 'lists', id))
         return { success: true, message: 'Allowlist deleted successfully' }
@@ -68,12 +79,13 @@ export default class AllowlistService {
       return { success: false, message: 'Undefined list id' }
     } catch (e) {
       console.log(e)
-      return { success: false, message: 'Error on deleting Allowlist' }
+      return { success: false, message: `Error on deleting Allowlist: ${e}` }
     }
   }
 
   update = async (id: string, allowlist: AllowlistInterface) => {
     try {
+      this.checkAuth()
       if (id) {
         await updateDoc(doc(db, 'lists', id), {
           title: allowlist.title,
@@ -86,13 +98,14 @@ export default class AllowlistService {
       return { success: false, message: 'Undefined list id' }
     } catch (e) {
       console.log(e)
-      return { success: false, message: 'Error on updating Allowlist' }
+      return { success: false, message: `Error on updating Allowlist: ${e}` }
     }
   }
 
   getUserAllowlists = async () => {
     var allowlists = []
     try {
+      this.checkAuth()
       const data = await getDocs(this.listsCollectionRef)
       allowlists = data.docs
         .map((doc) => ({
@@ -113,6 +126,7 @@ export default class AllowlistService {
 
   getAllowlist = async (id: string | undefined) => {
     try {
+      this.checkAuth()
       const allowlistDoc = await getDoc(doc(db, 'lists', id?.toString() ?? ''))
       if (!allowlistDoc.data()) {
         return { success: false, message: 'Allowlist not found' }
@@ -120,7 +134,10 @@ export default class AllowlistService {
       return { success: true, data: allowlistDoc.data() }
     } catch (error) {
       console.log(error)
-      return { success: true, message: 'Error loading allowlist data' }
+      return {
+        success: true,
+        message: `Error loading allowlist data: ${error}`
+      }
     }
   }
 }
