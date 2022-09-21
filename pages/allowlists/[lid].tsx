@@ -7,12 +7,14 @@ import Image from 'next/image'
 import { HiChevronLeft } from 'react-icons/hi'
 import Modal from '../../components/modal'
 import DeleteConfirmation from './components/deleteConfirmation'
+import AllowlistService from '../../services/allowlists'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
   const router = useRouter()
   const { lid } = router.query
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const allowlistService = new AllowlistService()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +23,7 @@ export default function Allowlist() {
           doc(db, 'lists', lid?.toString() ?? '')
         )
         if (!allowlistDoc.data()) {
-          router.push('/l')
+          router.push('/allowlists')
           return
         }
         setAllowlist({
@@ -33,7 +35,7 @@ export default function Allowlist() {
         })
       } catch (error) {
         console.log(error)
-        router.push('/l')
+        router.push('/allowlists')
       }
     }
     fetchData()
@@ -43,7 +45,7 @@ export default function Allowlist() {
   const deleteAllowlist = async (id: string | undefined) => {
     if (id) {
       await deleteDoc(doc(db, 'lists', id))
-      router.push('/l')
+      router.push('/allowlists')
     }
   }
 

@@ -8,6 +8,7 @@ import Modal from '../../components/modal'
 import CreateAllowlistForm from './components/createAllowlistForm'
 import { useRouter } from 'next/router'
 import DeleteConfirmation from './components/deleteConfirmation'
+import AllowlistService from '../../services/allowlists'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
@@ -17,6 +18,7 @@ export default function Allowlists() {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
+  const allowlistService = new AllowlistService()
 
   useEffect(() => {
     getAllowlists()
@@ -24,28 +26,8 @@ export default function Allowlists() {
   }, [])
 
   const getAllowlists = async () => {
-    const data = await getDocs(listsCollectionRef)
-
-    setAllowlists(
-      // Get user allowlists
-      data.docs
-        .map((doc) => ({
-          uid: doc.data().uid.id,
-          title: doc.data().title,
-          description: doc.data().description,
-          allowlist_id: doc.id,
-          allowlist: doc.data().allowlist,
-          merkle_root: doc.data().merkle_root
-        }))
-        .filter((doc) => doc.uid === auth.uid)
-    )
-  }
-
-  const deleteAllowlist = async (id: string | undefined) => {
-    if (id) {
-      await deleteDoc(doc(db, 'lists', id))
-      await getAllowlists()
-    }
+    const allowlists = await allowlistService.getUserAllowlists()
+    setAllowlists(allowlists)
   }
 
   return (
@@ -89,7 +71,9 @@ export default function Allowlists() {
                   <td className="flex flex-row justify-end py-4 px-6">
                     <div className="flex w-[50px] flex-row justify-between">
                       <Image
-                        onClick={() => router.push(`l/${e.allowlist_id}`)}
+                        onClick={() =>
+                          router.push(`allowlists/${e.allowlist_id}`)
+                        }
                         alt="details"
                         src="/assets/eye.svg"
                         height="20"
@@ -133,8 +117,11 @@ export default function Allowlists() {
         height=""
       >
         <DeleteConfirmation
-          onConfirm={() => deleteAllowlist(currentAllowlist)}
-          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() => allowlistService.delete(currentAllowlist)}
+          onClose={() => {
+            getAllowlists()
+            setShowDeleteModal(false)
+          }}
           text="Are you sure you want to delete?"
         />
       </Modal>
