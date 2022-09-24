@@ -40,7 +40,6 @@ export default function Event() {
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
-  // var eidInit:any;
 
   const { eid } = router.query
 

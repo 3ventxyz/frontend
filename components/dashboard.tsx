@@ -15,6 +15,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       let pastEventsData: any
       let upcomingEventsData: any
+      let registeredEventsData: any
       try {
         const userDocRef = doc(db, 'users', auth.uid)
         if (!events.cachedPastEvents) {
@@ -22,6 +23,12 @@ export default function Dashboard() {
             collectionRef: collection(userDocRef, 'past_events')
           })
           events.cachePastEvents(pastEventsData)
+        }
+        if (!events.cachedRegisteredEvents) {
+          registeredEventsData = await events.fetchEventsData({
+            collectionRef: collection(userDocRef, 'registered_events')
+          })
+          events.cacheRegisteredEvents(registeredEventsData)
         }
         if (!events.cachedUpcomingEvents) {
           upcomingEventsData = await events.fetchEventsData({
@@ -50,8 +57,19 @@ export default function Dashboard() {
         eventsData={events.cachedUpcomingEvents}
         seeAllOption={true}
         isFetching={!fetched}
-        emptyMessage={'You don\'t have any upcoming events, why don\'t you create one?'}
-        />
+        emptyMessage={
+          "You don't have any upcoming events. Here are some events from around the world."
+        }
+      />
+      <EventsDisplay
+        title={'registered events'}
+        route={'dashboard/seeAll'}
+        query={{ events: 'registered' }}
+        eventsData={events.cachedRegisteredEvents}
+        seeAllOption={true}
+        isFetching={!fetched}
+        emptyMessage={"You haven't registered any event, please check"}
+      />
       <EventsDisplay
         title={'past events'}
         route={'dashboard/seeAll'}
@@ -59,7 +77,7 @@ export default function Dashboard() {
         eventsData={events.cachedPastEvents}
         seeAllOption={true}
         isFetching={!fetched}
-        emptyMessage={'You don\'t have any past events yet.'}
+        emptyMessage={"You don't have any past events yet."}
       />
     </div>
   )
