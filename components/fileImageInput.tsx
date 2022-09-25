@@ -5,10 +5,12 @@ import Image from 'next/image'
 
 export default function FileImageInput({
   fileImg,
+  name,
   setFileImg
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
+  name: string,
 }) {
   const [imgURl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
@@ -41,6 +43,7 @@ export default function FileImageInput({
     <div className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer sm:max-h-full">
       <input
         type="file"
+        name={name}
         accept="image/*"
         onChange={(event: any) => {
           setFileImg(event.target.files[0])

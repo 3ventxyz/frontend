@@ -15,11 +15,13 @@ interface LocationInputProps {
   id: string
   placeholder: string
   setLocation: (location: LocationData) => void
+  name:string,
 }
 
 export default function LocationInput({
   labelText,
   id,
+  name,
   placeholder,
   setLocation
 }: LocationInputProps) {
@@ -61,6 +63,7 @@ export default function LocationInput({
             {labelText}
           </label>
           <input
+          name={name}
             {...getInputProps({
               placeholder: placeholder,
               id: id,
