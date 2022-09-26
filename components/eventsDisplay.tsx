@@ -26,6 +26,14 @@ export default function EventsDisplay({
 }) {
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
 
+  if (
+    title === 'your created events' &&
+    !isFetching &&
+    eventsData?.length === 0
+  ) {
+    return <></>
+  }
+
   return (
     <div className="flex flex-col items-center space-y-[20px]">
       {showHeader && (
@@ -40,31 +48,29 @@ export default function EventsDisplay({
           )}
         </div>
       )}
-      <div className="grid h-fit w-fit grid-cols-1 place-content-center gap-[30px] lg:grid-cols-2 2xl:grid-cols-3">
-        {isFetching ? (
-          <>
-            <EventTile eventData={null} />
-            <EventTile eventData={null} />
-            <EventTile eventData={null} />
-          </>
-        ) : eventsData?.length === 0 ? (
-          <div className='flex justify-center  items-center w-full '>
-            <h4>{emptyMessage}</h4>
-          </div>
-        ) : (
-          eventsData &&
-          eventsData.map((eventData, index) => {
-            return <EventTile key={index.toString()} eventData={eventData} />
-          })
-        )}
-      </div>
+      {isFetching ? (
+        <div className="grid h-fit w-fit grid-cols-1 place-content-center gap-[30px] lg:grid-cols-2 2xl:grid-cols-3">
+          <EventTile eventData={null} />
+          <EventTile eventData={null} />
+          <EventTile eventData={null} />
+        </div>
+      ) : eventsData?.length === 0 ? (
+        <div className="flex w-full flex-row items-center justify-center ">
+          <h4>{emptyMessage}</h4>
+        </div>
+      ) : (
+        <div className="grid h-fit w-fit grid-cols-1 place-content-center gap-[30px] lg:grid-cols-2 2xl:grid-cols-3">
+          {eventsData &&
+            eventsData.map((eventData, index) => {
+              return <EventTile key={index.toString()} eventData={eventData} />
+            })}
+        </div>
+      )}
     </div>
   )
 }
 
 function EventTile({ eventData }: { eventData: EventInterface | null }) {
-
-
   useEffect
   return !eventData ? (
     <div className=" mx-auto h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
