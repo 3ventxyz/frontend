@@ -20,7 +20,9 @@ interface Props {
 interface EventsInterface {
   cachedUpcomingEvents: EventInterface[] | null
   cachedPastEvents: EventInterface[] | null
+  cachedRegisteredEvents: EventInterface[] | null
   cacheUpcomingEvents: (events: EventInterface[]) => void | void
+  cacheRegisteredEvents: (events: EventInterface[]) => void | void
   cachePastEvents: (events: EventInterface[]) => void | void
   fetchEventsData: ({
     collectionRef,
@@ -39,9 +41,11 @@ const EventsContext = createContext<EventsInterface>({
   fetchEventsData: () => undefined,
   newEventData: () => undefined,
   cacheUpcomingEvents: () => undefined,
+  cacheRegisteredEvents: () => undefined,
   cachePastEvents: () => undefined,
   cachedPastEvents: null,
-  cachedUpcomingEvents: null
+  cachedUpcomingEvents: null,
+  cachedRegisteredEvents: null
 })
 
 const EventsProvider = ({ children }: Props): JSX.Element => {
@@ -51,6 +55,9 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   const [cachedPastEvents, setCachedPastEvents] = useState<
     EventInterface[] | null
   >(null)
+  const [cachedRegisteredEvents, setCachedRegisteredEvents] = useState<
+    EventInterface[] | null
+  >(null)
 
   const cacheUpcomingEvents = (events: EventInterface[]) => {
     setCachedUpcomingEvents(events)
@@ -58,20 +65,22 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   const cachePastEvents = (events: EventInterface[]) => {
     setCachedPastEvents(events)
   }
+  const cacheRegisteredEvents = (events: EventInterface[]) => {
+    setCachedRegisteredEvents(events)
+  }
 
   // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
 
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
       start_date: eventDoc.data()?.start_date?.toDate(),
-      event_id: eventDoc.data()?.id,
+      event_id: eventDoc.data()?.event_id,
       uid: eventDoc.data()?.uid,
       title: eventDoc.data()?.title,
       location: eventDoc.data()?.location,
-      organization: eventDoc.data()?.organization,
       img_url: eventDoc.data()?.img_url,
       end_date: eventDoc.data()?.end_date?.toDate(),
-      ticket_max: 0
+      ticket_max: eventDoc.data()?.ticket_max
     }
     return eventData
   }
@@ -84,11 +93,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     numberOfEvents?: number
   }) => {
     const eventsRef = await getDocs(
-      query(
-        collectionRef,
-        orderBy('date_of_event', 'desc'),
-        limit(numberOfEvents)
-      )
+      query(collectionRef, orderBy('start_date', 'desc'), limit(numberOfEvents))
     )
     const eventsList: EventInterface[] = []
     for (const eventRef of eventsRef.docs) {
@@ -103,10 +108,12 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       value={{
         cachedUpcomingEvents: cachedUpcomingEvents,
         cachedPastEvents: cachedPastEvents,
+        cachedRegisteredEvents: cachedRegisteredEvents,
         newEventData: newEventData,
         fetchEventsData: fetchEventsData,
         cacheUpcomingEvents: cacheUpcomingEvents,
-        cachePastEvents: cachePastEvents
+        cachePastEvents: cachePastEvents,
+        cacheRegisteredEvents: cacheRegisteredEvents
       }}
     >
       {children}

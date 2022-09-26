@@ -1,5 +1,7 @@
 // author: marthel
-export default function OutdatedTextInput({
+// export default function TicketRegTextInput({
+//TODO (09/17) update this name.
+export default function TicketRegTextInput({
 	id,
 	placeholder,
 	inputName,

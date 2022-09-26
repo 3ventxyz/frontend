@@ -1,12 +1,6 @@
 // author: marthel
 import { TbPhotoOff, TbPhoto, TbMap } from 'react-icons/tb'
-import {
-  doc,
-  getDoc,
-  getDocs,
-  collection,
-  DocumentData
-} from '@firebase/firestore'
+import { doc, getDoc } from '@firebase/firestore'
 import Router, { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
@@ -20,6 +14,8 @@ import Button from '../../components/button'
 import CreateCheckoutSession from './components/createCheckoutSession'
 import Spinner from '../../components/spinner'
 import Link from 'next/link'
+import { useAuth } from '../../contexts/auth'
+import checkRegisteredAttendee from '../../services/check_registered_attendee'
 
 enum EventPageEnum {
   fetchingData,
@@ -28,6 +24,7 @@ enum EventPageEnum {
 }
 
 export default function Event() {
+  const [QRImgUrl, setQRImgUrl] = useState('')
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
@@ -42,19 +39,9 @@ export default function Event() {
   >(null)
   const router = useRouter()
   const events = useEvents()
+  const auth = useAuth()
 
   const { eid } = router.query
-
-  const newTicketOption = (ticketDoc: any) => {
-    const ticketData: TicketInterface = {
-      ticketTitle: ticketDoc.data().ticket_title,
-      registeredUsers: ticketDoc.data().registered_users,
-      capLimit: ticketDoc.data().cap_limit,
-      tokenId: ticketDoc.data().token_id,
-      price: ticketDoc.data().ticket_price
-    }
-    return ticketData
-  }
 
   const EventPage = () => {
     switch (eventPageStatus) {
@@ -74,7 +61,10 @@ export default function Event() {
       case EventPageEnum.purchasedTicket:
         return (
           <LoadedEventPage event={event}>
-            <PurchasedTicketConfirmation selectedTicket={selectedTicket} />
+            <PurchasedTicketConfirmation
+              selectedTicket={selectedTicket}
+              QRImgUrl={QRImgUrl}
+            />
           </LoadedEventPage>
         )
       default:
@@ -90,22 +80,37 @@ export default function Event() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const docRef = doc(db, 'users', auth.uid)
+      const userDoc = await getDoc(docRef)
+      const uid_qr_code = userDoc.data()?.qr_code
+      setQRImgUrl(uid_qr_code)
       const eventId: any = eid
-      const docRef = doc(db, 'events', eventId)
-      const eventDoc = await getDoc(docRef)
+      const eventRef = doc(db, 'events', eventId)
+      const eventDoc = await getDoc(eventRef)
       const eventData = events.newEventData(eventDoc)
       const fetchedTicketListData: Array<TicketInterface> = []
+      var isUserRegistered: boolean
+
       if (!eventData) return
       setEvent(eventData)
-
-      // fetch ticket data.
-      const ticketDocs = await getDocs(collection(db, 'tickets'))
-
-      ticketDocs.forEach((ticketDoc) => {
-        fetchedTicketListData.push(newTicketOption(ticketDoc))
-      })
+      let ticket: TicketInterface = {
+        ticketTitle: 'Free Attendee',
+        registeredUsers: 0,
+        capLimit: eventData.ticket_max,
+        tokenId: '',
+        price: 0
+      }
+      fetchedTicketListData.push(ticket)
       setTicketListData(fetchedTicketListData)
-      setEventPageStatus(EventPageEnum.fetchedData)
+      isUserRegistered = await checkRegisteredAttendee({
+        uid: auth.uid,
+        eid: eventId
+      })
+      if (isUserRegistered) {
+        setEventPageStatus(EventPageEnum.purchasedTicket)
+      } else {
+        setEventPageStatus(EventPageEnum.fetchedData)
+      }
     }
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
       fetchData()
@@ -127,6 +132,8 @@ export default function Event() {
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
+          uid={auth.uid}
+          eventId={event ? event.event_id : ' '}
         />
       </Modal>
     </>
@@ -154,7 +161,6 @@ function LoadingEventPage() {
             <div className="h-[19px] w-[100px] rounded-lg bg-gray-300"></div>
             <div className="h-[19px] w-[280px] rounded-lg bg-gray-300"></div>
           </div>
-
           <div className="flex h-[100px] w-[100px] items-center justify-center rounded-[20px] bg-green-200">
             <TbMap className="h-[50px] w-[50px]" />
           </div>
@@ -163,7 +169,6 @@ function LoadingEventPage() {
             <div className="h-[19px] w-full rounded-lg bg-gray-300 leading-[20px]"></div>
           </div>
         </div>
-
         <div className="flex h-[364px] w-[320px] flex-col items-center justify-center space-y-[19px] md:w-[373px]">
           <Spinner />
         </div>
@@ -186,7 +191,7 @@ function LoadedEventPage({
   event: EventInterface | null
   children: ReactElement
 }): JSX.Element {
-  const [url, setUrl] = useState('')
+  const [profileUrlImg, setProfileUrlImg] = useState('')
   const [hostName, setHostName] = useState('')
   const router = useRouter()
 
@@ -196,7 +201,7 @@ function LoadedEventPage({
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
-        setUrl(`${docSnap.data().gravatar}?s=200`)
+        setProfileUrlImg(`${docSnap.data().avatar}`)
         setHostName(docSnap.data().username)
       } else {
         console.log('No such document!')
@@ -231,7 +236,7 @@ function LoadedEventPage({
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-fit w-fit cursor-pointer flex-row items-center justify-start space-x-4 rounded-3xl">
               <Image
-                src={url}
+                src={profileUrlImg}
                 layout="fixed"
                 width="35px"
                 height="35px"
@@ -325,9 +330,11 @@ function SelectAndPurchaseTicket({
 }
 
 function PurchasedTicketConfirmation({
-  selectedTicket
+  selectedTicket,
+  QRImgUrl
 }: {
   selectedTicket: TicketInterface | null
+  QRImgUrl: string
 }) {
   return (
     <div className="flex flex-col space-y-[26px]">
@@ -336,21 +343,13 @@ function PurchasedTicketConfirmation({
         <div className="text-[14px] font-bold">
           add your ticket to your apple wallet
         </div>
-        <div className="relative h-[34px] w-[114px]">
-          apple wallet
-          <Image
-            src={'/assets/featureIcons/apple-wallet.svg'}
-            layout="fill"
-            objectFit="cover"
-          />
-        </div>
       </div>
       <div className="space-y-[13px]">
         <div className="text-[14px] font-bold">
           Present this QR code to enter your event
         </div>
         <div className="relative h-[242px] w-[242px]">
-          <Image src={'/assets/qr-code.png'} layout="fill" objectFit="cover" />
+          <Image src={QRImgUrl} layout="fill" objectFit="cover" />
         </div>
       </div>
     </div>

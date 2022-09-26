@@ -23,12 +23,11 @@ export interface EventInterface {
   title: string
   description?: string
   location: LocationData
-  organization?: string
   start_date: Date
   end_date: Date
   img_url: string
   ticket_max: number
-  event_id?: string
+  event_id: string
 }
 
 export interface UserProfileEvents {

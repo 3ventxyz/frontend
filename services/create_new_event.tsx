@@ -1,4 +1,4 @@
-import { db, storage } from './firebase_config'
+import { db } from './firebase_config'
 import { EventInterface } from '../shared/interface/common'
 import { doc, collection, setDoc, addDoc } from '@firebase/firestore'
 

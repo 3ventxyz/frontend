@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
 import { EventInterface } from '../shared/interface/common'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 export default function EventsDisplay({
   title,
@@ -11,7 +12,8 @@ export default function EventsDisplay({
   eventsData,
   seeAllOption = false,
   showHeader = true,
-  isFetching
+  isFetching,
+  emptyMessage
 }: {
   title: string
   route: string
@@ -20,6 +22,7 @@ export default function EventsDisplay({
   seeAllOption?: boolean
   showHeader?: boolean
   isFetching: boolean
+  emptyMessage: string
 }) {
   const titleSectionStyle = 'text-[25px] md:text-[32px] font-bold'
 
@@ -44,6 +47,10 @@ export default function EventsDisplay({
             <EventTile eventData={null} />
             <EventTile eventData={null} />
           </>
+        ) : eventsData?.length === 0 ? (
+          <div className='flex justify-center  items-center w-full '>
+            <h4>{emptyMessage}</h4>
+          </div>
         ) : (
           eventsData &&
           eventsData.map((eventData, index) => {
@@ -56,6 +63,9 @@ export default function EventsDisplay({
 }
 
 function EventTile({ eventData }: { eventData: EventInterface | null }) {
+
+
+  useEffect
   return !eventData ? (
     <div className=" mx-auto h-[460px] w-full max-w-[320px] animate-pulse cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
       <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-300 sm:max-h-full">
@@ -93,7 +103,6 @@ function EventTile({ eventData }: { eventData: EventInterface | null }) {
           <li className="... truncate text-[24px] font-bold">
             {eventData.title}
           </li>
-          <li className="... truncate text-[14px]">{eventData.organization}</li>
           <li className="... truncate text-[14px]">{eventData.description}</li>
           <li className="... truncate text-[14px]">
             {eventData?.start_date?.toLocaleDateString()}

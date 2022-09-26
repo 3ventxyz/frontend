@@ -1,38 +1,79 @@
 // author: marthel
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import Button from '../../../components/button'
 import Spinner from '../../../components/spinner'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
-import OutdatedTextInput from '../../../components/outdatedTextInput'
+import TicketRegTextInput from '../../../components/ticketRegTextInput'
+import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 
+enum CheckoutPageEnum {
+  confirmTicketPage,
+  formPage,
+  loadingPage,
+  confirmationPage,
+  exitModalComponent
+}
 export default function CreateCheckoutSession({
   selectedTicket,
+  uid,
+  eventId,
   onClose,
   confirmSelectedTicketPurchase
 }: {
   selectedTicket: TicketInterface | null
   onClose: () => void
+  uid: string
+  eventId: string
   confirmSelectedTicketPurchase: () => void
 }) {
-  const [checkoutPage, setcheckoutPage] = useState(0)
-  const nextCheckoutPage = () => {
-    setcheckoutPage(checkoutPage + 1)
+  const [checkoutPage, setcheckoutPage] = useState<CheckoutPageEnum>()
+
+  const registeringAttendeeForm = async (event: any) => {
+    event.preventDefault()
+    setcheckoutPage(CheckoutPageEnum.loadingPage)
+
+    await registerAttendeeToEvent(
+      {
+        first_name: event.target.first_name.value,
+        last_name: event.target.last_name.value,
+        address: event.target.address.value,
+        state: event.target.state.value,
+        city: event.target.city.value,
+        phone_number: event.target.phone_number.value,
+        zip_code: event.target.zip_code.value,
+        uid: uid
+      },
+      eventId
+    )
+    setcheckoutPage(CheckoutPageEnum.confirmationPage)
   }
 
   const checkoutSessionPage = () => {
     switch (checkoutPage) {
-      case 1:
-        return <RegisterUserForm onClick={nextCheckoutPage} />
-      case 2:
-        return <DisplayIsLoading onClick={nextCheckoutPage} />
-      case 3:
-        return <DisplayStatus onClick={nextCheckoutPage} />
-      case 4:
+      case CheckoutPageEnum.formPage:
+        return <RegisterUserForm onSubmit={registeringAttendeeForm} />
+      case CheckoutPageEnum.loadingPage:
+        return <DisplayIsLoading />
+      case CheckoutPageEnum.confirmationPage:
+        return (
+          <DisplayStatus
+            onClick={() => {
+              setcheckoutPage(CheckoutPageEnum.exitModalComponent)
+            }}
+          />
+        )
+      case CheckoutPageEnum.exitModalComponent:
         confirmSelectedTicketPurchase()
         onClose()
       default:
-        return <SelectPaymentOption onClick={nextCheckoutPage} />
+        return (
+          <SelectPaymentOption
+            onClick={() => {
+              setcheckoutPage(CheckoutPageEnum.formPage)
+            }}
+          />
+        )
     }
   }
 
@@ -49,37 +90,45 @@ export default function CreateCheckoutSession({
 
 function SelectPaymentOption({ onClick }: { onClick: () => void }) {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col items-center">
       <div className="grow"></div>
-      <Button text={'Register user with ETH'} onClick={onClick} active={true} />
+      <div>
+        {'This event is free to register, you don\'t need to add any payment info.'}
+      </div>
+      <div className="grow"></div>
+      <Button text={'Continue'} onClick={onClick} active={true} />
     </div>
   )
 }
 
-function RegisterUserForm({ onClick }: { onClick: () => void }) {
+function RegisterUserForm({ onSubmit }: { onSubmit: (event: any) => void }) {
   return (
     <div className="flex h-full w-[466px] flex-col items-center pt-[18px]">
-      <form action="submit" className=" w-full space-y-[10px]">
+      <form
+        action="submit"
+        onSubmit={onSubmit}
+        className=" w-full space-y-[10px]"
+      >
         <div className="flex space-x-[10px]">
-          <OutdatedTextInput
-            id={'first-name'}
+          <TicketRegTextInput
+            id={'first_name'}
             placeholder={'Joe'}
             inputName={'first-name'}
-            htmlFor={'first-name'}
+            htmlFor={'first_name'}
             labelTitle={'First name'}
             width={'w-[228px]'}
           />
 
-          <OutdatedTextInput
-            id={'last-name'}
+          <TicketRegTextInput
+            id={'last_name'}
             placeholder={'Doe'}
             inputName={'last-name'}
-            htmlFor={'last-name'}
+            htmlFor={'last_name'}
             labelTitle={'Last name'}
             width={'w-[228px]'}
           />
         </div>
-        <OutdatedTextInput
+        <TicketRegTextInput
           id={'address'}
           placeholder={'street address ...'}
           inputName={'address'}
@@ -87,7 +136,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           labelTitle={'Street address'}
         />
         <div className="flex space-x-[10px]">
-          <OutdatedTextInput
+          <TicketRegTextInput
             id={'city'}
             placeholder={'Seattle'}
             inputName={'city'}
@@ -95,7 +144,7 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
             labelTitle={'City'}
             width={'w-[228px]'}
           />
-          <OutdatedTextInput
+          <TicketRegTextInput
             id={'state'}
             placeholder={'CA'}
             inputName={'state'}
@@ -105,40 +154,40 @@ function RegisterUserForm({ onClick }: { onClick: () => void }) {
           />
         </div>
         <div className="flex space-x-[10px]">
-          <OutdatedTextInput
-            id={'zip-code'}
+          <TicketRegTextInput
+            id={'zip_code'}
             placeholder={'zip code'}
             inputName={'zip-code'}
-            htmlFor={'zip-code'}
+            htmlFor={'zip_code'}
             labelTitle={'Zip code'}
             width={'w-[228px]'}
           />
-          <OutdatedTextInput
-            id={'country'}
-            placeholder={'United States'}
-            inputName={'country'}
-            htmlFor={'country'}
-            labelTitle={'Country '}
+          <TicketRegTextInput
+            id={'phone_number'}
+            placeholder={'(323) 000 0000'}
+            inputName={'phone_number'}
+            htmlFor={'phone_number'}
+            labelTitle={'Phone number '}
             width={'w-[228px]'}
           />
         </div>
+        <div className="grow"></div>
+        <div>
+          <Button text={'Register new attendee'} type="submit" active={true} />
+        </div>
       </form>
-      <div className="grow"></div>
-      <div>
-        <Button text={'Submit Order'} onClick={onClick} active={true} />
-      </div>
     </div>
   )
 }
 
-function DisplayIsLoading({ onClick }: { onClick: () => void }) {
+function DisplayIsLoading() {
   return (
     <div className="flex h-full flex-col">
       <div className="grow"></div>
       <Spinner />
       <div className="grow"></div>
       <div>
-        <Button text={'Pending'} onClick={onClick} active={true} />
+        <Button text={'Please wait ...'} onClick={() => {}} active={false} />
       </div>
     </div>
   )

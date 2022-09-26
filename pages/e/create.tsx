@@ -12,6 +12,7 @@ import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
+import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -35,22 +36,33 @@ export default function CreateEvent() {
   const createEvent = async () => {
     setIsCreatingNewEvent(true)
     const path = `${auth.uid}/${fileImg?.name}`
-    await uploadImage(fileImg, path, async (url: string) => {
-      const returnedId = await createNewEvent({
-        title: title,
-        end_date: endDate,
-        start_date: startDate,
-        organization: '',
-        uid: auth.uid,
-        description: eventDescription,
-        location: eventLocation,
-        img_url: url,
-        ticket_max: ticketMax,
-        event_id: eventId
+    try {
+      await uploadImage(fileImg, path, async (url: string) => {
+        const returnedId = await createNewEvent({
+          title: title,
+          end_date: endDate,
+          start_date: startDate,
+          uid: auth.uid,
+          description: eventDescription,
+          location: eventLocation,
+          img_url: url,
+          ticket_max: ticketMax,
+          event_id: eventId
+        })
+        await addEventToUpcomingEvents({
+          eventTitle: title,
+          uid: auth.uid,
+          eventId: eventId,
+          startDate: startDate,
+          endDate: endDate
+        })
+        console.log('returned id:', eventId)
+        router.push(`/e/${eventId}`)
       })
-      console.log('returned id', returnedId)
-      router.push(`/e/${returnedId}`)
-    })
+    } catch (e) {
+      alert('error')
+      setIsCreatingNewEvent(false)
+    }
   }
 
   return (
