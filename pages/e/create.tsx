@@ -14,15 +14,13 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
 import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
 
+
+// interface for the create event form, text inputs.
 interface createEventFormInterface {
   title: string
   eventId: string
   description: string
-  // location: LocationData
-  // fileImg: File | null
   ticketMax: number
-  startDate: Date
-  endDate: Date
 }
 
 const inputs = [
@@ -98,13 +96,9 @@ export default function CreateEvent() {
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
-  const [formData, setFormData] = useState<createEventFormInterface>({
+  const [formData, setTextFormData] = useState<createEventFormInterface>({
     description: '',
-    endDate: new Date(),
     eventId: '',
-    // fileImg: null,
-    // location: { address: '', lat: 0, long: 0 },
-    startDate: new Date(),
     ticketMax: 0,
     title: ''
   })
@@ -117,8 +111,8 @@ export default function CreateEvent() {
       await uploadImage(fileImg, path, async (url: string) => {
         const returnedId = await createNewEvent({
           title: formData.title,
-          end_date: formData.endDate,
-          start_date: formData.startDate,
+          end_date: endDate,
+          start_date: startDate,
           uid: auth.uid,
           description: formData.description,
           location: eventLocation,
@@ -142,26 +136,39 @@ export default function CreateEvent() {
     }
   }
 
-  const handleSubmit = (e: any) => {
+  //trying to add this onChange function to the TextInput component.
+  const onChangeTextInputData = (e: any) => {
     e.preventDefault()
-    // const data: any = new FormData(e.target)
-    // console.log(data)
-    // console.log(Object.fromEntries(data.entries()))
-    setIsCreatingNewEvent(true)
-    console.log('===========')
-    console.log(fileImg)
-    console.log('===========')
-    setFormData({
+    setTextFormData({
       description: e.target.event_description.value,
-      endDate: endDate,
-      startDate: startDate,
       eventId: e.target.event_id.value,
-      // fileImg: fileImg,
-      // location: eventLocation,
       ticketMax: ticketMax,
-      title: e.target.title.value
+      title: e.target.event_title.value
     })
     console.log(formData)
+  }
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    console.log('=IMG==========')
+    console.log(fileImg)
+    console.log('===========')
+    console.log(' event target elements===========')
+    console.log(e.target.elements)
+    console.log('event_id: ', e.target.event_id.value)
+    console.log('event_description: ', e.target.event_description.value)
+    console.log('title: ', e.target.event_title.value)
+    console.log(' ==============================')
+    setTextFormData({
+      description: e.target.event_description.value,
+      eventId: e.target.event_id.value,
+      ticketMax: ticketMax,
+      title: e.target.event_title.value
+    })
+    console.log('form data==================')
+    console.log(formData)
+    console.log('===========================')
+
     // createEvent()
   }
 
@@ -283,10 +290,6 @@ export default function CreateEvent() {
                 active={true}
               />
             )}
-          </div>
-          <div>
-            Event not created, please check the entered data is correctly
-            formatted.
           </div>
         </div>
       </div>
