@@ -51,24 +51,22 @@ export default function Dashboard() {
   return (
     <div className="flex w-screen flex-col space-y-[35px] bg-secondaryBg px-[20px] pb-[106px] pt-[35px] text-center md:px-[112px]">
       <EventsDisplay
-        title={'upcoming events'}
+        title={'your created events'}
         route={'dashboard/seeAll'}
         query={{ events: 'upcoming' }}
         eventsData={events.cachedUpcomingEvents}
         seeAllOption={true}
         isFetching={!fetched}
-        emptyMessage={
-          "You don't have any upcoming events. Here are some events from around the world."
-        }
+        emptyMessage={"You haven't created any events."}
       />
       <EventsDisplay
-        title={'registered events'}
+        title={'upcoming events'}
         route={'dashboard/seeAll'}
         query={{ events: 'registered' }}
         eventsData={events.cachedRegisteredEvents}
         seeAllOption={true}
         isFetching={!fetched}
-        emptyMessage={"You haven't registered any event, please check"}
+        emptyMessage={"You haven't registered for any events."}
       />
       <EventsDisplay
         title={'past events'}
@@ -77,7 +75,7 @@ export default function Dashboard() {
         eventsData={events.cachedPastEvents}
         seeAllOption={true}
         isFetching={!fetched}
-        emptyMessage={"You don't have any past events yet."}
+        emptyMessage={"You don't have any past events."}
       />
     </div>
   )
