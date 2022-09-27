@@ -90,6 +90,17 @@ export default function Header() {
               Create an Event
             </p>
           </Link>
+          <Link href="/creator">
+            <p
+              className={
+                path === '/creator'
+                  ? activeHeaderTextButtonStyle
+                  : headerTextButtonStyle
+              }
+            >
+              Creator
+            </p>
+          </Link>
         </div>
         {auth.currentUser ? (
           <div className="flex flex-row gap-x-4">
