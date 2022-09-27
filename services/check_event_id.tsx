@@ -8,7 +8,9 @@ export default async function CheckEventId(event_id:string) {
   console.trace(docSnap.exists())
 	if (!docSnap.exists()) {
 	console.trace('docRef is NULL. CREATING new event :)')
+	return false;
 } else {
 	  console.error('docRef Exists, please change your id')
-  }
+	return true;
+	}
 }

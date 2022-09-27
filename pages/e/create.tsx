@@ -13,6 +13,8 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
 import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
+import CheckEventId from '../../services/check_event_id'
+import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -30,21 +32,20 @@ export default function CreateEvent() {
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
-
+  const [errorMsg, setErrorMsg] = useState<String | null>(null)
+  const [errorField, setErrorField] = useState<String | null>(null)
   const router = useRouter()
   const auth = useAuth()
 
   const validateForm = () => {
     if (title === '') {
-      console.error('title is empty')
+      setErrorField('Event Title')
+      setErrorMsg('title is empty')
       return false
     }
-    if (!fileImg) {
-      console.error('file img is null')
-      return false
-    }
-    if (ticketMax === 0) {
-      console.error('ticket supply is 0')
+    if (eventId === '') {
+      setErrorField('Event id')
+      setErrorMsg('event id is empty, please add a custom id')
       return false
     }
     if (
@@ -52,21 +53,51 @@ export default function CreateEvent() {
       eventLocation.lat === 0 ||
       eventLocation.long === 0
     ) {
-      console.error('evenlocation is NULL')
+      setErrorField('Location')
+      setErrorMsg('event location is not selected')
       return false
     }
 
+    if (startDate.getTime() === endDate.getTime()) {
+      setErrorField('Start Date/End Date')
+      setErrorMsg('start date and end date cannot have the same time period')
+      return false
+    }
+    if (startDate.getTime() > endDate.getTime()) {
+      setErrorField('Start Date/End Date')
+      setErrorMsg('end date cannot be behind the start date schedule')
+      return false
+    }
+    if (!fileImg) {
+      setErrorField('Event Image')
+      setErrorMsg('file img is null')
+      return false
+    }
+    if (ticketMax === 0) {
+      setErrorField('Tickets')
+      setErrorMsg('please add a ticket supply higher than 0')
+      return false
+    }
     return true
   }
 
   const createEvent = async () => {
-    // TODO (sep, 16) continue with the createEvent validator
-    //  ========================================
-    // alert('test this is error')
-    // await CheckEventId(eventId)
-    // return ;
-    //  ========================================
+    let isFormValid
     setIsCreatingNewEvent(true)
+    setErrorMsg(null)
+    isFormValid = validateForm()
+    if (!isFormValid) {
+      setIsCreatingNewEvent(false)
+      return
+    }
+    let isEventIdTaken = await CheckEventId(eventId)
+    if (isEventIdTaken) {
+      setIsCreatingNewEvent(false)
+      setErrorMsg(
+        'Event ID: event id has been taken, please enter a different id'
+      )
+      return
+    }
     const path = `${auth.uid}/${fileImg?.name}`
     try {
       await uploadImage(fileImg, path, async (url: string) => {
@@ -103,14 +134,14 @@ export default function CreateEvent() {
         <h3 className="w-full text-center">Create an Event</h3>
         <TextInput
           id={'event_name'}
-          labelText={'Event Title'}
+          labelText={'Event Title*'}
           placeholder={''}
           setValue={setTitle}
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
           id={'event_id'}
-          labelText={'Event ID:'}
+          labelText={'Event ID*'}
           placeholder={'www.3vent.xyz/e/'}
           setValue={setEventId}
           isDisabled={isCreatingNewEvent}
@@ -124,13 +155,13 @@ export default function CreateEvent() {
           isDisabled={isCreatingNewEvent}
         />
         <LocationInput
-          labelText={'Location'}
+          labelText={'Location*'}
           id={'event_location'}
           placeholder={''}
           setLocation={setEventLocation}
         />
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Start Date</p>
+          <p>Start Date*</p>
           <DatePicker
             selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
@@ -140,7 +171,7 @@ export default function CreateEvent() {
         </div>
 
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>End Date</p>
+          <p>End Date*</p>
           <DatePicker
             selected={endDate}
             onChange={(date: Date) => setEndDate(date)}
@@ -149,11 +180,11 @@ export default function CreateEvent() {
           />
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Event Image:</p>
+          <p>Event Image*</p>
           <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Tickets:</p>
+          <p>Tickets*</p>
           <input
             onChange={(e) => {
               setTicketMax(parseInt(e.target.value))
@@ -182,6 +213,25 @@ export default function CreateEvent() {
               onClick={() => createEvent()}
               active={true}
             />
+          )}
+        </div>
+        <div className="mx-auto text-[13px] ">
+          {!errorMsg ? (
+            <></>
+          ) : (
+            <div className="flex items-end justify-end space-x-2">
+              <div className="">
+                <BsFillExclamationTriangleFill className="h-[35px] w-[30px]" />
+              </div>
+              <div>
+                <div>Form Not Submitted, please check the following field.</div>
+                <div className="text-red-500">
+                  <p>
+                    <b>{errorField}</b>: {errorMsg}{' '}
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
