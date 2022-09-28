@@ -4,10 +4,10 @@ import { AllowlistInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import { HiChevronLeft } from 'react-icons/hi'
 import Modal from '../../components/modal'
-import DeleteConfirmation from './components/deleteConfirmation'
 import AllowlistService from '../../services/allowlists'
-import EditAllowlistForm from './components/editAllowlistForm'
+import EditAllowlistForm from '../../components/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
+import DeleteConfirmation from '../../components/deleteConfirmation'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)

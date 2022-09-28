@@ -27,8 +27,8 @@ export default function EventTile({
     </div>
   ) : (
     <Link href={`/e/${eventData.event_id}`}>
-      <div className=" mx-auto h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
-        <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 sm:max-h-full">
+      <div className=" mx-auto h-[460px] w-full max-w-[320px] cursor-pointer rounded-3xl bg-white transition-all hover:scale-105 sm:h-[524px] sm:w-[380px] sm:max-w-[380px]">
+        <div className="relative h-[384px] max-h-[320px] w-full max-w-[380px] rounded-3xl bg-gray-200 shadow-md sm:max-h-full">
           {eventData.img_url === '' ? (
             <div className="flex h-full w-full flex-col items-center justify-center text-gray-500">
               <TbPhotoOff className="h-[150px] w-[150px] " />
@@ -50,11 +50,11 @@ export default function EventTile({
           </li>
           <li className="... truncate text-[14px]">{eventData.description}</li>
           <li className="... truncate text-[14px]">
-            {eventData?.start_date?.toLocaleDateString()}
+            {/* {eventData?.start_date?.toLocaleDateString()} */}
             {eventData?.start_date?.toDateString()}
           </li>
           <li className="... truncate text-[14px]">
-            {eventData.location?.address} address
+            {eventData.location?.address}
           </li>
         </ul>
       </div>
