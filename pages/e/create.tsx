@@ -14,13 +14,11 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
 import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
 import CheckEventId from '../../services/check_event_id'
-import { BsFillExclamationTriangleFill } from 'react-icons/bs'
+import ErrorFormMsg from '../../components/errorMsg'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
-  const [organization, setOrganization] = useState<string>('')
-  const [userName, setUserName] = useState<string>('')
   const [eventId, setEventId] = useState<string>('')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [eventLocation, setEventLocation] = useState<LocationData>({
@@ -33,7 +31,7 @@ export default function CreateEvent() {
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [errorMsg, setErrorMsg] = useState<String | null>(null)
-  const [errorField, setErrorField] = useState<String | null>(null)
+  const [errorField, setErrorField] = useState<String>(' ')
   const router = useRouter()
   const auth = useAuth()
 
@@ -119,11 +117,13 @@ export default function CreateEvent() {
           startDate: startDate,
           endDate: endDate
         })
-        console.log('returned id:', eventId)
         router.push(`/e/${eventId}`)
       })
     } catch (e) {
-      alert('error')
+      console.error('event/create:', e)
+      alert(
+        'error 404: form could not be created due to an unknown error, please try again later.'
+      )
       setIsCreatingNewEvent(false)
     }
   }
@@ -171,7 +171,6 @@ export default function CreateEvent() {
             dateFormat="Pp"
           />
         </div>
-
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             END DATE
@@ -227,19 +226,10 @@ export default function CreateEvent() {
           {!errorMsg ? (
             <></>
           ) : (
-            <div className="flex items-end justify-end space-x-2">
-              <div className="">
-                <BsFillExclamationTriangleFill className="h-[35px] w-[30px]" />
-              </div>
-              <div>
-                <div>Form Not Submitted, please check the following field.</div>
-                <div className="text-red-500">
-                  <p>
-                    <b>{errorField}</b>: {errorMsg}{' '}
-                  </p>
-                </div>
-              </div>
-            </div>
+            ErrorFormMsg({
+              errorField: errorField,
+              errorMsg: errorMsg 
+            })
           )}
         </div>
       </div>
