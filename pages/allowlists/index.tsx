@@ -21,8 +21,13 @@ export default function Allowlists() {
   }, [])
 
   const getAllowlists = async () => {
-    const allowlists = await allowlistService.getUserAllowlists()
-    setAllowlists(allowlists)
+    const checkAuth = await allowlistService.checkAuth(null)
+    if (checkAuth !== undefined && checkAuth?.success === false) {
+      router.push('/')
+    } else {
+      const allowlists = await allowlistService.getUserAllowlists()
+      setAllowlists(allowlists)
+    }
   }
 
   return (
@@ -55,10 +60,11 @@ export default function Allowlists() {
             </thead>
             <tbody>
               {allowlists.map((e, i) => (
-                <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
+                <tr key={i} className="border-b bg-white hover:bg-gray-50">
                   <th
                     scope="row"
-                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
+                    onClick={() => router.push(`allowlists/${e.allowlist_id}`)}
+                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900"
                   >
                     {e.title}
                   </th>
@@ -66,6 +72,7 @@ export default function Allowlists() {
                   <td className="flex flex-row justify-end py-4 px-6">
                     <div className="flex w-[50px] flex-row justify-between">
                       <Image
+                        className="hover:cursor-pointer"
                         onClick={() =>
                           router.push(`allowlists/${e.allowlist_id}`)
                         }
@@ -75,6 +82,7 @@ export default function Allowlists() {
                         width="20"
                       />
                       <Image
+                        className="hover:cursor-pointer"
                         onClick={() => {
                           setCurrentAllowlist(e?.allowlist_id)
                           setShowDeleteModal(true)

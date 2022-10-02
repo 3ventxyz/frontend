@@ -36,6 +36,20 @@ export default class AllowlistService {
     }
   }
 
+  getAllowlistFromString = (allowlist: string) => {
+    // Gets the input string with all address and removes extra spaces,
+    // apostrophes, repeated and invalid addresses
+    const _allowlist = allowlist
+      .split(',')
+      .map((e, i) => {
+        return e.trim().replaceAll("'", '')
+      })
+      .filter((val, id, array) => {
+        return array.indexOf(val) === id && this.isValidAddress(val)
+      })
+    return _allowlist
+  }
+
   create = async (addresses: string, title: string, description: string) => {
     try {
       var authVerification = await this.checkAuth(null)
@@ -45,16 +59,7 @@ export default class AllowlistService {
       ) {
         return authVerification
       } else {
-        // Gets the input string with all address and removes extra spaces,
-        // apostrophes, repeated and invalid addresses
-        const allowlist = addresses
-          .split(',')
-          .map((e, i) => {
-            return e.trim().replaceAll("'", '')
-          })
-          .filter((val, id, array) => {
-            return array.indexOf(val) === id && this.isValidAddress(val)
-          })
+        const allowlist = this.getAllowlistFromString(addresses)
 
         if (allowlist && allowlist.length > 0) {
           await addDoc(this.listsCollectionRef, {

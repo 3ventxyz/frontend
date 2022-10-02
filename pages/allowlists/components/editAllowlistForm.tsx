@@ -2,11 +2,16 @@ import React, { FormEvent, useState } from 'react'
 import Button from '../../../components/button'
 import ErrorAlert from '../../../components/alerts/errorAlert'
 import AllowlistService from '../../../services/allowlists'
+import { AllowlistInterface } from '../../../shared/interface/common'
 
-export default function CreateAllowlistForm({
-  onSuccess
+export default function EditAllowlistForm({
+  onSuccess,
+  allowlist,
+  id
 }: {
   onSuccess: () => void
+  allowlist: AllowlistInterface | null
+  id: string
 }) {
   const titleRef = React.createRef<HTMLInputElement>()
   const descriptionRef = React.createRef<HTMLInputElement>()
@@ -21,11 +26,15 @@ export default function CreateAllowlistForm({
     try {
       setLoading(true)
 
-      const response = await allowlistService.create(
-        allowlistRef.current?.value ?? '',
-        titleRef.current?.value ?? '',
-        descriptionRef.current?.value ?? ''
-      )
+      const response = await allowlistService.update(id, {
+        allowlist: allowlistService.getAllowlistFromString(
+          allowlistRef.current?.value ?? ''
+        ),
+        uid: allowlist?.uid ?? '',
+        title: titleRef.current?.value ?? '',
+        description: descriptionRef.current?.value ?? '',
+        allowlist_id: id
+      })
 
       if (!response?.success) {
         throw Error(response?.message)
@@ -50,6 +59,7 @@ export default function CreateAllowlistForm({
           type="text"
           id="title"
           ref={titleRef}
+          defaultValue={allowlist?.title}
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           required
         />
@@ -65,6 +75,7 @@ export default function CreateAllowlistForm({
           type="text"
           id="description"
           ref={descriptionRef}
+          defaultValue={allowlist?.description}
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
         />
       </div>
@@ -79,6 +90,7 @@ export default function CreateAllowlistForm({
           id="message"
           rows={4}
           ref={allowlistRef}
+          defaultValue={`${allowlist?.allowlist.join(',')},`}
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           placeholder="Add the list of addresses separated with comma"
           required
@@ -87,7 +99,7 @@ export default function CreateAllowlistForm({
       <Button
         type="submit"
         isExpanded={true}
-        text="Create New Allowlist"
+        text="Update Allowlist"
         active={!loading}
         onClick={() => null}
       ></Button>

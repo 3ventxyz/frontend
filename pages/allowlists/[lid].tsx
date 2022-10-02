@@ -6,6 +6,7 @@ import { HiChevronLeft } from 'react-icons/hi'
 import Modal from '../../components/modal'
 import DeleteConfirmation from './components/deleteConfirmation'
 import AllowlistService from '../../services/allowlists'
+import EditAllowlistForm from './components/editAllowlistForm'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -13,6 +14,7 @@ export default function Allowlist() {
   const { lid } = router.query
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showDeleteAddressModal, setShowDeleteAddressModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const allowlistService = new AllowlistService()
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
@@ -33,18 +35,25 @@ export default function Allowlist() {
   }, [addresses])
 
   const fetchData = async () => {
-    const response = await allowlistService.getAllowlist(lid?.toString() ?? '')
-    if (response?.success && response.data) {
-      setAllowlist({
-        uid: response.data.uid,
-        title: response.data.title,
-        description: response.data.description,
-        allowlist_id: response.data.id,
-        allowlist: response.data.allowlist
-      })
+    const checkAuth = await allowlistService.checkAuth(null)
+    if (checkAuth !== undefined && checkAuth?.success === false) {
+      router.push('/')
     } else {
-      console.log(response.message)
-      router.push('/allowlists')
+      const response = await allowlistService.getAllowlist(
+        lid?.toString() ?? ''
+      )
+      if (response?.success && response.data) {
+        setAllowlist({
+          uid: response.data.uid,
+          title: response.data.title,
+          description: response.data.description,
+          allowlist_id: response.data.id,
+          allowlist: response.data.allowlist
+        })
+      } else {
+        console.log(response.message)
+        router.push('/allowlists')
+      }
     }
   }
 
@@ -104,19 +113,30 @@ export default function Allowlist() {
           <table className="w-full text-left text-sm text-gray-500 ">
             <caption className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
               <div className="flex flex-row justify-between">
-                <div className="flex flex-col">
+                <div className="my-auto flex flex-col">
                   {allowlist?.title}
                   <p className="mt-1 text-sm font-normal text-gray-500 ">
                     {allowlist?.description}
                   </p>
                 </div>
-                <Image
-                  onClick={() => setShowDeleteModal(true)}
-                  alt="add"
-                  src="/assets/trash.svg"
-                  height="20"
-                  width="20"
-                />
+                <div className="my-auto flex w-[50px] flex-row justify-between">
+                  <Image
+                    className="hover:cursor-pointer"
+                    onClick={() => setShowEditModal(true)}
+                    alt="add"
+                    src="/assets/edit.svg"
+                    height="20"
+                    width="20"
+                  />
+                  <Image
+                    className="hover:cursor-pointer"
+                    onClick={() => setShowDeleteModal(true)}
+                    alt="add"
+                    src="/assets/trash.svg"
+                    height="20"
+                    width="20"
+                  />
+                </div>
               </div>
             </caption>
             <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
@@ -211,6 +231,21 @@ export default function Allowlist() {
               ? 'this address?'
               : `theses ${selected.length} addresses`
           }`}
+        />
+      </Modal>
+      <Modal
+        visible={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        width="w-3/4"
+        height=""
+      >
+        <EditAllowlistForm
+          onSuccess={() => {
+            fetchData()
+            setShowEditModal(false)
+          }}
+          allowlist={allowlist}
+          id={lid?.toString() ?? ''}
         />
       </Modal>
     </>
