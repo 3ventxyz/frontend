@@ -21,13 +21,8 @@ export default function Allowlists() {
   }, [])
 
   const getAllowlists = async () => {
-    const checkAuth = await allowlistService.checkAuth(null)
-    if (checkAuth !== undefined && checkAuth?.success === false) {
-      router.push('/')
-    } else {
-      const allowlists = await allowlistService.getUserAllowlists()
-      setAllowlists(allowlists)
-    }
+    const allowlists = await allowlistService.getUserAllowlists()
+    setAllowlists(allowlists)
   }
 
   return (
@@ -131,3 +126,5 @@ export default function Allowlists() {
     </>
   )
 }
+
+Allowlists.requireAuth = true

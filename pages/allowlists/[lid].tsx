@@ -35,25 +35,18 @@ export default function Allowlist() {
   }, [addresses])
 
   const fetchData = async () => {
-    const checkAuth = await allowlistService.checkAuth(null)
-    if (checkAuth !== undefined && checkAuth?.success === false) {
-      router.push('/')
+    const response = await allowlistService.getAllowlist(lid?.toString() ?? '')
+    if (response?.success && response.data) {
+      setAllowlist({
+        uid: response.data.uid,
+        title: response.data.title,
+        description: response.data.description,
+        allowlist_id: response.data.id,
+        allowlist: response.data.allowlist
+      })
     } else {
-      const response = await allowlistService.getAllowlist(
-        lid?.toString() ?? ''
-      )
-      if (response?.success && response.data) {
-        setAllowlist({
-          uid: response.data.uid,
-          title: response.data.title,
-          description: response.data.description,
-          allowlist_id: response.data.id,
-          allowlist: response.data.allowlist
-        })
-      } else {
-        console.log(response.message)
-        router.push('/allowlists')
-      }
+      console.log(response.message)
+      router.push('/allowlists')
     }
   }
 
@@ -251,3 +244,5 @@ export default function Allowlist() {
     </>
   )
 }
+
+Allowlist.requireAuth = true
