@@ -21,42 +21,65 @@ export default class AllowlistService {
     this.listsCollectionRef = collection(db, 'lists')
   }
 
-  checkAuth = () => {
+  checkAuth = async (id: string | null) => {
     if (!this.auth.currentUser) {
-      throw 'User not logged in'
+      return { success: false, message: 'User not logged in' }
+    }
+    if (id) {
+      var allowlist = await getDoc(doc(db, 'lists', id))
+      if (!allowlist.data()) {
+        return { success: false, message: 'Allowlist not found' }
+      }
+      if (this.auth.uid !== allowlist.data()?.uid) {
+        return { success: false, message: 'User not allowed' }
+      }
     }
   }
 
   create = async (addresses: string, title: string, description: string) => {
     try {
-      this.checkAuth()
-      // Gets the input string with all address and removes extra spaces,
-      // apostrophes, repeated and invalid addresses
-      const allowlist = addresses
-        .split(',')
-        .map((e, i) => {
-          return e.trim().replaceAll("'", '')
-        })
-        .filter((val, id, array) => {
-          return array.indexOf(val) === id && this.isValidAddress(val)
-        })
-
-      if (allowlist && allowlist.length > 0) {
-        await addDoc(this.listsCollectionRef, {
-          title: title,
-          description: description,
-          allowlist: allowlist,
-          uid: doc(db, 'users', this.auth.uid)
-        })
-        return { success: true, message: 'List created successfully' }
+      var authVerification = await this.checkAuth(null)
+      if (
+        authVerification !== undefined &&
+        authVerification?.success === false
+      ) {
+        return authVerification
       } else {
-        return { success: false, message: 'Any of the addresses are valid' }
+        // Gets the input string with all address and removes extra spaces,
+        // apostrophes, repeated and invalid addresses
+        const allowlist = addresses
+          .split(',')
+          .map((e, i) => {
+            return e.trim().replaceAll("'", '')
+          })
+          .filter((val, id, array) => {
+            return array.indexOf(val) === id && this.isValidAddress(val)
+          })
+
+        if (allowlist && allowlist.length > 0) {
+          await addDoc(this.listsCollectionRef, {
+            title: title,
+            description: description,
+            allowlist: allowlist,
+            uid: doc(db, 'users', this.auth.uid)
+          })
+          return { success: true, message: 'List created successfully' }
+        } else {
+          return { success: false, message: 'Any of the addresses are valid' }
+        }
       }
-    } catch (error) {
-      console.log(error)
-      return {
-        success: false,
-        message: `Could not create the allowlist: ${error}`
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message)
+        return {
+          success: false,
+          message: `Could not create the allowlist: ${error.message}`
+        }
+      } else {
+        return {
+          success: false,
+          message: `Could not create the allowlist`
+        }
       }
     }
   }
@@ -69,24 +92,31 @@ export default class AllowlistService {
     }
   }
 
-  delete = async (id: string | undefined) => {
+  delete = async (id: string | null | undefined) => {
     try {
-      this.checkAuth()
       if (id) {
+        await this.checkAuth(id)
         await deleteDoc(doc(db, 'lists', id))
         return { success: true, message: 'Allowlist deleted successfully' }
       }
       return { success: false, message: 'Undefined list id' }
-    } catch (e) {
-      console.log(e)
-      return { success: false, message: `Error on deleting Allowlist: ${e}` }
+    } catch (error: unknown) {
+      console.log(error)
+      if (error instanceof Error) {
+        return {
+          success: false,
+          message: `Could not delete allowlist: ${error.message}`
+        }
+      } else {
+        return { success: false, message: `Error deleting Allowlist` }
+      }
     }
   }
 
   update = async (id: string, allowlist: AllowlistInterface) => {
     try {
-      this.checkAuth()
       if (id) {
+        await this.checkAuth(id)
         await updateDoc(doc(db, 'lists', id), {
           title: allowlist.title,
           description: allowlist.description,
@@ -96,16 +126,23 @@ export default class AllowlistService {
         return { success: true, message: 'Allowlist updated successfully' }
       }
       return { success: false, message: 'Undefined list id' }
-    } catch (e) {
-      console.log(e)
-      return { success: false, message: `Error on updating Allowlist: ${e}` }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message)
+        return {
+          success: false,
+          message: `Could not update allowlist: ${error.message}`
+        }
+      } else {
+        return { success: false, message: `Error updating Allowlist` }
+      }
     }
   }
 
   getUserAllowlists = async () => {
     var allowlists = []
     try {
-      this.checkAuth()
+      await this.checkAuth(null)
       const data = await getDocs(this.listsCollectionRef)
       allowlists = data.docs
         .map((doc) => ({
@@ -113,8 +150,7 @@ export default class AllowlistService {
           title: doc.data().title,
           description: doc.data().description,
           allowlist_id: doc.id,
-          allowlist: doc.data().allowlist,
-          merkle_root: doc.data().merkle_root
+          allowlist: doc.data().allowlist
         }))
         .filter((doc) => doc.uid === this.auth.uid)
       return allowlists
@@ -124,19 +160,23 @@ export default class AllowlistService {
     }
   }
 
-  getAllowlist = async (id: string | undefined) => {
+  getAllowlist = async (id: string | null) => {
     try {
-      this.checkAuth()
+      await this.checkAuth(id)
       const allowlistDoc = await getDoc(doc(db, 'lists', id?.toString() ?? ''))
       if (!allowlistDoc.data()) {
         return { success: false, message: 'Allowlist not found' }
       }
       return { success: true, data: allowlistDoc.data() }
-    } catch (error) {
-      console.log(error)
-      return {
-        success: true,
-        message: `Error loading allowlist data: ${error}`
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message)
+        return {
+          success: false,
+          message: `Could not load allowlist: ${error.message}`
+        }
+      } else {
+        return { success: false, message: `Error load Allowlist` }
       }
     }
   }

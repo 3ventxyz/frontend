@@ -5,6 +5,7 @@ import { collection, addDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../../../contexts/auth'
 import ErrorAlert from '../../../components/alerts/errorAlert'
 import { ethers } from 'ethers'
+import AllowlistService from '../../../services/allowlists'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -17,46 +18,25 @@ export default function CreateAllowlistForm({
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const listsCollectionRef = collection(db, 'lists')
-  const auth = useAuth()
-
-  const isValidAddress = (adr: string) => {
-    try {
-      return ethers.utils.isAddress(adr)
-    } catch (e) {
-      return false
-    }
-  }
+  const allowlistService = new AllowlistService()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       setLoading(true)
-      // Gets the input string with all address and removes extra spaces,
-      // apostrophes, repeated and invalid addresses
-      const allowlist = allowlistRef.current?.value
-        .split(',')
-        .map((e, i) => {
-          return e.trim().replaceAll("'", '')
-        })
-        .filter((val, id, array) => {
-          return array.indexOf(val) === id && isValidAddress(val)
-        })
 
-      if (allowlist && allowlist.length > 0) {
-        await addDoc(listsCollectionRef, {
-          title: titleRef.current?.value,
-          description: descriptionRef.current?.value,
-          allowlist: allowlist,
-          uid: doc(db, 'users', auth.uid)
-        })
-        onSuccess()
-      } else {
-        setError('Any of the addresses are valid')
+      const response = await allowlistService.create(
+        allowlistRef.current?.value ?? '',
+        titleRef.current?.value ?? '',
+        descriptionRef.current?.value ?? ''
+      )
+
+      if (!response?.success) {
+        throw Error(response?.message)
       }
+      onSuccess()
     } catch (error) {
-      console.log(error)
-      setError('Could not create the allowlist')
+      setError((error as Error).message)
     }
     setLoading(false)
   }

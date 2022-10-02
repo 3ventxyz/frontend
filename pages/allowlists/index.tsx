@@ -1,7 +1,4 @@
-import { collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../../contexts/auth'
-import { db } from '../../services/firebase_config'
 import { AllowlistsInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
@@ -12,12 +9,10 @@ import AllowlistService from '../../services/allowlists'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
-  const listsCollectionRef = collection(db, 'lists')
-  const auth = useAuth()
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
+  const [currentAllowlist, setCurrentAllowlist] = useState<string | null>()
   const allowlistService = new AllowlistService()
 
   useEffect(() => {
