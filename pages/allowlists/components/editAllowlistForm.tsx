@@ -3,6 +3,7 @@ import Button from '../../../components/button'
 import ErrorAlert from '../../../components/alerts/errorAlert'
 import AllowlistService from '../../../services/allowlists'
 import { AllowlistInterface } from '../../../shared/interface/common'
+import { useAuth } from '../../../contexts/auth'
 
 export default function EditAllowlistForm({
   onSuccess,
@@ -20,21 +21,26 @@ export default function EditAllowlistForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const allowlistService = new AllowlistService()
+  const auth = useAuth()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       setLoading(true)
 
-      const response = await allowlistService.update(id, {
-        allowlist: allowlistService.getAllowlistFromString(
-          allowlistRef.current?.value ?? ''
-        ),
-        uid: allowlist?.uid ?? '',
-        title: titleRef.current?.value ?? '',
-        description: descriptionRef.current?.value ?? '',
-        allowlist_id: id
-      })
+      const response = await allowlistService.update(
+        id,
+        {
+          allowlist: allowlistService.getAllowlistFromString(
+            allowlistRef.current?.value ?? ''
+          ),
+          uid: allowlist?.uid ?? '',
+          title: titleRef.current?.value ?? '',
+          description: descriptionRef.current?.value ?? '',
+          allowlist_id: id
+        },
+        auth.currentUser?.uid ?? ''
+      )
 
       if (!response?.success) {
         throw Error(response?.message)

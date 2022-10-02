@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react'
 import Button from '../../../components/button'
 import ErrorAlert from '../../../components/alerts/errorAlert'
 import AllowlistService from '../../../services/allowlists'
+import { useAuth } from '../../../contexts/auth'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -15,6 +16,7 @@ export default function CreateAllowlistForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const allowlistService = new AllowlistService()
+  const auth = useAuth()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -24,7 +26,8 @@ export default function CreateAllowlistForm({
       const response = await allowlistService.create(
         allowlistRef.current?.value ?? '',
         titleRef.current?.value ?? '',
-        descriptionRef.current?.value ?? ''
+        descriptionRef.current?.value ?? '',
+        auth.currentUser?.uid ?? ''
       )
 
       if (!response?.success) {

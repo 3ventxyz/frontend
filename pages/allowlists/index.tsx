@@ -6,6 +6,7 @@ import CreateAllowlistForm from './components/createAllowlistForm'
 import { useRouter } from 'next/router'
 import DeleteConfirmation from './components/deleteConfirmation'
 import AllowlistService from '../../services/allowlists'
+import { useAuth } from '../../contexts/auth'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
@@ -14,6 +15,7 @@ export default function Allowlists() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentAllowlist, setCurrentAllowlist] = useState<string | null>()
   const allowlistService = new AllowlistService()
+  const auth = useAuth()
 
   useEffect(() => {
     getAllowlists()
@@ -21,7 +23,9 @@ export default function Allowlists() {
   }, [])
 
   const getAllowlists = async () => {
-    const allowlists = await allowlistService.getUserAllowlists()
+    const allowlists = await allowlistService.getUserAllowlists(
+      auth.currentUser?.uid ?? ''
+    )
     setAllowlists(allowlists)
   }
 
@@ -115,7 +119,12 @@ export default function Allowlists() {
         height=""
       >
         <DeleteConfirmation
-          onConfirm={() => allowlistService.delete(currentAllowlist)}
+          onConfirm={() =>
+            allowlistService.delete(
+              currentAllowlist,
+              auth.currentUser?.uid ?? ''
+            )
+          }
           onClose={() => {
             getAllowlists()
             setShowDeleteModal(false)

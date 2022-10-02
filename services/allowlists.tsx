@@ -15,22 +15,18 @@ import { db } from './firebase_config'
 
 export default class AllowlistService {
   listsCollectionRef: CollectionReference
-  auth = useAuth()
 
   constructor() {
     this.listsCollectionRef = collection(db, 'lists')
   }
 
-  checkAuth = async (id: string | null) => {
-    if (!this.auth.currentUser) {
-      return { success: false, message: 'User not logged in' }
-    }
+  checkAuth = async (id: string | null, uid: string) => {
     if (id) {
       var allowlist = await getDoc(doc(db, 'lists', id))
       if (!allowlist.data()) {
         return { success: false, message: 'Allowlist not found' }
       }
-      if (this.auth.uid !== allowlist.data()?.uid) {
+      if (uid !== allowlist.data()?.uid) {
         return { success: false, message: 'User not allowed' }
       }
     }
@@ -50,9 +46,14 @@ export default class AllowlistService {
     return _allowlist
   }
 
-  create = async (addresses: string, title: string, description: string) => {
+  create = async (
+    addresses: string,
+    title: string,
+    description: string,
+    uid: string
+  ) => {
     try {
-      var authVerification = await this.checkAuth(null)
+      var authVerification = await this.checkAuth(null, uid)
       if (
         authVerification !== undefined &&
         authVerification?.success === false
@@ -66,7 +67,7 @@ export default class AllowlistService {
             title: title,
             description: description,
             allowlist: allowlist,
-            uid: doc(db, 'users', this.auth.uid)
+            uid: doc(db, 'users', uid)
           })
           return { success: true, message: 'List created successfully' }
         } else {
@@ -97,10 +98,10 @@ export default class AllowlistService {
     }
   }
 
-  delete = async (id: string | null | undefined) => {
+  delete = async (id: string | null | undefined, uid: string) => {
     try {
       if (id) {
-        await this.checkAuth(id)
+        await this.checkAuth(id, uid)
         await deleteDoc(doc(db, 'lists', id))
         return { success: true, message: 'Allowlist deleted successfully' }
       }
@@ -118,15 +119,15 @@ export default class AllowlistService {
     }
   }
 
-  update = async (id: string, allowlist: AllowlistInterface) => {
+  update = async (id: string, allowlist: AllowlistInterface, uid: string) => {
     try {
       if (id) {
-        await this.checkAuth(id)
+        const authVerification = await this.checkAuth(id, uid)
         await updateDoc(doc(db, 'lists', id), {
           title: allowlist.title,
           description: allowlist.description,
           allowlist: allowlist.allowlist,
-          uid: doc(db, 'users', this.auth.uid)
+          uid: doc(db, 'users', uid)
         })
         return { success: true, message: 'Allowlist updated successfully' }
       }
@@ -144,10 +145,10 @@ export default class AllowlistService {
     }
   }
 
-  getUserAllowlists = async () => {
+  getUserAllowlists = async (uid: string) => {
     var allowlists = []
     try {
-      await this.checkAuth(null)
+      const authVerification = await this.checkAuth(null, uid)
       const data = await getDocs(this.listsCollectionRef)
       allowlists = data.docs
         .map((doc) => ({
@@ -157,7 +158,7 @@ export default class AllowlistService {
           allowlist_id: doc.id,
           allowlist: doc.data().allowlist
         }))
-        .filter((doc) => doc.uid === this.auth.uid)
+        .filter((doc) => doc.uid === uid)
       return allowlists
     } catch (e) {
       console.log(e)
@@ -167,7 +168,6 @@ export default class AllowlistService {
 
   getAllowlist = async (id: string | null) => {
     try {
-      await this.checkAuth(id)
       const allowlistDoc = await getDoc(doc(db, 'lists', id?.toString() ?? ''))
       if (!allowlistDoc.data()) {
         return { success: false, message: 'Allowlist not found' }

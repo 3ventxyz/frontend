@@ -7,6 +7,7 @@ import Modal from '../../components/modal'
 import DeleteConfirmation from './components/deleteConfirmation'
 import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from './components/editAllowlistForm'
+import { useAuth } from '../../contexts/auth'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -18,6 +19,7 @@ export default function Allowlist() {
   const allowlistService = new AllowlistService()
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
+  const auth = useAuth()
 
   useEffect(() => {
     fetchData()
@@ -51,7 +53,10 @@ export default function Allowlist() {
   }
 
   const deleteAllowlist = async (id: string | undefined) => {
-    var response = await allowlistService.delete(id)
+    var response = await allowlistService.delete(
+      id,
+      auth.currentUser?.uid ?? ''
+    )
     console.log(response.message)
     router.push('/allowlists')
   }
@@ -76,15 +81,19 @@ export default function Allowlist() {
   }
 
   const handleDeleteSelectedAddresses = async () => {
-    var response = await allowlistService.update(lid?.toString() ?? '', {
-      allowlist: (allowlist?.allowlist ?? []).filter(
-        (address) => selected.indexOf(address) < 0
-      ),
-      uid: allowlist?.uid ?? '',
-      title: allowlist?.title ?? '',
-      description: allowlist?.description ?? '',
-      allowlist_id: lid?.toString()
-    })
+    var response = await allowlistService.update(
+      lid?.toString() ?? '',
+      {
+        allowlist: (allowlist?.allowlist ?? []).filter(
+          (address) => selected.indexOf(address) < 0
+        ),
+        uid: allowlist?.uid ?? '',
+        title: allowlist?.title ?? '',
+        description: allowlist?.description ?? '',
+        allowlist_id: lid?.toString()
+      },
+      auth.currentUser?.uid ?? ''
+    )
     await fetchData()
     setAddresses(new Map())
   }
