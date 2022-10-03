@@ -10,6 +10,8 @@ import { publicProvider } from 'wagmi/providers/public'
 import { AuthProvider } from '../contexts/auth'
 import { EventsProvider } from '../contexts/events'
 import Layout from '../components/layout'
+import { NextPage } from 'next'
+import { AuthGuard } from '../components/auth/authGuard'
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
@@ -30,7 +32,15 @@ const wagmiClient = createClient({
   provider: provider
 })
 
-function MyApp({ Component, pageProps }: AppProps) {
+export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
+  requireAuth?: boolean
+}
+
+function MyApp(props: AppProps) {
+  const {
+    Component,
+    pageProps
+  }: { Component: NextApplicationPage; pageProps: any } = props
   return (
     <div className="h-screen w-screen">
       <Head>
@@ -51,7 +61,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           <WagmiConfig client={wagmiClient}>
             <RainbowKitProvider chains={chains}>
               <Layout>
-                <Component {...pageProps} />
+                {/* if requireAuth property is present - protect the page */}
+                {Component.requireAuth ? (
+                  <AuthGuard>
+                    <Component {...pageProps} />
+                  </AuthGuard>
+                ) : (
+                  <Component {...pageProps} />
+                )}
               </Layout>
             </RainbowKitProvider>
           </WagmiConfig>

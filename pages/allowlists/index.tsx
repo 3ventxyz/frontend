@@ -1,22 +1,21 @@
-import { collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../../contexts/auth'
-import { db } from '../../services/firebase_config'
 import { AllowlistsInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import Modal from '../../components/modal'
 import CreateAllowlistForm from './components/createAllowlistForm'
 import { useRouter } from 'next/router'
 import DeleteConfirmation from './components/deleteConfirmation'
+import AllowlistService from '../../services/allowlists'
+import { useAuth } from '../../contexts/auth'
 
 export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
-  const listsCollectionRef = collection(db, 'lists')
-  const auth = useAuth()
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
+  const [currentAllowlist, setCurrentAllowlist] = useState<string | null>()
+  const allowlistService = new AllowlistService()
+  const auth = useAuth()
 
   useEffect(() => {
     getAllowlists()
@@ -24,28 +23,10 @@ export default function Allowlists() {
   }, [])
 
   const getAllowlists = async () => {
-    const data = await getDocs(listsCollectionRef)
-
-    setAllowlists(
-      // Get user allowlists
-      data.docs
-        .map((doc) => ({
-          uid: doc.data().uid.id,
-          title: doc.data().title,
-          description: doc.data().description,
-          allowlist_id: doc.id,
-          allowlist: doc.data().allowlist,
-          merkle_root: doc.data().merkle_root
-        }))
-        .filter((doc) => doc.uid === auth.uid)
+    const allowlists = await allowlistService.getUserAllowlists(
+      auth.currentUser?.uid ?? ''
     )
-  }
-
-  const deleteAllowlist = async (id: string | undefined) => {
-    if (id) {
-      await deleteDoc(doc(db, 'lists', id))
-      await getAllowlists()
-    }
+    setAllowlists(allowlists)
   }
 
   return (
@@ -78,10 +59,11 @@ export default function Allowlists() {
             </thead>
             <tbody>
               {allowlists.map((e, i) => (
-                <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
+                <tr key={i} className="border-b bg-white hover:bg-gray-50">
                   <th
                     scope="row"
-                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
+                    onClick={() => router.push(`allowlists/${e.allowlist_id}`)}
+                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900"
                   >
                     {e.title}
                   </th>
@@ -89,13 +71,17 @@ export default function Allowlists() {
                   <td className="flex flex-row justify-end py-4 px-6">
                     <div className="flex w-[50px] flex-row justify-between">
                       <Image
-                        onClick={() => router.push(`l/${e.allowlist_id}`)}
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          router.push(`allowlists/${e.allowlist_id}`)
+                        }
                         alt="details"
                         src="/assets/eye.svg"
                         height="20"
                         width="20"
                       />
                       <Image
+                        className="hover:cursor-pointer"
                         onClick={() => {
                           setCurrentAllowlist(e?.allowlist_id)
                           setShowDeleteModal(true)
@@ -133,11 +119,21 @@ export default function Allowlists() {
         height=""
       >
         <DeleteConfirmation
-          onConfirm={() => deleteAllowlist(currentAllowlist)}
-          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() =>
+            allowlistService.delete(
+              currentAllowlist,
+              auth.currentUser?.uid ?? ''
+            )
+          }
+          onClose={() => {
+            getAllowlists()
+            setShowDeleteModal(false)
+          }}
           text="Are you sure you want to delete?"
         />
       </Modal>
     </>
   )
 }
+
+Allowlists.requireAuth = true
