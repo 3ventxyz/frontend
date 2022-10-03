@@ -3,7 +3,7 @@ import { getAnalytics, isSupported } from '@firebase/analytics'
 import { getFirestore, connectFirestoreEmulator } from '@firebase/firestore'
 import { getAuth, connectAuthEmulator } from '@firebase/auth'
 import { getStorage, connectStorageEmulator } from '@firebase/storage'
-import { connectFunctionsEmulator, getFunctions } from '@firebase/functions'
+import { connectFunctionsEmulator, Functions, getFunctions } from '@firebase/functions'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -24,10 +24,19 @@ const storage = getStorage(app)
 
 export { analytics, app, auth, db, storage }
 
+// export const helloWorld = httpsCallable(
+//   functions,
+//   'helloWorld'
+// )
+
 if (typeof window !== 'undefined') {
   if (window.location.hostname.includes('localhost')) {
     connectFunctionsEmulator(functions, 'localhost', 5001)
-    connectAuthEmulator(auth, 'http://localhost:9099')
+    // connectAuthEmulator(auth, 'http://localhost:9099')
     connectFirestoreEmulator(db, 'localhost', 8080)
   }
 }
+// function httpsCallable(functions: Functions, arg1: string) {
+//   throw new Error('Function not implemented.')
+// }
+
