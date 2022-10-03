@@ -79,17 +79,6 @@ export default function Header() {
               Dashboard
             </p>
           </Link>
-          <Link href="/e/create">
-            <p
-              className={
-                path === '/e/create'
-                  ? activeHeaderTextButtonStyle
-                  : headerTextButtonStyle
-              }
-            >
-              Create an Event
-            </p>
-          </Link>
           <Link href="/creator">
             <p
               className={
@@ -117,12 +106,22 @@ export default function Header() {
                   onError={(address: any) => console.log(address)}
                 />
               </>
-            ) : (
+            ) : !auth.userModel?.wallet ? (
               <Button
                 active={true}
                 text={address ? address : 'Connect Wallet'}
                 onClick={openConnectModal}
               />
+            ) : (
+              <Link href="/e/create">
+                <Button
+                  active={true}
+                  text={'Create an Event'}
+                  onClick={() => {
+                    return
+                  }}
+                />
+              </Link>
             )}
             <img
               alt="avatar"

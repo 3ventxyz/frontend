@@ -35,7 +35,7 @@ export default function EventsDisplay({
   return (
     <div className="flex flex-col items-center space-y-[20px]">
       {showHeader && (
-        <div className="mx-auto flex w-full max-w-[1200px] flex-row items-end justify-between border-b border-disabled">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-row items-center justify-between border-b border-disabled pb-2">
           <p className={titleSectionStyle}>{title}</p>
           {seeAllOption ? (
             <Link href={{ pathname: route, query: query }}>

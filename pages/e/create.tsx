@@ -129,19 +129,19 @@ export default function CreateEvent() {
   }
 
   return (
-    <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
-      <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
-        <h3 className="w-full text-center">Create an Event</h3>
+    <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
+      <h3 className="w-full max-w-[600px] border-b border-disabled">Event</h3>
+      <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <TextInput
           id={'event_name'}
-          labelText={'Event Title*'}
+          labelText={'Title'}
           placeholder={''}
           setValue={setTitle}
           isDisabled={isCreatingNewEvent}
         />
         <TextInput
           id={'event_id'}
-          labelText={'Event ID*'}
+          labelText={'URL'}
           placeholder={'www.3vent.xyz/e/'}
           setValue={setEventId}
           isDisabled={isCreatingNewEvent}
@@ -161,7 +161,9 @@ export default function CreateEvent() {
           setLocation={setEventLocation}
         />
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Start Date*</p>
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            START DATE
+          </label>
           <DatePicker
             selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
@@ -171,7 +173,9 @@ export default function CreateEvent() {
         </div>
 
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>End Date*</p>
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            END DATE
+          </label>
           <DatePicker
             selected={endDate}
             onChange={(date: Date) => setEndDate(date)}
@@ -180,11 +184,15 @@ export default function CreateEvent() {
           />
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Event Image*</p>
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            IMAGE
+          </label>
           <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Tickets*</p>
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            TICKET SUPPLY
+          </label>
           <input
             onChange={(e) => {
               setTicketMax(parseInt(e.target.value))
@@ -209,7 +217,7 @@ export default function CreateEvent() {
           ) : (
             <Button
               type="submit"
-              text={'Create new event'}
+              text={'Create'}
               onClick={() => createEvent()}
               active={true}
             />

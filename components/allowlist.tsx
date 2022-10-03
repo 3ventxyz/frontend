@@ -76,14 +76,14 @@ export default function Allowlists() {
   return (
     <>
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center space-y-[20px] bg-secondaryBg">
-        <div className="mx-auto flex w-full  flex-row items-end justify-between border-b border-disabled pb-2">
+        <div className="mx-auto flex w-full  flex-row items-center justify-between border-b border-disabled pb-2">
           <p className="text-[25px] font-bold md:text-[32px]">
             your allowlists
           </p>
           <Button
-            text={'Create an Allowlist'}
+            text={'Create Allowlist'}
             active={true}
-            onClick={() => setShowModal(true)}
+            onClick={() => router.push('allowlists/create')}
           />
         </div>
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -95,9 +95,6 @@ export default function Allowlists() {
                 </th>
                 <th scope="col" className="py-3 px-6">
                   # ENTRIES
-                </th>
-                <th scope="col" className="py-3 px-6 text-right">
-                  Action
                 </th>
               </tr>
             </thead>
@@ -115,29 +112,6 @@ export default function Allowlists() {
                     {e.title}
                   </th>
                   <td className="py-4 px-6">{e.allowlist.length}</td>
-                  <td className="flex flex-row justify-end py-4 px-6">
-                    <div className="flex w-[50px] flex-row justify-between">
-                      <Image
-                        onClick={() =>
-                          router.push(`allowlists/${e.allowlist_id}`)
-                        }
-                        alt="details"
-                        src="/assets/eye.svg"
-                        height="20"
-                        width="20"
-                      />
-                      <Image
-                        onClick={() => {
-                          setCurrentAllowlist(e?.allowlist_id)
-                          setShowDeleteModal(true)
-                        }}
-                        alt="delete"
-                        src="/assets/trash.svg"
-                        height="20"
-                        width="20"
-                      />
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>

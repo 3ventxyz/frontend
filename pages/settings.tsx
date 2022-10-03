@@ -15,7 +15,9 @@ export default function Settings() {
     <div className="flex flex-grow bg-secondaryBg py-[78px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-8 px-2 sm:px-0">
         {/* TITLE AND HEADER */}
-        <h3 className="w-full border-b border-disabled">Settings</h3>
+        <h3 className="w-full max-w-[600px] border-b border-disabled">
+          Settings
+        </h3>
         {/* PROFILE INFORMATION */}
         <div className="flex w-full flex-col space-y-5 px-2 md:px-8">
           {/* NUMBER */}

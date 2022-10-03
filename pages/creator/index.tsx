@@ -66,7 +66,7 @@ function CreatedEventsDisplay({
       <div className="mx-auto flex w-full max-w-[1200px] flex-row items-center justify-between border-b border-disabled pb-2">
         <p className={titleSectionStyle}>{title}</p>
         <Button
-          text={'Create an Event'}
+          text={'Create Event'}
           active={true}
           onClick={() => {
             router.push('/e/create')
