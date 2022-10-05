@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { deleteDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../contexts/auth'
-import { db } from '../services/firebase_config'
 import { AllowlistsInterface } from '../shared/interface/common'
 import Modal from '../components/modal'
 import CreateAllowlistForm from './createAllowlistForm'
@@ -32,10 +30,12 @@ export default function Allowlists() {
   }
 
   const deleteAllowlist = async (id: string | undefined) => {
-    if (id) {
-      await deleteDoc(doc(db, 'lists', id))
-      await getAllowlists()
-    }
+    var response = await allowlistService.delete(
+      id,
+      auth.currentUser?.uid ?? ''
+    )
+    console.log(response.message)
+    router.push('/allowlists')
   }
 
   return (
