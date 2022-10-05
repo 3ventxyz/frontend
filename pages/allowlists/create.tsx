@@ -5,10 +5,8 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 
 import React, { FormEvent, useState } from 'react'
-import { db } from '../../services/firebase_config'
-import { collection, addDoc, doc } from '@firebase/firestore'
 import ErrorAlert from '../../components/alerts/errorAlert'
-import { ethers } from 'ethers'
+import AllowlistService from '../../../services/allowlists'
 
 // return (
 //   <form className="m-4" onSubmit={handleSubmit}>
