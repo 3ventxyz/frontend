@@ -121,7 +121,7 @@ export default function CreateAllowlist() {
       }
     } catch (error) {
       console.log(error)
-      setError('Could not create the allowlist')
+      setError((error as Error).message)
     }
     setLoading(false)
   }
