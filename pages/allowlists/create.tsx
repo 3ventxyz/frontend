@@ -95,27 +95,17 @@ export default function CreateAllowlist() {
     e.preventDefault()
     try {
       setLoading(true)
-      // Gets the input string with all address and removes extra spaces,
-      // apostrophes, repeated and invalid addresses
-      const allowlist = allowlistRef.current?.value
-        .split(',')
-        .map((e, i) => {
-          return e.trim().replaceAll("'", '')
-        })
-        .filter((val, id, array) => {
-          return array.indexOf(val) === id && isValidAddress(val)
-        })
+const response = await allowlistService.create(
+        allowlistRef.current?.value ?? '',
+        titleRef.current?.value ?? '',
+        descriptionRef.current?.value ?? '',
+        auth.currentUser?.uid ?? ''
+      )
 
-      if (allowlist && allowlist.length > 0) {
-        await addDoc(listsCollectionRef, {
-          title: titleRef.current?.value,
-          description: descriptionRef.current?.value,
-          allowlist: allowlist,
-          uid: doc(db, 'users', auth.uid)
-        })
-        // onSuccess()
+      if (!response?.success) {
+        throw Error(response?.message)
       } else {
-        setError('Any of the addresses are valid')
+        router.push('/creator'}
       }
     } catch (error) {
       console.log(error)
