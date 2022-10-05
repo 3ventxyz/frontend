@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from 'react'
-import Button from '../../../components/button'
-import ErrorAlert from '../../../components/alerts/errorAlert'
-import AllowlistService from '../../../services/allowlists'
-import { AllowlistInterface } from '../../../shared/interface/common'
-import { useAuth } from '../../../contexts/auth'
+import Button from './button'
+import ErrorAlert from './alerts/errorAlert'
+import AllowlistService from '../services/allowlists'
+import { AllowlistInterface } from '../shared/interface/common'
+import { useAuth } from '../contexts/auth'
 
 export default function EditAllowlistForm({
   onSuccess,

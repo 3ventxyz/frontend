@@ -1,7 +1,7 @@
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
-} from  'react-places-autocomplete'
+} from 'react-places-autocomplete'
 import { useState } from 'react'
 
 interface LocationData {
@@ -57,8 +57,11 @@ export default function LocationInput({
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-stretch">
-          <label className="text-left" htmlFor={id}>
-            {labelText}
+          <label
+            htmlFor={id}
+            className="mb-2 block text-sm font-medium text-gray-900 "
+          >
+            {labelText.toUpperCase()}
           </label>
           <input
             {...getInputProps({
