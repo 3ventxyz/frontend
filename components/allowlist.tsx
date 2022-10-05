@@ -103,8 +103,16 @@ export default function Allowlists() {
         height=""
       >
         <DeleteConfirmation
-          onConfirm={() => deleteAllowlist(currentAllowlist)}
-          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() =>
+            allowlistService.delete(
+              currentAllowlist,
+              auth.currentUser?.uid ?? ''
+            )
+          }
+          onClose={() => {
+            getAllowlists()
+            setShowDeleteModal(false)
+          }}
           text="Are you sure you want to delete?"
         />
       </Modal>
