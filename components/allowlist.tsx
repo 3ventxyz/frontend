@@ -39,33 +39,6 @@ export default function Allowlists() {
     setAllowlists(allowlists)
   }
 
-  // const getAllowlists = async () => {
-  //   const q = query(
-  //     collection(db, 'lists'),
-  //     where('uid', '==', doc(db, 'users', auth.uid))
-  //   )
-
-  //   const querySnapshot = await getDocs(q)
-  //   const allowlists: AllowlistsInterface = []
-  //   querySnapshot.forEach((doc) => {
-  //     // doc.data() is never undefined for query doc snapshots
-  //     console.log(doc.id, ' => ', doc.data())
-  //     const res = doc.data()
-  //     const parsedRes = {
-  //       uid: res.uid.id,
-  //       title: res.title,
-  //       allowlist_id: doc.id,
-  //       description: res.description,
-  //       allowlist: res.allowlist,
-  //       merkle_root: res.merkle_root
-  //     }
-  //     console.log('res', parsedRes)
-  //     allowlists.push(parsedRes)
-  //   })
-  //   console.log('res', allowlists)
-  //   setAllowlists(allowlists)
-  // }
-
   const deleteAllowlist = async (id: string | undefined) => {
     if (id) {
       await deleteDoc(doc(db, 'lists', id))
