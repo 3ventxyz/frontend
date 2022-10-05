@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where
-} from '@firebase/firestore'
+import { deleteDoc, doc } from '@firebase/firestore'
 import { useAuth } from '../contexts/auth'
 import { db } from '../services/firebase_config'
 import { AllowlistsInterface } from '../shared/interface/common'
