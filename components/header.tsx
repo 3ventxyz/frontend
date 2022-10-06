@@ -231,6 +231,11 @@ export default function Header() {
           active={true}
           text={'Launch App'}
           onClick={() => {
+
+            // here I can add a special edge case.
+            //if the page is connected to firebase emulators and is also running the auth emulator.
+            //then make this button onClick, a super quick loggin, also later in the future it could redirect to a new page
+            //where the user can select 2 or 3 dummy users so it can interact with each other.
             router.push('/login')
           }}
         />

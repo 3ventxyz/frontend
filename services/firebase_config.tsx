@@ -32,7 +32,7 @@ export { analytics, app, auth, db, storage }
 if (typeof window !== 'undefined') {
   if (window.location.hostname.includes('localhost')) {
     connectFunctionsEmulator(functions, 'localhost', 5001)
-    // connectAuthEmulator(auth, 'http://localhost:9099')
+    connectAuthEmulator(auth, 'http://localhost:9099')
     connectFirestoreEmulator(db, 'localhost', 8080)
   }
 }
