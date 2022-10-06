@@ -30,8 +30,8 @@ export default function CreateEvent() {
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
-  const [errorMsg, setErrorMsg] = useState<String | null>(null)
-  const [errorField, setErrorField] = useState<String>(' ')
+  const [errorMsg, setErrorMsg] = useState<string>('')
+  const [errorField, setErrorField] = useState<string>('')
   const router = useRouter()
   const auth = useAuth()
 
@@ -82,7 +82,7 @@ export default function CreateEvent() {
   const createEvent = async () => {
     let isFormValid
     setIsCreatingNewEvent(true)
-    setErrorMsg(null)
+    setErrorMsg('')
     isFormValid = validateForm()
     if (!isFormValid) {
       setIsCreatingNewEvent(false)
@@ -223,12 +223,12 @@ export default function CreateEvent() {
           )}
         </div>
         <div className="mx-auto text-[13px] ">
-          {!errorMsg ? (
+          {errorMsg === '' ? (
             <></>
           ) : (
             ErrorFormMsg({
               errorField: errorField,
-              errorMsg: errorMsg 
+              errorMsg: errorMsg
             })
           )}
         </div>
