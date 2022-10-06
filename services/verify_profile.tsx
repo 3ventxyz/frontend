@@ -1,5 +1,5 @@
 import { db } from './firebase_config'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc, arrayUnion} from 'firebase/firestore'
 
 export async function verifyDiscord(
   accessCode: string,
@@ -77,16 +77,15 @@ export async function verifyTwitter(
       const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
       const twitterIdJson = await getTwitterId.json()
 
-      /* get twitter following
-      const getTwitterFollowing = await fetch('api/twitter-id?accessCode=' + token + 'id=' + twitterIdJson.data.id)
-      console.log('Following', getTwitterFollowing)*/
       /*change value on database*/
       try {
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
           twitter_verified: true,
+          tw_verifications: arrayUnion(true),
           twitter_id: twitterIdJson.data.id,
-          twitter_name: twitterIdJson.data.username
+          twitter_name: arrayUnion(twitterIdJson.data.username),
+          tw_verifs: arrayUnion(twitterIdJson.data.id)
         })
         console.log('Data written into doc ID: ', docRef.id)
         return true

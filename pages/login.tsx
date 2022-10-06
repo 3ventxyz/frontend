@@ -139,7 +139,8 @@ export default function Login() {
                     twitter_id: '',
                     twitter_verified: false,
                     wallet: '',
-                    siwe_expiration_time: ''
+                    siwe_expiration_time: '',
+                    twitter_verifications: []
                   }
                   await setDoc(doc(db, 'users', result.user.uid), userObject)
                   const userModel: UserModel = {
@@ -149,7 +150,8 @@ export default function Login() {
                     twitter_id: '',
                     twitter_verified: false,
                     wallet: '',
-                    siwe_expiration_time: ''
+                    siwe_expiration_time: '',
+                    twitter_verifications: []
                   }
                   await uploadQRImage(
                     canvas,
@@ -179,7 +181,8 @@ export default function Login() {
                     twitter_id: data?.twitter_id,
                     twitter_verified: data?.twitter_verified,
                     wallet: data?.wallet,
-                    siwe_expiration_time: data?.siwe_expiration_time
+                    siwe_expiration_time: data?.siwe_expiration_time,
+                    twitter_verifications: data?.twitter_verifications
                   }
                   authContext.setUserModel(userModel)
                 }

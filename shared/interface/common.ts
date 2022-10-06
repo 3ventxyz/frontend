@@ -44,6 +44,7 @@ export interface UserModel {
   twitter_name?: string
   wallet: string
   siwe_expiration_time: string
+  twitter_verifications: Array<boolean>
 }
 
 export interface AllowlistInterface {
