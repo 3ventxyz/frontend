@@ -4,9 +4,6 @@ const { faker } = require('@faker-js/faker')
 process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080'
 admin.initializeApp({
   projectId: 'vent-d1d85',
-  // credential: admin.credential.cert(
-    // firebase email credential ENV VAR
-  // )
 })
 const db = admin.firestore()
 const auth = admin.auth()
