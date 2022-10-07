@@ -18,6 +18,30 @@ module.exports = class DataSeeder {
         .then((docSnap) => {
           this.user1UID = docSnap.uid
           console.log('User 1 Successfully created')
+          this.db
+            .collection('users')
+            .doc(`${docSnap.uid}`)
+            .set({
+              avatar: faker.internet.avatar(),
+              bio: faker.commerce.productDescription(),
+              discord_guilds: [],
+              discord_id: '',
+              discord_verified: false,
+              email: faker.internet.email(),
+              location: {
+                address: '123 test st.',
+                lat: faker.address.latitude(),
+                long: faker.address.longitude()
+              },
+              organizations: [],
+              phone_number: faker.phone.number('+###-###-#####'),
+              qr_code: '',
+              siwe_expiration_time: '',
+              twitter_id: '',
+              twitter_verified: false,
+              username: faker.internet.userName(),
+              wallet: ''
+            })
         })
         .catch((error) => {
           console.log(error, 'setDummyAuthUserError1')
@@ -74,22 +98,25 @@ module.exports = class DataSeeder {
         var eventId =
           firstWord + '-' + 'event' + '-' + eventYear + '-' + randomIdNum
         var eventTitle = firstWord + ' event ' + eventYear
-        this.db.collection('events').add({
-          description: faker.commerce.productDescription(),
-          end_date: endDate,
-          start_date: startDate,
-          img_url: faker.image.abstract(640, 640, true),
-          title: eventTitle,
-          uid: 'owner of the event',
-          tickets_max: randomCapTickets,
-          event_id: eventId,
-          description: faker.commerce.productDescription(),
-          location: {
-            address: faker.address.streetAddress(),
-            lat: faker.address.latitude(),
-            long: faker.address.longitude()
-          }
-        })
+        this.db
+          .collection('events')
+          .doc(`${eventId}`)
+          .set({
+            description: faker.commerce.productDescription(),
+            end_date: endDate,
+            start_date: startDate,
+            img_url: faker.image.abstract(640, 640, true),
+            title: eventTitle,
+            uid: 'owner of the event',
+            tickets_max: randomCapTickets,
+            event_id: eventId,
+            description: faker.commerce.productDescription(),
+            location: {
+              address: faker.address.streetAddress(),
+              lat: faker.address.latitude(),
+              long: faker.address.longitude()
+            }
+          })
       })
       console.log('database seed was successful')
     } catch (error) {
@@ -100,6 +127,6 @@ module.exports = class DataSeeder {
   initDummyData() {
     this.setDummyAuthUser()
     this.setDummyEventsCollectionInDB()
-    this.setDummyUsersInDB()
+    // this.setDummyUsersInDB()
   }
 }
