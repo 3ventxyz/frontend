@@ -2,7 +2,7 @@ interface TextInputProps {
   id: string
   labelText: string
   placeholder?: string
-  maxWidth?: string
+  maxWidth?: number
   errorMsg?: string
   textArea?: boolean
   isDisabled?: boolean
