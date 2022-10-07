@@ -73,7 +73,6 @@ export default function VerifyFollowing() {
           labelText="Twitter account"
           id="twitter_account"
           placeholder="Twitter account"
-          maxWidth={''}
           width={'w-full'}
           textArea={false}
           setValue={setTwitterAccount}

@@ -90,7 +90,6 @@ export default function VerifyFollowing() {
           labelText="Guild ID"
           id="discord_guild"
           placeholder="Discord Guild ID"
-          maxWidth={''}
           width={'w-full'}
           textArea={false}
           setValue={setDiscordGuild}

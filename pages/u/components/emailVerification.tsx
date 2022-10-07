@@ -106,7 +106,6 @@ export default function EmailVerification() {
           labelText=""
           id="email"
           placeholder={email}
-          maxWidth={''}
           width={'w-full'}
           textArea={false}
           setValue={setEmail}
