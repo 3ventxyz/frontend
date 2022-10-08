@@ -24,7 +24,7 @@ module.exports = class DataSeeder {
         })
       if (docSnap) {
         strippedUID = `${docSnap.uid}`
-        this.db
+        await this.db
           .collection('users')
           .doc(`${docSnap.uid}`)
           .set({
@@ -128,9 +128,42 @@ module.exports = class DataSeeder {
     }
   }
 
+  async setDummyEventsToUserPropietaryDB() {
+    //first get the seeded dummyevents from the events collection.
+    const eventsRef = this.db.collection('events')
+    var eventsDocs = await eventsRef.get()
+    console.log('checking eventsRef is empty:', eventsRef.empty)
+    console.log('eventsDocs obtained')
+    console.log(eventsDocs)
+    console.log('===========================')
+    eventsDocs.forEach((doc) => {
+      var docData = doc.data()
+      console.log('===================setting data========')
+      console.log('event Id:', doc.id)
+      console.log('event uid:', docData['uid'])
+      console.log(docData)
+      console.log('===========================')
+      if (docData['uid'] === this.user1UID) {
+        this.db
+          .collection(`users/${docData['uid']}/upcoming_events`)
+          .doc(`${doc.id}`)
+          .set({
+            end_date: docData['end_date'],
+            event_ref: this.db.doc(`events/${doc.id}`),
+            event_title: docData['title'],
+            start_date: docData['start_date']
+          })
+      }
+    })
+    //then iterate through each retrieved event.
+    //if an event has the same uid from user1UID, add the event to the UID database from the users collection.
+    //it will be added inside the upcoming_events collection, from the UID doc.
+  }
+
   async initDummyData() {
     this.user1UID = await this.setDummyAuthUser('+12223334444', '1234567890')
     this.user2UID = await this.setDummyAuthUser('+10002223333', '0987654321')
-    this.setDummyEventsCollectionInDB()
+    await this.setDummyEventsCollectionInDB()
+    await this.setDummyEventsToUserPropietaryDB()
   }
 }
