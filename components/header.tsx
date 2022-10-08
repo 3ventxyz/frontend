@@ -245,6 +245,25 @@ export default function Header() {
             //where the user can select 2 or 3 dummy users so it can interact with each other.
             if (process.env.NODE_ENV === 'development') {
               //create a quick login and make a push to the logged in user.
+              //sign in with password and pass the auth
+              //and login as a regular user
+
+              
+              // const userDocRef = doc(db, 'users', result.user.uid)
+              //     const userDocSnap = await getDoc(userDocRef)
+              //     const data = userDocSnap.data()
+              //     const userModel: UserModel = {
+              //       phone_number: data?.phone_number,
+              //       discord_id: data?.discord_id,
+              //       discord_verified: data?.discord_verified,
+              //       twitter_id: data?.twitter_id,
+              //       twitter_verified: data?.twitter_verified,
+              //       wallet: data?.wallet,
+              //       siwe_expiration_time: data?.siwe_expiration_time
+              //     }
+              //     authContext.setUserModel(userModel)
+
+                  router.push('/u')
             } else {
               router.push('/login')
             }

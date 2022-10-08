@@ -5,8 +5,6 @@ process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080'
 app.initializeApp()
 
 if (process.env.FUNCTIONS_EMULATOR) {
-  console.log('We are running emulators locally INDEX.JS')
-  console.log(process.env.FUNCTIONS_EMULATOR)
   const seeder = new DataSeeder(app)
   seeder.initDummyData()
 }

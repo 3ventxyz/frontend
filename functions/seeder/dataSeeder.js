@@ -6,49 +6,53 @@ module.exports = class DataSeeder {
     this.db = this.app.firestore()
     this.auth = this.app.auth()
   }
-  setDummyAuthUser() {
+  user1UID = ' '
+  user2UID = ' '
+  async setDummyAuthUser(phoneNumber, password) {
+    var strippedUID = ' '
     try {
-      this.auth
+      var docSnap = await this.auth
         .createUser({
           emailVerified: false,
-          phoneNumber: '+12223334444',
-          password: '1234567890',
+
+          phoneNumber: phoneNumber,
+          password: password,
           disabled: false
         })
-        .then((docSnap) => {
-          this.user1UID = docSnap.uid
-          console.log('User 1 Successfully created')
-          this.db
-            .collection('users')
-            .doc(`${docSnap.uid}`)
-            .set({
-              avatar: faker.internet.avatar(),
-              bio: faker.commerce.productDescription(),
-              discord_guilds: [],
-              discord_id: '',
-              discord_verified: false,
-              email: faker.internet.email(),
-              location: {
-                address: '123 test st.',
-                lat: faker.address.latitude(),
-                long: faker.address.longitude()
-              },
-              organizations: [],
-              phone_number: faker.phone.number('+###-###-#####'),
-              qr_code: '',
-              siwe_expiration_time: '',
-              twitter_id: '',
-              twitter_verified: false,
-              username: faker.internet.userName(),
-              wallet: ''
-            })
-        })
         .catch((error) => {
-          console.log(error, 'setDummyAuthUserError1')
+          console.log(error, 'setDummyAuthUserError: ' + phoneNumber)
         })
+      if (docSnap) {
+        strippedUID = `${docSnap.uid}`
+        this.db
+          .collection('users')
+          .doc(`${docSnap.uid}`)
+          .set({
+            avatar: faker.internet.avatar(),
+            bio: faker.commerce.productDescription(),
+            discord_guilds: [],
+            discord_id: '',
+            discord_verified: false,
+            email: faker.internet.email(),
+            location: {
+              address: '123 test st.',
+              lat: faker.address.latitude(),
+              long: faker.address.longitude()
+            },
+            organizations: [],
+            phone_number: phoneNumber,
+            qr_code: '',
+            siwe_expiration_time: '',
+            twitter_id: '',
+            twitter_verified: false,
+            username: faker.internet.userName(),
+            wallet: ''
+          })
+      }
     } catch (error) {
-      console.log(error, 'database seed failed')
+      console.log(error, 'auth seed failed')
     }
+    return strippedUID
   }
 
   setDummyUsersInDB() {
@@ -62,7 +66,7 @@ module.exports = class DataSeeder {
           discord_verified: false,
           email: faker.internet.email(),
           location: {
-            address: '123 test st.',
+            address: '123 dummy st.',
             lat: faker.address.latitude(),
             long: faker.address.longitude()
           },
@@ -84,7 +88,7 @@ module.exports = class DataSeeder {
 
   setDummyEventsCollectionInDB() {
     try {
-      ;[...Array(20).keys()].map(() => {
+      ;[...Array(10).keys()].map((index) => {
         var firstWord = faker.commerce.product()
         var randomIdNum = Math.floor(Math.random() * 909)
         var randomCapTickets = Math.floor(Math.random() * 21)
@@ -107,7 +111,7 @@ module.exports = class DataSeeder {
             start_date: startDate,
             img_url: faker.image.abstract(640, 640, true),
             title: eventTitle,
-            uid: 'owner of the event',
+            uid: index % 2 === 0 ? this.user1UID : this.user2UID,
             tickets_max: randomCapTickets,
             event_id: eventId,
             description: faker.commerce.productDescription(),
@@ -124,9 +128,9 @@ module.exports = class DataSeeder {
     }
   }
 
-  initDummyData() {
-    this.setDummyAuthUser()
+  async initDummyData() {
+    this.user1UID = await this.setDummyAuthUser('+12223334444', '1234567890')
+    this.user2UID = await this.setDummyAuthUser('+10002223333', '0987654321')
     this.setDummyEventsCollectionInDB()
-    // this.setDummyUsersInDB()
   }
 }
