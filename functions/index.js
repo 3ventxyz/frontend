@@ -17,3 +17,12 @@ exports.helloWorld2 = functions.https.onRequest((request, response) => {
   functions.logger.info('Hello logs2!', { structuredData: true })
   response.send('Hello from Firebase2!')
 })
+
+exports.isFirebaseEmulatorsRunning = functions.https.onRequest(()=>{
+  if(process.env.FUNCTIONS_EMULATOR){
+    //how can you retrieve a value from the firebase cloud functions to 
+    //the front end??
+    return true;
+  }
+  return false;
+})

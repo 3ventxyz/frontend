@@ -8,7 +8,6 @@ import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 import { UserModel } from '../shared/interface/common'
-// import QRCodeStyling from 'qr-code-styling'
 import { uploadQRImage } from '../services/upload_qr_image'
 
 export default function Login() {
@@ -27,8 +26,9 @@ export default function Login() {
   const [phoneNumber, setPhoneNumber] = useState<any>('')
   const [userId, setUserId] = useState<any>('')
   const [qrCode, setQrCodeImg] = useState<any>()
-  
+
   useEffect(() => {
+    //
     // Dynamically import qr-code-styling only client-side
     if (typeof window !== 'undefined') {
       import('qr-code-styling').then(({ default: QRCodeStyling }) => {
@@ -63,7 +63,6 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     // declare phonenumber and appverifier
     if (phoneNumber === '') return
     const appVerifier = (window as any).recaptchaVerifier
