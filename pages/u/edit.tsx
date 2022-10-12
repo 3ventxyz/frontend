@@ -20,6 +20,7 @@ export default function CreateUser() {
   const [bio, setBio] = useState('')
   const [location, setLocation] = useState<LocationData>()
   const [avatar, setAvatar] = useState('')
+  const [modal, setModal] = useState(false)
   const auth = useAuth()
   const uid = auth?.uid
   let remakeProfile = false
@@ -123,11 +124,7 @@ export default function CreateUser() {
             </Link>
           </div>
         </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <p>Event Image:</p>
-          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
         </div>
       </div>
-    </div>
   )
 }
