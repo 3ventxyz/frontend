@@ -19,6 +19,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@firebase/analytics": "^0.8.0",
     "@firebase/app": "^0.7.29",
     "@firebase/auth": "^0.20.5",
