@@ -5,11 +5,14 @@ import TextInputDisplay from '../components/textInputDisplay'
 import SignInButton from '../components/siwe'
 import Verify from '../components/verify'
 import Button from '../components/button'
+import EmailVerification from './u/components/emailVerification'
+import { useState } from 'react'
 
 export default function Settings() {
   const auth = useAuth()
   const { openConnectModal } = useConnectModal()
   const { address } = useAccount()
+  const [email, setEmail] = useState('')
 
   return (
     <div className="flex flex-grow bg-secondaryBg py-[78px]">
@@ -47,6 +50,8 @@ export default function Settings() {
               />
             )}
           </div>
+          {/*EMAIL*/}
+          <EmailVerification />
           <Verify />
         </div>
       </div>

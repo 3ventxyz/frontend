@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Button from '../../../components/button'
 import Modal from '../../../components/modal'
 import DisplayQRCode from './displayQRCode'
-import EmailVerification from './emailVerification';
 
 function TextDisplay({ label, value }: { label: string; value: string }) {
   return (
@@ -24,7 +23,6 @@ export default function ProfileDisplay({
   twitterName,
   img,
   edit = false,
-  email
 }: {
   name: string
   bio: string
@@ -32,7 +30,6 @@ export default function ProfileDisplay({
   twitterName: string
   img: string
   edit?: boolean
-  email: string
 }) {
   const [showModal, setShowModal] = useState(false)
 
@@ -70,10 +67,6 @@ export default function ProfileDisplay({
             </a>
           </>
         )}
-        <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-          Email
-        </p>
-        <EmailVerification />
         <div className="h-4" />
           {edit && (
             <div className="flex flex-row space-x-[10px]">

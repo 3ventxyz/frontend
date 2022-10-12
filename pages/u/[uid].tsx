@@ -14,7 +14,6 @@ export default function UserProfile() {
   const [twitterName, setTwitterName] = useState('')
   const router = useRouter()
   const { uid } = router.query
-  const [email, setEmail] = useState('')
   
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +27,6 @@ export default function UserProfile() {
         setLocation(docSnap.data().location)
         setAvatar(`${docSnap.data().gravatar}?s=200`)
         setTwitterName(docSnap.data().twitter_name)
-        setEmail(docSnap.data().email)
       } else {
         console.log('No such document!')
       }
@@ -46,7 +44,6 @@ export default function UserProfile() {
         img={avatar}
         address={location?.address || 'NA'}
         twitterName={twitterName}
-        email={email}
       />
       <Dashboard />
     </div>

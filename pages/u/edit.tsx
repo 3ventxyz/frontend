@@ -15,25 +15,10 @@ interface LocationData {
   address: string
 }
 
-const fetchAvatar = (email: string, setGravatar: any) => {
-  const md5 = require('md5')
-
-  function getGravatarURL(email: string) {
-    const address = String(email).trim().toLowerCase()
-    const hash = md5(address)
-    const url = `https://www.gravatar.com/avatar/${hash}?d=mp`
-    console.log('url', url)
-    return url
-  }
-  const url = getGravatarURL(email)
-  setGravatar(url)
-}
-
 export default function CreateUser() {
   const [name, setName] = useState('')
   const [bio, setBio] = useState('')
   const [location, setLocation] = useState<LocationData>()
-  const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState('')
   const auth = useAuth()
   const uid = auth?.uid
@@ -50,7 +35,6 @@ export default function CreateUser() {
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
         setAvatar(`${docSnap.data().gravatar}?s=200`)
-        setEmail(docSnap.data().email)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -60,7 +44,6 @@ export default function CreateUser() {
   }, [remakeProfile])
 
   const createProfile = async (
-    email = '',
     fileImg: File | null,
     uid: string,
     name: string,
@@ -75,7 +58,6 @@ export default function CreateUser() {
           bio: bio,
           location: location,
           avatar: url,
-          email: email
         })
         console.log('Data written into doc ID: ', docRef.id)
       })
@@ -96,7 +78,6 @@ export default function CreateUser() {
             labelText=""
             id="username"
             placeholder={name}
-            maxWidth={500}
             width={'w-full'}
             textArea={false}
             setValue={setName}
@@ -108,22 +89,9 @@ export default function CreateUser() {
             labelText=""
             id="bio"
             placeholder={bio}
-            maxWidth={500}
             width={'w-full'}
             textArea={false}
             setValue={setBio}
-          />
-           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
-            Email
-          </p>
-          <TextInput
-            labelText=""
-            id="email"
-            placeholder={email}
-            maxWidth={500}
-            width={'w-full'}
-            textArea={false}
-            setValue={setEmail}
           />
           <p className="mb-2 border-b border-primary pt-2 text-left text-[16px] font-semibold">
             Location
@@ -139,7 +107,7 @@ export default function CreateUser() {
               <Button
                 text="Save"
                 onClick={() => {
-                  createProfile(email, fileImg, uid, name, bio, location)
+                  createProfile(fileImg, uid, name, bio, location)
                 }}
                 active={true}
               />

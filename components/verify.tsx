@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { verifyDiscord, verifyTwitter } from '../services/verify_profile'
 import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../services/firebase_config'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
@@ -13,12 +15,31 @@ export default function Verify() {
   const [discordVerified, setDiscordVerified] = useState(false)
   const [twitterVerified, setTwitterVerified] = useState(false)
   const auth = useAuth()
-
+  const uid = auth?.uid
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
+  const [verificationSize, setVerificationSize] = useState(0)
+  const [twitterVerifs, setTwitterVerifs] = useState([])
 
   // checks if user is verified on discord and twitter
   // if user is not verified and hash is present, run verification and update db
+      {/*Getting array size from db*/}
+      useEffect(() => {
+        const getSize = async () => {
+          const docRef = doc(db, 'users', uid)
+          const docSnap = await getDoc(docRef)
+          if (docSnap.exists()) {
+            setVerificationSize(docSnap.data().tw_verifs.size)
+            setTwitterVerifs(docSnap.data().tw_verifs)
+          } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!')
+          }
+        }
+        getSize()
+        console.log('verif',verificationSize)
+      }, [])
+
   useEffect(() => {
     const pathParts = asPath.split('code=')
     let hash = ''
@@ -72,6 +93,14 @@ export default function Verify() {
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
       <p className="font-semibold">Verify Social Accounts</p>
+      {
+        /*
+        1. Check the number of the size of the array, print out a verification row for each
+        2. When clicking on the add button, a new row appears. Clicking the X button deletes the row
+        3. If the row is verified either discord or twitter, the row does not display the x button
+        4. Only the last row displays the + button
+        */
+      }
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         {discordVerified ? (
           <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
