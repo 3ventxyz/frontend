@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, setDoc } from '@firebase/firestore'
+import { collection, doc, getDoc, setDoc } from '@firebase/firestore'
 import { db } from './firebase_config'
 
 export default async function addEventToUpcomingEvents({
@@ -19,13 +19,17 @@ export default async function addEventToUpcomingEvents({
   if (!docSnap.exists) {
     throw "error user doesn't exist. Contact customer support"
   }
-  const newDocRef = await setDoc(
-    doc(collection(userDocRef, 'upcoming_events'), eventId),
-    {
-      event_ref: doc(db, `/events/${eventId}`),
-      start_date: startDate,
-      end_date: endDate,
-      event_title: eventTitle
-    }
-  )
+  try {
+    const newDocRef = await setDoc(
+      doc(collection(userDocRef, 'upcoming_events'), eventId),
+      {
+        event_ref: doc(db, `/events/${eventId}`),
+        start_date: startDate,
+        end_date: endDate,
+        event_title: eventTitle
+      }
+    )
+  } catch (e) {
+    throw e
+  }
 }

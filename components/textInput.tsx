@@ -15,7 +15,6 @@ export default function TextInput({
   placeholder,
   id,
   maxWidth,
-  errorMsg = '',
   textArea = false,
   isDisabled = false,
   setValue,
@@ -48,13 +47,6 @@ export default function TextInput({
           disabled={isDisabled}
         ></textarea>
       )}
-      <div
-        className={`${
-          errorMsg === '' ? 'hidden' : 'block'
-        } ml-[20px] text-red-600`}
-      >
-        {errorMsg}
-      </div>
     </form>
   )
 }

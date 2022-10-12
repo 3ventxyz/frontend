@@ -16,20 +16,17 @@ export default async function registerAttendeeToEvent(
   eventId: string
 ) {
   const eventDocRef = doc(db, 'events', eventId)
-  const newAttendeeRegistrationRef = await setDoc(
+  const userDocId = doc(db, 'users', attendeeRegistrationData.uid)
+
+  await setDoc(
     doc(
       collection(eventDocRef, 'registered_attendees'),
       attendeeRegistrationData.uid
     ),
     attendeeRegistrationData
   )
-
-  const userDocId = doc(db, 'users', attendeeRegistrationData.uid)
-  const newRegisteredEvent = await setDoc(
-    doc(collection(userDocId, 'registered_events'), eventId),
-    {
-      event_ref: doc(db, `/events/${eventId}`),
-      start_date: new Date()
-    }
-  )
+  await setDoc(doc(collection(userDocId, 'registered_events'), eventId), {
+    event_ref: doc(db, `/events/${eventId}`),
+    start_date: new Date()
+  })
 }
