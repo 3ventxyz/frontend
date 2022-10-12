@@ -14,7 +14,7 @@ export default function UserProfile() {
   const [twitterName, setTwitterName] = useState('')
   const router = useRouter()
   const { uid } = router.query
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const userId: any = uid
@@ -25,7 +25,8 @@ export default function UserProfile() {
         setName(docSnap.data().username)
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
-        setAvatar(`${docSnap.data().gravatar}?s=200`)
+        console.log(docSnap.data().avatar)
+        setAvatar(docSnap.data().avatar)
         setTwitterName(docSnap.data().twitter_name)
       } else {
         console.log('No such document!')
