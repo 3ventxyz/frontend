@@ -48,6 +48,7 @@ export default function Verify() {
     getSize()
     setAddTwitterButtons(false)
   }, [addTwitterButtons])
+  
 
   const addTwAccount = async () => {
     setAddTwitterButtons(true)
