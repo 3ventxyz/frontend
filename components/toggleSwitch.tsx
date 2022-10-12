@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+/*Change to tailwind classes */
 
 const Container = styled.div`
   .checkbox:checked + .label .inner {

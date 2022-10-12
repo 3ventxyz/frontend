@@ -10,6 +10,7 @@ export async function uploadImageToStorage(
     alert('Please upload an image first!')
     return
   }
+  if(storage !== null) return
   const storageRef = ref(storage, `/files/${path}`)
   const fileBuffer = await fileImg?.arrayBuffer()
 
