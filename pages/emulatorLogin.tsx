@@ -2,12 +2,15 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState, useRef } from 'react'
 import Spinner from '../components/spinner'
 import { useAuth } from '../contexts/auth'
-import { auth } from '../services/firebase_config'
+import { auth, db } from '../services/firebase_config'
 import { signInWithEmailAndPassword } from '@firebase/auth'
 import { uploadQRImage } from '../services/upload_qr_image'
+import { doc, getDoc } from '@firebase/firestore'
+import { UserModel } from '../shared/interface/common'
 export default function EmulatorLogin() {
   const authContext = useAuth()
   const router = useRouter()
+  const [confirmationCode, setConfirmationCode] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [userId, setUserId] = useState<any>('')
   const [email, setEmail] = useState<any>('')
@@ -37,26 +40,27 @@ export default function EmulatorLogin() {
 
   // loging in with the dummy user in the auth emulators
   useEffect(() => {
-    //login the user.
-    //check if he has a qr code in its user doc, from the db.
-    //if it has, redirect to the user page right away.
     signInWithEmailAndPassword(auth, 'test123@gmail.com', '1234567890').then(
-      (confirmationResult) => {
-        //callback for a confirmation code
-        setShowConfirmation(true)
-        setConfirmation(() => (code: string) => {
-          // confirmationResult.confirm(code).then(async (result) => {
-          //   //firebase and global.
-          //   //gets the userRef and the doc snap
-          //   //it sets the user id
-          //   //qrcode canvas if its new
-          //   //check the doc snap exists(which should)
-          //   // --->if no doc exists, please restart the emulators.!
-          //   //get the doc snap, the data should be set to a userModel
-          //   //that userModel will be setted inside authContext
-          //   //lastly redirect the user to the logged in user page.
-          // })
-        })
+      async (result) => {
+        console.log('user id:', result.user.uid)
+        setUserId(result.user.uid)
+        const userDocRef = doc(db, 'users', result.user.uid)
+        const userDocSnap = await getDoc(userDocRef)
+        const data =userDocSnap.data()
+        const userModel: UserModel = {
+          phone_number: data?.phone_number,
+                    discord_id: data?.discord_id,
+                    discord_verified: data?.discord_verified,
+                    twitter_id: data?.twitter_id,
+                    twitter_verified: data?.twitter_verified,
+                    wallet: data?.wallet,
+                    siwe_expiration_time: data?.siwe_expiration_time
+        }
+        authContext.setUserModel(userModel);
+        router.push('/u')
+
+        //   // --->if no doc exists, please restart the emulators.!
+
       }
     )
     //otherwise, create the qr code, add it to his user doc in the db.

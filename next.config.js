@@ -8,7 +8,9 @@ const nextConfig = {
       'firebasestorage.googleapis.com',
       'www.gravatar.com',
       'maps.googleapis.com',
-      'res.cloudinary.com'
+      'res.cloudinary.com',
+      'cloudflare-ipfs.com',
+      'loremflickr.com'
     ],
     formats: ['image/webp']
   }
