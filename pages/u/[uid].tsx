@@ -25,7 +25,6 @@ export default function UserProfile() {
         setName(docSnap.data().username)
         setBio(docSnap.data().bio)
         setLocation(docSnap.data().location)
-        console.log(docSnap.data().avatar)
         setAvatar(docSnap.data().avatar)
         setTwitterName(docSnap.data().twitter_name)
       } else {
