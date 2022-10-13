@@ -1,7 +1,7 @@
-// author: marthel
-import { TbPhotoOff, TbPhoto, TbMap } from 'react-icons/tb'
+// author: marthel + ben
+import { TbPhoto, TbMap } from 'react-icons/tb'
 import { doc, getDoc } from '@firebase/firestore'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
 import TicketButton from '../../components/ticketButton'
 import { db } from '../../services/firebase_config'
@@ -263,14 +263,18 @@ function LoadedEventPage({
           </div>
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-auto w-fit cursor-pointer flex-row items-center space-x-2  ">
-              <Image
-                src={profileUrlImg}
-                layout="fixed"
-                width="35px"
-                height="35px"
-                loading="lazy"
-                className="rounded-full bg-gray-200"
-              />
+              {profileUrlImg ? (
+                <Image
+                  src={profileUrlImg}
+                  layout="fixed"
+                  width="35px"
+                  height="35px"
+                  loading="lazy"
+                  className="rounded-full bg-gray-200"
+                />
+              ) : (
+                <div className="h-[35px] w-[35px] rounded-full bg-gray-200" />
+              )}
               <div className="flex h-fit flex-col space-y-0">
                 <div className="h-[22px] ">
                   <b className=" ">Host:</b>
