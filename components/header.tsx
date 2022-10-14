@@ -239,13 +239,13 @@ export default function Header() {
         </div>
         <Button
           active={true}
-          text={process.env.NODE_ENV === 'development'?'Quick Login':'Launch App'}
+          text={
+            process.env.NODE_ENV === 'development'
+              ? 'Quick Login'
+              : 'Launch App'
+          }
           onClick={() => {
-            if (process.env.NODE_ENV === 'development') {
-              router.push('/emulatorLogin')
-            } else {
-              router.push('/login')
-            }
+            router.push('/login')
           }}
         />
       </nav>

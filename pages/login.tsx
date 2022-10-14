@@ -2,7 +2,12 @@ import React, { FormEvent, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
 import Button from '../components/button'
-import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  signInWithEmailAndPassword,
+  UserCredential
+} from '@firebase/auth'
 import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
@@ -57,6 +62,40 @@ export default function Login() {
     }
     if (onlyOnce === false) {
       run()
+    }
+  }, [])
+
+  useEffect(() => {
+    const emulatorSignUp = async () => {
+      try {
+        const result: UserCredential = await signInWithEmailAndPassword(
+          auth,
+          'test123@gmail.com',
+          '1234567890'
+        )
+        console.log('user id:', result.user.uid)
+        setUserId(result.user.uid)
+        const userDocRef = doc(db, 'users', result.user.uid)
+        const userDocSnap = await getDoc(userDocRef)
+        const data = userDocSnap.data()
+        const userModel: UserModel = {
+          phone_number: data?.phone_number,
+          discord_id: data?.discord_id,
+          discord_verified: data?.discord_verified,
+          twitter_id: data?.twitter_id,
+          twitter_verified: data?.twitter_verified,
+          wallet: data?.wallet,
+          siwe_expiration_time: data?.siwe_expiration_time
+        }
+        authContext.setUserModel(userModel)
+        router.push('/u')
+      } catch (error) {
+        alert(error)
+        console.error(error)
+      }
+    }
+    if (process.env.NODE_ENV === 'development') {
+      emulatorSignUp()
     }
   }, [])
 

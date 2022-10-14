@@ -89,7 +89,7 @@ const AuthProvider = ({ children }: Props): JSX.Element => {
     setUserModel(null)
     setUid('')
     localStorage.clear()
-    router.push('/login')
+    router.push('/')
     return signOut(auth)
   }
 

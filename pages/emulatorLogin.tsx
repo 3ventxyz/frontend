@@ -80,7 +80,8 @@ export default function EmulatorLogin() {
                 It looks like it firebase emulators are not running.
                 <br />
                 Please make sure that firebase emulators are running in a new
-                terminal window, and refresh this page.
+                terminal window, and refresh this page. firebase:emulators start
+                localhost:4000
               </div>
             </div>
           </>
