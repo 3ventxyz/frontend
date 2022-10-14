@@ -136,8 +136,6 @@ export default function Login() {
                     discord_id: '',
                     discord_verified: false,
                     discord_guilds: [],
-                    twitter_id: '',
-                    twitter_verified: false,
                     wallet: '',
                     siwe_expiration_time: '',
                     twitter_verifications: []
@@ -147,8 +145,6 @@ export default function Login() {
                     phone_number: phoneNumber,
                     discord_id: '',
                     discord_verified: false,
-                    twitter_id: '',
-                    twitter_verified: false,
                     wallet: '',
                     siwe_expiration_time: '',
                     twitter_verifications: []
@@ -178,8 +174,6 @@ export default function Login() {
                     phone_number: data?.phone_number,
                     discord_id: data?.discord_id,
                     discord_verified: data?.discord_verified,
-                    twitter_id: data?.twitter_id,
-                    twitter_verified: data?.twitter_verified,
                     wallet: data?.wallet,
                     siwe_expiration_time: data?.siwe_expiration_time,
                     twitter_verifications: data?.twitter_verifications

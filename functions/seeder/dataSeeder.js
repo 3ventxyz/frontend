@@ -57,8 +57,6 @@ module.exports = class DataSeeder {
             phone_number: phoneNumber,
             qr_code: '',
             siwe_expiration_time: '',
-            twitter_id: '',
-            twitter_verified: false,
             username: faker.internet.userName(),
             wallet: ''
           })
@@ -88,8 +86,6 @@ module.exports = class DataSeeder {
           phone_number: faker.phone.number('+###-###-#####'),
           qr_code: '',
           siwe_expiration_time: '',
-          twitter_id: '',
-          twitter_verified: false,
           username: faker.internet.userName(),
           wallet: ''
         })
