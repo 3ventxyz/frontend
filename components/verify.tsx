@@ -5,10 +5,7 @@ import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
 import {
   doc,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove
+  getDoc
 } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 
@@ -91,7 +88,7 @@ export default function Verify() {
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
       <p className="font-semibold">Verify Social Accounts</p>
-      <div className="flex w-full flex-row flex-wrap items-center justify-start space-x-2 text-center">
+      <div className="flex flex-col w-full flex-wrap items-start space-y-2 justify-center text-center">
         {discordVerified ? (
           <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
             Discord Verified
@@ -123,7 +120,7 @@ export default function Verify() {
                     {index !== twitterSize - 1 ? (
                       <></>
                     ) : (
-                      <a
+                      <a className="text-4xl"
                         href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
                       >
                         +
