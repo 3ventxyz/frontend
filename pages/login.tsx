@@ -8,6 +8,8 @@ import {
   signInWithEmailAndPassword,
   UserCredential
 } from '@firebase/auth'
+import Spinner from '../components/spinner'
+import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
@@ -27,10 +29,11 @@ export default function Login() {
   })
   const router = useRouter()
   const authContext = useAuth()
-  const ref = useRef<any>()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
   const [userId, setUserId] = useState<any>('')
   const [qrCode, setQrCodeImg] = useState<any>()
+  const isEnvDev = process.env.NODE_ENV === 'development'
+  const [emulatorLoginError, setEmulatorLoginError] = useState(false)
 
   useEffect(() => {
     // Dynamically import qr-code-styling only client-side
@@ -60,7 +63,7 @@ export default function Login() {
       )
       setOnlyOnce(true)
     }
-    if (onlyOnce === false) {
+    if (onlyOnce === false && !isEnvDev) {
       run()
     }
   }, [])
@@ -92,9 +95,10 @@ export default function Login() {
       } catch (error) {
         alert(error)
         console.error(error)
+        setEmulatorLoginError(true)
       }
     }
-    if (process.env.NODE_ENV === 'development') {
+    if (isEnvDev) {
       emulatorSignUp()
     }
   }, [])
@@ -201,7 +205,35 @@ export default function Login() {
     setLoading(false)
   }
 
-  return (
+  return isEnvDev ? (
+    <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
+      <div className="flex flex-grow flex-col justify-center space-y-10 md:items-center">
+        <h3>Logging in to firebase auth emulators</h3>
+        {emulatorLoginError ? (
+          <>
+            <h4>Firebase emulators not initialized</h4>
+            <div className="flex items-start justify-start space-x-3">
+              <div>
+                <BsFillExclamationTriangleFill className="h-[50px] w-[50px]" />
+              </div>
+              <div>
+                It looks like it firebase emulators are not running.
+                <br />
+                Please make sure that firebase emulators are running in a new
+                terminal window, and refresh this page. firebase:emulators start
+                localhost:4000
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p>please wait</p>
+            <Spinner height={200} width={200} />
+          </>
+        )}
+      </div>
+    </div>
+  ) : (
     <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
       {!showConfirmation ? (
         <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">
