@@ -28,7 +28,6 @@ export default function Login() {
   const [qrCode, setQrCodeImg] = useState<any>()
 
   useEffect(() => {
-    //
     // Dynamically import qr-code-styling only client-side
     if (typeof window !== 'undefined') {
       import('qr-code-styling').then(({ default: QRCodeStyling }) => {

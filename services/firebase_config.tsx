@@ -3,12 +3,7 @@ import { getAnalytics, isSupported } from '@firebase/analytics'
 import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore'
 import { connectAuthEmulator, getAuth } from '@firebase/auth'
 import { getStorage } from '@firebase/storage'
-// import {  } from '@firebase/storage'
-import {
-  getFunctions,
-  httpsCallable,
-  connectFunctionsEmulator
-} from 'firebase/functions'
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
