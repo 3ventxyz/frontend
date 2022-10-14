@@ -18,6 +18,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "16"
+  },
   "dependencies": {
     "@faker-js/faker": "^7.5.0",
     "@firebase/analytics": "^0.8.0",
