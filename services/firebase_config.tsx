@@ -1,8 +1,9 @@
 import { initializeApp } from '@firebase/app'
 import { getAnalytics, isSupported } from '@firebase/analytics'
-import { getFirestore } from '@firebase/firestore'
-import { getAuth } from '@firebase/auth'
+import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore'
+import { connectAuthEmulator, getAuth } from '@firebase/auth'
 import { getStorage } from '@firebase/storage'
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,6 +20,14 @@ const db = getFirestore(app)
 const auth = getAuth(app)
 const analytics = isSupported().then((yes) => (yes ? getAnalytics(app) : null))
 const storage = getStorage(app)
+const functions = getFunctions(app)
 
 export { analytics, app, auth, db, storage }
 
+if (typeof window !== 'undefined') {
+  if (window.location.hostname.includes('localhost')) {
+    connectFunctionsEmulator(functions, 'localhost', 5001)
+    connectAuthEmulator(auth, 'http://localhost:9099')
+    connectFirestoreEmulator(db, 'localhost', 8080)
+  }
+}

@@ -39,3 +39,7 @@ yarn-error.log*
 .vercel
 
 .history/
+
+
+functions/*.log
+*.log

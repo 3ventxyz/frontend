@@ -2,13 +2,19 @@ import React, { FormEvent, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
 import Button from '../components/button'
-import { signInWithPhoneNumber, RecaptchaVerifier } from '@firebase/auth'
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  signInWithEmailAndPassword,
+  UserCredential
+} from '@firebase/auth'
+import Spinner from '../components/spinner'
+import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
 import ReactCodeInput from 'react-code-input'
 import PhoneInput from 'react-phone-number-input'
 import { UserModel } from '../shared/interface/common'
-// import QRCodeStyling from 'qr-code-styling'
 import { uploadQRImage } from '../services/upload_qr_image'
 
 export default function Login() {
@@ -23,11 +29,12 @@ export default function Login() {
   })
   const router = useRouter()
   const authContext = useAuth()
-  const ref = useRef<any>()
   const [phoneNumber, setPhoneNumber] = useState<any>('')
   const [userId, setUserId] = useState<any>('')
   const [qrCode, setQrCodeImg] = useState<any>()
-  
+  const isEnvDev = process.env.NODE_ENV === 'development'
+  const [emulatorLoginError, setEmulatorLoginError] = useState(false)
+
   useEffect(() => {
     // Dynamically import qr-code-styling only client-side
     if (typeof window !== 'undefined') {
@@ -56,14 +63,48 @@ export default function Login() {
       )
       setOnlyOnce(true)
     }
-    if (onlyOnce === false) {
+    if (onlyOnce === false && !isEnvDev) {
       run()
+    }
+  }, [])
+
+  useEffect(() => {
+    const emulatorSignUp = async () => {
+      try {
+        const result: UserCredential = await signInWithEmailAndPassword(
+          auth,
+          'test123@gmail.com',
+          '1234567890'
+        )
+        console.log('user id:', result.user.uid)
+        setUserId(result.user.uid)
+        const userDocRef = doc(db, 'users', result.user.uid)
+        const userDocSnap = await getDoc(userDocRef)
+        const data = userDocSnap.data()
+        const userModel: UserModel = {
+          phone_number: data?.phone_number,
+          discord_id: data?.discord_id,
+          discord_verified: data?.discord_verified,
+          twitter_id: data?.twitter_id,
+          twitter_verified: data?.twitter_verified,
+          wallet: data?.wallet,
+          siwe_expiration_time: data?.siwe_expiration_time
+        }
+        authContext.setUserModel(userModel)
+        router.push('/u')
+      } catch (error) {
+        alert(error)
+        console.error(error)
+        setEmulatorLoginError(true)
+      }
+    }
+    if (isEnvDev) {
+      emulatorSignUp()
     }
   }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     // declare phonenumber and appverifier
     if (phoneNumber === '') return
     const appVerifier = (window as any).recaptchaVerifier
@@ -164,7 +205,35 @@ export default function Login() {
     setLoading(false)
   }
 
-  return (
+  return isEnvDev ? (
+    <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
+      <div className="flex flex-grow flex-col justify-center space-y-10 md:items-center">
+        <h3>Logging in to firebase auth emulators</h3>
+        {emulatorLoginError ? (
+          <>
+            <h4>Firebase emulators not initialized</h4>
+            <div className="flex items-start justify-start space-x-3">
+              <div>
+                <BsFillExclamationTriangleFill className="h-[50px] w-[50px]" />
+              </div>
+              <div>
+                It looks like it firebase emulators are not running.
+                <br />
+                Please make sure that firebase emulators are running in a new
+                terminal window, and refresh this page. firebase:emulators start
+                localhost:4000
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p>please wait</p>
+            <Spinner height={200} width={200} />
+          </>
+        )}
+      </div>
+    </div>
+  ) : (
     <div className="flex flex-grow items-center justify-center bg-secondaryBg py-[40px] px-[20px] sm:px-[56px] md:px-[112px]">
       {!showConfirmation ? (
         <div className="p-auto flex max-w-[343px] flex-grow flex-col items-center gap-y-6">

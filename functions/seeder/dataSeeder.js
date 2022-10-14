@@ -116,7 +116,7 @@ module.exports = class DataSeeder {
         var eventYear = startDate.getUTCFullYear()
         var eventId =
           adjective +
-          '' +
+          '-' +
           firstWord +
           '-' +
           'event' +
