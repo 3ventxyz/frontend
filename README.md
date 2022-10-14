@@ -55,11 +55,7 @@ const data = snapshot.data()
   }, [])
 ```
 ### Initializing and running firebase emulators and firebase cloud functions
-
-- after git cloning this repo, please call ```yarn -i``` for installing the needed dependencies and try to run ```firebase emulators:start```
-- If there was an error with the deploy, you will have to initialize firebase, by calling ```firebase init```
-- During the firebase init, please select these packages: storage, firestore, functions, emulators. And set every value by default.
-- NOTE: when prompting the option to install all dependencies with npm, please set to N. as you will need to call ```yarn -i``` again after finishing the firebase installation.
-- When prompting which language for the firebase cloud functions, please select javascript.
-- Once you have firebase installed and called ```yarn -i```
-- AFTER ALL THESE STEPS you should be able to call ```firebase emulators:start``` at any time, without the need to do all the work stated above again.
+- NOTE: you must have node version 16 to be able to run firebase emulators.
+- after git cloning this repo, please go to the functions folder from your root project ```cd functions```, 
+ and call ```yarn -i``` for installing the required dependencies for firebase CLI.
+- Then you can call ```firebase emulators:start``` from the root of the project.
