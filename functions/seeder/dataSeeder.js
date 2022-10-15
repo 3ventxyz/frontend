@@ -59,6 +59,8 @@ module.exports = class DataSeeder {
             siwe_expiration_time: '',
             twitter_id: '',
             twitter_verified: false,
+            tw_verifs: [],
+            twitter_name: [],
             username: faker.internet.userName(),
             wallet: ''
           })
@@ -90,6 +92,8 @@ module.exports = class DataSeeder {
           siwe_expiration_time: '',
           twitter_id: '',
           twitter_verified: false,
+          tw_verifs: [],
+          twitter_name: [],
           username: faker.internet.userName(),
           wallet: ''
         })
@@ -196,7 +200,6 @@ module.exports = class DataSeeder {
   registerDummyUsersToEvents() {
     //iterate through the list, and as long that is not from the main
     //auth users. then update.
-
     //data to add in the registered_attendees collection for each event doc
     // --address:
     // --city:
@@ -207,7 +210,6 @@ module.exports = class DataSeeder {
     // --uid:
     // --zip_code:
     // date_of_registration:
-
     //data to add to the registered_events collection in the ui doc
     //event_ref:
     //start_date:
