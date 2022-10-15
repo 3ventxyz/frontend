@@ -25,7 +25,7 @@ export default function Verify() {
   const [twitterSize, setTwitterSize] = useState(0)
 
   useEffect(() => {
-    const getTwitterInfo = async () => {
+    const getSize = async () => {
       const docRef = doc(db, 'users', uid)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
@@ -37,7 +37,7 @@ export default function Verify() {
         console.log('No such document!')
       }
     }
-    getTwitterInfo()
+    getSize()
   }, [twitterVerifs])
 
   useEffect(() => {
