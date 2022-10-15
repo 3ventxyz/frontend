@@ -6,12 +6,15 @@ import { EventInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Button from '../../../components/button'
 export default function LoadedEventPage({
   event,
-  children
+  children,
+  isEventCreator = false
 }: {
   event: EventInterface | null
   children: ReactElement
+  isEventCreator?: boolean
 }): JSX.Element {
   const [profileUrlImg, setProfileUrlImg] = useState('')
   const [hostName, setHostName] = useState('')
@@ -93,6 +96,7 @@ export default function LoadedEventPage({
             <h4>Location:</h4>
             {event?.location?.address}
           </div>
+          {/* edit event component */}
           <div className="relative h-[200px] w-[200px] rounded-[20px] bg-green-100">
             <a
               rel="noreferrer noopener"
@@ -115,7 +119,7 @@ export default function LoadedEventPage({
         </div>
         {children}
       </div>
-      <div>
+      <div className="flex flex-col space-y-5">
         <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] lg:block">
           <Image
             src={event ? event.img_url : ''}
@@ -125,6 +129,23 @@ export default function LoadedEventPage({
             className="rounded-[67px]"
           />
         </div>
+        {true ? (
+          <div>
+            <Button
+              text={'edit event'}
+              active={true}
+              onClick={() => {
+                //TODO create a new file called edit.
+                //it will use the create e logic, with some small tweaks.
+                //edit/$(event-id)
+                router.push('create')
+                console.log('redirecting user to edit event page')
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   )

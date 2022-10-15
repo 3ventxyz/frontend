@@ -32,6 +32,7 @@ export default function Event() {
     null
   )
   const [showModal, setShowModal] = useState(false)
+  const [isEventCreator, setIsEventCreator] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [ticketListData, setTicketListData] = useState<
     TicketInterface[] | null
@@ -79,18 +80,25 @@ export default function Event() {
 
   useEffect(() => {
     const fetchData = async () => {
+      // fetch user Doc Data.
       const docRef = doc(db, 'users', auth.uid)
       const userDoc = await getDoc(docRef)
       const uid_qr_code = userDoc.data()?.qr_code
       setQRImgUrl(uid_qr_code)
+      // fetch event Doc Data.
       const eventId: any = eid
       const eventRef = doc(db, 'events', eventId)
       const eventDoc = await getDoc(eventRef)
       const eventData = events.newEventData(eventDoc)
+      //vars for fetching ticket data and userIsRegistered.
       const fetchedTicketListData: Array<TicketInterface> = []
       var isUserRegistered: boolean
-
+      const isUserOwner = (eventData?.uid === userDoc.id)
+      setIsEventCreator(isUserOwner);
+      
+      //if eventDataDoesnt exist return null
       if (!eventData) return
+      //setting eventData and ticket data
       setEvent(eventData)
       let ticket: TicketInterface = {
         ticketTitle: 'Free Attendee',
@@ -101,15 +109,24 @@ export default function Event() {
       }
       fetchedTicketListData.push(ticket)
       setTicketListData(fetchedTicketListData)
+
+      /**
+       * this block is good for user who is not the owner of the event.
+       */
+      //checking if the userIsRegistered
       isUserRegistered = await checkRegisteredAttendee({
         uid: auth.uid,
         eid: eventId
       })
+
       if (isUserRegistered) {
         setEventPageStatus(EventPageEnum.purchasedTicket)
       } else {
         setEventPageStatus(EventPageEnum.fetchedData)
       }
+      /**
+       *
+       */
     }
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
       fetchData()
@@ -127,6 +144,8 @@ export default function Event() {
         width="w-[600px]"
         height="h-[600px]"
       >
+        {/* if the user is the owner of the event, just show the stats. */}
+
         <CreateCheckoutSession
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
