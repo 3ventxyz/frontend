@@ -81,6 +81,9 @@ export async function verifyTwitter(
       try {
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
+          twitter_verified: true,
+          tw_verifications: arrayUnion(true),
+          twitter_id: twitterIdJson.data.id,
           twitter_name: arrayUnion(twitterIdJson.data.username),
           tw_verifs: arrayUnion(twitterIdJson.data.id)
         })
