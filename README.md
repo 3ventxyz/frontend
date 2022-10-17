@@ -8,6 +8,9 @@
   - `yarn install`
 - run `firebase emulators:start` to launch our serverless backend (runs on localhost:4000)
 - run `yarn dev` to launch our application (runs on localhost:3000)
+- localhost port collision?
+  - `sudo lsof -i :<PORT>`
+  - `kill -15 <PID>`
 
 ### Build Configuration
 - you must be using Node v16.15.0 (for both firebase local emulator and our web app)
