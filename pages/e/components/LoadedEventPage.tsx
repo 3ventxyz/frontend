@@ -138,7 +138,7 @@ export default function LoadedEventPage({
                 //TODO create a new file called edit.
                 //it will use the create e logic, with some small tweaks.
                 //edit/$(event-id)
-                router.push('create')
+                router.push(`edit?eid=${event?.event_id}`)
                 console.log('redirecting user to edit event page')
               }}
             />

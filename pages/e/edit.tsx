@@ -2,10 +2,17 @@ import { doc, getDoc } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import ErrorFormMsg from '../../components/errorMsg'
 import { db } from '../../services/firebase_config'
+import DatePicker from 'react-datepicker'
+import Spinner from '../../components/spinner'
+import Button from '../../components/button'
+import TextInput from '../../components/textInput'
 import { uploadImage } from '../../services/upload_image'
+import LocationInput from '../../components/locationInput'
 import { LocationData } from '../../shared/interface/common'
 import { useAuth } from '../../contexts/auth'
 import { useRouter } from 'next/router'
+import FileImageInput from '../../components/fileImageInput'
+import { ContractResultDecodeError } from 'wagmi'
 
 export default function EditEvent() {
   const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
@@ -25,7 +32,7 @@ export default function EditEvent() {
   const [errorField, setErrorField] = useState<string>('')
   const router = useRouter()
   const auth = useAuth()
-  const eid = router.query
+  const {eid} = router.query
   //get the passed id from the querying the url
   //   const query = ''
 
@@ -74,16 +81,25 @@ export default function EditEvent() {
     return true
   }
 
+  //fetch and set current event data to ui edit page.
   useEffect(() => {
     const setCurrentEventData = async () => {
       const eventId: any = eid
+      console.trace('eventId obtained', eventId)
       const eventRef = doc(db, 'events', eventId)
       const eventDoc = await getDoc(eventRef)
+
+      console.trace(eventDoc.data())
+
+
+      //setState all the obtained data to the front end ui.!!!
     }
     if (eid) {
       setCurrentEventData()
     }
   }, [eid])
+
+  //function for updating new event info to firestore
   const updateEvent = async () => {
     let isFormValid
     setIsUpdatingEvent(true)
@@ -97,7 +113,9 @@ export default function EditEvent() {
     const path = `${auth.uid}/${fileImg?.name}`
 
     try {
-      // change the logic inside the uploadImage.
+      //set a new function called updateImage.
+      //where it updates the current image with the new one,
+      //exactly to the path of where is stored.
       // await uploadImage(fileImg, path, async (url: string) => {
       // 	const returnedId = await createNewEvent({
       // 	title: title,
@@ -110,13 +128,14 @@ export default function EditEvent() {
       // 	ticket_max: ticketMax,
       // 	event_id: eventId
       //   })
-      //   await addEventToUpcomingEvents({
-      // 	eventTitle: title,
-      // 	uid: auth.uid,
-      // 	eventId: eventId,
-      // 	startDate: startDate,
-      // 	endDate: endDate
-      //   })
+      //rename to updateCreatedEventDocument()
+      // await addEventToUpcomingEvents({
+      // eventTitle: title,
+      // uid: auth.uid,
+      // eventId: eventId,
+      // startDate: startDate,
+      // endDate: endDate
+      // })
 
       //reroute the user back to the previous event.
       //and it will refresh with the new data.
@@ -130,4 +149,117 @@ export default function EditEvent() {
       setIsUpdatingEvent(false)
     }
   }
+
+  //returning the ui of the edit page.
+
+  return (
+    <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
+      <h3 className="w-full max-w-[600px] border-b border-disabled">Event</h3>
+      <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
+        <TextInput
+          id={'event_name'}
+          labelText={'Title'}
+          placeholder={''}
+          setValue={setTitle}
+          isDisabled={isUpdatingEvent}
+        />
+        <TextInput
+          id={'event_id'}
+          labelText={'URL'}
+          placeholder={'www.3vent.xyz/e/'}
+          setValue={setEventId}
+          isDisabled={isUpdatingEvent}
+        />
+        <TextInput
+          textArea={true}
+          id={'event_description'}
+          labelText={'Description'}
+          placeholder={''}
+          setValue={setEventDescription}
+          isDisabled={isUpdatingEvent}
+        />
+        <LocationInput
+          labelText={'Location*'}
+          id={'event_location'}
+          placeholder={''}
+          setLocation={setEventLocation}
+        />
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            START DATE
+          </label>
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date) => setStartDate(date)}
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            END DATE
+          </label>
+          <DatePicker
+            selected={endDate}
+            onChange={(date: Date) => setEndDate(date)}
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            IMAGE
+          </label>
+          {/* update the logic of fileImageInput, where if a url is
+              passed, use the url as the display of the input.
+          */}
+          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          <label className="mb-2 block text-sm font-medium text-gray-900 ">
+            TICKET SUPPLY
+          </label>
+          <input
+            onChange={(e) => {
+              setTicketMax(parseInt(e.target.value))
+            }}
+            className={`focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] ${
+              isUpdatingEvent
+                ? 'border-gray-300  text-gray-300'
+                : 'border-black  text-gray-700'
+            } px-2  focus:outline-none`}
+            id={'event_ticket_max'}
+            type="number"
+            placeholder={'0'}
+            disabled={isUpdatingEvent}
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+          {isUpdatingEvent ? (
+            <>
+              <Spinner width={40} height={40} />
+              <p>Creating new event, please do not refresh</p>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              text={'update event'}
+              onClick={() => updateEvent()}
+              active={true}
+            />
+          )}
+        </div>
+        <div className="mx-auto text-[13px] ">
+          {errorMsg === '' ? (
+            <></>
+          ) : (
+            ErrorFormMsg({
+              errorField: errorField,
+              errorMsg: errorMsg
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  )
 }
