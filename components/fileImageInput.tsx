@@ -5,14 +5,18 @@ import Image from 'next/image'
 
 export default function FileImageInput({
   fileImg,
-  setFileImg
+  setFileImg,
+  //imgUrl for the previous template.
+  //if a url is passed but a fileImg is still null, display the imgUrl.
+  imgUrl=null,
 }: {
-  fileImg: File | null
-  setFileImg: (value: File) => void
+  fileImg: File | null,
+  setFileImg: (value: File) => void,
+  imgUrl?: String | null,
 }) {
   const [imgURl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
-
+  //TODO update the fileImageInput with the imgUrl, if an imgUrl is passed, display the UI with an image, instead of the empty image UI layout.
   return fileImg !== null ? (
     <div
       onMouseEnter={() => {

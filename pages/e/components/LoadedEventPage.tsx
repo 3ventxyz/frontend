@@ -20,6 +20,7 @@ export default function LoadedEventPage({
   const [hostName, setHostName] = useState('')
 
   const router = useRouter()
+  
   useEffect(() => {
     const fetchData = async () => {
       const docRef = doc(db, 'users', event?.uid || '')
@@ -129,7 +130,7 @@ export default function LoadedEventPage({
             className="rounded-[67px]"
           />
         </div>
-        {true ? (
+        {isEventCreator ? (
           <div>
             <Button
               text={'edit event'}

@@ -47,7 +47,7 @@ export default function Event() {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
-          <LoadedEventPage event={event}>
+          <LoadedEventPage event={event} isEventCreator={isEventCreator}>
             <SelectAndPurchaseTicket
               ticketListData={ticketListData}
               selectedIndex={selectedIndex}
