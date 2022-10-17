@@ -1,4 +1,4 @@
-import { doc, getDoc } from '@firebase/firestore'
+import { doc, DocumentSnapshot, getDoc } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import ErrorFormMsg from '../../components/errorMsg'
 import { db } from '../../services/firebase_config'
@@ -12,7 +12,6 @@ import { LocationData } from '../../shared/interface/common'
 import { useAuth } from '../../contexts/auth'
 import { useRouter } from 'next/router'
 import FileImageInput from '../../components/fileImageInput'
-import { ContractResultDecodeError } from 'wagmi'
 
 export default function EditEvent() {
   const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
@@ -32,9 +31,7 @@ export default function EditEvent() {
   const [errorField, setErrorField] = useState<string>('')
   const router = useRouter()
   const auth = useAuth()
-  const {eid} = router.query
-  //get the passed id from the querying the url
-  //   const query = ''
+  const { eid } = router.query
 
   //   TODO migrate to a different file
   const validateForm = () => {
@@ -87,10 +84,29 @@ export default function EditEvent() {
       const eventId: any = eid
       console.trace('eventId obtained', eventId)
       const eventRef = doc(db, 'events', eventId)
-      const eventDoc = await getDoc(eventRef)
+      const eventDoc: DocumentSnapshot = await getDoc(eventRef)
+      // const eventData:EventInterface = events.newEventData(eventDoc);
 
-      console.trace(eventDoc.data())
+      console.log('description: ', eventDoc.data()?.description)
+      console.log('end_date: ', eventDoc.data()?.end_date)
+      console.log('start_date: ', eventDoc.data()?.start_date)
+      console.log('event_id: ', eventDoc.data()?.event_id)
+      console.log('img_url: ', eventDoc.data()?.img_url)
+      console.log('location: ', eventDoc.data()?.location)
+      console.log('tickets_max: ', eventDoc.data()?.tickets_max)
+      console.log('title: ', eventDoc.data()?.title)
+      console.log('uid: ', eventDoc.data()?.uid)
 
+      setTitle(eventDoc.data()?.title)
+      setEventId(eventDoc.data()?.event_id)
+      setEventDescription(eventDoc.data()?.description)
+      setEventLocation(eventDoc.data()?.location)
+      //update and pass the url so it will be used for
+      //displaying the previous photo on the photo input
+      // setFileImg()
+      setTicketMax(eventDoc.data()?.tickets_max)
+      // setStartDate((eventDoc.data()?.start_date))
+      // setEndDate(eventDoc.data()?.end_date)
 
       //setState all the obtained data to the front end ui.!!!
     }
@@ -150,38 +166,43 @@ export default function EditEvent() {
     }
   }
 
-  //returning the ui of the edit page.
-
+  //UI of the edit page.
   return (
     <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
-      <h3 className="w-full max-w-[600px] border-b border-disabled">Event</h3>
+      <div className="flex w-full items-center justify-center">
+        {/* <div>back</div> add a back arrow that pops back to the previous page */}
+        <h3 className="w-full max-w-[600px] border-b border-disabled">
+          Edit Event
+        </h3>
+      </div>
+
       <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <TextInput
           id={'event_name'}
           labelText={'Title'}
-          placeholder={''}
+          placeholder={title}
           setValue={setTitle}
           isDisabled={isUpdatingEvent}
         />
         <TextInput
           id={'event_id'}
           labelText={'URL'}
-          placeholder={'www.3vent.xyz/e/'}
+          placeholder={eventId}
           setValue={setEventId}
-          isDisabled={isUpdatingEvent}
+          isDisabled={true}
         />
         <TextInput
           textArea={true}
           id={'event_description'}
           labelText={'Description'}
-          placeholder={''}
+          placeholder={eventDescription}
           setValue={setEventDescription}
           isDisabled={isUpdatingEvent}
         />
         <LocationInput
           labelText={'Location*'}
           id={'event_location'}
-          placeholder={''}
+          placeholder={eventLocation.address}
           setLocation={setEventLocation}
         />
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
