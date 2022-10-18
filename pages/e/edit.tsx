@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 import Spinner from '../../components/spinner'
 import Button from '../../components/button'
 import TextInput from '../../components/textInput'
-import { uploadImage } from '../../services/upload_image'
+import { uploadEventImage } from '../../services/upload_event_image'
 import LocationInput from '../../components/locationInput'
 import { LocationData } from '../../shared/interface/common'
 import { useAuth } from '../../contexts/auth'
@@ -68,6 +68,13 @@ export default function EditEvent() {
     return true
   }
 
+  const setFiletype = (type: string) => {
+    if (true) {
+      return '.jpg'
+    }
+    return '.png'
+  }
+
   //fetch and set current event data to ui edit page.
   useEffect(() => {
     const setCurrentEventData = async () => {
@@ -103,14 +110,11 @@ export default function EditEvent() {
       setIsUpdatingEvent(false)
       return
     }
-    const path = `${auth.uid}/${fileImg?.name}`
     try {
-      if (!fileImg) {
-        //set a new function called updateImage.
-        //where it updates the current image with the new one,
-        //exactly to the path of where is stored.
-        // TODO update the logic of this function
-        await uploadImage(fileImg, path, async (url: string) => {
+      if (fileImg) {
+        // TODO create a imgType setter, based from the selected file img.
+        const storagePath = `${auth.uid}/${eventId + '.jpg'}`
+        await uploadEventImage(fileImg, storagePath, async (url: string) => {
           await uploadEventInfo({
             title: title,
             end_date: endDate,

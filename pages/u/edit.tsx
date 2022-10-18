@@ -7,7 +7,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { useAuth } from '../../contexts/auth'
 import FileImageInput from '../../components/fileImageInput'
-import { uploadImage } from '../../services/upload_image'
+import { uploadImage } from '../../services/upload_event_image'
 
 interface LocationData {
   lat: number

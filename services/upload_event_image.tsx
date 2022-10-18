@@ -1,12 +1,7 @@
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { storage } from './firebase_config'
 
-// update event image.
-// TODO: the uploaded event image will have the name of event as the name of the image
-// on storage. This will help to easily upload new images when creating new events
-// and replace the current uploaded images with new ones,
-// without storing duplicates or unused files.
-export async function uploadImage(
+export async function uploadEventImage(
   fileImg: File | null,
   path: string,
   onSuccess: (url: string) => Promise<void>

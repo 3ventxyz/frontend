@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { uploadImage } from '../../services/upload_image'
+import { uploadEventImage } from '../../services/upload_event_image'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
@@ -98,7 +98,8 @@ export default function CreateEvent() {
     }
     const path = `${auth.uid}/${fileImg?.name}`
     try {
-      await uploadImage(fileImg, path, async (url: string) => {
+      console.log('uploading image: ', fileImg?.name)
+      await uploadEventImage(fileImg, path, async (url: string) => {
         const returnedId = await uploadEventInfo({
           title: title,
           end_date: endDate,
