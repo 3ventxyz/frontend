@@ -87,7 +87,6 @@ export default function EditEvent() {
       console.trace('eventId obtained', eventId)
       const eventRef = doc(db, 'events', eventId)
       const eventDoc: DocumentSnapshot = await getDoc(eventRef)
-      // const eventData:EventInterface = events.newEventData(eventDoc);
 
       console.log('description: ', eventDoc.data()?.description)
       console.log('end_date: ', eventDoc.data()?.end_date)
@@ -98,7 +97,6 @@ export default function EditEvent() {
       console.log('tickets_max: ', eventDoc.data()?.tickets_max)
       console.log('title: ', eventDoc.data()?.title)
       console.log('uid: ', eventDoc.data()?.uid)
-      // currEventImg=eventDoc.data()?.img_url;
       setCurrEventImgURl(eventDoc.data()?.img_url)
       setTitle(eventDoc.data()?.title)
       setEventId(eventDoc.data()?.event_id)
