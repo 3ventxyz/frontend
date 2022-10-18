@@ -9,6 +9,7 @@ const nextConfig = {
       'www.gravatar.com',
       'maps.googleapis.com',
       'res.cloudinary.com',
+      'localhost',
       'cloudflare-ipfs.com',
       'loremflickr.com'
     ],
