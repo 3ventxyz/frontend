@@ -1,5 +1,6 @@
 import { doc, DocumentSnapshot, getDoc } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
+import { IoChevronBack } from 'react-icons/io5'
 import ErrorFormMsg from '../../components/errorMsg'
 import { db } from '../../services/firebase_config'
 import DatePicker from 'react-datepicker'
@@ -29,6 +30,7 @@ export default function EditEvent() {
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [errorMsg, setErrorMsg] = useState<string>('')
   const [errorField, setErrorField] = useState<string>('')
+  const [currEventImgURl, setCurrEventImgURl] = useState('')
   const router = useRouter()
   const auth = useAuth()
   const { eid } = router.query
@@ -96,7 +98,8 @@ export default function EditEvent() {
       console.log('tickets_max: ', eventDoc.data()?.tickets_max)
       console.log('title: ', eventDoc.data()?.title)
       console.log('uid: ', eventDoc.data()?.uid)
-
+      // currEventImg=eventDoc.data()?.img_url;
+      setCurrEventImgURl(eventDoc.data()?.img_url)
       setTitle(eventDoc.data()?.title)
       setEventId(eventDoc.data()?.event_id)
       setEventDescription(eventDoc.data()?.description)
@@ -170,7 +173,15 @@ export default function EditEvent() {
   return (
     <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
       <div className="flex w-full items-center justify-center">
-        {/* <div>back</div> add a back arrow that pops back to the previous page */}
+        <span
+          onClick={() => {
+            router.back()
+          }}
+        >
+          <div className="cursor-pointer">
+            <IoChevronBack className="h-[40px] w-[40px]" />
+          </div>
+        </span>
         <h3 className="w-full max-w-[600px] border-b border-disabled">
           Edit Event
         </h3>
@@ -231,10 +242,11 @@ export default function EditEvent() {
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             IMAGE
           </label>
-          {/* update the logic of fileImageInput, where if a url is
-              passed, use the url as the display of the input.
-          */}
-          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+          <FileImageInput
+            fileImg={fileImg}
+            setFileImg={setFileImg}
+            imgUrlTemplate={currEventImgURl}
+          />
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
