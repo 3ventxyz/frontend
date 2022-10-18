@@ -6,13 +6,13 @@ import { useState } from 'react'
 import Spinner from '../../components/spinner'
 import LocationInput from '../../components/locationInput'
 import { LocationData } from '../../shared/interface/common'
-import { createNewEvent } from '../../services/create_new_event'
+import { uploadEventInfo } from '../../services/upload_event_info'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { uploadImage } from '../../services/upload_image'
-import addEventToUpcomingEvents from '../../services/add_event_to_upcoming_events'
+import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
 
@@ -99,7 +99,7 @@ export default function CreateEvent() {
     const path = `${auth.uid}/${fileImg?.name}`
     try {
       await uploadImage(fileImg, path, async (url: string) => {
-        const returnedId = await createNewEvent({
+        const returnedId = await uploadEventInfo({
           title: title,
           end_date: endDate,
           start_date: startDate,
@@ -110,7 +110,7 @@ export default function CreateEvent() {
           ticket_max: ticketMax,
           event_id: eventId
         })
-        await addEventToUpcomingEvents({
+        await updateCreatedEventToUser({
           eventTitle: title,
           uid: auth.uid,
           eventId: eventId,

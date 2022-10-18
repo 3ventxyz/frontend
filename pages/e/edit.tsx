@@ -13,6 +13,8 @@ import { LocationData } from '../../shared/interface/common'
 import { useAuth } from '../../contexts/auth'
 import { useRouter } from 'next/router'
 import FileImageInput from '../../components/fileImageInput'
+import { uploadEventInfo } from '../../services/upload_event_info'
+import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 
 export default function EditEvent() {
   const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
@@ -25,7 +27,7 @@ export default function EditEvent() {
     long: 0
   })
   const [fileImg, setFileImg] = useState<File | null>(null)
-  const [ticketMax, setTicketMax] = useState<number>(0) //disabled
+  const [ticketMax, setTicketMax] = useState<number>(0)
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [errorMsg, setErrorMsg] = useState<string>('')
@@ -33,20 +35,11 @@ export default function EditEvent() {
   const [currEventImgURl, setCurrEventImgURl] = useState('')
   const router = useRouter()
   const auth = useAuth()
+  let previousCap: number
   const { eid } = router.query
 
-  //   TODO migrate to a different file
-  const validateForm = () => {
-    if (title === '') {
-      setErrorField('Event Title')
-      setErrorMsg('title is empty')
-      return false
-    }
-    if (eventId === '') {
-      setErrorField('Event id')
-      setErrorMsg('event id is empty, please add a custom id')
-      return false
-    }
+  //edit event form validator.
+  const validateEditEventForm = () => {
     if (
       eventLocation.address === '' ||
       eventLocation.lat === 0 ||
@@ -67,14 +60,9 @@ export default function EditEvent() {
       setErrorMsg('end date cannot be behind the start date schedule')
       return false
     }
-    if (!fileImg) {
-      setErrorField('Event Image')
-      setErrorMsg('file img is null')
-      return false
-    }
-    if (ticketMax === 0) {
+    if (ticketMax < previousCap) {
       setErrorField('Tickets')
-      setErrorMsg('please add a ticket supply higher than 0')
+      setErrorMsg('event capacity cannot be lower than the previous capacity')
       return false
     }
     return true
@@ -84,32 +72,21 @@ export default function EditEvent() {
   useEffect(() => {
     const setCurrentEventData = async () => {
       const eventId: any = eid
-      console.trace('eventId obtained', eventId)
       const eventRef = doc(db, 'events', eventId)
       const eventDoc: DocumentSnapshot = await getDoc(eventRef)
-
-      console.log('description: ', eventDoc.data()?.description)
-      console.log('end_date: ', eventDoc.data()?.end_date)
-      console.log('start_date: ', eventDoc.data()?.start_date)
-      console.log('event_id: ', eventDoc.data()?.event_id)
-      console.log('img_url: ', eventDoc.data()?.img_url)
-      console.log('location: ', eventDoc.data()?.location)
-      console.log('tickets_max: ', eventDoc.data()?.tickets_max)
-      console.log('title: ', eventDoc.data()?.title)
-      console.log('uid: ', eventDoc.data()?.uid)
       setCurrEventImgURl(eventDoc.data()?.img_url)
       setTitle(eventDoc.data()?.title)
       setEventId(eventDoc.data()?.event_id)
       setEventDescription(eventDoc.data()?.description)
       setEventLocation(eventDoc.data()?.location)
-      //update and pass the url so it will be used for
-      //displaying the previous photo on the photo input
-      // setFileImg()
       setTicketMax(eventDoc.data()?.tickets_max)
+      previousCap = eventDoc.data()?.tickets_max
       // setStartDate((eventDoc.data()?.start_date))
       // setEndDate(eventDoc.data()?.end_date)
 
-      //setState all the obtained data to the front end ui.!!!
+      //update and pass the url so it will be used for
+      //displaying the previous photo on the photo input
+      // setFileImg()
     }
     if (eid) {
       setCurrentEventData()
@@ -121,43 +98,59 @@ export default function EditEvent() {
     let isFormValid
     setIsUpdatingEvent(true)
     setErrorMsg('')
-    isFormValid = validateForm()
+    isFormValid = validateEditEventForm()
     if (!isFormValid) {
       setIsUpdatingEvent(false)
       return
     }
-    //event id is not needed to take a look again.
     const path = `${auth.uid}/${fileImg?.name}`
-
     try {
-      //set a new function called updateImage.
-      //where it updates the current image with the new one,
-      //exactly to the path of where is stored.
-      // await uploadImage(fileImg, path, async (url: string) => {
-      // 	const returnedId = await createNewEvent({
-      // 	title: title,
-      // 	end_date: endDate,
-      // 	start_date: startDate,
-      // 	uid: auth.uid,
-      // 	description: eventDescription,
-      // 	location: eventLocation,
-      // 	img_url: url,
-      // 	ticket_max: ticketMax,
-      // 	event_id: eventId
-      //   })
-      //rename to updateCreatedEventDocument()
-      // await addEventToUpcomingEvents({
-      // eventTitle: title,
-      // uid: auth.uid,
-      // eventId: eventId,
-      // startDate: startDate,
-      // endDate: endDate
-      // })
-
-      //reroute the user back to the previous event.
-      //and it will refresh with the new data.
+      if (!fileImg) {
+        //set a new function called updateImage.
+        //where it updates the current image with the new one,
+        //exactly to the path of where is stored.
+        // TODO update the logic of this function
+        await uploadImage(fileImg, path, async (url: string) => {
+          await uploadEventInfo({
+            title: title,
+            end_date: endDate,
+            start_date: startDate,
+            uid: auth.uid,
+            description: eventDescription,
+            location: eventLocation,
+            img_url: url,
+            ticket_max: ticketMax,
+            event_id: eventId
+          })
+          await updateCreatedEventToUser({
+            eventTitle: title,
+            uid: auth.uid,
+            eventId: eventId,
+            startDate: startDate,
+            endDate: endDate
+          })
+        })
+      } else {
+        await uploadEventInfo({
+          title: title,
+          end_date: endDate,
+          start_date: startDate,
+          uid: auth.uid,
+          description: eventDescription,
+          location: eventLocation,
+          img_url: currEventImgURl,
+          ticket_max: ticketMax,
+          event_id: eventId
+        })
+        await updateCreatedEventToUser({
+          eventTitle: title,
+          uid: auth.uid,
+          eventId: eventId,
+          startDate: startDate,
+          endDate: endDate
+        })
+      }
       router.push(`/e/${eventId}`)
-      // })
     } catch (e) {
       console.error('event/create:', e)
       alert(
