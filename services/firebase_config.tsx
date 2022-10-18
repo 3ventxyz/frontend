@@ -2,7 +2,7 @@ import { initializeApp } from '@firebase/app'
 import { getAnalytics, isSupported } from '@firebase/analytics'
 import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore'
 import { connectAuthEmulator, getAuth } from '@firebase/auth'
-import { getStorage } from '@firebase/storage'
+import { getStorage, connectStorageEmulator } from '@firebase/storage'
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 
 const firebaseConfig = {
@@ -29,5 +29,6 @@ if (typeof window !== 'undefined') {
     connectFunctionsEmulator(functions, 'localhost', 5001)
     connectAuthEmulator(auth, 'http://localhost:9099')
     connectFirestoreEmulator(db, 'localhost', 8080)
+    connectStorageEmulator(storage, 'localhost',9199)
   }
 }
