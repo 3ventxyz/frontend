@@ -8,6 +8,7 @@ import Button from '../../components/button'
 import ErrorAlert from '../../components/alerts/errorAlert'
 import TextInput from '../../components/textInput'
 import ToggleSwitch from '../../components/toggleSwitch'
+import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 
 export default function CreateAllowlist() {
   const auth = useAuth()
@@ -19,9 +20,17 @@ export default function CreateAllowlist() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const uid = auth?.uid
   const [wallet, setWallet] = useState(false)
-  let i = 0
-  console.log(wallet)
+  const [twitterVerification, setTwitterVerification] = useState(false)
+  const [twitterFollowing, setTwitterFollowing] = useState(false)
+  const [twitterAccount, setTwitterAccount] = useState('')
+  const [discordVerification, setDiscordVerification] = useState(false)
+  const [discordGuild, setDiscordGuild] = useState(false)
+  const [guild, setGuild] = useState('')
+  const [emailVerification, setEmailVerification] = useState(false) 
+  
   const valueChange = (change: (value: boolean) => void, value: boolean) => {
     change(!value)
   }
@@ -34,7 +43,15 @@ export default function CreateAllowlist() {
         allowlistRef.current?.value ?? '',
         titleRef.current?.value ?? '',
         descriptionRef.current?.value ?? '',
-        auth.currentUser?.uid ?? ''
+        uid,
+        wallet,
+        twitterVerification,
+        twitterFollowing,
+        twitterAccount,
+        discordVerification,
+        discordGuild,
+        guild,
+        emailVerification 
       )
 
       if (!response?.success) {
@@ -103,7 +120,79 @@ export default function CreateAllowlist() {
           </div>
           <div className="mb-6 flex items-center space-x-4">
             <span className="text-sm font-medium text-gray-900">WALLET</span>
-            <ToggleSwitch label="wallet" onClick={() => valueChange(setWallet, wallet)} />
+            <ToggleSwitch
+              label="wallet"
+              onClick={() => valueChange(setWallet, wallet)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              TWITTER VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="twitterVerification"
+              onClick={() =>
+                valueChange(setTwitterVerification, twitterVerification)
+              }
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              CHECK TWITTER FOLLOWING
+            </span>
+            <ToggleSwitch
+              label="twitterFollowing"
+              onClick={() => valueChange(setTwitterFollowing, twitterFollowing)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <TextInput
+              id="twitterAccount"
+              labelText="TWITTER ACCOUNT ID"
+              placeholder="Twitter Account ID"
+              setValue={setTwitterAccount}
+              xMargin="mx-0"
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              DISCORD VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="discordVerification"
+              onClick={() =>
+                valueChange(setDiscordVerification, discordVerification)
+              }
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              CHECK DISCORD GUILD
+            </span>
+            <ToggleSwitch
+              label="discordGuild"
+              onClick={() => valueChange(setDiscordGuild, discordGuild)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <TextInput
+              id="discordGuild"
+              labelText="DISCORD GUILD ID"
+              placeholder="Discord Guild ID"
+              setValue={setGuild}
+              xMargin="mx-0"
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              EMAIL VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="emailVerification"
+              onClick={() =>
+                valueChange(setEmailVerification, emailVerification)
+              }
+            />
           </div>
           <Button
             type="submit"

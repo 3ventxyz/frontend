@@ -50,7 +50,15 @@ export default class AllowlistService {
     addresses: string,
     title: string,
     description: string,
-    uid: string
+    uid: string,
+    wallet: boolean,
+    twitter: boolean,
+    twitterFollowing: boolean,
+    twitterAccountId: string,
+    discord: boolean,
+    discordGuild: boolean,
+    discordGuildId: string,
+    email: boolean
   ) => {
     try {
       var authVerification = await this.checkAuth(null, uid)
@@ -67,7 +75,15 @@ export default class AllowlistService {
             title: title,
             description: description,
             allowlist: allowlist,
-            uid: doc(db, 'users', uid)
+            uid: doc(db, 'users', uid),
+            walletVerif: wallet,
+            twitterVerif: twitter,
+            twitterFollowing: twitterFollowing,
+            twitterAccountId: twitterAccountId,
+            discordVerif: discord,
+            discordGuild: discordGuild,
+            discordGuildId: discordGuildId,
+            emailVerif: email
           })
           return { success: true, message: 'List created successfully' }
         } else {
