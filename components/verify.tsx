@@ -3,15 +3,18 @@ import { useRouter } from 'next/router'
 import { verifyDiscord, verifyTwitter } from '../services/verify_profile'
 import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
-import {
-  doc,
-  getDoc
-} from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
-export default function Verify() {
+export default function Verify({
+  twitter = true,
+  discord = true
+}: {
+  twitter: boolean
+  discord: boolean
+}) {
   const { asPath } = useRouter()
   const router = useRouter()
   const [checked, setChecked] = useState(false)
@@ -75,7 +78,6 @@ export default function Verify() {
           }
         }
       } else {
-
       }
       setChecked(true)
     }
@@ -84,53 +86,65 @@ export default function Verify() {
       checkVerification()
     }
   }, [])
-
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
       <p className="font-semibold">Verify Social Accounts</p>
-      <div className="flex flex-col w-full flex-wrap items-start space-y-2 justify-center text-center">
-        {discordVerified ? (
-          <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
-            Discord Verified
-          </p>
-        ) : (
-          <a
-            href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
-            className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
-          >
-            Verify Discord
-          </a>
-        )}
-        {twitterSize === 0 ? (
-          <a
-            href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
-            className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
-          >
-            Verify Twitter
-          </a>
-        ) : (
-          twitterVerifs.map((account, index) => {
-            return (
-              <>
-                {twitterVerifs[index] !== '' ? (
-                  <div className="flex w-full space-x-2">
-                    <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#1d9bf0] bg-white text-[14px] font-semibold text-[#1d9bf0]">
-                      Twitter Verified - {twitterNames[index]}
-                    </p>
-                    {index !== twitterSize - 1 ? (
-                      <></>
-                    ) : (
-                      <a className="text-4xl"
-                        href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
-                      >
-                        +
-                      </a>
-                    )}
-                  </div>
-                ) : <></>}
-              </>
+      <div className="flex w-full flex-col flex-wrap items-start justify-center space-y-2 text-center">
+        <>
+          {discord ? (
+            discordVerified ? (
+              <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
+                Discord Verified
+              </p>
+            ) : (
+              <a
+                href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify`}
+                className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
+              >
+                Verify Discord
+              </a>
             )
-          })
+          ) : (
+            <></>
+          )}
+        </>
+        {twitter ? (
+          twitterSize === 0 ? (
+            <a
+              href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+              className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+            >
+              Verify Twitter
+            </a>
+          ) : (
+            twitterVerifs.map((account, index) => {
+              return (
+                <>
+                  {twitterVerifs[index] !== '' ? (
+                    <div className="flex w-full space-x-2">
+                      <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-[#1d9bf0] bg-white text-[14px] font-semibold text-[#1d9bf0]">
+                        Twitter Verified - {twitterNames[index]}
+                      </p>
+                      {index !== twitterSize - 1 ? (
+                        <></>
+                      ) : (
+                        <a
+                          className="text-4xl"
+                          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+                        >
+                          +
+                        </a>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )
+            })
+          )
+        ) : (
+          <></>
         )}
       </div>
     </div>

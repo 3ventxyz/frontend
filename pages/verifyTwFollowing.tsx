@@ -48,10 +48,10 @@ export async function verifyTwitter(
   return false
 }
 
-export default function VerifyFollowing() {
+export default function VerifyFollowing({twitterID = ''}:{twitterID: string}) {
   const { asPath } = useRouter()
   const router = useRouter()
-  const [twitterAccount, setTwitterAccount] = useState('')
+  const twitterAccount = twitterID
   const auth = useAuth()
   const uid = auth?.uid
   const { origin } = absoluteUrl()
@@ -67,24 +67,16 @@ export default function VerifyFollowing() {
 
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
-      <p className="font-semibold">Check Account Following</p>
+      <p className="font-semibold">Follow Check</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
-        <TextInput
-          labelText="Twitter account"
-          id="twitter_account"
-          placeholder="Twitter account"
-          width={'w-full'}
-          textArea={false}
-          setValue={setTwitterAccount}
-        />
         <a
           href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
-          Verify Twitter
+          Choose an account
         </a>
         <Button
-          text={'Save'}
+          text={'Verify'}
           onClick={() => {
             verifyTwitter(hash, uid, url, twitterAccount)
           }}

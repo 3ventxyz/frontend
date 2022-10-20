@@ -6,6 +6,11 @@ import { useRouter } from 'next/router'
 import Button from '../../../components/button'
 import ErrorAlert from '../../../components/alerts/errorAlert'
 import TextInputDisplay from '../../../components/textInputDisplay'
+import Verify from '../../../components/verify'
+import EmailVerification from '../../u/components/emailVerification'
+import VerifyFollowing from '../../verifyTwFollowing'
+import VerifyGuild from '../../verifyGuild'
+
 export default function AllowlistApplication() {
   /*Needed variables */
   const auth = useAuth()
@@ -19,6 +24,7 @@ export default function AllowlistApplication() {
 
   const [wallet, setWallet] = useState('')
   const [twitter, setTwitter] = useState([])
+  const [twitterName, setTwitterName] = useState([])
   const [discord, setDiscord] = useState('')
   const [email, setEmail] = useState(false)
 
@@ -65,6 +71,7 @@ export default function AllowlistApplication() {
         setTwitter(docSnap.data().tw_verifs)
         setDiscord(docSnap.data().discord_id)
         setEmail(docSnap.data().email_verified)
+        setTwitterName(docSnap.data().twitter_name)
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -80,39 +87,51 @@ export default function AllowlistApplication() {
         <h3 className="w-full max-w-[600px] border-b border-disabled">
           {title}
         </h3>
-        {(
-            walletVerification ? 
-         <p>Check wallet</p>
-          :
-            <></>
+        {walletVerification ? <p>Check wallet</p> : <></>}
+
+        {twitterVerification ? (
+          twitter.length != 0 ? (
+            <>
+              <p>Select of verified accounts</p>
+              <select>
+                {twitter.map((account, index) => {
+                  return (
+                    <>
+                      <option value={twitter[index]}>
+                        {twitterName[index]}
+                      </option>
+                    </>
+                  )
+                })}
+              </select>
+            </>
+          ) : (
+            <Verify twitter={true} discord={false} />
+          )
+        ) : (
+          <></>
         )}
-             {(
-            twitterVerification ? 
-            (
-                twitter.length != 0 ? <p>Verifed</p> : <p>Not veriified</p>
-            ) :
-            <></>
+
+        {twitterFollowing ? (
+          <VerifyFollowing twitterID={twitterAccount} />
+        ) : (
+          <></>
         )}
-             {(
-            twitterFollowing ? 
-            <p>input to verify follow to {twitterAccount}</p> :
-            <></>
+
+        {discordVerification ? (
+          <Verify twitter={false} discord={true} />
+        ) : (
+          <></>
         )}
-             {(
-            discordVerification ? 
-            (discord != '' ? <p>Verified</p> : <p>Not verified</p>) :
-            <></>
+
+        {discordGuild ? <VerifyGuild discordGuildID={guild} /> : <></>}
+
+        {emailVerification ? (
+          <EmailVerification />
+        ) : (
+          <></>
         )}
-             {(
-            discordGuild ? 
-            <p>input to verify follow to {guild}</p> :      
-                  <></>
-        )}
-                     {(
-            emailVerification ? 
-            (email ? <p>verified</p> : <p>Not verified</p>) :
-            <></>
-        )}
+
         <form className="m-4 w-full" onSubmit={() => {}}>
           <Button
             type="submit"
