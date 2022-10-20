@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useState, useRef } from 'react'
 import AllowlistService from '../../services/allowlists'
 import Button from '../../components/button'
 import ErrorAlert from '../../components/alerts/errorAlert'
@@ -21,20 +21,19 @@ export default function CreateAllowlist() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const uid = auth?.uid
-  const [wallet, setWallet] = useState(false)
-  const [twitterVerification, setTwitterVerification] = useState(false)
+  const walletVerification = useRef(false)
+  const twitterVerification = useRef(false)
   const [twitterFollowing, setTwitterFollowing] = useState(false)
-  const [twitterAccount, setTwitterAccount] = useState('')
-  const [discordVerification, setDiscordVerification] = useState(false)
+  const discordVerification = useRef(false)
   const [discordGuild, setDiscordGuild] = useState(false)
+  const [twitterAccount, setTwitterAccount] = useState('')
   const [guild, setGuild] = useState('')
-  const [emailVerification, setEmailVerification] = useState(false) 
-  
-  const valueChange = (change: (value: boolean) => void, value: boolean) => {
-    change(!value)
-  }
+  const emailVerification = useRef(false)
 
+  const changeValue = (ref: any) => {
+    ref.current = !ref.current
+    console.log(ref, ref.current)
+  }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
@@ -43,15 +42,15 @@ export default function CreateAllowlist() {
         allowlistRef.current?.value ?? '',
         titleRef.current?.value ?? '',
         descriptionRef.current?.value ?? '',
-        uid,
-        wallet,
-        twitterVerification,
+        auth.currentUser?.uid ?? '',
+        walletVerification.current,
+        twitterVerification.current,
         twitterFollowing,
         twitterAccount,
-        discordVerification,
+        discordVerification.current,
         discordGuild,
         guild,
-        emailVerification 
+        emailVerification.current
       )
 
       if (!response?.success) {
@@ -65,7 +64,6 @@ export default function CreateAllowlist() {
     }
     setLoading(false)
   }
-
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
@@ -118,80 +116,82 @@ export default function CreateAllowlist() {
               required
             ></textarea>
           </div>
-          <div className="mb-6 flex items-center space-x-4">
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">WALLET</span>
             <ToggleSwitch
               label="wallet"
-              onClick={() => valueChange(setWallet, wallet)}
+              onClick={() => changeValue(walletVerification)}
             />
           </div>
-          <div className="mb-6 flex items-center space-x-4">
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               TWITTER VERIFICATION
             </span>
             <ToggleSwitch
               label="twitterVerification"
-              onClick={() =>
-                valueChange(setTwitterVerification, twitterVerification)
-              }
+              onClick={() => changeValue(twitterVerification)}
             />
           </div>
-          <div className="mb-6 flex items-center space-x-4">
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               CHECK TWITTER FOLLOWING
             </span>
             <ToggleSwitch
               label="twitterFollowing"
-              onClick={() => valueChange(setTwitterFollowing, twitterFollowing)}
+              onClick={() => setTwitterFollowing(!twitterFollowing)}
             />
           </div>
-          <div className="mb-6 flex items-center space-x-4">
-            <TextInput
-              id="twitterAccount"
-              labelText="TWITTER ACCOUNT ID"
-              placeholder="Twitter Account ID"
-              setValue={setTwitterAccount}
-              xMargin="mx-0"
-            />
-          </div>
-          <div className="mb-6 flex items-center space-x-4">
+          { (twitterFollowing ? (
+            <div className="mb-6 flex max-w-[400px] items-center justify-between">
+              <TextInput
+                id="twitterAccount"
+                labelText="TWITTER ACCOUNT ID"
+                placeholder="Twitter Account ID"
+                setValue={setTwitterAccount}
+                xMargin="mx-0"
+              />
+            </div>
+          ) : (
+            <></>
+          ) )}
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               DISCORD VERIFICATION
             </span>
             <ToggleSwitch
               label="discordVerification"
-              onClick={() =>
-                valueChange(setDiscordVerification, discordVerification)
-              }
+              onClick={() => changeValue(discordVerification)}
             />
           </div>
-          <div className="mb-6 flex items-center space-x-4">
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               CHECK DISCORD GUILD
             </span>
             <ToggleSwitch
               label="discordGuild"
-              onClick={() => valueChange(setDiscordGuild, discordGuild)}
+              onClick={() => setDiscordGuild(!discordGuild)}
             />
           </div>
-          <div className="mb-6 flex items-center space-x-4">
-            <TextInput
-              id="discordGuild"
-              labelText="DISCORD GUILD ID"
-              placeholder="Discord Guild ID"
-              setValue={setGuild}
-              xMargin="mx-0"
-            />
-          </div>
-          <div className="mb-6 flex items-center space-x-4">
+          {discordGuild ? (
+            <div className="mb-6 flex max-w-[400px] items-center justify-between">
+              <TextInput
+                id="discordGuild"
+                labelText="DISCORD GUILD ID"
+                placeholder="Discord Guild ID"
+                setValue={setGuild}
+                xMargin="mx-0"
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               EMAIL VERIFICATION
             </span>
             <ToggleSwitch
               label="emailVerification"
-              onClick={() =>
-                valueChange(setEmailVerification, emailVerification)
-              }
+              onClick={() => changeValue(emailVerification)}
             />
           </div>
           <Button
