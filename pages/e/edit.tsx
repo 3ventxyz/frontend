@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import FileImageInput from '../../components/fileImageInput'
 import { uploadEventInfo } from '../../services/upload_event_info'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
-import setFiletype from './functions/setFileType'
+import setFiletype from '../../shared/utils/setFileType'
 
 export default function EditEvent() {
   const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)

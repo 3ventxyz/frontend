@@ -15,7 +15,7 @@ import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
-import setFiletype from './functions/setFileType'
+import setFiletype from '../../shared/utils/setFileType'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
