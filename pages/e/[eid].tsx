@@ -79,6 +79,7 @@ export default function Event() {
   const handleOnClose = () => setShowModal(false)
 
   useEffect(() => {
+    setEventPageStatus(EventPageEnum.fetchingData)
     const fetchData = async () => {
       // fetch user Doc Data.
       const docRef = doc(db, 'users', auth.uid)
@@ -93,9 +94,9 @@ export default function Event() {
       //vars for fetching ticket data and userIsRegistered.
       const fetchedTicketListData: Array<TicketInterface> = []
       var isUserRegistered: boolean
-      const isUserOwner = (eventData?.uid === userDoc.id)
-      setIsEventCreator(isUserOwner);
-      
+      const isUserOwner = eventData?.uid === userDoc.id
+      setIsEventCreator(isUserOwner)
+
       //if eventDataDoesnt exist return null
       if (!eventData) return
       //setting eventData and ticket data
@@ -128,9 +129,12 @@ export default function Event() {
        *
        */
     }
-    if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+    if (eid) {
       fetchData()
     }
+    // if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+    //   fetchData()
+    // }
   }, [eid])
 
   return (

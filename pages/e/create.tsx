@@ -1,4 +1,4 @@
-// author: Marthel
+// author: Marthel, Ben
 import TextInput from '../../components/textInput'
 import Button from '../../components/button'
 import FileImageInput from '../../components/fileImageInput'
@@ -35,6 +35,15 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
+  const typeofFileValidator = (fileType: string) => {
+    if (fileType === 'image/jpeg' || fileType === 'image/png') {
+      console.log('valid image type', fileType)
+      return true;
+    }
+    console.error('invalid image type', fileType)
+    return false
+  }
+
   const validateForm = () => {
     if (title === '') {
       setErrorField('Event Title')
@@ -70,6 +79,16 @@ export default function CreateEvent() {
       setErrorField('Event Image')
       setErrorMsg('file img is null')
       return false
+    }
+    if(!typeofFileValidator(fileImg.type)){
+      setErrorField('Event Image')
+      setErrorMsg('Selected Image is invalid type. Please upload jpg or png image.')
+      return false;
+    }
+    if(isNaN(ticketMax)){
+      setErrorField('Tickets')
+      setErrorMsg('Please enter a valid number of tickets')
+      return false;
     }
     if (ticketMax === 0) {
       setErrorField('Tickets')

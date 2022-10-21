@@ -52,8 +52,8 @@ export default function EditEvent() {
       setEventLocation(eventDoc.data()?.location)
       setTicketMax(eventDoc.data()?.ticket_max)
       setPreviousCap(eventDoc.data()?.ticket_max)
-      setStartDate(eventDoc.data()?.start_date.toDate())
-      setEndDate(eventDoc.data()?.end_date.toDate())
+      setStartDate(new Date(eventDoc.data()?.start_date.toDate()))
+      setEndDate(new Date(eventDoc.data()?.end_date.toDate()))
     }
     if (eid) {
       setCurrentEventData()
@@ -61,17 +61,23 @@ export default function EditEvent() {
   }, [eid])
 
   //edit event form validator.
-  const typeofFileValidator = (fileType: string) => {
-    if (fileType === 'image/jpeg' || fileType === 'image/png') {
-      console.log('valid image type', fileType)
-      return true;
+  const fileTypeValidator = (file: File | null) => {
+    if (!file) {
+      return true
     }
-    console.error('invalid image type', fileType)
+    if (file.type === 'image/jpeg' || file.type === 'image/png') {
+      console.log('valid image type', file.type)
+      return true
+    }
+    console.error('invalid image type', file.type)
     return false
   }
 
-  const setFiletype = (type: string) => {
-    if (true) {
+  const setFiletype = (file: File | null) => {
+    if (!file) {
+      return ''
+    }
+    if (file.type === 'image/jpeg') {
       return '.jpg'
     }
     return '.png'
@@ -83,18 +89,18 @@ export default function EditEvent() {
       setErrorMsg('title is empty')
       return false
     }
-    if(!fileImg){
+    if (!fileTypeValidator(fileImg)) {
       setErrorField('Event Image')
-      setErrorMsg('No Image has been selected for your event. Please select one.')
-      return false;
+      setErrorMsg(
+        'Selected Image is invalid type. Please upload jpg or png image.'
+      )
+      return false
     }
-    if(!typeofFileValidator(fileImg.type)){
-      
+    if (!fileImg && currEventImgURl == '') {
       setErrorField('Event Image')
-      setErrorMsg('Selected Image is invalid type. Please upload jpg or png image.')
-      return false;
+      setErrorMsg('Image is invalid, please select an image for your event.')
+      return false
     }
-    
     if (
       eventLocation.address === '' ||
       eventLocation.lat === 0 ||
@@ -105,7 +111,7 @@ export default function EditEvent() {
       return false
     }
 
-    if (startDate.getTime() > currentDate.getTime()) {
+    if (startDate.getTime() < currentDate.getTime()) {
       setErrorField('Start Date/End Date')
       setErrorMsg('start date cannot be a previous date from today')
       return false
@@ -119,6 +125,11 @@ export default function EditEvent() {
     if (startDate.getTime() > endDate.getTime()) {
       setErrorField('Start Date/End Date')
       setErrorMsg('end date cannot be behind the start date schedule')
+      return false
+    }
+    if (isNaN(ticketMax)) {
+      setErrorField('Tickets')
+      setErrorMsg('Please enter a valid number of tickets')
       return false
     }
     if (ticketMax < previousCap) {
@@ -142,32 +153,32 @@ export default function EditEvent() {
     try {
       if (fileImg) {
         // TODO create a imgType setter, based from the selected file img.
-        console.log('fileImg:', fileImg.type);
+        console.log('fileImg:', fileImg.type)
         const storagePath = `${auth.uid}/${eventId + '.jpg'}`
-        // await uploadImageToStorage(
-        //   fileImg,
-        //   storagePath,
-        //   async (url: string) => {
-        //     await uploadEventInfo({
-        //       title: title,
-        //       end_date: endDate,
-        //       start_date: startDate,
-        //       uid: auth.uid,
-        //       description: eventDescription,
-        //       location: eventLocation,
-        //       img_url: url,
-        //       ticket_max: ticketMax,
-        //       event_id: eventId
-        //     })
-        //     await updateCreatedEventToUser({
-        //       eventTitle: title,
-        //       uid: auth.uid,
-        //       eventId: eventId,
-        //       startDate: startDate,
-        //       endDate: endDate
-        //     })
-        //   }
-        // )
+        await uploadImageToStorage(
+          fileImg,
+          storagePath,
+          async (url: string) => {
+            await uploadEventInfo({
+              title: title,
+              end_date: endDate,
+              start_date: startDate,
+              uid: auth.uid,
+              description: eventDescription,
+              location: eventLocation,
+              img_url: url,
+              ticket_max: ticketMax,
+              event_id: eventId
+            })
+            await updateCreatedEventToUser({
+              eventTitle: title,
+              uid: auth.uid,
+              eventId: eventId,
+              startDate: startDate,
+              endDate: endDate
+            })
+          }
+        )
       } else {
         await uploadEventInfo({
           title: title,
@@ -201,7 +212,7 @@ export default function EditEvent() {
   //UI of the edit page.
   return (
     <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
-      {/* <div className="flex w-full items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <span
           onClick={() => {
             router.back()
@@ -210,12 +221,11 @@ export default function EditEvent() {
           <div className="cursor-pointer">
             <IoChevronBack className="h-[40px] w-[40px]" />
           </div>
-        </span> */}
+        </span>
         <h3 className="w-full max-w-[600px] border-b border-disabled">
           Edit Event
         </h3>
-      {/* </div> */}
-
+      </div>
       <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <TextInput
           id={'event_name'}
@@ -224,7 +234,6 @@ export default function EditEvent() {
           setValue={setTitle}
           isDisabled={isUpdatingEvent}
         />
-        {/* <div> */}
         <div className="w-full">
           <TextInput
             id={'event_id'}
@@ -257,7 +266,11 @@ export default function EditEvent() {
           </label>
           <DatePicker
             selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
+            onChange={(date: Date) => {
+              console.log('new startDate: ', date.getTime())
+              setStartDate(new Date(date))
+              console.log('set startDate: ', startDate.getTime())
+            }}
             showTimeSelect
             dateFormat="Pp"
           />
@@ -268,7 +281,11 @@ export default function EditEvent() {
           </label>
           <DatePicker
             selected={endDate}
-            onChange={(date: Date) => setEndDate(date)}
+            onChange={(date: Date) => {
+              console.log('new endDate: ', date.getTime())
+              setEndDate(new Date(date))
+              console.log('set endDate: ', endDate.getTime())
+            }}
             showTimeSelect
             dateFormat="Pp"
           />
