@@ -10,6 +10,12 @@ module.exports = class DataSeeder {
   user1UID = ' '
   user2UID = ' '
 
+  /**
+   * function: setDummyAuthUser
+   * --description: it creates a user in the firebase auth, this.auth, for logging in the front end;
+   *    and sets their uid document in firestore, this.db, for accessing their data.
+   *    if the user already exists in the auth database, then its skipped.
+   */
   async setDummyAuthUser(email, phoneNumber, password) {
     var strippedUID = ' '
     var isUserCreated = true
@@ -18,12 +24,8 @@ module.exports = class DataSeeder {
       //if it does return right away its uid
       var userData = await this.auth.getUserByEmail(email).catch((error) => {
         isUserCreated = false
-        console.log(error, 'user not created, creating user')
-        console.log(error, 'user not created, creating user')
       })
       if (isUserCreated) {
-        console.log('user already created data:', userData)
-        console.log('user id :', userData.uid)
         return userData.uid
       }
       var docSnap = await this.auth
@@ -72,6 +74,12 @@ module.exports = class DataSeeder {
     return strippedUID
   }
 
+  /**
+   * function: setDummyUsersInDB
+   * --description: it creates an array of generated dummy users, with data randomly generated for each dummy user.
+   * Each generated dummy user is added right away to the 'users' collection firestore,
+   * this.db, setting the generated data to their respective fileds.
+   */
   async setDummyUsersInDB() {
     try {
       ;[...Array(10).keys()].map(() => {
@@ -105,6 +113,14 @@ module.exports = class DataSeeder {
     }
   }
 
+  /**
+   * function: setDummyEventsCollectionInDB
+   * --description: it creates an array of generated events, with data randomly generated for each dummy event.
+   * it creates an array of generated dummy users, with data randomly generated for each dummy user.
+   * Each generated dummy user is added right away to the 'users' collection firestore,
+   * this.db, setting the generated data to their respective fileds.
+   * Also, each event sets the user id, uid, from the already authenticated users.
+   */
   setDummyEventsCollectionInDB() {
     try {
       ;[...Array(10).keys()].map((index) => {
@@ -156,25 +172,16 @@ module.exports = class DataSeeder {
     }
   }
 
+  /**
+   * function: setDummyEventsToUserPropietaryDB
+   * --description: it adds the event reference(eventRef), along other data, to the user document; who created the event.
+   *   This data is added to the 'upcoming_events' collection, inside the uid doc.
+   */
   async setDummyEventsToUserPropietaryDB() {
-    //first get the seeded dummyevents from the events collection.
     const eventsRef = this.db.collection('events')
     var eventsDocs = await eventsRef.get()
-    console.log('checking eventsRef is empty:', eventsRef.empty)
-    console.log('eventsDocs obtained')
-    console.log(eventsDocs)
-    console.log('===========================')
-    /**
-     *iterate each event doc, and add it to the upcoming_events collection,
-     * from their respective owner(uid doc)
-     */
     eventsDocs.forEach((doc) => {
       var docData = doc.data()
-      console.log('===================setting data========')
-      console.log('event Id:', doc.id)
-      console.log('event uid:', docData['uid'])
-      console.log(docData)
-      console.log('===========================')
       if (docData['uid'] === this.user1UID) {
         this.db
           .collection(`users/${docData['uid']}/upcoming_events`)
@@ -199,25 +206,11 @@ module.exports = class DataSeeder {
     })
   }
 
-  registerDummyUsersToEvents() {
-    //iterate through the list, and as long that is not from the main
-    //auth users. then update.
-    //data to add in the registered_attendees collection for each event doc
-    // --address:
-    // --city:
-    // --first_name:
-    // --last_name:
-    // --phone_number:
-    // --state:
-    // --uid:
-    // --zip_code:
-    // date_of_registration:
-    //data to add to the registered_events collection in the ui doc
-    //event_ref:
-    //start_date:
-    //date_of_registration:
-  }
-
+  /**
+   * function: initDummyData
+   * description: this function runs the other functions that seed the generated dummy
+   * data to firebase emulators.
+   */
   async initDummyData() {
     this.user1UID = await this.setDummyAuthUser(
       'test123@gmail.com',
