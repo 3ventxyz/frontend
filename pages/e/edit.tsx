@@ -1,3 +1,4 @@
+// author: marthel
 import { doc, DocumentSnapshot, getDoc } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import { IoChevronBack } from 'react-icons/io5'
@@ -16,6 +17,7 @@ import { useRouter } from 'next/router'
 import FileImageInput from '../../components/fileImageInput'
 import { uploadEventInfo } from '../../services/upload_event_info'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
+import setFiletype from './functions/setFileType'
 
 export default function EditEvent() {
   const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
@@ -73,15 +75,15 @@ export default function EditEvent() {
     return false
   }
 
-  const setFiletype = (file: File | null) => {
-    if (!file) {
-      return ''
-    }
-    if (file.type === 'image/jpeg') {
-      return '.jpg'
-    }
-    return '.png'
-  }
+  // const setFiletype = (file: File | null) => {
+  //   if (!file) {
+  //     return ''
+  //   }
+  //   if (file.type === 'image/jpeg') {
+  //     return '.jpg'
+  //   }
+  //   return '.png'
+  // }
 
   const validateEditEventForm = () => {
     if (title === '') {
@@ -154,7 +156,8 @@ export default function EditEvent() {
       if (fileImg) {
         // TODO create a imgType setter, based from the selected file img.
         console.log('fileImg:', fileImg.type)
-        const storagePath = `${auth.uid}/${eventId + '.jpg'}`
+        const fileType = setFiletype(fileImg)
+        const storagePath = `${auth.uid}/${eventId + fileType}`
         await uploadImageToStorage(
           fileImg,
           storagePath,

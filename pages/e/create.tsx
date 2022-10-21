@@ -15,6 +15,7 @@ import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
+import setFiletype from './functions/setFileType'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -38,7 +39,7 @@ export default function CreateEvent() {
   const typeofFileValidator = (fileType: string) => {
     if (fileType === 'image/jpeg' || fileType === 'image/png') {
       console.log('valid image type', fileType)
-      return true;
+      return true
     }
     console.error('invalid image type', fileType)
     return false
@@ -64,7 +65,11 @@ export default function CreateEvent() {
       setErrorMsg('event location is not selected')
       return false
     }
-
+    if (startDate.getTime() === endDate.getTime()) {
+      setErrorField('Start Date/End Date')
+      setErrorMsg('start date and end date cannot have the same time period')
+      return false
+    }
     if (startDate.getTime() === endDate.getTime()) {
       setErrorField('Start Date/End Date')
       setErrorMsg('start date and end date cannot have the same time period')
@@ -80,15 +85,17 @@ export default function CreateEvent() {
       setErrorMsg('file img is null')
       return false
     }
-    if(!typeofFileValidator(fileImg.type)){
+    if (!typeofFileValidator(fileImg.type)) {
       setErrorField('Event Image')
-      setErrorMsg('Selected Image is invalid type. Please upload jpg or png image.')
-      return false;
+      setErrorMsg(
+        'Selected Image is invalid type. Please upload jpg or png image.'
+      )
+      return false
     }
-    if(isNaN(ticketMax)){
+    if (isNaN(ticketMax)) {
       setErrorField('Tickets')
       setErrorMsg('Please enter a valid number of tickets')
-      return false;
+      return false
     }
     if (ticketMax === 0) {
       setErrorField('Tickets')
@@ -115,10 +122,12 @@ export default function CreateEvent() {
       )
       return
     }
-    const path = `${auth.uid}/${fileImg?.name}`
     try {
+      console.log('fileImg: ', fileImg?.type)
+      const fileType = setFiletype(fileImg)
+      const storagePath = `${auth.uid}/${eventId + fileType}`
       console.log('uploading image: ', fileImg?.name)
-      await uploadImageToStorage(fileImg, path, async (url: string) => {
+      await uploadImageToStorage(fileImg, storagePath, async (url: string) => {
         const returnedId = await uploadEventInfo({
           title: title,
           end_date: endDate,
