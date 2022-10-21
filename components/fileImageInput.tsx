@@ -52,6 +52,9 @@ export default function FileImageInput({
             onChange={(event: any) => {
               setFileImg(event.target.files[0])
               setImgUrl(URL.createObjectURL(event.target.files[0]))
+              
+              
+              // console.log('fileImg type:',fileImg?.type)
               setMouseHover(false)
             }}
           />

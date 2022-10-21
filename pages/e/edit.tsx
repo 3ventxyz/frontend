@@ -62,9 +62,11 @@ export default function EditEvent() {
 
   //edit event form validator.
   const typeofFileValidator = (fileType: string) => {
-    if (fileType === 'jpeg' || fileType === 'png') {
-      return true
+    if (fileType === 'image/jpeg' || fileType === 'image/png') {
+      console.log('valid image type', fileType)
+      return true;
     }
+    console.error('invalid image type', fileType)
     return false
   }
 
@@ -81,6 +83,18 @@ export default function EditEvent() {
       setErrorMsg('title is empty')
       return false
     }
+    if(!fileImg){
+      setErrorField('Event Image')
+      setErrorMsg('No Image has been selected for your event. Please select one.')
+      return false;
+    }
+    if(!typeofFileValidator(fileImg.type)){
+      
+      setErrorField('Event Image')
+      setErrorMsg('Selected Image is invalid type. Please upload jpg or png image.')
+      return false;
+    }
+    
     if (
       eventLocation.address === '' ||
       eventLocation.lat === 0 ||
@@ -128,31 +142,32 @@ export default function EditEvent() {
     try {
       if (fileImg) {
         // TODO create a imgType setter, based from the selected file img.
+        console.log('fileImg:', fileImg.type);
         const storagePath = `${auth.uid}/${eventId + '.jpg'}`
-        await uploadImageToStorage(
-          fileImg,
-          storagePath,
-          async (url: string) => {
-            await uploadEventInfo({
-              title: title,
-              end_date: endDate,
-              start_date: startDate,
-              uid: auth.uid,
-              description: eventDescription,
-              location: eventLocation,
-              img_url: url,
-              ticket_max: ticketMax,
-              event_id: eventId
-            })
-            await updateCreatedEventToUser({
-              eventTitle: title,
-              uid: auth.uid,
-              eventId: eventId,
-              startDate: startDate,
-              endDate: endDate
-            })
-          }
-        )
+        // await uploadImageToStorage(
+        //   fileImg,
+        //   storagePath,
+        //   async (url: string) => {
+        //     await uploadEventInfo({
+        //       title: title,
+        //       end_date: endDate,
+        //       start_date: startDate,
+        //       uid: auth.uid,
+        //       description: eventDescription,
+        //       location: eventLocation,
+        //       img_url: url,
+        //       ticket_max: ticketMax,
+        //       event_id: eventId
+        //     })
+        //     await updateCreatedEventToUser({
+        //       eventTitle: title,
+        //       uid: auth.uid,
+        //       eventId: eventId,
+        //       startDate: startDate,
+        //       endDate: endDate
+        //     })
+        //   }
+        // )
       } else {
         await uploadEventInfo({
           title: title,
