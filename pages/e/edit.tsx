@@ -4,10 +4,11 @@ import { IoChevronBack } from 'react-icons/io5'
 import ErrorFormMsg from '../../components/errorMsg'
 import { db } from '../../services/firebase_config'
 import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import Spinner from '../../components/spinner'
 import Button from '../../components/button'
 import TextInput from '../../components/textInput'
-import { uploadEventImage } from '../../services/upload_event_image'
+import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import LocationInput from '../../components/locationInput'
 import { LocationData } from '../../shared/interface/common'
 import { useAuth } from '../../contexts/auth'
@@ -35,11 +36,51 @@ export default function EditEvent() {
   const [currEventImgURl, setCurrEventImgURl] = useState('')
   const router = useRouter()
   const auth = useAuth()
-  let previousCap: number
+  const [previousCap, setPreviousCap] = useState(0)
   const { eid } = router.query
+  const currentDate: Date = new Date()
+
+  useEffect(() => {
+    const setCurrentEventData = async () => {
+      const eventId: any = eid
+      const eventRef = doc(db, 'events', eventId)
+      const eventDoc: DocumentSnapshot = await getDoc(eventRef)
+      setCurrEventImgURl(eventDoc.data()?.img_url)
+      setTitle(eventDoc.data()?.title)
+      setEventId(eventDoc.data()?.event_id)
+      setEventDescription(eventDoc.data()?.description)
+      setEventLocation(eventDoc.data()?.location)
+      setTicketMax(eventDoc.data()?.ticket_max)
+      setPreviousCap(eventDoc.data()?.ticket_max)
+      setStartDate(eventDoc.data()?.start_date.toDate())
+      setEndDate(eventDoc.data()?.end_date.toDate())
+    }
+    if (eid) {
+      setCurrentEventData()
+    }
+  }, [eid])
 
   //edit event form validator.
+  const typeofFileValidator = (fileType: string) => {
+    if (fileType === 'jpeg' || fileType === 'png') {
+      return true
+    }
+    return false
+  }
+
+  const setFiletype = (type: string) => {
+    if (true) {
+      return '.jpg'
+    }
+    return '.png'
+  }
+
   const validateEditEventForm = () => {
+    if (title === '') {
+      setErrorField('Event Title')
+      setErrorMsg('title is empty')
+      return false
+    }
     if (
       eventLocation.address === '' ||
       eventLocation.lat === 0 ||
@@ -47,6 +88,12 @@ export default function EditEvent() {
     ) {
       setErrorField('Location')
       setErrorMsg('event location is not selected')
+      return false
+    }
+
+    if (startDate.getTime() > currentDate.getTime()) {
+      setErrorField('Start Date/End Date')
+      setErrorMsg('start date cannot be a previous date from today')
       return false
     }
 
@@ -68,38 +115,6 @@ export default function EditEvent() {
     return true
   }
 
-  const setFiletype = (type: string) => {
-    if (true) {
-      return '.jpg'
-    }
-    return '.png'
-  }
-
-  //fetch and set current event data to ui edit page.
-  useEffect(() => {
-    const setCurrentEventData = async () => {
-      const eventId: any = eid
-      const eventRef = doc(db, 'events', eventId)
-      const eventDoc: DocumentSnapshot = await getDoc(eventRef)
-      setCurrEventImgURl(eventDoc.data()?.img_url)
-      setTitle(eventDoc.data()?.title)
-      setEventId(eventDoc.data()?.event_id)
-      setEventDescription(eventDoc.data()?.description)
-      setEventLocation(eventDoc.data()?.location)
-      setTicketMax(eventDoc.data()?.tickets_max)
-      previousCap = eventDoc.data()?.tickets_max
-      // setStartDate((eventDoc.data()?.start_date))
-      // setEndDate(eventDoc.data()?.end_date)
-
-      //update and pass the url so it will be used for
-      //displaying the previous photo on the photo input
-      // setFileImg()
-    }
-    if (eid) {
-      setCurrentEventData()
-    }
-  }, [eid])
-
   //function for updating new event info to firestore
   const updateEvent = async () => {
     let isFormValid
@@ -114,26 +129,30 @@ export default function EditEvent() {
       if (fileImg) {
         // TODO create a imgType setter, based from the selected file img.
         const storagePath = `${auth.uid}/${eventId + '.jpg'}`
-        await uploadEventImage(fileImg, storagePath, async (url: string) => {
-          await uploadEventInfo({
-            title: title,
-            end_date: endDate,
-            start_date: startDate,
-            uid: auth.uid,
-            description: eventDescription,
-            location: eventLocation,
-            img_url: url,
-            ticket_max: ticketMax,
-            event_id: eventId
-          })
-          await updateCreatedEventToUser({
-            eventTitle: title,
-            uid: auth.uid,
-            eventId: eventId,
-            startDate: startDate,
-            endDate: endDate
-          })
-        })
+        await uploadImageToStorage(
+          fileImg,
+          storagePath,
+          async (url: string) => {
+            await uploadEventInfo({
+              title: title,
+              end_date: endDate,
+              start_date: startDate,
+              uid: auth.uid,
+              description: eventDescription,
+              location: eventLocation,
+              img_url: url,
+              ticket_max: ticketMax,
+              event_id: eventId
+            })
+            await updateCreatedEventToUser({
+              eventTitle: title,
+              uid: auth.uid,
+              eventId: eventId,
+              startDate: startDate,
+              endDate: endDate
+            })
+          }
+        )
       } else {
         await uploadEventInfo({
           title: title,
@@ -167,7 +186,7 @@ export default function EditEvent() {
   //UI of the edit page.
   return (
     <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
-      <div className="flex w-full items-center justify-center">
+      {/* <div className="flex w-full items-center justify-center">
         <span
           onClick={() => {
             router.back()
@@ -176,11 +195,11 @@ export default function EditEvent() {
           <div className="cursor-pointer">
             <IoChevronBack className="h-[40px] w-[40px]" />
           </div>
-        </span>
+        </span> */}
         <h3 className="w-full max-w-[600px] border-b border-disabled">
           Edit Event
         </h3>
-      </div>
+      {/* </div> */}
 
       <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <TextInput
@@ -190,13 +209,19 @@ export default function EditEvent() {
           setValue={setTitle}
           isDisabled={isUpdatingEvent}
         />
-        <TextInput
-          id={'event_id'}
-          labelText={'URL'}
-          placeholder={eventId}
-          setValue={setEventId}
-          isDisabled={true}
-        />
+        {/* <div> */}
+        <div className="w-full">
+          <TextInput
+            id={'event_id'}
+            labelText={'URL'}
+            placeholder={eventId}
+            setValue={setEventId}
+            isDisabled={true}
+          />
+          <p className="mx-auto flex max-w-[400px] text-[14px]">
+            *event id cannot be updated
+          </p>
+        </div>
         <TextInput
           textArea={true}
           id={'event_description'}
@@ -258,7 +283,7 @@ export default function EditEvent() {
             } px-2  focus:outline-none`}
             id={'event_ticket_max'}
             type="number"
-            placeholder={'0'}
+            placeholder={previousCap.toString()}
             disabled={isUpdatingEvent}
           />
         </div>

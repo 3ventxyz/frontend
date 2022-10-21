@@ -1,7 +1,7 @@
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { storage } from './firebase_config'
 
-export async function uploadEventImage(
+export async function uploadImageToStorage(
   fileImg: File | null,
   path: string,
   onSuccess: (url: string) => Promise<void>

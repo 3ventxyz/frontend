@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { uploadEventImage } from '../../services/upload_event_image'
+import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
@@ -99,7 +99,7 @@ export default function CreateEvent() {
     const path = `${auth.uid}/${fileImg?.name}`
     try {
       console.log('uploading image: ', fileImg?.name)
-      await uploadEventImage(fileImg, path, async (url: string) => {
+      await uploadImageToStorage(fileImg, path, async (url: string) => {
         const returnedId = await uploadEventInfo({
           title: title,
           end_date: endDate,
@@ -140,13 +140,18 @@ export default function CreateEvent() {
           setValue={setTitle}
           isDisabled={isCreatingNewEvent}
         />
-        <TextInput
-          id={'event_id'}
-          labelText={'URL'}
-          placeholder={'www.3vent.xyz/e/'}
-          setValue={setEventId}
-          isDisabled={isCreatingNewEvent}
-        />
+        <div className="w-full">
+          <TextInput
+            id={'event_id'}
+            labelText={'URL'}
+            placeholder={'www.3vent.xyz/e/'}
+            setValue={setEventId}
+            isDisabled={isCreatingNewEvent}
+          />
+          <p className="mx-auto flex max-w-[400px] text-[14px]">
+            *event id cannot be updated
+          </p>
+        </div>
         <TextInput
           textArea={true}
           id={'event_description'}

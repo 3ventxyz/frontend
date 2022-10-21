@@ -140,7 +140,7 @@ module.exports = class DataSeeder {
             img_url: faker.image.abstract(640, 640, true),
             title: eventTitle,
             uid: index % 2 === 0 ? this.user1UID : this.user2UID,
-            tickets_max: randomCapTickets,
+            ticket_max: randomCapTickets,
             event_id: eventId,
             description: faker.commerce.productDescription(),
             location: {
