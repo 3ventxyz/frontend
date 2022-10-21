@@ -1,3 +1,4 @@
+// author: marthel
 const { faker } = require('@faker-js/faker')
 
 module.exports = class DataSeeder {
@@ -139,7 +140,7 @@ module.exports = class DataSeeder {
             img_url: faker.image.abstract(640, 640, true),
             title: eventTitle,
             uid: index % 2 === 0 ? this.user1UID : this.user2UID,
-            tickets_max: randomCapTickets,
+            ticket_max: randomCapTickets,
             event_id: eventId,
             description: faker.commerce.productDescription(),
             location: {
@@ -163,6 +164,10 @@ module.exports = class DataSeeder {
     console.log('eventsDocs obtained')
     console.log(eventsDocs)
     console.log('===========================')
+    /**
+     *iterate each event doc, and add it to the upcoming_events collection,
+     * from their respective owner(uid doc)
+     */
     eventsDocs.forEach((doc) => {
       var docData = doc.data()
       console.log('===================setting data========')
@@ -192,9 +197,6 @@ module.exports = class DataSeeder {
           })
       }
     })
-    //then iterate through each retrieved event.
-    //if an event has the same uid from user1UID, add the event to the UID database from the users collection.
-    //it will be added inside the upcoming_events collection, from the UID doc.
   }
 
   registerDummyUsersToEvents() {

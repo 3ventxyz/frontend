@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, setDoc } from '@firebase/firestore'
 import { db } from './firebase_config'
 
-export default async function addEventToUpcomingEvents({
+export default async function updateCreatedEventToUser({
   uid,
   eventId,
   startDate,
@@ -21,7 +21,7 @@ export default async function addEventToUpcomingEvents({
   }
   try {
     const newDocRef = await setDoc(
-      doc(collection(userDocRef, 'upcoming_events'), eventId),
+      doc(collection(userDocRef, 'created_events'), eventId),
       {
         event_ref: doc(db, `/events/${eventId}`),
         start_date: startDate,

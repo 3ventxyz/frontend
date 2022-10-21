@@ -7,7 +7,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { useAuth } from '../../contexts/auth'
 import FileImageInput from '../../components/fileImageInput'
-import { uploadImage } from '../../services/upload_image'
+import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 
 interface LocationData {
   lat: number
@@ -51,7 +51,7 @@ export default function CreateUser() {
     location?: LocationData
   ) => {
     try {
-      await uploadImage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
+      await uploadImageToStorage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
         const docRef = doc(db, 'users', uid)
         await updateDoc(docRef, {
           username: name,

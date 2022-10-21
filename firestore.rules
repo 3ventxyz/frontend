@@ -8,7 +8,6 @@ service cloud.firestore {
   }
 }
 
-
 service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
@@ -16,6 +15,9 @@ service firebase.storage {
     }
   }
 }
+
+//rules_version = '2';
+
 
 // rules_version = '2';
 // service cloud.firestore {
