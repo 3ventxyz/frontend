@@ -208,7 +208,7 @@ module.exports = class DataSeeder {
 
   /**
    * function: initDummyData
-   * description: this function runs the other functions that seed the generated dummy
+   * description: this function runs the functions, that seeds the generated dummy
    * data to firebase emulators.
    */
   async initDummyData() {
