@@ -78,6 +78,7 @@ export default function Event() {
 
   const handleOnClose = () => setShowModal(false)
 
+  /**current useEffect */
   useEffect(() => {
     setEventPageStatus(EventPageEnum.fetchingData)
     const fetchData = async () => {
@@ -96,13 +97,13 @@ export default function Event() {
       var isUserRegistered: boolean
       const isUserOwner = eventData?.uid === userDoc.id
       setIsEventCreator(isUserOwner)
-
-      //if eventDataDoesnt exist return null
       if (!eventData) return
-      //setting eventData and ticket data
+      //TODO: step1.- before the setEvent, get the current number of registeredUsers field from the doc of this eid.
       setEvent(eventData)
       let ticket: TicketInterface = {
         ticketTitle: 'Free Attendee',
+        //TODO: step2.- here's the registeredUsers number,
+        //if the registerdUsers is equal to the maxCap, disable the register button, and the free tag should appear sold out,
         registeredUsers: 0,
         capLimit: eventData.ticket_max,
         tokenId: '',
@@ -126,7 +127,7 @@ export default function Event() {
         setEventPageStatus(EventPageEnum.fetchedData)
       }
       /**
-       *
+       * otherwise show different data.
        */
     }
     if (eid) {

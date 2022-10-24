@@ -6,10 +6,10 @@ import { TicketInterface } from '../../../shared/interface/common'
 export default function SelectAndPurchaseTicket({
   ticketListData,
   selectedTicket,
-  setSelectedTicket,
   selectedIndex,
+  setSelectedTicket,
   setSelectedIndex,
-  setShowModal
+  setShowModal,
 }: {
   ticketListData: Array<TicketInterface> | null
   selectedIndex: number | null
@@ -26,6 +26,9 @@ export default function SelectAndPurchaseTicket({
       {ticketListData?.map((ticket: TicketInterface, index) => {
         return (
           <button
+            //TODO: step3.- here set the disable to true if the registeredUsers is equal to CapLimit.
+            // a new parameter is not needed.
+            disabled={false}
             key={index.toString()}
             className="w-full"
             onClick={() => {
@@ -37,6 +40,7 @@ export default function SelectAndPurchaseTicket({
               key={index.toString()}
               selected={selectedIndex === index}
               ticket={ticket}
+              isDisabled={false}
             />
           </button>
         )

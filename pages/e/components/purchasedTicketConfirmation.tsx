@@ -12,8 +12,16 @@ export default function PurchasedTicketConfirmation({
 }) {
   return (
     <div className="flex flex-col space-y-[26px]">
-      <TicketButton selected={true} ticket={selectedTicket} />
-      <div className="space-y-[13px]"></div>
+      <TicketButton
+        selected={true}
+        ticket={selectedTicket}
+        isDisabled={false}
+      />
+      <div className="space-y-[13px]">
+        <div className="text-[14px] font-bold">
+          add your ticket to your apple wallet
+        </div>
+      </div>
       <div className="space-y-[13px]">
         <div className="text-[14px] font-bold">
           Present this QR code to enter your event

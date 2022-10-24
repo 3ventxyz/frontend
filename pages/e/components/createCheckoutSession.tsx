@@ -80,7 +80,11 @@ export default function CreateCheckoutSession({
   return (
     <div className="flex h-full flex-col items-center justify-around py-[34px]">
       <h3 className="mb-[26px] text-[32px]">Your Order</h3>
-      <TicketButton selected={true} ticket={selectedTicket} />
+      <TicketButton
+        selected={true}
+        ticket={selectedTicket}
+        isDisabled={false}
+      />
       <div className="flex h-full items-center justify-center">
         {checkoutSessionPage()}
       </div>
@@ -93,7 +97,9 @@ function SelectPaymentOption({ onClick }: { onClick: () => void }) {
     <div className="flex h-full flex-col items-center">
       <div className="grow"></div>
       <div>
-        {'This event is free to register, you don\'t need to add any payment info.'}
+        {
+          "This event is free to register, you don't need to add any payment info."
+        }
       </div>
       <div className="grow"></div>
       <Button text={'Continue'} onClick={onClick} active={true} />
