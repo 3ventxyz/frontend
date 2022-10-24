@@ -78,21 +78,17 @@ export default function Event() {
 
   const handleOnClose = () => setShowModal(false)
 
-  /**current useEffect */
   useEffect(() => {
     setEventPageStatus(EventPageEnum.fetchingData)
     const fetchData = async () => {
-      // fetch user Doc Data.
       const docRef = doc(db, 'users', auth.uid)
       const userDoc = await getDoc(docRef)
       const uid_qr_code = userDoc.data()?.qr_code
       setQRImgUrl(uid_qr_code)
-      // fetch event Doc Data.
       const eventId: any = eid
       const eventRef = doc(db, 'events', eventId)
       const eventDoc = await getDoc(eventRef)
       const eventData = events.newEventData(eventDoc)
-      //vars for fetching ticket data and userIsRegistered.
       const fetchedTicketListData: Array<TicketInterface> = []
       var isUserRegistered: boolean
       const isUserOwner = eventData?.uid === userDoc.id
@@ -101,8 +97,6 @@ export default function Event() {
       setEvent(eventData)
       let ticket: TicketInterface = {
         ticketTitle: 'Free Attendee',
-        //TODO: step2.- here's the registeredUsers number,
-        //if the registerdUsers is equal to the maxCap, disable the register button, and the free tag should appear sold out,
         registeredUsers: eventData.registered_attendees,
         capLimit: eventData.ticket_max,
         tokenId: '',
@@ -114,7 +108,6 @@ export default function Event() {
       /**
        * this block is good for user who is not the owner of the event.
        */
-      //checking if the userIsRegistered
       isUserRegistered = await checkRegisteredAttendee({
         uid: auth.uid,
         eid: eventId
