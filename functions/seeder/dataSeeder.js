@@ -142,6 +142,7 @@ module.exports = class DataSeeder {
             uid: index % 2 === 0 ? this.user1UID : this.user2UID,
             ticket_max: randomCapTickets,
             event_id: eventId,
+            counted_registered_attendees: 0,
             description: faker.commerce.productDescription(),
             location: {
               address: faker.address.streetAddress(),
