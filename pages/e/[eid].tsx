@@ -148,8 +148,6 @@ export default function Event() {
         width="w-[600px]"
         height="h-[600px]"
       >
-        {/* if the user is the owner of the event, just show the stats. */}
-
         <CreateCheckoutSession
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
