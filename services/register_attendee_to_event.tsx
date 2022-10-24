@@ -28,10 +28,9 @@ export default async function registerAttendeeToEvent(
   //registering the user, to the event document.
   const eventDoc: DocumentData = await getDoc(eventDocRef)
   console.log(eventDoc)
-  let registered_attendees_counter =
-    eventDoc.data().counted_registered_attendees
+  let registered_attendees:number = eventDoc.data().registered_attendees
   await updateDoc(eventDocRef, {
-    counted_registered_attendees: registered_attendees_counter + 1
+    registered_attendees: registered_attendees + 1
   })
   await setDoc(
     doc(

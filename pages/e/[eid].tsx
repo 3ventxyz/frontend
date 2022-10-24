@@ -98,13 +98,12 @@ export default function Event() {
       const isUserOwner = eventData?.uid === userDoc.id
       setIsEventCreator(isUserOwner)
       if (!eventData) return
-      //TODO: step1.- before the setEvent, get the current number of registeredUsers field from the doc of this eid.
       setEvent(eventData)
       let ticket: TicketInterface = {
         ticketTitle: 'Free Attendee',
         //TODO: step2.- here's the registeredUsers number,
         //if the registerdUsers is equal to the maxCap, disable the register button, and the free tag should appear sold out,
-        registeredUsers: 0,
+        registeredUsers: eventData.registered_attendees,
         capLimit: eventData.ticket_max,
         tokenId: '',
         price: 0

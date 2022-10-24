@@ -28,6 +28,7 @@ export interface EventInterface {
   img_url: string
   ticket_max: number
   event_id: string
+  registered_attendees: number
 }
 
 export interface UserProfileEvents {

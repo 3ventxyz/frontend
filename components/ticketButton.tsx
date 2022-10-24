@@ -23,15 +23,14 @@
 //   )
 // }
 
-
 import { TicketInterface } from '../shared/interface/common'
 
 export default function TicketButton({
   ticket,
   selected,
   isDisabled
-  //also add a purchased option one.
-}: //todo: add a disabled boolean that sets the UI design for a disabled button, like a sold out ticket event.
+}: //also add a purchased option one.
+//todo: add a disabled boolean that sets the UI design for a disabled button, like a sold out ticket event.
 {
   ticket: TicketInterface | null
   selected: boolean
@@ -59,15 +58,15 @@ export default function TicketButton({
   ) : (
     <div
       className={`
-        border-disabled text-disabled
-      flex h-[76px] w-[320px] flex-row items-center justify-between rounded-xl border bg-white px-[20px] pt-[13px] pb-[14px] pl-[17px] md:w-[373px]`}
+        flex h-[76px]
+      w-[320px] flex-row items-center justify-between rounded-xl border border-disabled bg-white px-[20px] pt-[13px] pb-[14px] pl-[17px] text-disabled md:w-[373px]`}
     >
       <div className="flex flex-col items-start">
         <div className="text-[14px] font-bold">
-          {ticket?.ticketTitle || 'NULL TICKET TITLE'}
+          {ticket?.ticketTitle || 'NULL TICKET TITLE'} (Sold Out)
         </div>
         <div className="text-[10px]">
-          {ticket?.registeredUsers || '0'}/{ticket?.capLimit || '0'} remaining
+          {ticket?.registeredUsers || '0'}/{ticket?.capLimit || '0'} Max Capped
         </div>
         {/* <div className="text-[10px]"># {ticket?.tokenId || '0x000'} required?</div> */}
       </div>

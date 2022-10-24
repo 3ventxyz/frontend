@@ -1,4 +1,5 @@
 // author:marthel
+import { useEffect } from 'react'
 import Button from '../../../components/button'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
@@ -9,7 +10,7 @@ export default function SelectAndPurchaseTicket({
   selectedIndex,
   setSelectedTicket,
   setSelectedIndex,
-  setShowModal,
+  setShowModal
 }: {
   ticketListData: Array<TicketInterface> | null
   selectedIndex: number | null
@@ -18,17 +19,21 @@ export default function SelectAndPurchaseTicket({
   setSelectedTicket: (ticket: TicketInterface) => void
   setShowModal: (toggle: boolean) => void
 }) {
+  useEffect(() => {}, [])
   return (
     <div
       id="ticketbuilder"
       className="flex w-[320px] flex-col items-center space-y-[19px] md:w-[373px]"
     >
       {ticketListData?.map((ticket: TicketInterface, index) => {
+        console.log('ticket.registeredUsers', ticket.registeredUsers)
+        console.log('ticket.capLimit', ticket.capLimit)
+        console.log(ticket.capLimit > ticket.registeredUsers)
         return (
           <button
             //TODO: step3.- here set the disable to true if the registeredUsers is equal to CapLimit.
             // a new parameter is not needed.
-            disabled={false}
+            disabled={ticket.capLimit <= ticket.registeredUsers}
             key={index.toString()}
             className="w-full"
             onClick={() => {
@@ -40,7 +45,7 @@ export default function SelectAndPurchaseTicket({
               key={index.toString()}
               selected={selectedIndex === index}
               ticket={ticket}
-              isDisabled={false}
+              isDisabled={ticket.capLimit <= ticket.registeredUsers}
             />
           </button>
         )
