@@ -160,7 +160,7 @@ export default function EditEvent() {
         console.log('fileImg:', fileImg.type)
         const fileType = setFiletype(fileImg)
         const storagePath = `${auth.uid}/${eventId + fileType}`
-        await uploadImageToStorage(
+        const url: string | undefined = await uploadImageToStorage(
           fileImg,
           storagePath,
           async (url: string) => {
@@ -206,7 +206,7 @@ export default function EditEvent() {
           endDate: endDate
         })
       }
-      router.push(`/e/${eventId}`)
+      router.replace(`/e/${eventId}`)
     } catch (e) {
       console.error('event/create:', e)
       alert(
