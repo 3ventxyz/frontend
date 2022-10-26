@@ -2,7 +2,16 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
-      allow read, write: if request.auth!=null;
+      allow read, write: if true;
     }
   }
 }
+
+//previous rules, these are needed for later in the future.
+//service firebase.storage {
+//  match /b/{bucket}/o {
+//    match /{allPaths=**} {
+//      allow read, write: if request.auth!=null;
+//    }
+//  }
+//}

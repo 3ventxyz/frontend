@@ -33,6 +33,7 @@ export default function CreateEvent() {
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [errorMsg, setErrorMsg] = useState<string>('')
   const [errorField, setErrorField] = useState<string>('')
+  const [predefinedEventImgUrl, setPredefinedEventImgUrl] = useState<string>('')
   const router = useRouter()
   const auth = useAuth()
 
@@ -222,6 +223,68 @@ export default function CreateEvent() {
             IMAGE
           </label>
           <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+          <div
+            id="accordion-collapse"
+            className="w-full rounded-t-xl bg-gray-500"
+            data-accordion="collapse"
+          >
+            <h4 id="accordion-collapse-heading" className="w-full">
+              <button
+                type="button"
+                className="flex w-full items-center justify-between"
+                data-accordion-target="#accordion-collapse-body"
+                aria-expanded="true"
+                aria-controls="accordion-collapse-body"
+              >
+                <span>predefined images</span>
+                <svg
+                  data-accordion-icon
+                  className="h-6 w-6 shrink-0 rotate-180"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </h4>
+            <div>
+              <p>
+                In case that you don't have an image for your event. Please
+                select one of the pictures that we offer.
+              </p>
+              <div className="flex flex-wrap ">
+                
+                <button onClick={()=>{setPredefinedEventImgUrl('img1Url')}}>
+                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
+                    img1
+                  </div>
+                </button>
+                
+                <button onClick={()=>{setPredefinedEventImgUrl('img2Url')}}>
+                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
+                    img2
+                  </div>
+                </button>
+                
+                <button onClick={()=>{setPredefinedEventImgUrl('img3Url')}}>
+                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
+                    img3
+                  </div>
+                </button>
+
+                <button onClick={()=>{setPredefinedEventImgUrl('img4Url')}}>
+                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
+                    img4
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
