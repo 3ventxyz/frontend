@@ -38,10 +38,10 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
-  const staticImgUrl1 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1
-  const staticImgUrl2 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2
-  const staticImgUrl3 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3
-  const staticImgUrl4 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4
+  const staticImgUrl1:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1??''
+  const staticImgUrl2:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2??''
+  const staticImgUrl3:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3??''
+  const staticImgUrl4:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4??''
 
   const typeofFileValidator = (fileType: string) => {
     if (fileType === 'image/jpeg' || fileType === 'image/png') {
@@ -245,7 +245,7 @@ export default function CreateEvent() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => {
-                    setPredefinedEventImgUrl(staticImgUrl1 ?? '')
+                    setPredefinedEventImgUrl(staticImgUrl1)
                   }}
                 >
                   <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
@@ -260,12 +260,12 @@ export default function CreateEvent() {
                 </button>
                 <button
                   onClick={() => {
-                    setPredefinedEventImgUrl(staticImgUrl2 ?? '')
+                    setPredefinedEventImgUrl(staticImgUrl2)
                   }}
                 >
                   <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
                     <Image
-                      src={staticImgUrl2 ?? ''}
+                      src={staticImgUrl2}
                       layout="fill"
                       loading='lazy'
                       objectFit="cover"
@@ -278,12 +278,12 @@ export default function CreateEvent() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => {
-                    setPredefinedEventImgUrl(staticImgUrl3 ?? '')
+                    setPredefinedEventImgUrl(staticImgUrl3)
                   }}
                 >
                   <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
                     <Image
-                      src={staticImgUrl3 ?? ''}
+                      src={staticImgUrl3}
                       layout="fill"
                       loading='lazy'
                       objectFit="cover"
@@ -293,12 +293,12 @@ export default function CreateEvent() {
                 </button>
                 <button
                   onClick={() => {
-                    setPredefinedEventImgUrl(staticImgUrl4 ?? '')
+                    setPredefinedEventImgUrl(staticImgUrl4)
                   }}
                 >
                   <div className=" relative h-[150px] w-[150px] rounded-3xl bg-red-300">
                     <Image
-                      src={staticImgUrl4 ?? ''}
+                      src={staticImgUrl4}
                       layout="fill"
                       loading='lazy'
                       objectFit="cover"
