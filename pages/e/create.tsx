@@ -16,6 +16,7 @@ import updateCreatedEventToUser from '../../services/update_created_event_to_use
 import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
 import setFiletype from '../../shared/utils/setFileType'
+import Image from 'next/image'
 
 export default function CreateEvent() {
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
@@ -36,6 +37,11 @@ export default function CreateEvent() {
   const [predefinedEventImgUrl, setPredefinedEventImgUrl] = useState<string>('')
   const router = useRouter()
   const auth = useAuth()
+
+  const staticImgUrl1 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1
+  const staticImgUrl2 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2
+  const staticImgUrl3 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3
+  const staticImgUrl4 = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4
 
   const typeofFileValidator = (fileType: string) => {
     if (fileType === 'image/jpeg' || fileType === 'image/png') {
@@ -222,64 +228,82 @@ export default function CreateEvent() {
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             IMAGE
           </label>
-          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} />
+          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} imgUrlTemplate={predefinedEventImgUrl}/>
           <div
             id="accordion-collapse"
-            className="w-full rounded-t-xl bg-gray-500"
+            className="w-full "
             data-accordion="collapse"
           >
-            <h4 id="accordion-collapse-heading" className="w-full">
-              <button
-                type="button"
-                className="flex w-full items-center justify-between"
-                data-accordion-target="#accordion-collapse-body"
-                aria-expanded="true"
-                aria-controls="accordion-collapse-body"
-              >
-                <span>predefined images</span>
-                <svg
-                  data-accordion-icon
-                  className="h-6 w-6 shrink-0 rotate-180"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
+            <h4 className="w-full">
+              <span>predefined images</span>
             </h4>
-            <div>
+            <div className="flex flex-col items-center space-y-2">
               <p>
-                In case that you don't have an image for your event. Please
+                In case that you don&apos;t have an image for your event. Please
                 select one of the pictures that we offer.
               </p>
-              <div className="flex flex-wrap ">
-                
-                <button onClick={()=>{setPredefinedEventImgUrl('img1Url')}}>
-                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
-                    img1
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => {
+                    setPredefinedEventImgUrl(staticImgUrl1 ?? '')
+                  }}
+                >
+                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                    <Image
+                      src={staticImgUrl1 ?? ''}
+                      layout="fill"
+                      loading='lazy'
+                      objectFit="cover"
+                      className="rounded-3xl"
+                    />
                   </div>
                 </button>
-                
-                <button onClick={()=>{setPredefinedEventImgUrl('img2Url')}}>
-                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
-                    img2
+                <button
+                  onClick={() => {
+                    setPredefinedEventImgUrl(staticImgUrl2 ?? '')
+                  }}
+                >
+                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                    <Image
+                      src={staticImgUrl2 ?? ''}
+                      layout="fill"
+                      loading='lazy'
+                      objectFit="cover"
+                      className="rounded-3xl"
+                    />
                   </div>
                 </button>
-                
-                <button onClick={()=>{setPredefinedEventImgUrl('img3Url')}}>
-                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
-                    img3
-                  </div>
-                </button>
+              </div>
 
-                <button onClick={()=>{setPredefinedEventImgUrl('img4Url')}}>
-                  <div className="h-[150px] w-[150px] rounded-2xl bg-red-300">
-                    img4
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => {
+                    setPredefinedEventImgUrl(staticImgUrl3 ?? '')
+                  }}
+                >
+                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                    <Image
+                      src={staticImgUrl3 ?? ''}
+                      layout="fill"
+                      loading='lazy'
+                      objectFit="cover"
+                      className="rounded-3xl"
+                    />
+                  </div>
+                </button>
+                <button
+                  onClick={() => {
+                    setPredefinedEventImgUrl(staticImgUrl4 ?? '')
+                  }}
+                >
+                  <div className=" relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                    <Image
+                      src={staticImgUrl4 ?? ''}
+                      layout="fill"
+                      loading='lazy'
+                      objectFit="cover"
+                      className="rounded-3xl"
+                    />
                   </div>
                 </button>
               </div>
