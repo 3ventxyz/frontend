@@ -17,6 +17,7 @@ import CheckEventId from '../../services/check_event_id'
 import ErrorFormMsg from '../../components/errorMsg'
 import setFiletype from '../../shared/utils/setFileType'
 import Image from 'next/image'
+import PredefinedImageOption from './components/predefinedImageOption'
 
 export default function CreateEvent() {
   const router = useRouter()
@@ -43,8 +44,9 @@ export default function CreateEvent() {
   const [errorMsg, setErrorMsg] = useState<string>('')
   const [errorField, setErrorField] = useState<string>('')
 
-  const [predefinedEventImgUrl, setPredefinedEventImgUrl] = useState<string>('')
-  const [selectedPredefinedImage, setSelectedPredefinedImg] =
+  const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
+    useState<string>('')
+  const [selectedPredefinedImgIndex, setSelectedPredefinedImgIndex] =
     useState<number>(0)
 
   const typeofFileValidator = (fileType: string) => {
@@ -235,7 +237,7 @@ export default function CreateEvent() {
           <FileImageInput
             fileImg={fileImg}
             setFileImg={setFileImg}
-            imgUrlTemplate={predefinedEventImgUrl}
+            imgUrlTemplate={selectedPredefinedEventImgUrl}
           />
           <div
             id="accordion-collapse"
@@ -251,99 +253,45 @@ export default function CreateEvent() {
                 select one of the pictures that we offer.
               </p>
               <div className="flex space-x-2">
-                <button
-                  onClick={() => {
-                    setSelectedPredefinedImg(1)
-                    setPredefinedEventImgUrl(staticImgUrl1)
-                  }}
-                >
-                  <div
-                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
-                      selectedPredefinedImage === 1
-                        ? 'border-[3px] border-blue-600'
-                        : ''
-                    }`}
-                  >
-                    <Image
-                      src={staticImgUrl1 ?? ''}
-                      layout="fill"
-                      loading="lazy"
-                      objectFit="cover"
-                      className="rounded-3xl"
-                    />
-                  </div>
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedPredefinedImg(2)
-                    setPredefinedEventImgUrl(staticImgUrl2)
-                  }}
-                >
-                  <div
-                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
-                      selectedPredefinedImage === 2
-                        ? 'border-[3px] border-blue-600'
-                        : ''
-                    }`}
-                  >
-                    <Image
-                      src={staticImgUrl2}
-                      layout="fill"
-                      loading="lazy"
-                      objectFit="cover"
-                      className="rounded-3xl"
-                    />
-                  </div>
-                </button>
+                <PredefinedImageOption
+                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+                  setSelectedPredefinedEventImgUrl={
+                    setSelectedPredefinedEventImgUrl
+                  }
+                  imgIndex={1}
+                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                  predefinedImgUrl={staticImgUrl1}
+                />
+                <PredefinedImageOption
+                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+                  setSelectedPredefinedEventImgUrl={
+                    setSelectedPredefinedEventImgUrl
+                  }
+                  imgIndex={2}
+                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                  predefinedImgUrl={staticImgUrl2}
+                />
               </div>
 
               <div className="flex space-x-2">
-                <button
-                  onClick={() => {
-                    setSelectedPredefinedImg(3)
-                    setPredefinedEventImgUrl(staticImgUrl3)
-                  }}
-                >
-                  <div
-                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
-                      selectedPredefinedImage === 3
-                        ? 'border-[3px] border-blue-600'
-                        : ''
-                    }`}
-                  >
-                    <div>
-                      <Image
-                        src={staticImgUrl3}
-                        layout="fill"
-                        loading="lazy"
-                        objectFit="cover"
-                        className="rounded-3xl"
-                      />
-                    </div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedPredefinedImg(4)
-                    setPredefinedEventImgUrl(staticImgUrl4)
-                  }}
-                >
-                  <div
-                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
-                      selectedPredefinedImage === 4
-                        ? 'border-[3px] border-blue-600'
-                        : ''
-                    }`}
-                  >
-                    <Image
-                      src={staticImgUrl4}
-                      layout="fill"
-                      loading="lazy"
-                      objectFit="cover"
-                      className="rounded-3xl"
-                    />
-                  </div>
-                </button>
+                <PredefinedImageOption
+                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+                  setSelectedPredefinedEventImgUrl={
+                    setSelectedPredefinedEventImgUrl
+                  }
+                  imgIndex={3}
+                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                  predefinedImgUrl={staticImgUrl3}
+                />
+                <PredefinedImageOption
+                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+                  setSelectedPredefinedEventImgUrl={
+                    setSelectedPredefinedEventImgUrl
+                  }
+                  imgIndex={4}
+                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                  predefinedImgUrl={staticImgUrl4}
+                />
               </div>
             </div>
           </div>
