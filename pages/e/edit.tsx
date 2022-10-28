@@ -77,15 +77,15 @@ export default function EditEvent() {
     return false
   }
 
-  // const setFiletype = (file: File | null) => {
-  //   if (!file) {
-  //     return ''
-  //   }
-  //   if (file.type === 'image/jpeg') {
-  //     return '.jpg'
-  //   }
-  //   return '.png'
-  // }
+  const setFiletype = (file: File | null) => {
+    if (!file) {
+      return ''
+    }
+    if (file.type === 'image/jpeg') {
+      return '.jpg'
+    }
+    return '.png'
+  }
 
   const validateEditEventForm = () => {
     if (title === '') {
@@ -160,7 +160,7 @@ export default function EditEvent() {
         console.log('fileImg:', fileImg.type)
         const fileType = setFiletype(fileImg)
         const storagePath = `${auth.uid}/${eventId + fileType}`
-        await uploadImageToStorage(
+        const url: string | undefined = await uploadImageToStorage(
           fileImg,
           storagePath,
           async (url: string) => {
@@ -183,6 +183,7 @@ export default function EditEvent() {
               startDate: startDate,
               endDate: endDate
             })
+            router.push(`/e/${eventId}`)
           }
         )
       } else {
@@ -205,8 +206,8 @@ export default function EditEvent() {
           startDate: startDate,
           endDate: endDate
         })
+        router.push(`/e/${eventId}`)
       }
-      router.push(`/e/${eventId}`)
     } catch (e) {
       console.error('event/create:', e)
       alert(
@@ -330,7 +331,7 @@ export default function EditEvent() {
           {isUpdatingEvent ? (
             <>
               <Spinner width={40} height={40} />
-              <p>Creating new event, please do not refresh</p>
+              <p>Updating event info, please do not refresh</p>
             </>
           ) : (
             <Button

@@ -77,57 +77,56 @@ export default function Event() {
   }
 
   const handleOnClose = () => setShowModal(false)
-
-  useEffect(() => {
-    setEventPageStatus(EventPageEnum.fetchingData)
-    const fetchData = async () => {
-      const docRef = doc(db, 'users', auth.uid)
-      const userDoc = await getDoc(docRef)
-      const uid_qr_code = userDoc.data()?.qr_code
-      setQRImgUrl(uid_qr_code)
-      const eventId: any = eid
-      const eventRef = doc(db, 'events', eventId)
-      const eventDoc = await getDoc(eventRef)
-      const eventData = events.newEventData(eventDoc)
-      const fetchedTicketListData: Array<TicketInterface> = []
-      var isUserRegistered: boolean
-      const isUserOwner = eventData?.uid === userDoc.id
-      setIsEventCreator(isUserOwner)
-      if (!eventData) return
-      setEvent(eventData)
-      let ticket: TicketInterface = {
-        ticketTitle: 'Free Attendee',
-        registeredUsers: eventData.registered_attendees,
-        capLimit: eventData.ticket_max,
-        tokenId: '',
-        price: 0
-      }
-      fetchedTicketListData.push(ticket)
-      setTicketListData(fetchedTicketListData)
-
-      /**
-       * this block is good for user who is not the owner of the event.
-       */
-      isUserRegistered = await checkRegisteredAttendee({
-        uid: auth.uid,
-        eid: eventId
-      })
-
-      if (isUserRegistered) {
-        setEventPageStatus(EventPageEnum.purchasedTicket)
-      } else {
-        setEventPageStatus(EventPageEnum.fetchedData)
-      }
-      /**
-       * otherwise show different data.
-       */
+  const fetchData = async () => {
+    const docRef = doc(db, 'users', auth.uid)
+    const userDoc = await getDoc(docRef)
+    const uid_qr_code = userDoc.data()?.qr_code
+    setQRImgUrl(uid_qr_code)
+    const eventId: any = eid
+    const eventRef = doc(db, 'events', eventId)
+    const eventDoc = await getDoc(eventRef)
+    console.log(eventDoc)
+    const eventData = events.newEventData(eventDoc)
+    console.log(eventData)
+    const fetchedTicketListData: Array<TicketInterface> = []
+    var isUserRegistered: boolean
+    const isUserOwner = eventData?.uid === userDoc.id
+    setIsEventCreator(isUserOwner)
+    if (!eventData) return
+    setEvent(eventData)
+    let ticket: TicketInterface = {
+      ticketTitle: 'Free Attendee',
+      registeredUsers: eventData.registered_attendees,
+      capLimit: eventData.ticket_max,
+      tokenId: '',
+      price: 0
     }
-    if (eid) {
+    fetchedTicketListData.push(ticket)
+    setTicketListData(fetchedTicketListData)
+
+    /**
+     * this block is good for user who is not the owner of the event.
+     */
+    //checking if the userIsRegistered
+    isUserRegistered = await checkRegisteredAttendee({
+      uid: auth.uid,
+      eid: eventId
+    })
+
+    if (isUserRegistered) {
+      setEventPageStatus(EventPageEnum.purchasedTicket)
+    } else {
+      setEventPageStatus(EventPageEnum.fetchedData)
+    }
+    /**
+     *
+     */
+  }
+  useEffect(() => {
+    if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+      console.log('calling base fech')
       fetchData()
     }
-    // if (eventPageStatus === EventPageEnum.fetchingData && eid) {
-    //   fetchData()
-    // }
   }, [eid])
 
   return (
