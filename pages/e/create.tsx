@@ -93,18 +93,20 @@ export default function CreateEvent() {
       setErrorMsg('end date cannot be behind the start date schedule')
       return false
     }
-    if (!fileImg) {
+
+    if (!fileImg && selectedPredefinedEventImgUrl === '') {
       setErrorField('Event Image')
-      setErrorMsg('file img is null')
+      setErrorMsg('An event image has not been selected. Please selecte an event image')
       return false
     }
-    if (!typeofFileValidator(fileImg.type)) {
+    if (fileImg !== null && !typeofFileValidator(fileImg.type)) {
       setErrorField('Event Image')
       setErrorMsg(
         'Selected Image is invalid type. Please upload jpg or png image.'
       )
       return false
     }
+
     if (isNaN(ticketMax)) {
       setErrorField('Tickets')
       setErrorMsg('Please enter a valid number of tickets')
@@ -136,11 +138,37 @@ export default function CreateEvent() {
       return
     }
     try {
-      console.log('fileImg: ', fileImg?.type)
-      const fileType = setFiletype(fileImg)
-      const storagePath = `${auth.uid}/${eventId + fileType}`
-      console.log('uploading image: ', fileImg?.name)
-      await uploadImageToStorage(fileImg, storagePath, async (url: string) => {
+      if (fileImg !== null) {
+        console.log('fileImg: ', fileImg?.type)
+        const fileType = setFiletype(fileImg)
+        const storagePath = `${auth.uid}/${eventId + fileType}`
+        console.log('uploading image: ', fileImg?.name)
+        await uploadImageToStorage(
+          fileImg,
+          storagePath,
+          async (url: string) => {
+            const returnedId = await uploadEventInfo({
+              title: title,
+              end_date: endDate,
+              start_date: startDate,
+              uid: auth.uid,
+              description: eventDescription,
+              location: eventLocation,
+              img_url: url,
+              ticket_max: ticketMax,
+              event_id: eventId
+            })
+            await updateCreatedEventToUser({
+              eventTitle: title,
+              uid: auth.uid,
+              eventId: eventId,
+              startDate: startDate,
+              endDate: endDate
+            })
+            router.push(`/e/${eventId}`)
+          }
+        )
+      } else {
         const returnedId = await uploadEventInfo({
           title: title,
           end_date: endDate,
@@ -148,7 +176,7 @@ export default function CreateEvent() {
           uid: auth.uid,
           description: eventDescription,
           location: eventLocation,
-          img_url: url,
+          img_url: selectedPredefinedEventImgUrl,
           ticket_max: ticketMax,
           event_id: eventId,
           registered_attendees: 0
@@ -161,7 +189,7 @@ export default function CreateEvent() {
           endDate: endDate
         })
         router.push(`/e/${eventId}`)
-      })
+      }
     } catch (e) {
       console.error('event/create:', e)
       alert(
@@ -239,62 +267,69 @@ export default function CreateEvent() {
             setFileImg={setFileImg}
             imgUrlTemplate={selectedPredefinedEventImgUrl}
           />
-          <div
-            id="accordion-collapse"
-            className="w-full "
-            data-accordion="collapse"
-          >
-            <h4 className="w-full">
-              <span>predefined images</span>
-            </h4>
-            <div className="flex flex-col items-center space-y-2">
-              <p>
-                In case that you don&apos;t have an image for your event. Please
-                select one of the pictures that we offer.
-              </p>
-              <div className="flex space-x-2">
-                <PredefinedImageOption
-                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-                  setSelectedPredefinedEventImgUrl={
-                    setSelectedPredefinedEventImgUrl
-                  }
-                  imgIndex={1}
-                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                  predefinedImgUrl={staticImgUrl1}
-                />
-                <PredefinedImageOption
-                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-                  setSelectedPredefinedEventImgUrl={
-                    setSelectedPredefinedEventImgUrl
-                  }
-                  imgIndex={2}
-                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                  predefinedImgUrl={staticImgUrl2}
-                />
-              </div>
-
-              <div className="flex space-x-2">
-                <PredefinedImageOption
-                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-                  setSelectedPredefinedEventImgUrl={
-                    setSelectedPredefinedEventImgUrl
-                  }
-                  imgIndex={3}
-                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                  predefinedImgUrl={staticImgUrl3}
-                />
-                <PredefinedImageOption
-                  setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-                  setSelectedPredefinedEventImgUrl={
-                    setSelectedPredefinedEventImgUrl
-                  }
-                  imgIndex={4}
-                  selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                  predefinedImgUrl={staticImgUrl4}
-                />
+          {fileImg === null ? (
+            <div>
+              <h4 className="w-full">
+                <span>predefined images</span>
+              </h4>
+              <div className="flex flex-col items-center space-y-2">
+                <p>
+                  In case that you don&apos;t have an image for your event.
+                  Please select one of the pictures that we offer.
+                </p>
+                <div className="flex space-x-2">
+                  <PredefinedImageOption
+                    setSelectedPredefinedImgIndex={
+                      setSelectedPredefinedImgIndex
+                    }
+                    setSelectedPredefinedEventImgUrl={
+                      setSelectedPredefinedEventImgUrl
+                    }
+                    imgIndex={1}
+                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                    predefinedImgUrl={staticImgUrl1}
+                  />
+                  <PredefinedImageOption
+                    setSelectedPredefinedImgIndex={
+                      setSelectedPredefinedImgIndex
+                    }
+                    setSelectedPredefinedEventImgUrl={
+                      setSelectedPredefinedEventImgUrl
+                    }
+                    imgIndex={2}
+                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                    predefinedImgUrl={staticImgUrl2}
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <PredefinedImageOption
+                    setSelectedPredefinedImgIndex={
+                      setSelectedPredefinedImgIndex
+                    }
+                    setSelectedPredefinedEventImgUrl={
+                      setSelectedPredefinedEventImgUrl
+                    }
+                    imgIndex={3}
+                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                    predefinedImgUrl={staticImgUrl3}
+                  />
+                  <PredefinedImageOption
+                    setSelectedPredefinedImgIndex={
+                      setSelectedPredefinedImgIndex
+                    }
+                    setSelectedPredefinedEventImgUrl={
+                      setSelectedPredefinedEventImgUrl
+                    }
+                    imgIndex={4}
+                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+                    predefinedImgUrl={staticImgUrl4}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
