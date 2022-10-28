@@ -23,10 +23,14 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
 
-  const staticImgUrl1: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1 ?? ''
-  const staticImgUrl2: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2 ?? ''
-  const staticImgUrl3: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3 ?? ''
-  const staticImgUrl4: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4 ?? ''
+  const staticImgUrl1: string =
+    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent1.jpg?alt=media&token=841706c6-4890-4716-8ea1-16a1af49154a'
+  const staticImgUrl2: string =
+    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent2.jpg?alt=media&token=8be3fca4-9f01-4c0a-8654-984990ea8963'
+  const staticImgUrl3: string =
+    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent3.jpg?alt=media&token=ae0f2e20-6c24-4c0f-b080-8b4cdaf0ba7d'
+  const staticImgUrl4: string =
+    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent4.jpg?alt=media&token=145fdc18-f398-4d26-b441-0f63356db72e'
 
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
@@ -96,7 +100,9 @@ export default function CreateEvent() {
 
     if (!fileImg && selectedPredefinedEventImgUrl === '') {
       setErrorField('Event Image')
-      setErrorMsg('An event image has not been selected. Please selecte an event image')
+      setErrorMsg(
+        'An event image has not been selected. Please selecte an event image'
+      )
       return false
     }
     if (fileImg !== null && !typeofFileValidator(fileImg.type)) {
