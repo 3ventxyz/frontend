@@ -36,6 +36,7 @@ export default function EditEvent() {
   const [errorMsg, setErrorMsg] = useState<string>('')
   const [errorField, setErrorField] = useState<string>('')
   const [currEventImgURl, setCurrEventImgURl] = useState('')
+  const [registeredAttendees, setRegisteredUsers] = useState(0)
   const router = useRouter()
   const auth = useAuth()
   const [previousCap, setPreviousCap] = useState(0)
@@ -56,6 +57,7 @@ export default function EditEvent() {
       setPreviousCap(eventDoc.data()?.ticket_max)
       setStartDate(new Date(eventDoc.data()?.start_date.toDate()))
       setEndDate(new Date(eventDoc.data()?.end_date.toDate()))
+      setRegisteredUsers(eventDoc.data()?.registered_attendees)
     }
     if (eid) {
       setCurrentEventData()
@@ -171,7 +173,8 @@ export default function EditEvent() {
               location: eventLocation,
               img_url: url,
               ticket_max: ticketMax,
-              event_id: eventId
+              event_id: eventId,
+              registered_attendees: registeredAttendees
             })
             await updateCreatedEventToUser({
               eventTitle: title,
@@ -192,7 +195,8 @@ export default function EditEvent() {
           location: eventLocation,
           img_url: currEventImgURl,
           ticket_max: ticketMax,
-          event_id: eventId
+          event_id: eventId,
+          registered_attendees: registeredAttendees
         })
         await updateCreatedEventToUser({
           eventTitle: title,

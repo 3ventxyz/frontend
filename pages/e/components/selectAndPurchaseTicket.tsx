@@ -1,4 +1,5 @@
 // author:marthel
+import { useEffect } from 'react'
 import Button from '../../../components/button'
 import TicketButton from '../../../components/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
@@ -6,8 +7,8 @@ import { TicketInterface } from '../../../shared/interface/common'
 export default function SelectAndPurchaseTicket({
   ticketListData,
   selectedTicket,
-  setSelectedTicket,
   selectedIndex,
+  setSelectedTicket,
   setSelectedIndex,
   setShowModal
 }: {
@@ -26,6 +27,7 @@ export default function SelectAndPurchaseTicket({
       {ticketListData?.map((ticket: TicketInterface, index) => {
         return (
           <button
+            disabled={ticket.capLimit <= ticket.registeredUsers}
             key={index.toString()}
             className="w-full"
             onClick={() => {
@@ -37,6 +39,7 @@ export default function SelectAndPurchaseTicket({
               key={index.toString()}
               selected={selectedIndex === index}
               ticket={ticket}
+              isDisabled={ticket.capLimit <= ticket.registeredUsers}
             />
           </button>
         )
