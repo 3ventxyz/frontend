@@ -162,7 +162,8 @@ export default function CreateEvent() {
               location: eventLocation,
               img_url: url,
               ticket_max: ticketMax,
-              event_id: eventId
+              event_id: eventId,
+              registered_attendees: 0
             })
             await updateCreatedEventToUser({
               eventTitle: title,
