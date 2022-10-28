@@ -19,6 +19,14 @@ import setFiletype from '../../shared/utils/setFileType'
 import Image from 'next/image'
 
 export default function CreateEvent() {
+  const router = useRouter()
+  const auth = useAuth()
+
+  const staticImgUrl1: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1 ?? ''
+  const staticImgUrl2: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2 ?? ''
+  const staticImgUrl3: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3 ?? ''
+  const staticImgUrl4: string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4 ?? ''
+
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [title, setTitle] = useState<string>('')
   const [eventId, setEventId] = useState<string>('')
@@ -34,14 +42,10 @@ export default function CreateEvent() {
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [errorMsg, setErrorMsg] = useState<string>('')
   const [errorField, setErrorField] = useState<string>('')
-  const [predefinedEventImgUrl, setPredefinedEventImgUrl] = useState<string>('')
-  const router = useRouter()
-  const auth = useAuth()
 
-  const staticImgUrl1:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_1??''
-  const staticImgUrl2:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_2??''
-  const staticImgUrl3:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_3??''
-  const staticImgUrl4:string = process.env.NEXT_PUBLIC_STATIC_IMAGE_URL_4??''
+  const [predefinedEventImgUrl, setPredefinedEventImgUrl] = useState<string>('')
+  const [selectedPredefinedImage, setSelectedPredefinedImg] =
+    useState<number>(0)
 
   const typeofFileValidator = (fileType: string) => {
     if (fileType === 'image/jpeg' || fileType === 'image/png') {
@@ -228,7 +232,11 @@ export default function CreateEvent() {
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             IMAGE
           </label>
-          <FileImageInput fileImg={fileImg} setFileImg={setFileImg} imgUrlTemplate={predefinedEventImgUrl}/>
+          <FileImageInput
+            fileImg={fileImg}
+            setFileImg={setFileImg}
+            imgUrlTemplate={predefinedEventImgUrl}
+          />
           <div
             id="accordion-collapse"
             className="w-full "
@@ -245,14 +253,21 @@ export default function CreateEvent() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => {
+                    setSelectedPredefinedImg(1)
                     setPredefinedEventImgUrl(staticImgUrl1)
                   }}
                 >
-                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                  <div
+                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
+                      selectedPredefinedImage === 1
+                        ? 'border-[3px] border-blue-600'
+                        : ''
+                    }`}
+                  >
                     <Image
                       src={staticImgUrl1 ?? ''}
                       layout="fill"
-                      loading='lazy'
+                      loading="lazy"
                       objectFit="cover"
                       className="rounded-3xl"
                     />
@@ -260,14 +275,21 @@ export default function CreateEvent() {
                 </button>
                 <button
                   onClick={() => {
+                    setSelectedPredefinedImg(2)
                     setPredefinedEventImgUrl(staticImgUrl2)
                   }}
                 >
-                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                  <div
+                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
+                      selectedPredefinedImage === 2
+                        ? 'border-[3px] border-blue-600'
+                        : ''
+                    }`}
+                  >
                     <Image
                       src={staticImgUrl2}
                       layout="fill"
-                      loading='lazy'
+                      loading="lazy"
                       objectFit="cover"
                       className="rounded-3xl"
                     />
@@ -278,29 +300,45 @@ export default function CreateEvent() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => {
+                    setSelectedPredefinedImg(3)
                     setPredefinedEventImgUrl(staticImgUrl3)
                   }}
                 >
-                  <div className="relative h-[150px] w-[150px] rounded-3xl bg-red-300">
-                    <Image
-                      src={staticImgUrl3}
-                      layout="fill"
-                      loading='lazy'
-                      objectFit="cover"
-                      className="rounded-3xl"
-                    />
+                  <div
+                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
+                      selectedPredefinedImage === 3
+                        ? 'border-[3px] border-blue-600'
+                        : ''
+                    }`}
+                  >
+                    <div>
+                      <Image
+                        src={staticImgUrl3}
+                        layout="fill"
+                        loading="lazy"
+                        objectFit="cover"
+                        className="rounded-3xl"
+                      />
+                    </div>
                   </div>
                 </button>
                 <button
                   onClick={() => {
+                    setSelectedPredefinedImg(4)
                     setPredefinedEventImgUrl(staticImgUrl4)
                   }}
                 >
-                  <div className=" relative h-[150px] w-[150px] rounded-3xl bg-red-300">
+                  <div
+                    className={`relative h-[150px] w-[150px] rounded-3xl   ${
+                      selectedPredefinedImage === 4
+                        ? 'border-[3px] border-blue-600'
+                        : ''
+                    }`}
+                  >
                     <Image
                       src={staticImgUrl4}
                       layout="fill"
-                      loading='lazy'
+                      loading="lazy"
                       objectFit="cover"
                       className="rounded-3xl"
                     />
