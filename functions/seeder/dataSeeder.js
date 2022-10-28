@@ -211,6 +211,22 @@ module.exports = class DataSeeder {
     })
   }
 
+  async setRegisteredAttendeesToEvents(){
+    /**
+     * TODO:
+     * add some users to the events registered_attendees collection(or array of registered_attendees objects)
+     * these users should appear in the front end as a guidance that users are registered in the backend.
+     */
+  }
+  async setSocialFeedToEvents(){
+    /**
+     * TODO:
+     * after users are registered to an event, they should have the ability to give comments on the social feed
+     * of the event. So add posts based from those registered users, to the db of the event. Each post will be stored in the
+     * posts collection that is located at the root of the database and the post id is stored in the posts doc field of the event doc.
+     */
+  }
+
   /**
    * Description:
    * it adds some users to the events as registered attendees.
