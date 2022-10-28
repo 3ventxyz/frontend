@@ -96,7 +96,7 @@ export default function Event() {
     setEvent(eventData)
     let ticket: TicketInterface = {
       ticketTitle: 'Free Attendee',
-      registeredUsers: 0,
+      registeredUsers: eventData.registered_attendees,
       capLimit: eventData.ticket_max,
       tokenId: '',
       price: 0
