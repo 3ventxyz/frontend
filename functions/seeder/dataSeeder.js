@@ -9,6 +9,8 @@ module.exports = class DataSeeder {
     this.app = firebaseApp
     this.db = this.app.firestore()
     this.auth = this.app.auth()
+    /**add here an array of dummy users for local use. */
+    this.dummyUsers = new Array(12)
   }
   user1UID = ' '
   user2UID = ' '
@@ -211,14 +213,70 @@ module.exports = class DataSeeder {
     })
   }
 
-  async setRegisteredAttendeesToEvents(){
-    /**
-     * TODO:
-     * add some users to the events registered_attendees collection(or array of registered_attendees objects)
-     * these users should appear in the front end as a guidance that users are registered in the backend.
-     */
+  /**
+   * Function: setDummyPosts
+   * --description: it creates a collection of posts at the root of the database.
+   * each post document has an author(uid, user_name, avatar), date of creation, comment; and an empty eid space,
+   * specifying where the post belongs to.
+   */
+  async setDummyPosts() {
+    try {
+      const usersRef = this.db.collection('users')
+      var usersDocs = await usersRef.get()
+      usersDocs.forEach((user) => {
+        ;[...Array(2).keys()].map((index) => {
+          this.db
+            .collection('posts')
+            .doc()
+            .set({
+              uid: user.id,
+              username: user.data().username,
+              avatar: user.data().avatar,
+              post_content: faker.lorem.lines(3),
+              date_posted: new Date(),
+              eid: ''
+            })
+        })
+      })
+    } catch (e) {
+      console.error(e, 'setDummyPosts error caught')
+    }
   }
-  async setSocialFeedToEvents(){
+
+  /**
+   * TODO:
+   * add some users to the events registered_attendees collection(or array of registered_attendees objects)
+   * these users should appear in the front end as a guidance that users are registered in the backend.
+   */
+  async setRegisteredAttendeesToEvents() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+      usersDocs.forEach((user) => {
+        //for each user, register them to an event as an attendee.
+        if (user.id !== this.user1UID && user.id !== this.user2UID) {
+          eventsDocs.forEach((event) => {
+            const registeredAttendeesRef = this.db
+              .collection('events')
+              .doc(`${event.id}`)
+              .collection('registered_attendees')
+            registeredAttendeesRef.doc(user.id).set({
+              address: faker.address.streetAddress(),
+              city: faker.address.city(),
+              username: user.data().username,
+              phone_number: '',
+              state: faker.address.state(),
+              uid: user.id,
+              zip_code: faker.address.zipCode('#####')
+            })
+          })
+        }
+      })
+    } catch (e) {}
+  }
+  async setSocialFeedToEvents() {
     /**
      * TODO:
      * after users are registered to an event, they should have the ability to give comments on the social feed
