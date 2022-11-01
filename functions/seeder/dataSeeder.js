@@ -247,7 +247,8 @@ module.exports = class DataSeeder {
    * TODO:
    * add some users to the events registered_attendees collection(or array of registered_attendees objects)
    * these users should appear in the front end as a guidance that users are registered in the backend.
-   */
+  * IMPORTANT: UPDATE THE REGISTERED_ATTENDEES COUNTER FROM THE EVENT DOC!!!!! 
+  */
   async setRegisteredAttendeesToEvents() {
     try {
       const eventsRef = this.db.collection('events')
