@@ -65,7 +65,8 @@ module.exports = class DataSeeder {
             tw_verifs: [],
             twitter_name: [],
             username: faker.internet.userName(),
-            wallet: ''
+            wallet: '',
+            email_verified: false
           })
       }
     } catch (error) {
@@ -104,7 +105,8 @@ module.exports = class DataSeeder {
           tw_verifs: [],
           twitter_name: [],
           username: faker.internet.userName(),
-          wallet: ''
+          wallet: '',
+          email_verified: false
         })
       })
       console.log('setDummyUsersInDB: seed was successful')

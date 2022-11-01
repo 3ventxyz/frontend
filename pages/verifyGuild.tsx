@@ -84,7 +84,7 @@ export default function VerifyGuild({discordGuildID = ''}:{discordGuildID: strin
 
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
-      <p className="font-semibold">Check Account Following</p>
+      <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
           href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds`}

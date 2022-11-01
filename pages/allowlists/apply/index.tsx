@@ -12,6 +12,7 @@ import VerifyFollowing from '../../verifyTwFollowing'
 import VerifyGuild from '../../verifyGuild'
 import Link from 'next/link'
 import Modal from '../../../components/modal'
+import { ContractResultDecodeError } from 'wagmi'
 
 export default function AllowlistApplication() {
   /*Needed variables */
@@ -43,15 +44,27 @@ export default function AllowlistApplication() {
   const [emailVerification, setEmailVerification] = useState(false)
 
   const [showModal, setShowModal] = useState(false)
+  const [lid, setLid] = useState('')
+  const [code, setCode] = useState('')
 
+  useEffect(() => {
+      const pathParts = asPath.split('id=')
+      if (pathParts.length >= 2) {
+        if (asPath.includes('code')) {
+          const pathParts = asPath.split('id=')
+          const idCode = pathParts[1].split('&code=')
+          setLid(idCode[0])
+          console.log(lid)
+          setCode(idCode[1])
+          console.log(code)
+        }
+        else {
+            setLid(pathParts[1])
+        }
+      }
+  }, [lid])
   /*Allowlist Info */
   useEffect(() => {
-    const pathParts = asPath.split('code=')
-    let lid = ''
-    if (pathParts.length >= 2) {
-      lid = pathParts.slice(-1)[0]
-    }
-
     const getListInfo = async () => {
       const docRef = doc(db, 'lists', lid?.toString() ?? '')
       const docSnap = await getDoc(docRef)
@@ -71,7 +84,17 @@ export default function AllowlistApplication() {
       }
     }
     getListInfo()
-  }, [])
+  }, [
+    title,
+    walletVerification,
+    twitterVerification,
+    twitterFollowing,
+    twitterAccount,
+    discordVerification,
+    discordGuild,
+    guild,
+    emailVerification
+  ])
 
   /*User Info*/
   useEffect(() => {
@@ -84,7 +107,11 @@ export default function AllowlistApplication() {
         setDiscord(docSnap.data().discord_id)
         setEmail(docSnap.data().email_verified)
         setTwitterName(docSnap.data().twitter_name)
-        setShowModal((wallet != '' || twitter.length != 0 || discord != '' || email) ? false : true)
+        setShowModal(
+          wallet != '' || twitter.length != 0 || discord != '' || email
+            ? false
+            : true
+        )
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
@@ -106,10 +133,15 @@ export default function AllowlistApplication() {
         >
           <div className="flex flex-col space-y-4 p-4">
             <h3>Please finish setting up your profile</h3>
-            <p>This list requires for your profile to be complete before applying</p>
-            <Link href="/settings"><span className="w-1/2 bg-primary text-primaryBg cursor-pointer h-[40px] flex items-center justify-center rounded-[6px] px-[20px] py-[10px] text-[14px] font-semibold leading-[]">Complete your profile</span></Link>
-            </div>
-
+            <p>
+              This list requires for your profile to be complete before applying
+            </p>
+            <Link href="/settings">
+              <span className="flex h-[40px] w-1/2 cursor-pointer items-center justify-center rounded-[6px] bg-primary px-[20px] py-[10px] text-[14px] font-semibold leading-[] text-primaryBg">
+                Complete your profile
+              </span>
+            </Link>
+          </div>
         </Modal>
 
         <h3 className="w-full max-w-[600px] border-b border-disabled">
@@ -122,15 +154,14 @@ export default function AllowlistApplication() {
               VERIFY WALLET
             </p>
             <span className="inline-flex h-[40px] w-1/2 items-center justify-center rounded-[10px] bg-secondary text-[14px] font-semibold text-white">
-                  Wallet Verified
-                </span>
+              Wallet Verified
+            </span>
           </>
         ) : (
           <></>
         )}
 
         {twitterVerification ? (
-          twitter.length != 0 ? (
             <>
               <p className="border-b-2 border-primary font-medium">
                 VERIFY TWITTER
@@ -152,25 +183,14 @@ export default function AllowlistApplication() {
                 </span>
               </Link>
             </>
-          ) : (
-            <>
-              <p className="border-b-2 border-primary font-medium">
-                VERIFY TWITTER
-              </p>
-              <Link href="/settings">
-                <span className="inline-flex h-[40px] w-1/2 cursor-pointer items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]">
-                  Verify your twitter account
-                </span>
-              </Link>
-            </>
-          )
         ) : (
           <></>
         )}
         {twitterFollowing ? (
+            /*When clicked it saves info on db */
           <>
             <p className="border-b-2 border-primary font-medium">
-              VERIFY YO&apos;RE FOLLOWING THE CREATOR&apos;S ACCOUNT
+              VERIFY YOU&apos;RE FOLLOWING THE CREATOR&apos;S ACCOUNT
             </p>
             <VerifyFollowing twitterID={twitterAccount} />
           </>
@@ -179,7 +199,6 @@ export default function AllowlistApplication() {
         )}
 
         {discordVerification ? (
-          discord != '' ? (
             <>
               <p className="border-b-2 border-primary font-medium">
                 VERIIFY DISCORD
@@ -188,23 +207,13 @@ export default function AllowlistApplication() {
                 Discord Verified
               </p>
             </>
-          ) : (
-            <>
-              <p className="border-b-2 border-primary font-medium">
-                VERIIFY DISCORD
-              </p>
-              <Link href="/settings">
-                <span className="inline-flex h-[40px] w-1/2 cursor-pointer items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]">
-                  Verify your discord account
-                </span>
-              </Link>
-            </>
-          )
+          
         ) : (
           <></>
         )}
 
         {discordGuild ? (
+            /*When clicked iit saves info on db */
           <>
             <p className="border-b-2 border-primary font-medium">
               VERIFY YOU&apos;RE A PART OF THE CREATOR&apos;S GUILD
@@ -216,16 +225,16 @@ export default function AllowlistApplication() {
         )}
 
         {emailVerification ? (
-            <>
-              <p className="border-b-2 border-primary font-medium">
-                VERIFY YOUR EMAIL
-              </p>
-              <Link href="/settings">
+          <>
+            <p className="border-b-2 border-primary font-medium">
+              VERIFY YOUR EMAIL
+            </p>
+            <Link href="/settings">
               <span className="inline-flex h-[40px] w-1/2 items-center justify-center rounded-[10px] bg-secondary text-[14px] font-semibold text-white">
-                  Email Verified
-                </span>
-              </Link>
-            </>
+                Email Verified
+              </span>
+            </Link>
+          </>
         ) : (
           <></>
         )}
