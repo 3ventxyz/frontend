@@ -256,10 +256,9 @@ module.exports = class DataSeeder {
         //for each user, register them to an event as an attendee.
         if (user.id !== this.user1UID && user.id !== this.user2UID) {
           eventsDocs.forEach((event) => {
-            const registeredAttendeesRef = this.db
-              .collection('events')
-              .doc(`${event.id}`)
-              .collection('registered_attendees')
+            const registeredAttendeesRef = this.db.collection(
+              `events/${event.id}/registered_attendees`
+            )
             registeredAttendeesRef.doc(user.id).set({
               address: faker.address.streetAddress(),
               city: faker.address.city(),
@@ -267,13 +266,48 @@ module.exports = class DataSeeder {
               phone_number: '',
               state: faker.address.state(),
               uid: user.id,
-              zip_code: faker.address.zipCode('#####')
+              zip_code: faker.address.zipCode('#####'),
+              date_of_registrattion: new Date()
             })
           })
         }
       })
     } catch (e) {}
   }
+
+  async setRegisteredEventsToUsers() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+      console.log(`running setRegisteredEventsToUsers`)
+
+      eventsDocs.forEach((event) => {
+        //for each user, register them to an event as an attendee.
+        // if (user.id !== this.user1UID && user.id !== this.user2UID) {
+        usersDocs.forEach((user) => {
+          const registeredEventsRef = this.db.collection(
+            `users/${user.id}/registered_events`
+          )
+          // console.log(`registering eid: ${event.id}, user:${user.id}`)
+
+          registeredEventsRef.doc(event.data().event_id).set({
+            event_ref: this.db.collection('events').doc(event.data().event_id),
+            event_title: event.data().title,
+            start_date: event.data().start_date,
+            end_date: event.data().end_date,
+            //this has been the problem all along!!!!
+            // date_registered: event.data().date_of_registration
+          })
+        })
+        // }
+      })
+    } catch (e) {
+      console.error(e, 'setRegisteredEventsToUsers error caught')
+    }
+  }
+
   async setSocialFeedToEvents() {
     /**
      * TODO:
@@ -304,5 +338,9 @@ module.exports = class DataSeeder {
     await this.setDummyUsersInDB()
     await this.setDummyPosts()
     await this.setRegisteredAttendeesToEvents()
+    await this.setRegisteredEventsToUsers()
+
+    /**WIP */
+    // await this.setSocialFeedToEvents()
   }
 }
