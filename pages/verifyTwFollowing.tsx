@@ -20,7 +20,7 @@ export async function verifyTwitter(
       'api/twitter?accessCode=' + accessCode + '&redirectUrl=' + redirectUrl
     )
     const response = await rawResponse.json()
-    const token = response.access_token
+    const token = response.access_toke
     if (token && token !== undefined) {
       /* get twitter id */
       const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
@@ -34,21 +34,20 @@ export async function verifyTwitter(
      /*Check if user is following */
      twitterFollowingArray.forEach((account: any) => {
       const accountId = account.id
+      console.log('checking')
       if (accountId === twitterAccount) {
         console.log('following')
         return true
       }
     })
     }
-    
   } catch (err) {
     console.log(err)
   }
-
   return false
 }
 
-export default function VerifyFollowing({twitterID = '27265633'}:{twitterID: string}) {
+export default function VerifyFollowing({id = '',twitterID = '27265633'}:{id: string, twitterID: string}) {
   const { asPath } = useRouter()
   const router = useRouter()
   const twitterAccount = twitterID
@@ -63,25 +62,22 @@ export default function VerifyFollowing({twitterID = '27265633'}:{twitterID: str
     if (pathParts.length >= 2) {
       setHash(pathParts.slice(-1)[0])
     }
-  }, [])
+    if(hash != '') {
+      verifyTwitter(hash, uid, url, twitterAccount)
+      console.log('aver',verifyTwitter(hash, uid, url, twitterAccount))
+    }
+  }, [hash])
 
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
       <p className="font-semibold">Follow Check</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=http://localhost:3000/settings&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}?id=${id}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
-          Choose an account
+          Verify following - WIP
         </a>
-        <Button
-          text={'Verify'}
-          onClick={() => {
-            verifyTwitter(hash, uid, url, twitterAccount)
-          }}
-          active={true}
-        />
       </div>
     </div>
   )

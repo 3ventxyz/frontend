@@ -65,7 +65,7 @@ export async function verifyDiscord(
   return false
 }
 
-export default function VerifyGuild({discordGuildID = ''}:{discordGuildID: string}) {
+export default function VerifyGuild({id = '', discordGuildID = ''}:{id: string, discordGuildID: string}) {
   const { asPath } = useRouter()
   const router = useRouter()
   const discordGuild = discordGuildID
@@ -80,6 +80,9 @@ export default function VerifyGuild({discordGuildID = ''}:{discordGuildID: strin
     if (pathParts.length >= 2) {
       setHash(pathParts.slice(-1)[0])
     }
+    if (hash != '') {
+      verifyDiscord(hash, uid, url, discordGuild)
+    }
   }, [])
 
   return (
@@ -87,18 +90,11 @@ export default function VerifyGuild({discordGuildID = ''}:{discordGuildID: strin
       <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds`}
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}?id=${id}&response_type=code&scope=guilds`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
         >
-          Choose an account
+          Check Guild - WIP
         </a>
-        <Button
-          text={'Verify'}
-          onClick={() => {
-            verifyDiscord(hash, uid, url, discordGuild)
-          }}
-          active={true}
-        />
       </div>
     </div>
   )
