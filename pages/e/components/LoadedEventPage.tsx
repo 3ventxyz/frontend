@@ -8,7 +8,9 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Button from '../../../components/button'
 import RegisteredAttendee from './registeredAttendee'
-import SocialFeedPost from './socialFeedPost'
+import SocialFeedPost from './socialFeed'
+import SocialFeed from './socialFeed'
+import RegisteredAttendees from './registeredAttendee'
 export default function LoadedEventPage({
   event,
   children,
@@ -62,38 +64,11 @@ export default function LoadedEventPage({
                 className="rounded-[67px]"
               />
             </div>
-            <div id="registered-attendees-mobile">
-              <h4>Registered Attendees</h4>
-              <hr />
-              <div className="relative w-[320px] overflow-x-scroll bg-blue-200">
-                <div className="flex  w-fit space-x-2">
-                  <RegisteredAttendee />
-                  <RegisteredAttendee />
-                  <RegisteredAttendee />
-                  <RegisteredAttendee />
-                  <RegisteredAttendee />
-                  <RegisteredAttendee />
-                </div>
-              </div>
-            </div>
-            <div id="registered-attendees-mobile" className="w-full ">
-              <h4>Comments</h4>
-              <hr />
-              <div id="social-feed-mobile" className="h-fit overflow-y-scroll">
-                {/* use the max-height parameter so it can be resized based from the number of comments. */}
-                <div
-                  id="social-feed-mobile"
-                  className="h-[200px] overflow-y-scroll"
-                >
-                  <div className="space-y-2">
-                    <SocialFeedPost />
-                    <SocialFeedPost />
-                    <SocialFeedPost />
-                    <SocialFeedPost />
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* TODO: show this on the pair programming session. */}
+            {/* <br />
+            <RegisteredAttendees isMobile={true} />
+            <br />
+            <SocialFeed isMobile={true} /> */}
           </div>
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-auto w-fit cursor-pointer flex-row items-center space-x-2  ">
@@ -153,6 +128,10 @@ export default function LoadedEventPage({
             <h4>Event description:</h4>
             {event?.description}
           </div>
+          <div className="block flex-col space-y-5 lg:hidden">
+            <RegisteredAttendees isMobile={true} />
+            {/* <SocialFeed isMobile={true} /> */}
+          </div>
         </div>
         {children}
       </div>
@@ -180,10 +159,9 @@ export default function LoadedEventPage({
         ) : (
           <></>
         )}
-
-        <div id="registered-attendees-display" className="w-full bg-yellow-200">
-          hi this should appear the attendees registered.
-        </div>
+        <RegisteredAttendees isMobile={false} />
+        <br />
+        <SocialFeed isMobile={false} />
       </div>
     </>
   )
