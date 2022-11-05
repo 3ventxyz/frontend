@@ -83,7 +83,7 @@ module.exports = class DataSeeder {
   async setDummyUsersInDB() {
     try {
       ;[...Array(10).keys()].map(() => {
-        this.db.collection('users').add({
+        const dummyUserData = {
           avatar: faker.internet.avatar(),
           bio: faker.commerce.productDescription(),
           discord_guilds: [],
@@ -105,7 +105,8 @@ module.exports = class DataSeeder {
           twitter_name: [],
           username: faker.internet.userName(),
           wallet: ''
-        })
+        }
+        this.db.collection('users').add(dummyUserData)
       })
       console.log('setDummyUsersInDB: seed was successful')
     } catch (error) {
@@ -208,6 +209,124 @@ module.exports = class DataSeeder {
   }
 
   /**
+   * Function: setDummyPosts
+   * --description: it creates a collection of posts at the root of the database.
+   * each post document has an author(uid, user_name, avatar), date of creation, comment; and an empty eid space,
+   * specifying where the post belongs to.
+   */
+  async setDummyPosts() {
+    try {
+      const usersRef = this.db.collection('users')
+      var usersDocs = await usersRef.get()
+      usersDocs.forEach((user) => {
+        ;[...Array(2).keys()].map((index) => {
+          this.db
+            .collection('posts')
+            .doc()
+            .set({
+              uid: user.id,
+              username: user.data().username,
+              avatar: user.data().avatar,
+              post_content: faker.lorem.lines(3),
+              date_posted: new Date(),
+              eid: ''
+            })
+        })
+      })
+    } catch (e) {
+      console.error(e, 'setDummyPosts error caught')
+    }
+  }
+
+  /**
+   * TODO:
+   * add some users to the events registered_attendees collection(or array of registered_attendees objects)
+   * these users should appear in the front end as a guidance that users are registered in the backend.
+   * IMPORTANT: UPDATE THE REGISTERED_ATTENDEES COUNTER FROM THE EVENT DOC and fix the date_of_registry field.
+   */
+  async setRegisteredAttendeesToEvents() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+      usersDocs.forEach((user) => {
+        //for each user, register them to an event as an attendee.
+        if (user.id !== this.user1UID && user.id !== this.user2UID) {
+          eventsDocs.forEach((event) => {
+            const registeredAttendeesRef = this.db.collection(
+              `events/${event.id}/registered_attendees`
+            )
+            registeredAttendeesRef.doc(user.id).set({
+              address: faker.address.streetAddress(),
+              city: faker.address.city(),
+              username: user.data().username,
+              phone_number: '',
+              state: faker.address.state(),
+              uid: user.id,
+              zip_code: faker.address.zipCode('#####'),
+              date_of_registration: new Date()
+            })
+          })
+        }
+      })
+    } catch (e) {
+      console.error(
+        e,
+        'dataSeeder::setRegisteredAttendeesToEvents Error Caught'
+      )
+    }
+  }
+
+  async setRegisteredEventsToUsers() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+      console.log(`running setRegisteredEventsToUsers`)
+
+      //for each user, register them to an event as an attendee.
+      usersDocs.forEach((user) => {
+        if (user.id !== this.user1UID && user.id !== this.user2UID) {
+          eventsDocs.forEach((event) => {
+            const registeredEventsRef = this.db.collection(
+              `users/${user.id}/registered_events`
+            )
+            registeredEventsRef.doc(event.data().event_id).set({
+              event_ref: this.db
+                .collection('events')
+                .doc(event.data().event_id),
+              event_title: event.data().title,
+              start_date: event.data().start_date,
+              end_date: event.data().end_date
+
+            })
+          })
+        }
+      })
+    } catch (e) {
+      console.error(e, 'dataSeeder::setRegisteredEventsToUsers Error Caught')
+    }
+  }
+
+  async setSocialFeedToEvents() {
+    /**
+     * TODO:
+     * after users are registered to an event, they should have the ability to give comments on the social feed
+     * of the event. So add posts based from those registered users, to the db of the event. Each post will be stored in the
+     * posts collection that is located at the root of the database and the post id is stored in the posts doc field of the event doc.
+     */
+    const postsRef = this.db.collection("posts");
+
+    const postsDocs = await postsRef.get();
+  }
+
+  async setEidToPosts(){
+
+  }
+  
+  /**
    * function: initDummyData
    * description: this function runs the functions, that seeds the generated dummy
    * data to firebase emulators.
@@ -226,5 +345,11 @@ module.exports = class DataSeeder {
     await this.setDummyEventsCollectionInDB()
     await this.setDummyEventsToUserPropietaryDB()
     await this.setDummyUsersInDB()
+    await this.setDummyPosts()
+    await this.setRegisteredAttendeesToEvents()
+    await this.setRegisteredEventsToUsers()
+
+    /**WIP */
+    // await this.setSocialFeedToEvents()
   }
 }
