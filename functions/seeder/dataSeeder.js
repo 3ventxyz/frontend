@@ -1,6 +1,9 @@
 // author: marthel
 const { faker } = require('@faker-js/faker')
 
+const userSize = 10
+const eventSize = 10
+const postsSize = 15
 module.exports = class DataSeeder {
   constructor(firebaseApp) {
     this.app = firebaseApp
@@ -82,7 +85,7 @@ module.exports = class DataSeeder {
    */
   async setDummyUsersInDB() {
     try {
-      ;[...Array(10).keys()].map(() => {
+      ;[...Array(userSize).keys()].map(() => {
         const dummyUserData = {
           avatar: faker.internet.avatar(),
           bio: faker.commerce.productDescription(),
@@ -124,11 +127,11 @@ module.exports = class DataSeeder {
    */
   setDummyEventsCollectionInDB() {
     try {
-      ;[...Array(10).keys()].map((index) => {
+      ;[...Array(eventSize).keys()].map((index) => {
         var adjective = faker.word.adjective(5)
         var firstWord = faker.commerce.product()
         var randomIdNum = Math.floor(Math.random() * 909)
-        var randomCapTickets = Math.floor(Math.random() * 21)
+        var randomCapTickets = Math.floor(Math.random() * 21) + userSize
         var currentDate = new Date()
         var startDate = faker.date.between(
           currentDate,
@@ -209,40 +212,9 @@ module.exports = class DataSeeder {
   }
 
   /**
-   * Function: setDummyPosts
-   * --description: it creates a collection of posts at the root of the database.
-   * each post document has an author(uid, user_name, avatar), date of creation, comment; and an empty eid space,
-   * specifying where the post belongs to.
-   */
-  async setDummyPosts() {
-    try {
-      const usersRef = this.db.collection('users')
-      var usersDocs = await usersRef.get()
-      usersDocs.forEach((user) => {
-        ;[...Array(2).keys()].map((index) => {
-          this.db
-            .collection('posts')
-            .doc()
-            .set({
-              uid: user.id,
-              username: user.data().username,
-              avatar: user.data().avatar,
-              post_content: faker.lorem.lines(3),
-              date_posted: new Date(),
-              eid: ''
-            })
-        })
-      })
-    } catch (e) {
-      console.error(e, 'setDummyPosts error caught')
-    }
-  }
-
-  /**
-   * TODO:
-   * add some users to the events registered_attendees collection(or array of registered_attendees objects)
-   * these users should appear in the front end as a guidance that users are registered in the backend.
-   * IMPORTANT: UPDATE THE REGISTERED_ATTENDEES COUNTER FROM THE EVENT DOC and fix the date_of_registry field.
+   * Description:
+   * it adds some users to the events as registered attendees.
+   * These users will be added to  registered_attendees collection
    */
   async setRegisteredAttendeesToEvents() {
     try {
@@ -257,6 +229,9 @@ module.exports = class DataSeeder {
             const registeredAttendeesRef = this.db.collection(
               `events/${event.id}/registered_attendees`
             )
+            eventsRef
+              .doc(`${event.id}`)
+              .update({ registered_attendees: userSize })
             registeredAttendeesRef.doc(user.id).set({
               address: faker.address.streetAddress(),
               city: faker.address.city(),
@@ -284,9 +259,7 @@ module.exports = class DataSeeder {
       const usersRef = this.db.collection('users')
       const eventsDocs = await eventsRef.get()
       const usersDocs = await usersRef.get()
-      console.log(`running setRegisteredEventsToUsers`)
 
-      //for each user, register them to an event as an attendee.
       usersDocs.forEach((user) => {
         if (user.id !== this.user1UID && user.id !== this.user2UID) {
           eventsDocs.forEach((event) => {
@@ -300,7 +273,6 @@ module.exports = class DataSeeder {
               event_title: event.data().title,
               start_date: event.data().start_date,
               end_date: event.data().end_date
-
             })
           })
         }
@@ -310,22 +282,44 @@ module.exports = class DataSeeder {
     }
   }
 
-  async setSocialFeedToEvents() {
-    /**
-     * TODO:
-     * after users are registered to an event, they should have the ability to give comments on the social feed
-     * of the event. So add posts based from those registered users, to the db of the event. Each post will be stored in the
-     * posts collection that is located at the root of the database and the post id is stored in the posts doc field of the event doc.
-     */
-    const postsRef = this.db.collection("posts");
-
-    const postsDocs = await postsRef.get();
+  /**
+   * Function: setSocialFeedDummyData
+   * --description: it creates a collection of posts for each event doc.
+   * each post document has an author(uid, user_name, avatar), date of creation, comment;  eid,
+   * specifying where the post belongs to.
+   */
+  async setSocialFeedDummyData() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const usersDocs = await usersRef.get()
+      const eventsDocs = await eventsRef.get()
+      const localUserDocs = []
+      usersDocs.forEach((user) => {
+        localUserDocs.push(user)
+      })
+      eventsDocs.forEach((event) => {
+        ;[...Array(postsSize).keys()].map((index) => {
+          let randomIndex = Math.floor(Math.random() * 100) % userSize
+          let user = localUserDocs[randomIndex]
+          eventsRef
+            .doc(`${event.id}`)
+            .collection('posts')
+            .doc()
+            .set({
+              uid: user.id,
+              username: user.data().username,
+              avatar: user.data().avatar,
+              post_content: faker.lorem.lines(3),
+              date_posted: new Date()
+            })
+        })
+      })
+    } catch (e) {
+      console.error(e, 'dataSeeder::setSocialFeedDummyData error caught')
+    }
   }
 
-  async setEidToPosts(){
-
-  }
-  
   /**
    * function: initDummyData
    * description: this function runs the functions, that seeds the generated dummy
@@ -345,11 +339,8 @@ module.exports = class DataSeeder {
     await this.setDummyEventsCollectionInDB()
     await this.setDummyEventsToUserPropietaryDB()
     await this.setDummyUsersInDB()
-    await this.setDummyPosts()
     await this.setRegisteredAttendeesToEvents()
     await this.setRegisteredEventsToUsers()
-
-    /**WIP */
-    // await this.setSocialFeedToEvents()
+    await this.setSocialFeedDummyData()
   }
 }
