@@ -12,7 +12,48 @@ import VerifyFollowing from '../../verifyTwFollowing'
 import VerifyGuild from '../../verifyGuild'
 import Link from 'next/link'
 import Modal from '../../../components/modal'
-import { ContractResultDecodeError } from 'wagmi'
+import absoluteUrl from 'next-absolute-url'
+
+const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
+
+export async function verifyTwitter(
+  accessCode: string,
+  uid: string,
+  redirectUrl: string,
+  twitterAccount: string
+) {
+  try {
+    const rawResponse = await fetch(
+      'api/twitter?accessCode=' + accessCode + '&redirectUrl=' + redirectUrl
+    )
+    const response = await rawResponse.json()
+    const token = response.access_token
+    if (token && token !== undefined) {
+      /* get twitter id */
+      const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
+      const twitterIdJson = await getTwitterId.json()
+
+      /* get twitter following*/
+     const getTwitterFollowing = await fetch('api/twitter-following?accessCode=' + token + '&id=' + twitterIdJson.data.id)
+     const twitterFollowing = await getTwitterFollowing.json()
+     const twitterFollowingArray = twitterFollowing.data
+
+     /*Check if user is following */
+     twitterFollowingArray.forEach((account: any) => {
+      const accountId = account.id
+      if (accountId === twitterAccount) {
+        console.log('following')
+        return true
+      }
+    })
+    }
+    
+  } catch (err) {
+    console.log(err)
+  }
+
+  return false
+}
 
 export default function AllowlistApplication() {
   /*Needed variables */
@@ -51,6 +92,9 @@ export default function AllowlistApplication() {
   const [lid, setLid] = useState('')
   const [code, setCode] = useState('')
 
+  const { origin } = absoluteUrl()
+  const url = `${origin}${router.pathname}`
+  
   useEffect(() => {
     const pathParts = asPath.split('id=')
     if (pathParts.length >= 2) {
@@ -109,16 +153,11 @@ export default function AllowlistApplication() {
   /*User Info*/
   useEffect(() => {
     const modal = () => {
-      console.log('wallet', wallet)
-      console.log('twiitter', twitter)
-      console.log('discord', discord)
-      console.log('email', emailVerif)
       setShowModal(
         wallet != '' && twitter.length != 0 && discord != '' && emailVerif
           ? false
           : true
       )
-      console.log('modal', showModal)
     }
     const getUserInfo = async () => {
       const docRef = doc(db, 'users', uid)
@@ -170,9 +209,18 @@ export default function AllowlistApplication() {
   }
   /*Use conditionals to only show the values that the user chose as true*/
   /*Check for previous verifications*/
-  console.log(showModal)
   return (
+  
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
+        <div>
+        <a
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+        >
+          Verify following - WIP 
+        </a>
+        <p onClick={() => {verifyTwitter(code, uid, url, '395011248')}}>check</p>
+        </div>
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <Modal visible={showModal} onClose={() => {}} width="w-1/2" height="">
           <div className="flex flex-col space-y-4 p-4">
@@ -247,8 +295,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
-              <VerifyFollowing id={lid} twitterID={twitterAccount} />
-            </div>
+             </div>
           </>
         ) : (
           <></>
