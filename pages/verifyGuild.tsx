@@ -2,10 +2,28 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 import TextInput from '../components/textInput'
 import Button from '../components/button'
+
+const saveFollowing = async (
+  discord_guild: boolean,
+  lid: string,
+  uid: string
+) => {
+  try {
+    const docRef = doc(db, 'lists', `${lid}`)
+    await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
+      discord_guild: discord_guild,
+      status: 'testing discord'
+    })
+    console.log('Data written into doc ID: ', docRef.id)
+    return true
+  } catch (e) {
+    console.error('Error adding data: ', e)
+  }
+}
 
 export async function verifyDiscord(
   accessCode: string,
@@ -83,14 +101,14 @@ export default function VerifyGuild({id = '', discordGuildID = ''}:{id: string, 
     if (hash != '') {
       verifyDiscord(hash, uid, url, discordGuild)
     }
-  }, [])
+  }, [hash])
 
   return (
     <div className="flex flex-grow flex-col space-y-1 bg-secondaryBg">
       <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}?id=${id}&response_type=code&scope=guilds`}
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
         >
           Check Guild - WIP
