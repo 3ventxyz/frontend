@@ -157,7 +157,7 @@ export default function LoadedEventPage({
         ) : (
           <></>
         )}
-        <RegisteredAttendees isMobile={false} />
+        <RegisteredAttendees isMobile={false} eid={event?.event_id} />
         <br />
         <SocialFeed isMobile={false} eid={event?.event_id} />
       </div>

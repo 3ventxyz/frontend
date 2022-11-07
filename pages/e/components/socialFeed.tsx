@@ -30,7 +30,7 @@ export default function SocialFeed({
         eid,
         uid
       )
-      postsDocs.docs.forEach((post: any) => {})
+  
       //IMPORTANT move this to the event context for organizing.
       for (const postDoc of postsDocs.docs) {
         const newPost: PostInterface = {

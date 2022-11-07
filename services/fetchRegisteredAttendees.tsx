@@ -1,5 +1,17 @@
+import { collection, doc, getDocs } from '@firebase/firestore'
+import { db } from './firebase_config'
 
+export default async function FetchRegisteredAttendees(eid: string) {
 
-export default async function FetchRegisteredAttendees(eid:string){
-	// TODO (07/11/2022): build the logic for fetchRegisteredAttendees.
+  const eventRef = doc(db, 'events', eid)
+  const registeredAttendeesCollectionRef = collection(
+    eventRef,
+    'registered_attendees'
+  )
+
+  const registeredAttendeesDocs = await getDocs(
+    registeredAttendeesCollectionRef
+  )
+
+  return registeredAttendeesDocs
 }
