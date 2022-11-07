@@ -1,12 +1,18 @@
+import { useEffect, useState } from "react"
+
 export default function RegisteredAttendees({
-  isMobile
+  isMobile, eid=''
 }: {
-  isMobile: boolean
+  isMobile: boolean,
+  eid?:string
 }) {
+  const [attendees, setRegisteredAttendees] = useState<any>();
   /**
    * --pass the reference of the registered attendees collection.
    * fetch the docs and use each attendee doc to the registeredAtteendee component.
    **/
+
+  useEffect(()=>{},[])
   return isMobile ? (
     <div id="registered-attendees-mobile">
       <h4>Registered Attendees</h4>

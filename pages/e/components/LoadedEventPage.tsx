@@ -7,8 +7,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Button from '../../../components/button'
-import RegisteredAttendee from './registeredAttendees'
-import SocialFeedPost from './socialFeed'
 import SocialFeed from './socialFeed'
 import RegisteredAttendees from './registeredAttendees'
 export default function LoadedEventPage({
@@ -129,7 +127,7 @@ export default function LoadedEventPage({
             {event?.description}
           </div>
           <div className="block flex-col space-y-5 lg:hidden">
-            <RegisteredAttendees isMobile={true} />
+            <RegisteredAttendees isMobile={true} eid={event?.event_id} />
             {/* <SocialFeed isMobile={true} /> */}
           </div>
         </div>
@@ -161,7 +159,7 @@ export default function LoadedEventPage({
         )}
         <RegisteredAttendees isMobile={false} />
         <br />
-        <SocialFeed isMobile={false} />
+        <SocialFeed isMobile={false} eid={event?.event_id} />
       </div>
     </>
   )
