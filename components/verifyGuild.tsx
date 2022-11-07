@@ -4,8 +4,8 @@ import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
 import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
-import TextInput from '../components/textInput'
-import Button from '../components/button'
+import TextInput from './textInput'
+import Button from './button'
 
 const saveFollowing = async (
   discord_guild: boolean,
@@ -111,7 +111,7 @@ export default function VerifyGuild({discordGuildID = '', lid = ''}:{discordGuil
       <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds&state=${state}`}
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
         >
           Check Guild - WIP

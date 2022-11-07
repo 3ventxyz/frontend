@@ -8,52 +8,13 @@ import ErrorAlert from '../../../components/alerts/errorAlert'
 import TextInputDisplay from '../../../components/textInputDisplay'
 import Verify from '../../../components/verify'
 import EmailVerification from '../../u/components/emailVerification'
-import VerifyFollowing from '../../verifyTwFollowing'
-import VerifyGuild from '../../verifyGuild'
+import VerifyFollowing from '../../../components/verifyTwFollowing'
+import VerifyGuild from '../../../components/verifyGuild'
 import Link from 'next/link'
 import Modal from '../../../components/modal'
 import absoluteUrl from 'next-absolute-url'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
-
-export async function verifyTwitter(
-  accessCode: string,
-  uid: string,
-  redirectUrl: string,
-  twitterAccount: string
-) {
-  try {
-    const rawResponse = await fetch(
-      'api/twitter?accessCode=' + accessCode + '&redirectUrl=' + redirectUrl
-    )
-    const response = await rawResponse.json()
-    const token = response.access_token
-    if (token && token !== undefined) {
-      /* get twitter id */
-      const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
-      const twitterIdJson = await getTwitterId.json()
-
-      /* get twitter following*/
-     const getTwitterFollowing = await fetch('api/twitter-following?accessCode=' + token + '&id=' + twitterIdJson.data.id)
-     const twitterFollowing = await getTwitterFollowing.json()
-     const twitterFollowingArray = twitterFollowing.data
-
-     /*Check if user is following */
-     twitterFollowingArray.forEach((account: any) => {
-      const accountId = account.id
-      if (accountId === twitterAccount) {
-        console.log('following')
-        return true
-      }
-    })
-    }
-    
-  } catch (err) {
-    console.log(err)
-  }
-
-  return false
-}
 
 export default function AllowlistApplication() {
   /*Needed variables */
@@ -76,7 +37,7 @@ export default function AllowlistApplication() {
   const [email, setEmail] = useState('')
   const [followingTwitter, setFollowingTwitter] = useState(false)
   const [followingGuild, setFollowingGuild] = useState(false)
-  const [status, setStatus] = useState('testing')
+  const [status, setStatus] = useState('not saved')
 
   const [title, setTitle] = useState('')
   const [walletVerification, setWalletVerification] = useState(false)
@@ -89,13 +50,14 @@ export default function AllowlistApplication() {
   const [emailVerification, setEmailVerification] = useState(false)
 
   const [showModal, setShowModal] = useState(true)
-  const [lid, setLid] = useState('')
-  const [code, setCode] = useState('')
 
+  const lid = '3bRPXWn1phkfUh5qHYz1'
+  const [hash, setHash] = useState('')
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
-  
-  useEffect(() => {
+
+  /*
+    useEffect(() => {
     const pathParts = asPath.split('id=')
     if (pathParts.length >= 2) {
       if (asPath.includes('code')) {
@@ -115,6 +77,7 @@ export default function AllowlistApplication() {
       }
     }
   }, [lid])
+   */
 
   /*Allowlist Info */
   useEffect(() => {
@@ -197,21 +160,8 @@ export default function AllowlistApplication() {
         discord_id: discord_id,
         wallet: wallet,
         email: email,
-        tw_following: tw_following,
-        guild_following: guild_following,
         status: status
       })
-
-     /* await updateDoc(docRef, {
-        uid: uid,
-        twitter_id: twitter_id,
-        discord_id: discord_id,
-        wallet: wallet,
-        email: email,
-        tw_following: tw_following,
-        guild_following: guild_following,
-        status: status
-      })*/
       console.log('Data written into doc ID: ', docRef.id)
       return true
     } catch (e) {
@@ -223,15 +173,6 @@ export default function AllowlistApplication() {
   return (
   
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
-        <div>
-        <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
-          className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
-        >
-          Verify following - WIP 
-        </a>
-        <p onClick={() => {verifyTwitter(code, uid, url, '395011248')}}>check</p>
-        </div>
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <Modal visible={showModal} onClose={() => {}} width="w-1/2" height="">
           <div className="flex flex-col space-y-4 p-4">
@@ -306,6 +247,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
+                <VerifyFollowing twitterAccount={'395011248'} lid={lid}/>
              </div>
           </>
         ) : (
@@ -344,7 +286,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
-              <VerifyGuild lid={lid} discordGuildID={guild} />
+              <VerifyGuild discordGuildID={'605866305094156333'} lid={lid} />
             </div>
           </>
         ) : (
