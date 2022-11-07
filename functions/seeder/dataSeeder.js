@@ -247,8 +247,8 @@ module.exports = class DataSeeder {
    * TODO:
    * add some users to the events registered_attendees collection(or array of registered_attendees objects)
    * these users should appear in the front end as a guidance that users are registered in the backend.
-  * IMPORTANT: UPDATE THE REGISTERED_ATTENDEES COUNTER FROM THE EVENT DOC!!!!! 
-  */
+   * IMPORTANT: UPDATE THE REGISTERED_ATTENDEES COUNTER FROM THE EVENT DOC!!!!!
+   */
   async setRegisteredAttendeesToEvents() {
     try {
       const eventsRef = this.db.collection('events')
@@ -299,7 +299,7 @@ module.exports = class DataSeeder {
             event_ref: this.db.collection('events').doc(event.data().event_id),
             event_title: event.data().title,
             start_date: event.data().start_date,
-            end_date: event.data().end_date,
+            end_date: event.data().end_date
             //this has been the problem all along!!!!
             // date_registered: event.data().date_of_registration
           })
