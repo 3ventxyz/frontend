@@ -29,7 +29,8 @@ export async function verifyDiscord(
   accessCode: string,
   uid: string,
   redirectUrl: string,
-  guildId: string
+  guildId: string,
+  lid: string
 ) {
   try {
     const url = 'https://discord.com/api/v10/oauth2/token'
@@ -73,6 +74,7 @@ export async function verifyDiscord(
       guilds.forEach((guild: any) => {
         if (guild.id === guildId) {
           console.log('following')
+          saveFollowing(true, lid, uid)
           return true
         }
       })
@@ -83,7 +85,7 @@ export async function verifyDiscord(
   return false
 }
 
-export default function VerifyGuild({id = '', discordGuildID = ''}:{id: string, discordGuildID: string}) {
+export default function VerifyGuild({discordGuildID = '', lid = ''}:{discordGuildID: string, lid: string}) {
   const { asPath } = useRouter()
   const router = useRouter()
   const discordGuild = discordGuildID
@@ -99,7 +101,7 @@ export default function VerifyGuild({id = '', discordGuildID = ''}:{id: string, 
       setHash(pathParts.slice(-1)[0])
     }
     if (hash != '') {
-      verifyDiscord(hash, uid, url, discordGuild)
+      verifyDiscord(hash, uid, url, discordGuild, lid)
     }
   }, [hash])
 

@@ -66,10 +66,9 @@ export async function verifyTwitter(
   return false
 }
 
-export default function VerifyFollowing(lid: string) {
+export default function VerifyFollowing({twitterAccount = '', lid = ''}:{twitterAccount: string, lid: string}) {
   const { asPath } = useRouter()
   const router = useRouter()
-  const [twitterAccount, setTwitterAccount] = useState('395011248')
   const auth = useAuth()
   const uid = auth?.uid
   const { origin } = absoluteUrl()
@@ -79,7 +78,7 @@ export default function VerifyFollowing(lid: string) {
     const pathParts = asPath.split('code=')
     if (pathParts.length >= 2) {
       setHash(pathParts.slice(-1)[0])
-      verifyTwitter(hash, uid, url, twitterAccount, lid.lid)
+      verifyTwitter(hash, uid, url, twitterAccount, lid)
     }
   }, [hash])
 
@@ -88,7 +87,7 @@ export default function VerifyFollowing(lid: string) {
       <p className="font-semibold">Check Account Following</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
           Following Check

@@ -51,7 +51,7 @@ export default function AllowlistApplication() {
 
   const [showModal, setShowModal] = useState(true)
 
-  const lid = 'CVtnwak8VkvtTwDrLkFE'
+  const lid = '3bRPXWn1phkfUh5qHYz1'
   const [hash, setHash] = useState('')
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
@@ -224,7 +224,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
-                <VerifyFollowing lid={lid}/>
+                <VerifyFollowing twitterAccount={'395011248'} lid={lid}/>
              </div>
           </>
         ) : (
@@ -263,7 +263,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
-              <VerifyGuild id={lid} discordGuildID={guild} />
+              <VerifyGuild discordGuildID={'605866305094156333'} lid={lid} />
             </div>
           </>
         ) : (
