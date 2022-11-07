@@ -344,7 +344,7 @@ export default function AllowlistApplication() {
                 )
               }}
             >
-              <VerifyGuild id={lid} discordGuildID={guild} />
+              <VerifyGuild lid={lid} discordGuildID={guild} />
             </div>
           </>
         ) : (

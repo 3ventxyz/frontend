@@ -74,6 +74,7 @@ export default function VerifyFollowing({twitterAccount = '', lid = ''}:{twitter
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
   const [hash, setHash] = useState('')
+  const state = btoa(lid)
   useEffect(() => {
     const pathParts = asPath.split('code=')
     if (pathParts.length >= 2) {
@@ -87,7 +88,7 @@ export default function VerifyFollowing({twitterAccount = '', lid = ''}:{twitter
       <p className="font-semibold">Check Account Following</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}}&scope=tweet.read%20users.read%20follows.read&state=state&code_challenge=challenge&code_challenge_method=plain`}
+          href={`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${url}&scope=tweet.read%20users.read%20follows.read&state=${state}&code_challenge=challenge&code_challenge_method=plain`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
         >
           Following Check
