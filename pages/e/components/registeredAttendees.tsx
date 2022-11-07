@@ -3,6 +3,10 @@ export default function RegisteredAttendees({
 }: {
   isMobile: boolean
 }) {
+  /**
+   * --pass the reference of the registered attendees collection.
+   * fetch the docs and use each attendee doc to the registeredAtteendee component.
+   **/
   return isMobile ? (
     <div id="registered-attendees-mobile">
       <h4>Registered Attendees</h4>
@@ -32,6 +36,7 @@ export default function RegisteredAttendees({
   )
 }
 
+/**pass the avatar, username to display, and the uid for accessing their profile pages. */
 function RegisteredAttendee() {
   return (
     <div className="flex h-[130px] w-[100px] flex-col items-center justify-center truncate rounded-2xl bg-gray-200">

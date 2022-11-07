@@ -7,10 +7,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Button from '../../../components/button'
-import RegisteredAttendee from './registeredAttendee'
+import RegisteredAttendee from './registeredAttendees'
 import SocialFeedPost from './socialFeed'
 import SocialFeed from './socialFeed'
-import RegisteredAttendees from './registeredAttendee'
+import RegisteredAttendees from './registeredAttendees'
 export default function LoadedEventPage({
   event,
   children,

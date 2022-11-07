@@ -1,6 +1,13 @@
 import TextInput from '../../../components/textInput'
 
 export default function SocialFeed({ isMobile }: { isMobile: boolean }) {
+  /**
+   * --pass the posts collection reference of the event and fetch it here the docs. There must be a query for the most
+   * recent posts to the oldest posts, and it should be the 10 recent posts.
+   * Also, create a function that creates a new post doc in the collection that
+   * is inside the eid doc. Where the user is at the current event page, each post will be created with
+   * the click of 'new post' button.
+   */
   return isMobile ? (
     <div id="social-feed-mobile" className="w-full ">
       <h4>Activity</h4>
@@ -58,6 +65,12 @@ export default function SocialFeed({ isMobile }: { isMobile: boolean }) {
     </div>
   )
 }
+
+/**
+ * --it uses the avatar, username, uid for accessing their profile page,
+ *   the content of the post. (currently use only text, later check
+ * how to add images and gifs in each post and in the text area)
+ */
 
 function SocialFeedPost({ isMobile }: { isMobile: boolean }) {
   return isMobile ? (
