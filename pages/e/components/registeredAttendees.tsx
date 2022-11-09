@@ -5,7 +5,7 @@ import { RegisteredAttendeeInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 export default function RegisteredAttendees({
   isMobile,
-  eid =''
+  eid = ''
 }: {
   isMobile: boolean
   eid?: string
@@ -72,8 +72,8 @@ function RegisteredAttendee({
   attendee: RegisteredAttendeeInterface
 }) {
   return (
-    <div className="flex h-[130px] w-[100px] flex-col items-center justify-center truncate rounded-2xl bg-gray-200">
-      <div className="relative h-[80px] w-[80px] rounded-full bg-green-200  ">
+    <div className="flex   h-[130px] w-[100px] flex-col items-center justify-center  rounded-2xl bg-gray-200">
+      <div className="relative h-[80px] w-[80px] rounded-full bg-green-200">
         <Image
           src={attendee.avatar}
           layout="fill"
@@ -82,7 +82,13 @@ function RegisteredAttendee({
           className="rounded-full"
         />
       </div>
-      <p>{attendee.username}</p>
+      <div
+        className={`... truncate  ${
+          attendee.username.length > 10 ? 'w-[80px]' : 'w-fit'
+        }`}
+      >
+        {attendee.username}
+      </div>
     </div>
   )
 }
