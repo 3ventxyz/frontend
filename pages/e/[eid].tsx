@@ -43,12 +43,16 @@ export default function Event() {
   const [avatar, setAvatar] = useState<string>('')
 
   const { eid } = router.query
-  
+
   const EventPage = () => {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
-          <LoadedEventPage event={event} isEventCreator={isEventCreator}>
+          <LoadedEventPage
+            event={event}
+            avatar={avatar}
+            isEventCreator={isEventCreator}
+          >
             <SelectAndPurchaseTicket
               ticketListData={ticketListData}
               selectedIndex={selectedIndex}
@@ -61,7 +65,7 @@ export default function Event() {
         )
       case EventPageEnum.purchasedTicket:
         return (
-          <LoadedEventPage event={event}>
+          <LoadedEventPage event={event} avatar={avatar}>
             <PurchasedTicketConfirmation
               selectedTicket={selectedTicket}
               QRImgUrl={QRImgUrl}

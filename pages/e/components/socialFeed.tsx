@@ -16,7 +16,7 @@ export default function SocialFeed({
   isMobile: boolean
   eid?: string
   uid?: string
-  avatar?: string
+  avatar: string
 }) {
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [isFetching, setIsFetching] = useState(true)
@@ -34,7 +34,7 @@ export default function SocialFeed({
       const arrayOfPosts: Array<PostInterface> = []
       var postsDocs: QuerySnapshot<DocumentData> = await FetchSocialFeedPosts(
         eid,
-        uid
+        uid,
       )
 
       //IMPORTANT move this to the event context for organizing.
@@ -86,7 +86,19 @@ export default function SocialFeed({
       <h4>Activity</h4>
       <div id="comment-input" className="flex space-x-2 pb-[20px]">
         <div className="mt-[15px] h-[50px] w-[50px] rounded-full bg-red-200 ">
-          avatar
+          
+
+          <Link href={`/u/${uid}`}>
+          <div className="relative h-[50px] w-[50px] hover:cursor-pointer rounded-full ">
+            <Image
+              src={avatar}
+              loading="lazy"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full bg-gray-200"
+            />
+          </div>
+        </Link>
         </div>
         <div className="flex w-full flex-col space-y-2">
           <TextInput
@@ -162,9 +174,9 @@ function SocialFeedPost({
     </div>
   ) : (
     <div className="flex flex-col">
-      <div className="flex items-end space-x-2">
+      <div className="flex items-end space-x-2 ">
         <Link href={`/u/${post.uid}`}>
-          <div className="relative h-[50px] w-[50px] rounded-full ">
+          <div className="relative h-[50px] w-[50px] hover:cursor-pointer rounded-full ">
             <Image
               src={post.avatar ?? ''}
               loading="lazy"
