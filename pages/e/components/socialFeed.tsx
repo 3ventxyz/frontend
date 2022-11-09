@@ -75,7 +75,7 @@ export default function SocialFeed({
           <div className="space-y-2">
             {posts &&
               posts.map((post, index) => {
-                return <SocialFeedPost isMobile={isMobile} post={post} />
+                return <SocialFeedPost key={index} isMobile={isMobile} post={post} />
               })}
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function SocialFeed({
           {posts &&
             posts.map((post, index) => {
               console.log(post.avatar)
-              return <SocialFeedPost isMobile={isMobile} post={post} />
+              return <SocialFeedPost key={index} isMobile={isMobile} post={post} />
             })}
         </div>
       </div>

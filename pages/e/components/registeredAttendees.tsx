@@ -48,7 +48,7 @@ export default function RegisteredAttendees({
         <div className="flex  w-fit space-x-2">
           {attendees &&
             attendees.map((attendee, index) => {
-              return <RegisteredAttendee attendee={attendee} />
+              return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
             })}
         </div>
       </div>
@@ -59,7 +59,7 @@ export default function RegisteredAttendees({
       <div className="mt-[15px] grid grid-cols-4 gap-x-4 gap-y-2 ">
         {attendees &&
           attendees.map((attendee, index) => {
-            return <RegisteredAttendee attendee={attendee} />
+            return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
           })}
       </div>
     </div>
