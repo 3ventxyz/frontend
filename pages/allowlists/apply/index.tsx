@@ -51,13 +51,22 @@ export default function AllowlistApplication() {
 
   const [showModal, setShowModal] = useState(true)
 
-  const lid = '3bRPXWn1phkfUh5qHYz1'
+  const [lid, setLid] = useState('3bRPXWn1phkfUh5qHYz1')
   const [hash, setHash] = useState('')
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
 
-  /*
+  
     useEffect(() => {
+      console.log('ap', asPath)
+      if (asPath.includes('state')) {
+        const pathParts = asPath.split('state')
+        const middle = pathParts[1].slice(
+          pathParts[1].indexOf('=') + 1,
+          pathParts[1].lastIndexOf('&'),
+        );
+        console.log('middle',middle)
+      } 
     const pathParts = asPath.split('id=')
     if (pathParts.length >= 2) {
       if (asPath.includes('code')) {
@@ -65,19 +74,17 @@ export default function AllowlistApplication() {
           const pathParts = asPath.split('id=')
           const idCode = pathParts[1].split('&state=state&code=')
           setLid(idCode[0])
-          setCode(idCode[1])
         } else {
           const pathParts = asPath.split('id=')
           const idCode = pathParts[1].split('&code=')
           setLid(idCode[0])
-          setCode(idCode[1])
         }
       } else {
         setLid(pathParts[1])
       }
     }
   }, [lid])
-   */
+   
 
   /*Allowlist Info */
   useEffect(() => {
@@ -148,8 +155,6 @@ export default function AllowlistApplication() {
     discord_id: string,
     wallet: string,
     email: string,
-    tw_following: boolean,
-    guild_following: boolean,
     status: string
   ) => {
     try {
@@ -241,8 +246,6 @@ export default function AllowlistApplication() {
                   discord,
                   wallet,
                   email,
-                  followingTwitter,
-                  followingGuild,
                   status
                 )
               }}
@@ -280,8 +283,6 @@ export default function AllowlistApplication() {
                   discord,
                   wallet,
                   email,
-                  followingTwitter,
-                  followingGuild,
                   status
                 )
               }}
@@ -313,7 +314,7 @@ export default function AllowlistApplication() {
             type="submit"
             text="Apply"
             active={!loading}
-            onClick={() => saveProfile(uid, twitter[0], discord, wallet, email, false, false, status)}
+            onClick={() => saveProfile(uid, twitter[0], discord, wallet, email, 'submited')}
           ></Button>
           {error && (
             <ErrorAlert

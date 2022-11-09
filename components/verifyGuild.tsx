@@ -6,6 +6,7 @@ import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 import TextInput from './textInput'
 import Button from './button'
+import { setRevalidateHeaders } from 'next/dist/server/send-payload'
 
 const saveFollowing = async (
   discord_guild: boolean,
@@ -16,7 +17,7 @@ const saveFollowing = async (
     const docRef = doc(db, 'lists', `${lid}`)
     await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
       discord_guild: discord_guild,
-      status: 'testing discord'
+      status: 'testing discord again'
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -34,8 +35,6 @@ export async function verifyDiscord(
 ) {
   try {
     const url = 'https://discord.com/api/v10/oauth2/token'
-
-    console.log(redirectUrl)
 
     const formData = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '',
@@ -73,7 +72,6 @@ export async function verifyDiscord(
       /*check if guild is in the list*/
       guilds.forEach((guild: any) => {
         if (guild.id === guildId) {
-          console.log('following')
           saveFollowing(true, lid, uid)
           return true
         }
@@ -85,7 +83,13 @@ export async function verifyDiscord(
   return false
 }
 
-export default function VerifyGuild({discordGuildID = '', lid = ''}:{discordGuildID: string, lid: string}) {
+export default function VerifyGuild({
+  discordGuildID = '',
+  lid = ''
+}: {
+  discordGuildID: string
+  lid: string
+}) {
   const { asPath } = useRouter()
   const router = useRouter()
   const discordGuild = discordGuildID
@@ -95,11 +99,19 @@ export default function VerifyGuild({discordGuildID = '', lid = ''}:{discordGuil
   const url = `${origin}${router.pathname}`
   const [hash, setHash] = useState('')
   const state = btoa(lid)
-
+  
   useEffect(() => {
     const pathParts = asPath.split('code=')
-    if (pathParts.length >= 2) {
-      setHash(pathParts.slice(-1)[0])
+    {
+      if (pathParts.length >= 2) {
+        if (pathParts[1].includes('state')) {
+          const separatePath = pathParts[1].split('&state=')
+          console.log('sp', separatePath)
+          setHash(separatePath[0])
+        } else {
+          setHash(pathParts.slice(-1)[0])
+        }
+      }
     }
     if (hash != '') {
       verifyDiscord(hash, uid, url, discordGuild, lid)
@@ -111,7 +123,7 @@ export default function VerifyGuild({discordGuildID = '', lid = ''}:{discordGuil
       <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds`}
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds&state=${state}`}
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
         >
           Check Guild - WIP
