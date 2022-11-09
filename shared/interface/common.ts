@@ -57,7 +57,7 @@ export interface AllowlistInterface {
 
 export interface PostInterface{
   avatar: string,
-  date_posted: string,
+  date_posted: Date,
   post_content: string,
   uid: string,
   username: string,

@@ -6,7 +6,7 @@ import { PostInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../../components/button'
-import uploadComment from '../../../services/createNewPost'
+import uploadComment from '../../../services/upload_comment'
 export default function SocialFeed({
   isMobile,
   eid = '',
@@ -20,6 +20,7 @@ export default function SocialFeed({
 }) {
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [isFetching, setIsFetching] = useState(true)
+  const [comment, setComment] = useState<string>('')
   /**
    * --pass the posts collection reference of the event and fetch it here the docs. There must be a query for the most
    * recent posts to the oldest posts, and it should be the 10 recent posts.
@@ -93,21 +94,32 @@ export default function SocialFeed({
             placeholder="comment..."
             textArea={true}
             labelText={''}
-            setValue={(e) => {
-              console.log(e)
-            }}
+            setValue={setComment}
           />
           <Button
             text={'comment'}
-            active={true}
-            onClick={() => {
-              uploadComment({
-                uid:uid ,
-                eid:eid ,
-                username:'faker' ,
-                content:'hi this is a comment' ,
-                avatar:avatar 
+            active={comment !== '' ? true : false}
+            onClick={async () => {
+              await uploadComment({
+                uid: uid,
+                eid: eid,
+                username: 'faker',
+                content: comment,
+                avatar: avatar
               })
+              setComment('')
+              const newPost: PostInterface = {
+                avatar: avatar,
+                date_posted: new Date(),
+                post_content: comment,
+                uid: uid,
+                username: 'faker'
+              }
+              let localPosts = posts
+              localPosts?.splice(0,0,newPost)
+              setPosts(localPosts)
+              
+              /**append  */
             }}
           />
         </div>
