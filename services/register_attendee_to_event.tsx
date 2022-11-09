@@ -17,6 +17,7 @@ interface AttendeeRegistrationInterface {
   zip_code: string
   uid: string
   date_of_registration: Date,
+  avatar: string, 
   username: string,
 }
 

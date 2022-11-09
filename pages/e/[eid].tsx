@@ -39,9 +39,11 @@ export default function Event() {
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
+  const [username, setUsername] = useState<string>('')
+  const [avatar, setAvatar] = useState<string>('')
 
   const { eid } = router.query
-
+  
   const EventPage = () => {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
@@ -79,6 +81,9 @@ export default function Event() {
   const fetchData = async () => {
     const docRef = doc(db, 'users', auth.uid)
     const userDoc = await getDoc(docRef)
+
+    setUsername(userDoc.data()?.username)
+    setAvatar(userDoc.data()?.avatar)
     const uid_qr_code = userDoc.data()?.qr_code
     setQRImgUrl(uid_qr_code)
     const eventId: any = eid
@@ -143,7 +148,8 @@ export default function Event() {
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
           eventId={event ? event.event_id : ' '}
-          username="faker"
+          username={username}
+          avatar={avatar}
         />
       </Modal>
     </>

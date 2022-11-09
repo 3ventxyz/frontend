@@ -18,11 +18,13 @@ export default function CreateCheckoutSession({
   selectedTicket,
   uid,
   username,
+  avatar,
   eventId,
   onClose,
   confirmSelectedTicketPurchase
 }: {
   selectedTicket: TicketInterface | null
+  avatar: string
   onClose: () => void
   uid: string
   eventId: string
@@ -46,7 +48,8 @@ export default function CreateCheckoutSession({
         zip_code: event.target.zip_code.value,
         uid: uid,
         date_of_registration: new Date(),
-        username: 'faker'
+        username: username,
+        avatar: avatar
       },
       eventId
     )
