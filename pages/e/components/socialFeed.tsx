@@ -1,7 +1,7 @@
 import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import TextInput from '../../../components/textInput'
-import FetchSocialFeedPosts from '../../../services/fetchSocialFeedPosts'
+import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import { PostInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'

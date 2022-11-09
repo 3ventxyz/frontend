@@ -32,7 +32,7 @@ export default function CreateCheckoutSession({
   const registeringAttendeeForm = async (event: any) => {
     event.preventDefault()
     setcheckoutPage(CheckoutPageEnum.loadingPage)
-
+    //TODO 08/11/2022. connect the real username.
     await registerAttendeeToEvent(
       {
         first_name: event.target.first_name.value,
@@ -42,7 +42,9 @@ export default function CreateCheckoutSession({
         city: event.target.city.value,
         phone_number: event.target.phone_number.value,
         zip_code: event.target.zip_code.value,
-        uid: uid
+        uid: uid,
+        date_of_registration: new Date(),
+        username: 'faker'
       },
       eventId
     )

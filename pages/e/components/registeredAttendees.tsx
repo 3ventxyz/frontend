@@ -1,6 +1,6 @@
 import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import FetchRegisteredAttendees from '../../../services/fetchRegisteredAttendees'
+import FetchRegisteredAttendees from '../../../services/fetch_registered_attendees'
 import { RegisteredAttendeeInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 export default function RegisteredAttendees({

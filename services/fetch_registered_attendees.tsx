@@ -1,8 +1,14 @@
-import { collection, doc, getDocs } from '@firebase/firestore'
+import {
+  collection,
+  doc,
+  getDocs,
+  limit,
+  orderBy,
+  query
+} from '@firebase/firestore'
 import { db } from './firebase_config'
 
 export default async function FetchRegisteredAttendees(eid: string) {
-
   const eventRef = doc(db, 'events', eid)
   const registeredAttendeesCollectionRef = collection(
     eventRef,
@@ -10,7 +16,11 @@ export default async function FetchRegisteredAttendees(eid: string) {
   )
 
   const registeredAttendeesDocs = await getDocs(
-    registeredAttendeesCollectionRef
+    query(
+      registeredAttendeesCollectionRef,
+      orderBy('date_of_registration', 'desc'),
+      limit(8)
+    )
   )
 
   return registeredAttendeesDocs

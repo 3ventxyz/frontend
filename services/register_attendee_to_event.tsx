@@ -16,6 +16,8 @@ interface AttendeeRegistrationInterface {
   phone_number: string
   zip_code: string
   uid: string
+  date_of_registration: Date,
+  username: string,
 }
 
 export default async function registerAttendeeToEvent(
