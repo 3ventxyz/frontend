@@ -26,7 +26,6 @@ export default async function uploadComment({
   const postsCollection = collection(eventRef, 'posts')
   // const post
   await addDoc(postsCollection, {
-    eid: eid,
     uid: uid,
     username: username,
     post_content: content,

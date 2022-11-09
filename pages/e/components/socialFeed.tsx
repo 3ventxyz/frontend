@@ -5,14 +5,18 @@ import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import { PostInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
+import Button from '../../../components/button'
+import uploadComment from '../../../services/createNewPost'
 export default function SocialFeed({
   isMobile,
   eid = '',
-  uid = ''
+  uid = '',
+  avatar = ''
 }: {
   isMobile: boolean
   eid?: string
   uid?: string
+  avatar?: string
 }) {
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [isFetching, setIsFetching] = useState(true)
@@ -83,7 +87,7 @@ export default function SocialFeed({
         <div className="mt-[15px] h-[50px] w-[50px] rounded-full bg-red-200 ">
           avatar
         </div>
-        <div className="w-full ">
+        <div className="flex w-full flex-col space-y-2">
           <TextInput
             id={''}
             placeholder="comment..."
@@ -93,8 +97,22 @@ export default function SocialFeed({
               console.log(e)
             }}
           />
+          <Button
+            text={'comment'}
+            active={true}
+            onClick={() => {
+              uploadComment({
+                uid:uid ,
+                eid:eid ,
+                username:'faker' ,
+                content:'hi this is a comment' ,
+                avatar:avatar 
+              })
+            }}
+          />
         </div>
       </div>
+      <br />
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
       <div id="social-feed-mobile" className="h-[500px] overflow-y-auto">
         <div className="space-y-[25px]">
@@ -155,7 +173,7 @@ function SocialFeedPost({
             </Link>{' '}
             commented
           </p>
-          <div className="my-0 py-0 text-[15px]"> 3 months ago</div>
+          <div className="my-0 py-0 text-[15px]">3 months ago</div>
         </div>
       </div>
       <div className="ml-[60px]">{post.post_content}</div>
