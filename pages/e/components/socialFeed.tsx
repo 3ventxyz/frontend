@@ -116,9 +116,9 @@ export default function SocialFeed({
                 username: 'faker'
               }
               let localPosts = posts
-              localPosts?.splice(0,0,newPost)
+              localPosts?.splice(0, 0, newPost)
               setPosts(localPosts)
-              
+
               /**append  */
             }}
           />

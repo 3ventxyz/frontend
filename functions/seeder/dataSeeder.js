@@ -238,6 +238,7 @@ module.exports = class DataSeeder {
               address: faker.address.streetAddress(),
               city: faker.address.city(),
               username: user.data().username,
+              avatar: user.data().avatar,
               phone_number: '',
               state: faker.address.state(),
               uid: user.id,
