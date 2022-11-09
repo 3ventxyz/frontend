@@ -14,7 +14,7 @@ import Link from 'next/link'
 import Modal from '../../../components/modal'
 import absoluteUrl from 'next-absolute-url'
 
-const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
+/*Link href="allowlist/apply?${lid}" */
 
 export default function AllowlistApplication() {
   /*Needed variables */
@@ -35,8 +35,6 @@ export default function AllowlistApplication() {
   const [discord, setDiscord] = useState('')
   const [emailVerif, setEmailVerif] = useState(false)
   const [email, setEmail] = useState('')
-  const [followingTwitter, setFollowingTwitter] = useState(false)
-  const [followingGuild, setFollowingGuild] = useState(false)
   const [status, setStatus] = useState('not saved')
 
   const [title, setTitle] = useState('')
@@ -51,22 +49,23 @@ export default function AllowlistApplication() {
 
   const [showModal, setShowModal] = useState(true)
 
-  const [lid, setLid] = useState('3bRPXWn1phkfUh5qHYz1')
+  const [lid, setLid] = useState('')
   const [hash, setHash] = useState('')
   const { origin } = absoluteUrl()
   const url = `${origin}${router.pathname}`
 
-  
-    useEffect(() => {
-      console.log('ap', asPath)
-      if (asPath.includes('state')) {
-        const pathParts = asPath.split('state')
-        const middle = pathParts[1].slice(
-          pathParts[1].indexOf('=') + 1,
-          pathParts[1].lastIndexOf('&'),
-        );
-        console.log('middle',middle)
-      } 
+  useEffect(() => {
+    if (asPath.includes('state')) {
+      const pathParts = asPath.split('state')
+      const middle = pathParts[1].slice(
+        pathParts[1].indexOf('=') + 1,
+        pathParts[1].lastIndexOf('%')
+      )
+      const decoded = atob(`${middle}=`)
+      setLid(decoded)
+      /*TO-DO take off the 64 encoding (this will be the LID) */
+    }
+    /*Change this because id will not be available in the returning url */
     const pathParts = asPath.split('id=')
     if (pathParts.length >= 2) {
       if (asPath.includes('code')) {
@@ -84,7 +83,6 @@ export default function AllowlistApplication() {
       }
     }
   }, [lid])
-   
 
   /*Allowlist Info */
   useEffect(() => {
@@ -176,7 +174,6 @@ export default function AllowlistApplication() {
   /*Use conditionals to only show the values that the user chose as true*/
   /*Check for previous verifications*/
   return (
-  
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
         <Modal visible={showModal} onClose={() => {}} width="w-1/2" height="">
@@ -240,18 +237,11 @@ export default function AllowlistApplication() {
             </p>
             <div
               onClick={() => {
-                saveProfile(
-                  uid,
-                  twitter,
-                  discord,
-                  wallet,
-                  email,
-                  status
-                )
+                saveProfile(uid, twitter, discord, wallet, email, status)
               }}
             >
-                <VerifyFollowing twitterAccount={'395011248'} lid={lid}/>
-             </div>
+              <VerifyFollowing twitterAccount={twitterAccount} lid={lid} />
+            </div>
           </>
         ) : (
           <></>
@@ -277,17 +267,10 @@ export default function AllowlistApplication() {
             </p>
             <div
               onClick={() => {
-                saveProfile(
-                  uid,
-                  twitter,
-                  discord,
-                  wallet,
-                  email,
-                  status
-                )
+                saveProfile(uid, twitter, discord, wallet, email, status)
               }}
             >
-              <VerifyGuild discordGuildID={'605866305094156333'} lid={lid} />
+              <VerifyGuild discordGuildID={guild} lid={lid} />
             </div>
           </>
         ) : (
@@ -310,12 +293,16 @@ export default function AllowlistApplication() {
         )}
 
         <form className="m-4 w-full" onSubmit={() => {}}>
+          <Link href="/creator">
           <Button
             type="submit"
             text="Apply"
             active={!loading}
-            onClick={() => saveProfile(uid, twitter[0], discord, wallet, email, 'submited')}
+            onClick={() => {
+              saveProfile(uid, twitter[0], discord, wallet, email, 'submitted')
+            }}
           ></Button>
+          </Link>
           {error && (
             <ErrorAlert
               title="Oops!"

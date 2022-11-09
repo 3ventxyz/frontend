@@ -16,8 +16,7 @@ const saveFollowing = async (
   try {
     const docRef = doc(db, 'lists', `${lid}`)
     await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-      discord_guild: discord_guild,
-      status: 'testing discord again'
+      discord_guild: discord_guild
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true

@@ -4,8 +4,6 @@ import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
 import { doc, updateDoc, setDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
-import TextInput from '../components/textInput'
-import Button from '../components/button'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 
@@ -18,7 +16,7 @@ const saveFollowing = async (
     const docRef = doc(db, 'lists', `${lid}`)
     await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
       tw_following: tw_following,
-      status: 'testing'
+      status: 'testing twitter'
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -41,15 +39,16 @@ export async function verifyTwitter(
     const response = await rawResponse.json()
     const token = response.access_token
     if (token && token !== undefined) {
+      console.log('token', token)
       /* get twitter id */
       const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
       const twitterIdJson = await getTwitterId.json()
-
+      console.log('id', twitterIdJson) 
       /* get twitter following*/
      const getTwitterFollowing = await fetch('api/twitter-following?accessCode=' + token + '&id=' + twitterIdJson.data.id)
      const twitterFollowing = await getTwitterFollowing.json()
      const twitterFollowingArray = twitterFollowing.data
-
+     console.log('array', twitterFollowingArray)
      /*Check if user is following */
      twitterFollowingArray.forEach((account: any) => {
       const accountId = account.id
@@ -75,10 +74,19 @@ export default function VerifyFollowing({twitterAccount = '', lid = ''}:{twitter
   const url = `${origin}${router.pathname}`
   const [hash, setHash] = useState('')
   const state = btoa(lid)
+
   useEffect(() => {
     const pathParts = asPath.split('code=')
-    if (pathParts.length >= 2) {
-      setHash(pathParts.slice(-1)[0])
+    if (pathParts.includes('state')) {
+      const pathParts = asPath.split('state=')
+      const separatePath = pathParts[1].split('&code=')
+      setHash(separatePath[1])
+    } else {
+      if (pathParts.length >= 2) {
+        setHash(pathParts.slice(-1)[0])
+      }
+    }
+    if (hash != '') {
       verifyTwitter(hash, uid, url, twitterAccount, lid)
     }
   }, [hash])
