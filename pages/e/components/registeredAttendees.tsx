@@ -56,13 +56,6 @@ export default function RegisteredAttendees({
     <div id="registered-attendees-web">
       <h4>Registered Attendees</h4>
       <div className="mt-[15px] grid grid-cols-4 gap-x-2 gap-y-2 ">
-        {/* <RegisteredAttendee />
-        <RegisteredAttendee />
-        <RegisteredAttendee />
-        <RegisteredAttendee />
-        <RegisteredAttendee />
-        <RegisteredAttendee /> */}
-
         {attendees &&
           attendees.map((attendee, index) => {
             return <RegisteredAttendee attendee={attendee} />

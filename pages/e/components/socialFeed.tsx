@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import TextInput from '../../../components/textInput'
 import FetchSocialFeedPosts from '../../../services/fetchSocialFeedPosts'
 import { PostInterface } from '../../../shared/interface/common'
-
+import Image from 'next/image'
+import Link from 'next/link'
 export default function SocialFeed({
   isMobile,
   eid = '',
@@ -30,7 +31,7 @@ export default function SocialFeed({
         eid,
         uid
       )
-  
+
       //IMPORTANT move this to the event context for organizing.
       for (const postDoc of postsDocs.docs) {
         const newPost: PostInterface = {
@@ -99,6 +100,7 @@ export default function SocialFeed({
         <div className="space-y-[25px]">
           {posts &&
             posts.map((post, index) => {
+              console.log(post.avatar)
               return <SocialFeedPost isMobile={isMobile} post={post} />
             })}
         </div>
@@ -122,7 +124,7 @@ function SocialFeedPost({
 }) {
   return isMobile ? (
     <div className="flex items-center space-x-2 bg-yellow-200 px-[5px]">
-      <div className="h-[70px] w-[70px] rounded-full bg-green-100"></div>
+      <div className="relative h-[70px] w-[70px] rounded-full bg-green-100"></div>
       <div>
         <div>{post.username} commented:</div>
         <div>{post.post_content}</div>
@@ -131,13 +133,26 @@ function SocialFeedPost({
   ) : (
     <div className="flex flex-col">
       <div className="flex items-end space-x-2">
-        <div className="h-[50px] w-[50px] rounded-full bg-red-200">avatar</div>
+        <Link href={`/u/${post.uid}`}>
+          <div className="relative h-[50px] w-[50px] rounded-full ">
+            <Image
+              src={post.avatar ?? ''}
+              loading="lazy"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full bg-gray-200"
+            />
+          </div>
+        </Link>
+        {/* </button> */}
         <div className="flex flex-col items-start space-y-0">
           <div className="my-0 text-[21px]"></div>
           <p className="my-0 py-0 text-[21px]">
-            <a href="" className="font-bold hover:underline">
-              {post.username}
-            </a>{' '}
+            <Link href={`/u/${post.uid}`}>
+              <span className="font-bold hover:cursor-pointer hover:underline">
+                {post.username}
+              </span>
+            </Link>{' '}
             commented
           </p>
           <div className="my-0 py-0 text-[15px]"> 3 months ago</div>
