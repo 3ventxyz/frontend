@@ -156,7 +156,6 @@ export default function EditEvent() {
     }
     try {
       if (fileImg) {
-        // TODO create a imgType setter, based from the selected file img.
         console.log('fileImg:', fileImg.type)
         const fileType = setFiletype(fileImg)
         const storagePath = `${auth.uid}/${eventId + fileType}`

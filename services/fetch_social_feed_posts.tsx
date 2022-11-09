@@ -2,7 +2,7 @@ import { collection, doc, getDocs } from "@firebase/firestore";
 import { db } from "./firebase_config";
 
 /**
- * TODO: add a description for this function.
+ * TODO(09/11/2022) add a description for this function.
  */
 export default async function FetchSocialFeedPosts(eid:string, uid:string){
 

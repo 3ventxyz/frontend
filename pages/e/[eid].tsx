@@ -8,7 +8,6 @@ import { EventInterface } from '../../shared/interface/common'
 import Modal from '../../components/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
-
 import CreateCheckoutSession from './components/createCheckoutSession'
 import checkRegisteredAttendee from '../../services/check_registered_attendee'
 import SelectAndPurchaseTicket from './components/selectAndPurchaseTicket'
@@ -118,9 +117,6 @@ export default function Event() {
     } else {
       setEventPageStatus(EventPageEnum.fetchedData)
     }
-    /**
-     *
-     */
   }
   useEffect(() => {
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
@@ -140,12 +136,14 @@ export default function Event() {
         width="w-[600px]"
         height="h-[600px]"
       >
+        {/* TODO bring the username from the obtained uid data */}
         <CreateCheckoutSession
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
           eventId={event ? event.event_id : ' '}
+          username="faker"
         />
       </Modal>
     </>

@@ -17,6 +17,7 @@ enum CheckoutPageEnum {
 export default function CreateCheckoutSession({
   selectedTicket,
   uid,
+  username,
   eventId,
   onClose,
   confirmSelectedTicketPurchase
@@ -25,6 +26,7 @@ export default function CreateCheckoutSession({
   onClose: () => void
   uid: string
   eventId: string
+  username: string
   confirmSelectedTicketPurchase: () => void
 }) {
   const [checkoutPage, setcheckoutPage] = useState<CheckoutPageEnum>()
