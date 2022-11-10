@@ -4,9 +4,6 @@ import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
 import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
-import TextInput from './textInput'
-import Button from './button'
-import { setRevalidateHeaders } from 'next/dist/server/send-payload'
 
 const saveFollowing = async (
   discord_guild: boolean,

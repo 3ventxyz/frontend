@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import absoluteUrl from 'next-absolute-url'
 import { useAuth } from '../contexts/auth'
-import { doc, updateDoc, setDoc, collection } from 'firebase/firestore'
+import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
@@ -15,8 +15,7 @@ const saveFollowing = async (
   try {
     const docRef = doc(db, 'lists', `${lid}`)
     await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-      tw_following: tw_following,
-      status: 'testing twitter'
+      tw_following: tw_following
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -36,10 +35,11 @@ export async function verifyTwitter(
     const rawResponse = await fetch(
       'api/twitter?accessCode=' + accessCode + '&redirectUrl=' + redirectUrl
     )
+ 
     const response = await rawResponse.json()
     const token = response.access_token
+    
     if (token && token !== undefined) {
-      console.log('token', token)
       /* get twitter id */
       const getTwitterId = await fetch('api/twitter-id?accessCode=' + token)
       const twitterIdJson = await getTwitterId.json()
@@ -53,9 +53,11 @@ export async function verifyTwitter(
      twitterFollowingArray.forEach((account: any) => {
       const accountId = account.id
       if (accountId === twitterAccount) {
-        console.log('true')
         saveFollowing(true, lid, uid)
         return true
+      } else {
+        saveFollowing(false, lid, uid)
+        return false
       }
     })
     }

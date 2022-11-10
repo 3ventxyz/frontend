@@ -1,14 +1,12 @@
 // author: Ben
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
-
 import React, { FormEvent, useState, useRef } from 'react'
 import AllowlistService from '../../services/allowlists'
 import Button from '../../components/button'
 import ErrorAlert from '../../components/alerts/errorAlert'
 import TextInput from '../../components/textInput'
 import ToggleSwitch from '../../components/toggleSwitch'
-import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 
 export default function CreateAllowlist() {
   const auth = useAuth()
