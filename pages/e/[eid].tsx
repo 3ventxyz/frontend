@@ -49,6 +49,7 @@ export default function Event() {
       case EventPageEnum.fetchedData:
         return (
           <LoadedEventPage
+            username={username}
             event={event}
             avatar={avatar}
             isEventCreator={isEventCreator}
@@ -65,7 +66,7 @@ export default function Event() {
         )
       case EventPageEnum.purchasedTicket:
         return (
-          <LoadedEventPage event={event} avatar={avatar}>
+          <LoadedEventPage username={username} event={event} avatar={avatar}>
             <PurchasedTicketConfirmation
               selectedTicket={selectedTicket}
               QRImgUrl={QRImgUrl}

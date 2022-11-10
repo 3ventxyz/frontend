@@ -12,12 +12,14 @@ import RegisteredAttendees from './registeredAttendees'
 export default function LoadedEventPage({
   event,
   avatar,
+  username,
   children,
   isEventCreator = false
 }: {
   event: EventInterface | null
   children: ReactElement,
   avatar:string,
+  username:string,
   isEventCreator?: boolean
 }): JSX.Element {
   const [profileUrlImg, setProfileUrlImg] = useState('')
@@ -161,7 +163,7 @@ export default function LoadedEventPage({
         )}
         <RegisteredAttendees isMobile={false} eid={event?.event_id} />
         <br />
-        <SocialFeed isMobile={false} eid={event?.event_id} avatar={avatar} />
+        <SocialFeed isMobile={false} username={username} eid={event?.event_id} avatar={avatar} />
       </div>
     </>
   )

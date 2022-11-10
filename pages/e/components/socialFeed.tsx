@@ -11,12 +11,14 @@ export default function SocialFeed({
   isMobile,
   eid = '',
   uid = '',
-  avatar = ''
+  avatar = '',
+  username = '',
 }: {
   isMobile: boolean
   eid?: string
   uid?: string
-  avatar: string
+  avatar: string,
+  username:string,
 }) {
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [isFetching, setIsFetching] = useState(true)
@@ -115,7 +117,7 @@ export default function SocialFeed({
               await uploadComment({
                 uid: uid,
                 eid: eid,
-                username: 'faker',
+                username: username,
                 content: comment,
                 avatar: avatar
               })
@@ -125,13 +127,11 @@ export default function SocialFeed({
                 date_posted: new Date(),
                 post_content: comment,
                 uid: uid,
-                username: 'faker'
+                username: username
               }
               let localPosts = posts
               localPosts?.splice(0, 0, newPost)
               setPosts(localPosts)
-
-              /**append  */
             }}
           />
         </div>
