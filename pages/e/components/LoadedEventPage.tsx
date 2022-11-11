@@ -17,9 +17,9 @@ export default function LoadedEventPage({
   isEventCreator = false
 }: {
   event: EventInterface | null
-  children: ReactElement,
-  avatar:string,
-  username:string,
+  children: ReactElement
+  avatar: string
+  username: string
   isEventCreator?: boolean
 }): JSX.Element {
   const [profileUrlImg, setProfileUrlImg] = useState('')
@@ -66,11 +66,6 @@ export default function LoadedEventPage({
                 className="rounded-[67px]"
               />
             </div>
-            {/* TODO: show this on the pair programming session. */}
-            {/* <br />
-            <RegisteredAttendees isMobile={true} />
-            <br />
-            <SocialFeed isMobile={true} /> */}
           </div>
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-auto w-fit cursor-pointer flex-row items-center space-x-2  ">
@@ -132,10 +127,17 @@ export default function LoadedEventPage({
           </div>
           <div className="block flex-col space-y-5 lg:hidden">
             <RegisteredAttendees isMobile={true} eid={event?.event_id} />
-            {/* <SocialFeed isMobile={true} /> */}
           </div>
         </div>
         {children}
+        <div className="block py-[10px] lg:hidden">
+          <SocialFeed
+            isMobile={true}
+            username={username}
+            eid={event?.event_id}
+            avatar={avatar}
+          />
+        </div>
       </div>
       <div className="hidden flex-col space-y-5 lg:flex ">
         <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] ">
@@ -163,7 +165,12 @@ export default function LoadedEventPage({
         )}
         <RegisteredAttendees isMobile={false} eid={event?.event_id} />
         <br />
-        <SocialFeed isMobile={false} username={username} eid={event?.event_id} avatar={avatar} />
+        <SocialFeed
+          isMobile={false}
+          username={username}
+          eid={event?.event_id}
+          avatar={avatar}
+        />
       </div>
     </>
   )

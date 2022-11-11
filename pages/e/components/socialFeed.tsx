@@ -12,13 +12,13 @@ export default function SocialFeed({
   eid = '',
   uid = '',
   avatar = '',
-  username = '',
+  username = ''
 }: {
   isMobile: boolean
   eid?: string
   uid?: string
-  avatar: string,
-  username:string,
+  avatar: string
+  username: string
 }) {
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [isFetching, setIsFetching] = useState(true)
@@ -36,7 +36,7 @@ export default function SocialFeed({
       const arrayOfPosts: Array<PostInterface> = []
       var postsDocs: QuerySnapshot<DocumentData> = await FetchSocialFeedPosts(
         eid,
-        uid,
+        uid
       )
 
       //IMPORTANT move this to the event context for organizing.
@@ -57,52 +57,24 @@ export default function SocialFeed({
       fetchData()
     }
   }, [])
-  return isMobile ? (
-    <div id="social-feed-mobile" className="w-full ">
-      <h4>Activity</h4>
-      <div className="flex">
-        <div className="h-[50px] w-[50px] rounded-full bg-red-200 ">avatar</div>
-        <TextInput
-          id={''}
-          labelText={''}
-          setValue={function (value: string): void {
-            throw new Error('Function not implemented.')
-          }}
-        />
-      </div>
-
-      <div className="h-fit overflow-y-scroll">
-        {/* use the max-height parameter so it can be resized based from the number of comments. */}
-        <div className="h-[200px] overflow-y-scroll">
-          <div className="space-y-2">
-            {posts &&
-              posts.map((post, index) => {
-                return <SocialFeedPost key={index} isMobile={isMobile} post={post} />
-              })}
-          </div>
-        </div>
-      </div>
-    </div>
-  ) : (
+  return (
     <div id="social-feed-web" className="w-full">
       <h4>Activity</h4>
       <div id="comment-input" className="flex space-x-2 pb-[20px]">
-        <div className="mt-[15px] h-[50px] w-[50px] rounded-full bg-red-200 ">
-          
-
+        <div className="mt-[15px] hidden lg:block h-[50px] w-[50px] rounded-full bg-red-200 ">
           <Link href={`/u/${uid}`}>
-          <div className="relative h-[50px] w-[50px] hover:cursor-pointer rounded-full ">
-            <Image
-              src={avatar}
-              loading="lazy"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-full bg-gray-200"
-            />
-          </div>
-        </Link>
+            <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
+              <Image
+                src={avatar}
+                loading="lazy"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full bg-gray-200"
+              />
+            </div>
+          </Link>
         </div>
-        <div className="flex w-full flex-col space-y-2">
+        <div className="flex w-full flex-col space-y-2 ">
           <TextInput
             id={''}
             placeholder="comment..."
@@ -121,7 +93,6 @@ export default function SocialFeed({
                 content: comment,
                 avatar: avatar
               })
-              setComment('')
               const newPost: PostInterface = {
                 avatar: avatar,
                 date_posted: new Date(),
@@ -129,6 +100,7 @@ export default function SocialFeed({
                 uid: uid,
                 username: username
               }
+              setComment('')
               let localPosts = posts
               localPosts?.splice(0, 0, newPost)
               setPosts(localPosts)
@@ -143,7 +115,9 @@ export default function SocialFeed({
           {posts &&
             posts.map((post, index) => {
               console.log(post.avatar)
-              return <SocialFeedPost key={index} isMobile={isMobile} post={post} />
+              return (
+                <SocialFeedPost key={index} isMobile={isMobile} post={post} />
+              )
             })}
         </div>
       </div>
@@ -164,19 +138,16 @@ function SocialFeedPost({
   isMobile: boolean
   post: PostInterface
 }) {
+  const calculateAgeOfPost = (dateTime: Date) => {
+    /**calculate time */
+    /** */
+  }
+
   return isMobile ? (
-    <div className="flex items-center space-x-2 bg-yellow-200 px-[5px]">
-      <div className="relative h-[70px] w-[70px] rounded-full bg-green-100"></div>
-      <div>
-        <div>{post.username} commented:</div>
-        <div>{post.post_content}</div>
-      </div>
-    </div>
-  ) : (
-    <div className="flex flex-col">
-      <div className="flex items-end space-x-2 ">
+    <div className="flex flex-col items-start space-x-2  px-[3px]">
+      <div className="flex  space-x-2 ">
         <Link href={`/u/${post.uid}`}>
-          <div className="relative h-[50px] w-[50px] hover:cursor-pointer rounded-full ">
+          <div className="relative h-[25px] w-[25px] rounded-full hover:cursor-pointer ">
             <Image
               src={post.avatar ?? ''}
               loading="lazy"
@@ -186,7 +157,35 @@ function SocialFeedPost({
             />
           </div>
         </Link>
-        {/* </button> */}
+        <div className="flex flex-col items-start space-y-0">
+          <div className="my-0 text-[21px]"></div>
+          <p className="my-0 py-0 text-[15px]">
+            <Link href={`/u/${post.uid}`}>
+              <span className="font-bold hover:cursor-pointer hover:underline">
+                {post.username}
+              </span>
+            </Link>{' '}
+            commented
+          </p>
+          <div className="my-0 py-0 text-[12px]">3 months ago</div>
+        </div>
+      </div>
+      <div className="">{post.post_content}</div>
+    </div>
+  ) : (
+    <div className="flex flex-col">
+      <div className="flex items-end space-x-2 ">
+        <Link href={`/u/${post.uid}`}>
+          <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
+            <Image
+              src={post.avatar ?? ''}
+              loading="lazy"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full bg-gray-200"
+            />
+          </div>
+        </Link>
         <div className="flex flex-col items-start space-y-0">
           <div className="my-0 text-[21px]"></div>
           <p className="my-0 py-0 text-[21px]">
@@ -197,7 +196,10 @@ function SocialFeedPost({
             </Link>{' '}
             commented
           </p>
-          <div className="my-0 py-0 text-[15px]">3 months ago</div>
+          <div className="my-0 py-0 text-[15px]">
+            {/* {String(post.date_posted)} */}
+            3 months ago
+          </div>
         </div>
       </div>
       <div className="ml-[60px]">{post.post_content}</div>

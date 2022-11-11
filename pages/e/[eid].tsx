@@ -146,7 +146,6 @@ export default function Event() {
         width="w-[600px]"
         height="h-[600px]"
       >
-        {/* TODO bring the username from the obtained uid data */}
         <CreateCheckoutSession
           selectedTicket={selectedTicket}
           onClose={() => setShowModal(false)}
