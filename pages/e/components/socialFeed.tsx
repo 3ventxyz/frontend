@@ -43,7 +43,7 @@ export default function SocialFeed({
       for (const postDoc of postsDocs.docs) {
         const newPost: PostInterface = {
           avatar: postDoc.data().avatar,
-          date_posted: postDoc.data().date_posted,
+          date_posted: new Date(postDoc.data().date_posted.toDate()),
           post_content: postDoc.data().post_content,
           uid: postDoc.data().uid,
           username: postDoc.data().username
@@ -61,7 +61,7 @@ export default function SocialFeed({
     <div id="social-feed-web" className="w-full">
       <h4>Activity</h4>
       <div id="comment-input" className="flex space-x-2 pb-[20px]">
-        <div className="mt-[15px] hidden lg:block h-[50px] w-[50px] rounded-full bg-red-200 ">
+        <div className="mt-[15px] hidden h-[50px] w-[50px] rounded-full bg-red-200 lg:block ">
           <Link href={`/u/${uid}`}>
             <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
               <Image
@@ -139,13 +139,33 @@ function SocialFeedPost({
   post: PostInterface
 }) {
   const calculateAgeOfPost = (dateTime: Date) => {
-    /**calculate time */
-    /** */
+    const currentDate = new Date()
+    const differenceInTime = currentDate.getTime() - dateTime.getTime()
+    var differenceInDays: number = differenceInTime / (1000 * 3600 * 24)
+    if (differenceInDays >= 365) {
+      if (differenceInDays >= 365 && differenceInDays <= 730) {
+        return 'posted a year ago'
+      }
+      return 'posted ' + (differenceInDays / 30).toFixed(0) + ' years ago'
+    }
+    if (differenceInDays >= 30) {
+      if (differenceInDays >= 30 && differenceInDays <= 60) {
+        return 'posted a month ago'
+      }
+      return 'posted ' + (differenceInDays / 30).toFixed(0) + ' months ago'
+    }
+    if (differenceInDays < 30 && differenceInDays > 2) {
+      return 'posted ' + differenceInDays.toFixed(0) + ' days ago'
+    }
+    if (differenceInDays < 2 && differenceInDays > 1) {
+      return 'posted yesterday'
+    }
+    return 'posted today'
   }
 
   return isMobile ? (
     <div className="flex flex-col items-start space-x-2  px-[3px]">
-      <div className="flex  space-x-2 ">
+      <div className="flex space-x-2">
         <Link href={`/u/${post.uid}`}>
           <div className="relative h-[25px] w-[25px] rounded-full hover:cursor-pointer ">
             <Image
@@ -167,7 +187,9 @@ function SocialFeedPost({
             </Link>{' '}
             commented
           </p>
-          <div className="my-0 py-0 text-[12px]">3 months ago</div>
+          <div className="my-0 py-0 text-[12px]">
+            {calculateAgeOfPost(post.date_posted)}
+          </div>
         </div>
       </div>
       <div className="">{post.post_content}</div>
@@ -198,7 +220,8 @@ function SocialFeedPost({
           </p>
           <div className="my-0 py-0 text-[15px]">
             {/* {String(post.date_posted)} */}
-            3 months ago
+            {/* 3 months ago */}
+            {calculateAgeOfPost(post.date_posted)}
           </div>
         </div>
       </div>
