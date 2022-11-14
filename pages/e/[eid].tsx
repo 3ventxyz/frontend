@@ -8,7 +8,6 @@ import { EventInterface } from '../../shared/interface/common'
 import Modal from '../../components/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
-
 import CreateCheckoutSession from './components/createCheckoutSession'
 import checkRegisteredAttendee from '../../services/check_registered_attendee'
 import SelectAndPurchaseTicket from './components/selectAndPurchaseTicket'
@@ -40,6 +39,8 @@ export default function Event() {
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
+  const [username, setUsername] = useState<string>('')
+  const [avatar, setAvatar] = useState<string>('')
 
   const { eid } = router.query
 
@@ -47,7 +48,12 @@ export default function Event() {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
-          <LoadedEventPage event={event} isEventCreator={isEventCreator}>
+          <LoadedEventPage
+            username={username}
+            event={event}
+            avatar={avatar}
+            isEventCreator={isEventCreator}
+          >
             <SelectAndPurchaseTicket
               ticketListData={ticketListData}
               selectedIndex={selectedIndex}
@@ -60,7 +66,7 @@ export default function Event() {
         )
       case EventPageEnum.purchasedTicket:
         return (
-          <LoadedEventPage event={event}>
+          <LoadedEventPage username={username} event={event} avatar={avatar}>
             <PurchasedTicketConfirmation
               selectedTicket={selectedTicket}
               QRImgUrl={QRImgUrl}
@@ -80,6 +86,9 @@ export default function Event() {
   const fetchData = async () => {
     const docRef = doc(db, 'users', auth.uid)
     const userDoc = await getDoc(docRef)
+
+    setUsername(userDoc.data()?.username)
+    setAvatar(userDoc.data()?.avatar)
     const uid_qr_code = userDoc.data()?.qr_code
     setQRImgUrl(uid_qr_code)
     const eventId: any = eid
@@ -118,9 +127,6 @@ export default function Event() {
     } else {
       setEventPageStatus(EventPageEnum.fetchedData)
     }
-    /**
-     *
-     */
   }
   useEffect(() => {
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
@@ -146,6 +152,8 @@ export default function Event() {
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
           eventId={event ? event.event_id : ' '}
+          username={username}
+          avatar={avatar}
         />
       </Modal>
     </>
