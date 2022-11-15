@@ -7,20 +7,26 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Button from '../../../components/button'
+import SocialFeed from './socialFeed'
+import RegisteredAttendees from './registeredAttendees'
 export default function LoadedEventPage({
   event,
+  avatar,
+  username,
   children,
   isEventCreator = false
 }: {
   event: EventInterface | null
   children: ReactElement
+  avatar: string
+  username: string
   isEventCreator?: boolean
 }): JSX.Element {
   const [profileUrlImg, setProfileUrlImg] = useState('')
   const [hostName, setHostName] = useState('')
 
   const router = useRouter()
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const docRef = doc(db, 'users', event?.uid || '')
@@ -47,17 +53,19 @@ export default function LoadedEventPage({
           className="mb-[50px] w-auto space-y-[15px] font-medium leading-[40px] md:space-y-[25px] md:text-[14px]"
         >
           <h3>{event?.title !== null ? event?.title : 'Event Title'}</h3>
-          <div
-            id="mobile-event-image"
-            className="relative h-[310px] w-[310px] rounded-[67px] px-[50px] py-[50px] lg:hidden"
-          >
-            <Image
-              src={event ? event.img_url : ''}
-              layout="fill"
-              loading="lazy"
-              objectFit="cover"
-              className="rounded-[67px]"
-            />
+          <div className="space-y-2 lg:hidden">
+            <div
+              id="mobile-event-image"
+              className="relative h-[310px] w-[310px] rounded-[67px] px-[50px] py-[50px] "
+            >
+              <Image
+                src={event ? event.img_url : ''}
+                layout="fill"
+                loading="lazy"
+                objectFit="cover"
+                className="rounded-[67px]"
+              />
+            </div>
           </div>
           <Link href={`/u/${event?.uid}`}>
             <div className="flex h-auto w-fit cursor-pointer flex-row items-center space-x-2  ">
@@ -117,11 +125,22 @@ export default function LoadedEventPage({
             <h4>Event description:</h4>
             {event?.description}
           </div>
+          <div className="block flex-col space-y-5 lg:hidden">
+            <RegisteredAttendees isMobile={true} eid={event?.event_id} />
+          </div>
         </div>
         {children}
+        <div className="block py-[10px] lg:hidden">
+          <SocialFeed
+            isMobile={true}
+            username={username}
+            eid={event?.event_id}
+            avatar={avatar}
+          />
+        </div>
       </div>
-      <div className="flex flex-col space-y-5">
-        <div className="relative hidden h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] lg:block">
+      <div className="hidden flex-col space-y-5 lg:flex ">
+        <div className="relative h-[400px] w-[400px] rounded-[67px] bg-slate-400 px-[50px] py-[50px] ">
           <Image
             src={event ? event.img_url : ''}
             layout="fill"
@@ -144,6 +163,14 @@ export default function LoadedEventPage({
         ) : (
           <></>
         )}
+        <RegisteredAttendees isMobile={false} eid={event?.event_id} />
+        <br />
+        <SocialFeed
+          isMobile={false}
+          username={username}
+          eid={event?.event_id}
+          avatar={avatar}
+        />
       </div>
     </>
   )

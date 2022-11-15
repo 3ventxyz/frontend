@@ -1,11 +1,16 @@
 // author: marthel
 const { faker } = require('@faker-js/faker')
 
+const userSize = 10
+const eventSize = 10
+const postsSize = 15
 module.exports = class DataSeeder {
   constructor(firebaseApp) {
     this.app = firebaseApp
     this.db = this.app.firestore()
     this.auth = this.app.auth()
+    /**add here an array of dummy users for local use. */
+    this.dummyUsers = new Array(12)
   }
   user1UID = ' '
   user2UID = ' '
@@ -83,8 +88,8 @@ module.exports = class DataSeeder {
    */
   async setDummyUsersInDB() {
     try {
-      ;[...Array(10).keys()].map(() => {
-        this.db.collection('users').add({
+      ;[...Array(userSize).keys()].map(() => {
+        const dummyUserData = {
           avatar: faker.internet.avatar(),
           bio: faker.commerce.productDescription(),
           discord_guilds: [],
@@ -105,9 +110,10 @@ module.exports = class DataSeeder {
           tw_verifs: [],
           twitter_name: [],
           username: faker.internet.userName(),
-          wallet: '',
+          wallet: ''
           email_verified: false
-        })
+        }
+        this.db.collection('users').add(dummyUserData)
       })
       console.log('setDummyUsersInDB: seed was successful')
     } catch (error) {
@@ -125,11 +131,11 @@ module.exports = class DataSeeder {
    */
   setDummyEventsCollectionInDB() {
     try {
-      ;[...Array(10).keys()].map((index) => {
+      ;[...Array(eventSize).keys()].map((index) => {
         var adjective = faker.word.adjective(5)
         var firstWord = faker.commerce.product()
         var randomIdNum = Math.floor(Math.random() * 909)
-        var randomCapTickets = Math.floor(Math.random() * 21)
+        var randomCapTickets = Math.floor(Math.random() * 21) + userSize
         var currentDate = new Date()
         var startDate = faker.date.between(
           currentDate,
@@ -210,6 +216,116 @@ module.exports = class DataSeeder {
   }
 
   /**
+   * Description:
+   * it adds some users to the events as registered attendees.
+   * These users will be added to  registered_attendees collection
+   */
+  async setRegisteredAttendeesToEvents() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+      usersDocs.forEach((user) => {
+        //for each user, register them to an event as an attendee.
+        if (user.id !== this.user1UID && user.id !== this.user2UID) {
+          eventsDocs.forEach((event) => {
+            const registeredAttendeesRef = this.db.collection(
+              `events/${event.id}/registered_attendees`
+            )
+            eventsRef
+              .doc(`${event.id}`)
+              .update({ registered_attendees: userSize })
+            registeredAttendeesRef.doc(user.id).set({
+              address: faker.address.streetAddress(),
+              city: faker.address.city(),
+              username: user.data().username,
+              avatar: user.data().avatar,
+              phone_number: '',
+              state: faker.address.state(),
+              uid: user.id,
+              zip_code: faker.address.zipCode('#####'),
+              date_of_registration: new Date()
+            })
+          })
+        }
+      })
+    } catch (e) {
+      console.error(
+        e,
+        'dataSeeder::setRegisteredAttendeesToEvents Error Caught'
+      )
+    }
+  }
+
+  async setRegisteredEventsToUsers() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const eventsDocs = await eventsRef.get()
+      const usersDocs = await usersRef.get()
+
+      usersDocs.forEach((user) => {
+        if (user.id !== this.user1UID && user.id !== this.user2UID) {
+          eventsDocs.forEach((event) => {
+            const registeredEventsRef = this.db.collection(
+              `users/${user.id}/registered_events`
+            )
+            registeredEventsRef.doc(event.data().event_id).set({
+              event_ref: this.db
+                .collection('events')
+                .doc(event.data().event_id),
+              event_title: event.data().title,
+              start_date: event.data().start_date,
+              end_date: event.data().end_date
+            })
+          })
+        }
+      })
+    } catch (e) {
+      console.error(e, 'dataSeeder::setRegisteredEventsToUsers Error Caught')
+    }
+  }
+
+  /**
+   * Function: setSocialFeedDummyData
+   * --description: it creates a collection of posts for each event doc.
+   * each post document has an author(uid, user_name, avatar), date of creation, comment;  eid,
+   * specifying where the post belongs to.
+   */
+  async setSocialFeedDummyData() {
+    try {
+      const eventsRef = this.db.collection('events')
+      const usersRef = this.db.collection('users')
+      const usersDocs = await usersRef.get()
+      const eventsDocs = await eventsRef.get()
+      const localUserDocs = []
+      usersDocs.forEach((user) => {
+        localUserDocs.push(user)
+      })
+      eventsDocs.forEach((event) => {
+        ;[...Array(postsSize).keys()].map((index) => {
+          let randomIndex = Math.floor(Math.random() * 100) % userSize
+          let user = localUserDocs[randomIndex]
+          eventsRef
+            .doc(`${event.id}`)
+            .collection('posts')
+            .doc()
+            .set({
+              uid: user.id,
+              username: user.data().username,
+              avatar: user.data().avatar,
+              post_content: faker.lorem.lines(3),
+              date_posted: new Date()
+            })
+        })
+      })
+    } catch (e) {
+      console.error(e, 'dataSeeder::setSocialFeedDummyData error caught')
+    }
+  }
+
+  /**
    * function: initDummyData
    * description: this function runs the functions, that seeds the generated dummy
    * data to firebase emulators.
@@ -228,5 +344,8 @@ module.exports = class DataSeeder {
     await this.setDummyEventsCollectionInDB()
     await this.setDummyEventsToUserPropietaryDB()
     await this.setDummyUsersInDB()
+    await this.setRegisteredAttendeesToEvents()
+    await this.setRegisteredEventsToUsers()
+    await this.setSocialFeedDummyData()
   }
 }
