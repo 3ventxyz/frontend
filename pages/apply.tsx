@@ -10,8 +10,6 @@ import VerifyGuild from '../components/verifyGuild'
 import Link from 'next/link'
 import Modal from '../components/modal'
 
-/*Link href="allowlist/apply?id=${lid}" */
-
 export default function AllowlistApplication() {
   const auth = useAuth()
   const uid = auth?.uid

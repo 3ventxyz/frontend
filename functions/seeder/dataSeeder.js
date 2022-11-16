@@ -110,7 +110,7 @@ module.exports = class DataSeeder {
           tw_verifs: [],
           twitter_name: [],
           username: faker.internet.userName(),
-          wallet: ''
+          wallet: '',
           email_verified: false
         }
         this.db.collection('users').add(dummyUserData)
