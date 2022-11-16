@@ -1,0 +1,73 @@
+import { EventInterface } from '../../../shared/interface/common'
+import Link from 'next/link'
+import Image from 'next/image'
+import EventTile from '../../../components/eventTile'
+export default function LandingPortrait({
+  title,
+  host,
+  avatar,
+  event
+}: {
+  title: string
+  host: string
+  avatar: string
+  event: EventInterface | null
+}) {
+  return (
+    <div className="flex space-x-[15px] h-[500px] px-[45px] py-[20px] w-[1150px] rounded-3xl bg-gray-400">
+      {/* hero photo should be wrapped and expanded for this main pic*/}
+      <div className="flex flex-col items-start justify-start">
+        {/* 
+	   	--inside, it should have the big title.
+		--who is the host.
+		*/}
+        <div className='text-[60px] font-bold'>Web3 Event Expo 2022</div>
+        <DisplayHost event={event} profileUrlImg={''} hostName={'testUser123'} />
+        <div></div>
+      </div>
+      <div>
+        {/* 
+		   	--event card.
+		*/}
+		<EventTile eventData={null} eventPageMode={true}/>
+      </div>
+    </div>
+  )
+}
+
+function DisplayHost({
+  event,
+  profileUrlImg,
+  hostName
+}: {
+  event: EventInterface | null
+  profileUrlImg: string
+  hostName: string
+}) {
+  return (
+    <Link href={`/u/${event?.uid}`}>
+      <div className="flex h-auto w-fit cursor-pointer flex-row items-center space-x-2  ">
+        {profileUrlImg ? (
+          <Image
+            src={profileUrlImg}
+            layout="fixed"
+            width="54px"
+            height="54px"
+            loading="lazy"
+            className="rounded-full bg-gray-200"
+          />
+        ) : (
+          <div className="h-[54px] w-[54px] rounded-full bg-gray-200" />
+        )}
+        <div className="flex h-fit flex-col space-y-0">
+          <div className="h-[22px] ">
+            <b className=" ">Host:</b>
+          </div>
+          <div>
+            <p className="">{hostName}</p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
