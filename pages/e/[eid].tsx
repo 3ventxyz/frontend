@@ -14,6 +14,7 @@ import SelectAndPurchaseTicket from './components/selectAndPurchaseTicket'
 import PurchasedTicketConfirmation from './components/purchasedTicketConfirmation'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
+import NewLoadedPage from '.'
 
 enum EventPageEnum {
   fetchingData,
@@ -48,30 +49,33 @@ export default function Event() {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
-          <LoadedEventPage
-            username={username}
-            event={event}
-            avatar={avatar}
-            isEventCreator={isEventCreator}
-          >
-            <SelectAndPurchaseTicket
-              ticketListData={ticketListData}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedTicket={selectedTicket}
-              setSelectedTicket={setSelectedTicket}
-              setShowModal={setShowModal}
-            />
-          </LoadedEventPage>
+          // <LoadedEventPage
+          //   username={username}
+          //   event={event}
+          //   avatar={avatar}
+          //   isEventCreator={isEventCreator}
+          // >
+          //   <SelectAndPurchaseTicket
+          //     ticketListData={ticketListData}
+          //     selectedIndex={selectedIndex}
+          //     setSelectedIndex={setSelectedIndex}
+          //     selectedTicket={selectedTicket}
+          //     setSelectedTicket={setSelectedTicket}
+          //     setShowModal={setShowModal}
+          //   />
+          // </LoadedEventPage>
+        <NewLoadedPage event={event} avatar={avatar} username={username} />
         )
       case EventPageEnum.purchasedTicket:
         return (
-          <LoadedEventPage username={username} event={event} avatar={avatar}>
-            <PurchasedTicketConfirmation
-              selectedTicket={selectedTicket}
-              QRImgUrl={QRImgUrl}
-            />
-          </LoadedEventPage>
+          // <LoadedEventPage username={username} event={event} avatar={avatar}>
+          //   <PurchasedTicketConfirmation
+          //     selectedTicket={selectedTicket}
+          //     QRImgUrl={QRImgUrl}
+          //   />
+          // </LoadedEventPage>
+
+          <NewLoadedPage event={event} avatar={avatar} username={username} />
         )
       default:
         return <LoadingEventPage />
@@ -137,7 +141,7 @@ export default function Event() {
 
   return (
     <>
-      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[85px] lg:space-x-[80px] xl:space-x-[291px]">
+      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[35px] lg:space-x-[80px] xl:space-x-[291px]">
         {EventPage()}
       </div>
       <Modal

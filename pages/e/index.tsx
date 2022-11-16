@@ -5,24 +5,53 @@ import RegisteredAttendees from './components/registeredAttendees'
 import SocialFeed from './components/socialFeed'
 import { TbPhoto, TbMap } from 'react-icons/tb'
 import { BsCalendar3 } from 'react-icons/bs'
+import { useRouter } from 'next/router'
+
+/** these imports must be in a different place*/
+import { doc, getDoc } from '@firebase/firestore'
+import { db } from '../../services/firebase_config'
+
 enum EventPageEnum {
   fetchingData,
   fetchedData,
   purchasedTicket
 }
 
-export default function EventUpdated() {
-  /**qr code display */
-  /** */
+export default function NewLoadedPage({
+  event,
+  avatar,
+  username,
+  isEventCreator = false
+}: {
+  event: EventInterface | null
+  avatar: string
+  username: string
+  isEventCreator?: boolean
+}) {
+  const [profileUrlImg, setProfileUrlImg] = useState('')
+  const [hostName, setHostName] = useState('')
 
-  const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
-    EventPageEnum.fetchingData
-  )
-  const [event, setEvent] = useState<EventInterface | null>(null)
+  const router = useRouter()
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      const docRef = doc(db, 'users', event?.uid || '')
+      const docSnap = await getDoc(docRef)
+
+      if (docSnap.exists()) {
+        setProfileUrlImg(`${docSnap.data().avatar}`)
+        setHostName(docSnap.data().username)
+      } else {
+        console.log('No such document!')
+        router.push('/dashboard')
+      }
+    }
+    if (event?.uid) {
+      fetchData()
+    }
+  }, [event?.uid])
   return (
-    <div className="flex h-auto w-screen flex-col items-center space-y-5 bg-secondaryBg px-[20px] pt-[35px] pb-[70px] md:pb-[106px] md:pt-[40px]">
+    <div className="flex h-auto w-screen flex-col items-center space-y-5 bg-secondaryBg px-[20px] pt-[35px] pb-[70px] md:pb-[106px] md:pt-[0px]">
       <div>
         <LandingPortrait
           title={'title'}
@@ -34,7 +63,7 @@ export default function EventUpdated() {
       <div className="flex space-x-[15px] ">
         <div
           id="first-col"
-          className="flex flex-col space-y-[20px] bg-green-500"
+          className="flex flex-col space-y-[20px] "
         >
           <div className="w-[600px]">
             <h3>Details</h3>
@@ -55,10 +84,16 @@ export default function EventUpdated() {
               Convallis aenean et tortor at risus.
             </div>
           </div>
-          <RegisteredAttendees isMobile={false} />
-          <SocialFeed isMobile={false} avatar={''} username={''} />
+          <RegisteredAttendees isMobile={false} eid={event?.event_id} />
+          {/* <SocialFeed
+            isMobile={false}
+            avatar={avatar}
+            username={username}
+            eid={event?.event_id}
+            uid={event?.uid}
+          /> */}
         </div>
-        <div id="second-col" className="space-y-5 w-[330px] bg-yellow-500">
+        <div id="second-col" className="w-[330px] space-y-5 ">
           <div
             id="location-card"
             className="flex h-[150px] space-x-3 rounded-2xl bg-white"
@@ -66,7 +101,10 @@ export default function EventUpdated() {
             <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl bg-green-200">
               <TbMap className="h-[50px] w-[50px]" />
             </div>
-            <div id="location-text " className="w-[100px] flex flex-col items-center">
+            <div
+              id="location-text "
+              className="flex w-[100px] flex-col items-center"
+            >
               <div className="text-[24px] font-bold">location</div>
               <div className="text-wrap">
                 123 test ave, los angeles, california, 90032, USA
@@ -81,9 +119,11 @@ export default function EventUpdated() {
             <div className="flex h-[100px] w-[60px] items-center justify-center">
               <BsCalendar3 className="h-[60px] w-[60px]" />
             </div>
-            <div id="date-text" className='flex flex-col justify-center'>
+            <div id="date-text" className="flex flex-col justify-center">
               <div className="text-[24px] font-bold ">Date and time:</div>
-              <div>Wed, Nov 16, 2022, 7:00 PM - Fri, Nov 18, 2022, 8:00 PM PST</div>
+              <div>
+                Wed, Nov 16, 2022, 7:00 PM - Fri, Nov 18, 2022, 8:00 PM PST
+              </div>
             </div>
           </div>
 

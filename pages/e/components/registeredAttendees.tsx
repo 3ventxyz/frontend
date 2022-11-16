@@ -48,7 +48,9 @@ export default function RegisteredAttendees({
         <div className="flex  w-fit space-x-2">
           {attendees &&
             attendees.map((attendee, index) => {
-              return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
+              return (
+                <RegisteredAttendee key={attendee.uid} attendee={attendee} />
+              )
             })}
         </div>
       </div>
@@ -56,7 +58,7 @@ export default function RegisteredAttendees({
   ) : (
     <div id="registered-attendees-web">
       <h4>Registered Attendees</h4>
-      <div className="mt-[15px] grid grid-cols-4 gap-x-4 gap-y-2 ">
+      <div className="mt-[15px] grid grid-cols-5    gap-y-2 ">
         {attendees &&
           attendees.map((attendee, index) => {
             return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
@@ -74,7 +76,7 @@ function RegisteredAttendee({
 }) {
   return (
     <Link href={`/u/${attendee.uid}`}>
-      <div className="flex hover:cursor-pointer  h-[130px] w-[100px] flex-col items-center justify-center  rounded-2xl bg-gray-300">
+      <div className="flex h-[130px]  w-[100px] flex-col items-center justify-center rounded-2xl  bg-gray-300 hover:cursor-pointer">
         <div className="relative h-[80px] w-[80px] rounded-full bg-green-200">
           <Image
             src={attendee.avatar ?? ''}
