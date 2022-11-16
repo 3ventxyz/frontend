@@ -3,6 +3,8 @@ import AllowlistService from '../services/allowlists'
 import Button from './button'
 import { useAuth } from '../contexts/auth'
 import ErrorAlert from './alerts/errorAlert'
+import ToggleSwitch from './toggleSwitch'
+import TextInput from './textInput'
 
 export default function CreateAllowlistForm({
   onSuccess
@@ -18,6 +20,20 @@ export default function CreateAllowlistForm({
   const allowlistService = new AllowlistService()
   const auth = useAuth()
 
+  const uid = auth?.uid
+  const [wallet, setWallet] = useState(false)
+  const [twitterVerification, setTwitterVerification] = useState(false)
+  const [twitterFollowing, setTwitterFollowing] = useState(false)
+  const [twitterAccount, setTwitterAccount] = useState('')
+  const [discordVerification, setDiscordVerification] = useState(false)
+  const [discordGuild, setDiscordGuild] = useState(false)
+  const [guild, setGuild] = useState('')
+  const [emailVerification, setEmailVerification] = useState(false) 
+
+  const valueChange = (change: (value: boolean) => void, value: boolean) => {
+    change(!value)
+  }
+  
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
@@ -27,7 +43,15 @@ export default function CreateAllowlistForm({
         allowlistRef.current?.value ?? '',
         titleRef.current?.value ?? '',
         descriptionRef.current?.value ?? '',
-        auth.currentUser?.uid ?? ''
+        uid,
+        wallet,
+        twitterVerification,
+        twitterFollowing,
+        twitterAccount,
+        discordVerification,
+        discordGuild,
+        guild,
+        emailVerification 
       )
 
       if (!response?.success) {
@@ -87,6 +111,82 @@ export default function CreateAllowlistForm({
           required
         ></textarea>
       </div>
+      <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">WALLET</span>
+            <ToggleSwitch
+              label="wallet"
+              onClick={() => valueChange(setWallet, wallet)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              TWITTER VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="twitterVerification"
+              onClick={() =>
+                valueChange(setTwitterVerification, twitterVerification)
+              }
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              CHECK TWITTER FOLLOWING
+            </span>
+            <ToggleSwitch
+              label="twitterFollowing"
+              onClick={() => valueChange(setTwitterFollowing, twitterFollowing)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <TextInput
+              id="twitterAccount"
+              labelText="TWITTER ACCOUNT ID"
+              placeholder="Twitter Account ID"
+              setValue={setTwitterAccount}
+              xMargin="mx-0"
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              DISCORD VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="discordVerification"
+              onClick={() =>
+                valueChange(setDiscordVerification, discordVerification)
+              }
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              CHECK DISCORD GUILD
+            </span>
+            <ToggleSwitch
+              label="discordGuild"
+              onClick={() => valueChange(setDiscordGuild, discordGuild)}
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <TextInput
+              id="discordGuild"
+              labelText="DISCORD GUILD ID"
+              placeholder="Discord Guild ID"
+              setValue={setGuild}
+              xMargin="mx-0"
+            />
+          </div>
+          <div className="mb-6 flex items-center space-x-4">
+            <span className="text-sm font-medium text-gray-900">
+              EMAIL VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="emailVerification"
+              onClick={() =>
+                valueChange(setEmailVerification, emailVerification)
+              }
+            />
+          </div>
       <Button
         type="submit"
         isExpanded={true}

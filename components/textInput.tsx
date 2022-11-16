@@ -8,6 +8,7 @@ interface TextInputProps {
   isDisabled?: boolean
   setValue: (value: string) => void
   width?: string
+  xMargin?: string
 }
 
 export default function TextInput({
@@ -18,10 +19,11 @@ export default function TextInput({
   textArea = false,
   isDisabled = false,
   setValue,
-  width = 'w-full'
+  width = 'w-full',
+  xMargin = 'mx-auto'
 }: TextInputProps) {
   return (
-    <form className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 font-normal">
+    <form className={`${xMargin} flex w-full max-w-[400px] flex-col items-start space-y-1 font-normal`}>
       <label
         className="mb-2 block text-sm font-medium text-gray-900"
         htmlFor={id}

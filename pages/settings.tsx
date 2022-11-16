@@ -52,7 +52,7 @@ export default function Settings() {
           </div>
           {/*EMAIL*/}
           <EmailVerification />
-          <Verify />
+          <Verify twitter={true} discord={true} />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ export async function uploadQRImage(
     alert('Please generate a qr code first!')
   }
   var downloadurl = ''
+  if(storage !== null) return
   const storageRef = ref(storage, `/files/${path}`)
   canvas.toBlob((blobtmp: any) => {
     const uploadTask = uploadBytesResumable(storageRef, blobtmp)
