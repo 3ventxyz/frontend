@@ -14,22 +14,17 @@ export default function LandingPortrait({
   event: EventInterface | null
 }) {
   return (
-    <div className="flex space-x-[15px] h-[500px] px-[45px] py-[20px] w-[1150px] rounded-3xl bg-gray-400">
-      {/* hero photo should be wrapped and expanded for this main pic*/}
+    <div className="flex h-[500px] w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
       <div className="flex flex-col items-start justify-start">
-        {/* 
-	   	--inside, it should have the big title.
-		--who is the host.
-		*/}
-        <div className='text-[60px] font-bold'>Web3 Event Expo 2022</div>
-        <DisplayHost event={event} profileUrlImg={''} hostName={'testUser123'} />
-        <div></div>
+        <div className="text-[50px] font-bold">Web3 Event Expo 2022</div>
+        <DisplayHost
+          event={event}
+          profileUrlImg={''}
+          hostName={'testUser123'}
+        />
       </div>
       <div>
-        {/* 
-		   	--event card.
-		*/}
-		<EventTile eventData={null} eventPageMode={true}/>
+        <EventTile eventData={null} eventPageMode={true} />
       </div>
     </div>
   )

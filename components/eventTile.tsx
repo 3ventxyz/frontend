@@ -39,14 +39,14 @@ export default function EventTile({
     <div
       className={`${
         eventPageMode
-          ? 'h-[455px] w-[360px]'
+          ? 'h-[435px] w-[330px]'
           : 'h-[460px] w-full max-w-[320px] sm:h-[524px] sm:w-[380px] sm:max-w-[380px]'
       } mx-auto  animate-pulse cursor-pointer rounded-3xl bg-white `}
     >
       <div
         className={`${
           eventPageMode
-            ? 'h-[360px] max-h-full w-full '
+            ? 'h-[330px] max-h-full w-full '
             : 'h-[384px]  max-h-[320px] w-full max-w-[380px] sm:max-h-full'
         } relative  rounded-3xl bg-gray-300 `}
       >
