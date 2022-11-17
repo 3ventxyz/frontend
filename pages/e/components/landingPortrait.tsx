@@ -24,7 +24,7 @@ export default function LandingPortrait({
         />
       </div>
       <div>
-        <EventTile eventData={null} eventPageMode={true} />
+        <EventTile eventData={event} eventPageMode={true} />
       </div>
     </div>
   )

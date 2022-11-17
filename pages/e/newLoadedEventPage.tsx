@@ -3,13 +3,14 @@ import { EventInterface } from '../../shared/interface/common'
 import LandingPortrait from './components/landingPortrait'
 import RegisteredAttendees from './components/registeredAttendees'
 import SocialFeed from './components/socialFeed'
-import { TbPhoto, TbMap } from 'react-icons/tb'
+import { TbPhoto } from 'react-icons/tb'
 import { BsCalendar3 } from 'react-icons/bs'
 import { useRouter } from 'next/router'
 
 /** these imports must be in a different place*/
 import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../../services/firebase_config'
+import LocationCard from './components/locationCard'
 
 enum EventPageEnum {
   fetchingData,
@@ -61,10 +62,7 @@ export default function NewLoadedPage({
         />
       </div>
       <div className="flex space-x-[15px] ">
-        <div
-          id="first-col"
-          className="flex flex-col space-y-[20px] "
-        >
+        <div id="first-col" className="flex flex-col space-y-[20px] ">
           <div className="w-[600px]">
             <h3>Details</h3>
             <div>
@@ -94,24 +92,7 @@ export default function NewLoadedPage({
           /> */}
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
-          <div
-            id="location-card"
-            className="flex h-[150px] space-x-3 rounded-2xl bg-white"
-          >
-            <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl bg-green-200">
-              <TbMap className="h-[50px] w-[50px]" />
-            </div>
-            <div
-              id="location-text "
-              className="flex w-[100px] flex-col items-center"
-            >
-              <div className="text-[24px] font-bold">location</div>
-              <div className="text-wrap">
-                123 test ave, los angeles, california, 90032, USA
-              </div>
-            </div>
-          </div>
-
+          <LocationCard event={event} />
           <div
             id="date-card"
             className="flex h-[100px]  space-x-3 rounded-2xl bg-white px-[10px]"

@@ -14,7 +14,7 @@ import SelectAndPurchaseTicket from './components/selectAndPurchaseTicket'
 import PurchasedTicketConfirmation from './components/purchasedTicketConfirmation'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
-import NewLoadedPage from '.'
+import NewLoadedPage from './newLoadedEventPage'
 
 enum EventPageEnum {
   fetchingData,
