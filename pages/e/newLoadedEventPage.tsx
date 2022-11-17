@@ -11,6 +11,7 @@ import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../../services/firebase_config'
 import LocationCard from './components/locationCard'
 import DateCard from './components/dateCard'
+import RegisterEventButton from './components/registerEventButton'
 
 enum EventPageEnum {
   fetchingData,
@@ -66,6 +67,7 @@ export default function NewLoadedPage({
           <div className="w-[600px]">
             <h3>Details</h3>
             <div>
+              {event?.description}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui
               faucibus in ornare quam viverra orci sagittis. Tempus imperdiet
@@ -93,13 +95,8 @@ export default function NewLoadedPage({
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
           <LocationCard event={event} />
-          <DateCard event={event}/>
-          <div
-            id="register-event-button"
-            className="flex h-[85px]  items-center justify-center rounded-2xl bg-white"
-          >
-            <div className="text-[20px] font-bold">Register Event</div>
-          </div>
+          <DateCard event={event} />
+          <RegisterEventButton />
         </div>
       </div>
     </div>
