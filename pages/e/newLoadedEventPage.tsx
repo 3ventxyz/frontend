@@ -4,13 +4,13 @@ import LandingPortrait from './components/landingPortrait'
 import RegisteredAttendees from './components/registeredAttendees'
 import SocialFeed from './components/socialFeed'
 import { TbPhoto } from 'react-icons/tb'
-import { BsCalendar3 } from 'react-icons/bs'
 import { useRouter } from 'next/router'
 
 /** these imports must be in a different place*/
 import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../../services/firebase_config'
 import LocationCard from './components/locationCard'
+import DateCard from './components/dateCard'
 
 enum EventPageEnum {
   fetchingData,
@@ -93,21 +93,7 @@ export default function NewLoadedPage({
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
           <LocationCard event={event} />
-          <div
-            id="date-card"
-            className="flex h-[100px]  space-x-3 rounded-2xl bg-white px-[10px]"
-          >
-            <div className="flex h-[100px] w-[60px] items-center justify-center">
-              <BsCalendar3 className="h-[60px] w-[60px]" />
-            </div>
-            <div id="date-text" className="flex flex-col justify-center">
-              <div className="text-[24px] font-bold ">Date and time:</div>
-              <div>
-                Wed, Nov 16, 2022, 7:00 PM - Fri, Nov 18, 2022, 8:00 PM PST
-              </div>
-            </div>
-          </div>
-
+          <DateCard event={event}/>
           <div
             id="register-event-button"
             className="flex h-[85px]  items-center justify-center rounded-2xl bg-white"
