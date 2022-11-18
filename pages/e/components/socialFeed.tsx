@@ -81,6 +81,8 @@ export default function SocialFeed({
             textArea={true}
             labelText={''}
             setValue={setComment}
+            maxWidth={600}
+            maxWidthForm={600}
           />
           <Button
             text={'comment'}

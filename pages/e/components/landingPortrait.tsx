@@ -16,7 +16,7 @@ export default function LandingPortrait({
   return (
     <div className="flex h-[500px] w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
       <div className="flex flex-col items-start justify-start">
-        <div className="text-[50px] font-bold">Web3 Event Expo 2022</div>
+        <div className="text-[50px] font-bold">{event?.title}</div>
         <DisplayHost
           event={event}
           profileUrlImg={''}

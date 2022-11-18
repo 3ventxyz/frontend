@@ -12,6 +12,7 @@ import { db } from '../../services/firebase_config'
 import LocationCard from './components/locationCard'
 import DateCard from './components/dateCard'
 import RegisterEventButton from './components/registerEventButton'
+import { useEvents } from '../../contexts/events'
 
 enum EventPageEnum {
   fetchingData,
@@ -19,15 +20,12 @@ enum EventPageEnum {
   purchasedTicket
 }
 
-
-// useRef for passing the host data that is fetched from the eid page. 
+// useRef for passing the host data that is fetched from the eid page.
 export default function NewLoadedPage({
-  event,
   avatar,
   username,
   isEventCreator = false
 }: {
-  event: EventInterface | null
   avatar: string
   username: string
   isEventCreator?: boolean
@@ -36,10 +34,11 @@ export default function NewLoadedPage({
   const [hostName, setHostName] = useState('')
 
   const router = useRouter()
+  const events = useEvents()
 
   useEffect(() => {
     const fetchData = async () => {
-      const docRef = doc(db, 'users', event?.uid || '')
+      const docRef = doc(db, 'users', events?.accessedEventData?.uid || '')
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
@@ -50,10 +49,10 @@ export default function NewLoadedPage({
         router.push('/dashboard')
       }
     }
-    if (event?.uid) {
+    if (events?.accessedEventData?.uid) {
       fetchData()
     }
-  }, [event?.uid])
+  }, [events?.accessedEventData?.uid])
   return (
     <div className="flex h-auto w-screen flex-col items-center space-y-5 bg-secondaryBg px-[20px] pt-[35px] pb-[70px] md:pb-[106px] md:pt-[0px]">
       <div>
@@ -61,29 +60,30 @@ export default function NewLoadedPage({
           title={'title'}
           host={'hostname'}
           avatar={'imgurl'}
-          event={event}
+          event={events?.accessedEventData}
         />
       </div>
       <div className="flex space-x-[15px] ">
-        <div id="first-col" className="flex flex-col space-y-[20px] ">
+        <div id="first-col" className="flex w-[625px] flex-col space-y-[20px]">
           <div className="w-[600px]">
             <h3>Details</h3>
-            <div>
-              {event?.description}
-            </div>
+            <div>{events?.accessedEventData?.description}</div>
           </div>
-          <RegisteredAttendees isMobile={false} eid={event?.event_id} />
-          {/* <SocialFeed
+          <RegisteredAttendees
+            isMobile={false}
+            eid={events?.accessedEventData?.event_id}
+          />
+          <SocialFeed
             isMobile={false}
             avatar={avatar}
             username={username}
-            eid={event?.event_id}
-            uid={event?.uid}
-          /> */}
+            eid={events?.accessedEventData?.event_id}
+            uid={events?.accessedEventData?.uid}
+          />
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
-          <LocationCard event={event} />
-          <DateCard event={event} />
+          <LocationCard event={events?.accessedEventData} />
+          <DateCard event={events?.accessedEventData} />
           <RegisterEventButton />
         </div>
       </div>
