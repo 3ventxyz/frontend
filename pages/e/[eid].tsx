@@ -63,11 +63,7 @@ export default function Event() {
           //     setShowModal={setShowModal}
           //   />
           // </LoadedEventPage>
-          <NewLoadedPage
-            event={events.accessedEventPage}
-            avatar={avatar}
-            username={username}
-          />
+          <NewLoadedPage avatar={avatar} username={username} />
         )
       case EventPageEnum.purchasedTicket:
         return (
@@ -78,11 +74,7 @@ export default function Event() {
           //   />
           // </LoadedEventPage>
 
-          <NewLoadedPage
-            event={events.accessedEventPage}
-            avatar={avatar}
-            username={username}
-          />
+          <NewLoadedPage avatar={avatar} username={username} />
         )
       default:
         return <LoadingEventPage />
@@ -99,8 +91,8 @@ export default function Event() {
     /**users context */
     const docRef = doc(db, 'users', auth.uid)
     const userDoc = await getDoc(docRef)
-    setUsername(userDoc.data()?.username)
-    setAvatar(userDoc.data()?.avatar)
+      setUsername(userDoc.data()?.username)
+      setAvatar(userDoc.data()?.avatar)
     const uid_qr_code = userDoc.data()?.qr_code
     setQRImgUrl(uid_qr_code)
 
@@ -108,11 +100,9 @@ export default function Event() {
     const eventId: any = eid
     const accessedEventData = await events.fetchAccessedEventData(eventId)
     events.cacheAccessedEventData(accessedEventData)
-    const fetchedTicketListData: Array<TicketInterface> = []
-    var isUserRegistered: boolean
 
     /**this should be ok in the front end. */
-    const isUserOwner = events.accessedEventPage?.uid === userDoc.id
+    const isUserOwner = events.accessedEventData?.uid === userDoc.id
     setIsEventCreator(isUserOwner)
     if (!accessedEventData) return
     events.cacheAccessedEventData(accessedEventData)
@@ -122,6 +112,8 @@ export default function Event() {
      * a single event, which they're unique, and
      * its not shared with other events.
      */
+    const fetchedTicketListData: Array<TicketInterface> = []
+    var isUserRegistered: boolean
     let ticket: TicketInterface = {
       ticketTitle: 'Free Attendee',
       registeredUsers: accessedEventData.registered_attendees,
@@ -172,7 +164,7 @@ export default function Event() {
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
           eventId={
-            events.accessedEventPage ? events.accessedEventPage.event_id : ' '
+            events.accessedEventData ? events.accessedEventData.event_id : ' '
           }
           username={username}
           avatar={avatar}

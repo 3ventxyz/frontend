@@ -111,6 +111,7 @@ export default function SocialFeed({
         </div>
       </div>
       <br />
+      <hr />
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
       <div id="social-feed-mobile" className="h-[500px] overflow-y-auto">
         <div className="space-y-[25px]">
@@ -123,6 +124,7 @@ export default function SocialFeed({
             })}
         </div>
       </div>
+      <hr />
     </div>
   )
 }
