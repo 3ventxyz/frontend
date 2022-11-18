@@ -19,6 +19,8 @@ enum EventPageEnum {
   purchasedTicket
 }
 
+
+// useRef for passing the host data that is fetched from the eid page. 
 export default function NewLoadedPage({
   event,
   avatar,
@@ -68,20 +70,6 @@ export default function NewLoadedPage({
             <h3>Details</h3>
             <div>
               {event?.description}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui
-              faucibus in ornare quam viverra orci sagittis. Tempus imperdiet
-              nulla malesuada pellentesque. Sit amet tellus cras adipiscing enim
-              eu turpis egestas. Lectus arcu bibendum at varius vel pharetra.
-              Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla
-              facilisi. Tempus egestas sed sed risus pretium quam vulputate.
-              Viverra justo nec ultrices dui sapien. Scelerisque in dictum non
-              consectetur a. Adipiscing elit pellentesque habitant morbi. Tellus
-              mauris a diam maecenas sed enim ut sem viverra. Elit duis
-              tristique sollicitudin nibh sit amet commodo nulla. Turpis egestas
-              sed tempus urna et pharetra pharetra. Et tortor at risus viverra
-              adipiscing at in tellus. Semper feugiat nibh sed pulvinar.
-              Convallis aenean et tortor at risus.
             </div>
           </div>
           <RegisteredAttendees isMobile={false} eid={event?.event_id} />

@@ -21,7 +21,7 @@ export interface TimeStamp {
 export interface EventInterface {
   uid: string
   title: string
-  description?: string
+  description: string
   location: LocationData
   start_date: Date
   end_date: Date

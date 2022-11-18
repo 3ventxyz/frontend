@@ -81,7 +81,7 @@ export default function EventTile({
         <div
           className={`${
             eventPageMode
-              ? 'h-[330px] max-h-full w-full '
+              ? 'h-[330px] max-h-full w-full'
               : 'h-[384px]  max-h-[320px] w-full max-w-[380px] sm:max-h-full'
           }
         relative w-full rounded-3xl bg-gray-200 shadow-md`}
@@ -103,7 +103,9 @@ export default function EventTile({
 
           <Link href={`/u/${eventData.uid}`} className="">
             <div
-              className={`${eventPageMode ?'hidden' : 'flex'} absolute bottom-4 right-4   h-fit w-fit cursor-pointer flex-row items-center space-x-2 rounded-[14px] bg-white px-2 py-2`}
+              className={`${
+                eventPageMode ? 'hidden' : 'flex'
+              } absolute bottom-4 right-4   h-fit w-fit cursor-pointer flex-row items-center space-x-2 rounded-[14px] bg-white px-2 py-2`}
             >
               {profileUrlImg ? (
                 <Image

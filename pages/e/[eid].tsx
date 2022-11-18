@@ -37,6 +37,7 @@ export default function Event() {
   const [ticketListData, setTicketListData] = useState<
     TicketInterface[] | null
   >(null)
+  
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()

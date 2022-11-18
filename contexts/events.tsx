@@ -73,6 +73,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
 
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
+      description: eventDoc.data()?.description, 
       start_date: eventDoc.data()?.start_date?.toDate(),
       event_id: eventDoc.data()?.event_id,
       uid: eventDoc.data()?.uid,
