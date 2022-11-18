@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { db } from '../../services/firebase_config'
 import { TicketInterface } from '../../shared/interface/common'
-import { EventInterface } from '../../shared/interface/common'
 import Modal from '../../components/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
@@ -27,7 +26,6 @@ export default function Event() {
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
-  const [event, setEvent] = useState<EventInterface | null>(null)
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface | null>(
     null
   )
@@ -37,7 +35,7 @@ export default function Event() {
   const [ticketListData, setTicketListData] = useState<
     TicketInterface[] | null
   >(null)
-  
+
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
@@ -65,7 +63,11 @@ export default function Event() {
           //     setShowModal={setShowModal}
           //   />
           // </LoadedEventPage>
-        <NewLoadedPage event={event} avatar={avatar} username={username} />
+          <NewLoadedPage
+            event={events.accessedEventPage}
+            avatar={avatar}
+            username={username}
+          />
         )
       case EventPageEnum.purchasedTicket:
         return (
@@ -76,7 +78,11 @@ export default function Event() {
           //   />
           // </LoadedEventPage>
 
-          <NewLoadedPage event={event} avatar={avatar} username={username} />
+          <NewLoadedPage
+            event={events.accessedEventPage}
+            avatar={avatar}
+            username={username}
+          />
         )
       default:
         return <LoadingEventPage />
@@ -88,30 +94,38 @@ export default function Event() {
   }
 
   const handleOnClose = () => setShowModal(false)
+
   const fetchData = async () => {
+    /**users context */
     const docRef = doc(db, 'users', auth.uid)
     const userDoc = await getDoc(docRef)
-
     setUsername(userDoc.data()?.username)
     setAvatar(userDoc.data()?.avatar)
     const uid_qr_code = userDoc.data()?.qr_code
     setQRImgUrl(uid_qr_code)
+
+    /**events context */
     const eventId: any = eid
-    const eventRef = doc(db, 'events', eventId)
-    const eventDoc = await getDoc(eventRef)
-    console.log(eventDoc)
-    const eventData = events.newEventData(eventDoc)
-    console.log(eventData)
+    const accessedEventData = await events.fetchAccessedEventData(eventId)
+    events.cacheAccessedEventData(accessedEventData)
     const fetchedTicketListData: Array<TicketInterface> = []
     var isUserRegistered: boolean
-    const isUserOwner = eventData?.uid === userDoc.id
+
+    /**this should be ok in the front end. */
+    const isUserOwner = events.accessedEventPage?.uid === userDoc.id
     setIsEventCreator(isUserOwner)
-    if (!eventData) return
-    setEvent(eventData)
+    if (!accessedEventData) return
+    events.cacheAccessedEventData(accessedEventData)
+
+    /**this should be part of the events context,
+     * because each ticket collection is part of
+     * a single event, which they're unique, and
+     * its not shared with other events.
+     */
     let ticket: TicketInterface = {
       ticketTitle: 'Free Attendee',
-      registeredUsers: eventData.registered_attendees,
-      capLimit: eventData.ticket_max,
+      registeredUsers: accessedEventData.registered_attendees,
+      capLimit: accessedEventData.ticket_max,
       tokenId: '',
       price: 0
     }
@@ -133,6 +147,7 @@ export default function Event() {
       setEventPageStatus(EventPageEnum.fetchedData)
     }
   }
+
   useEffect(() => {
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
       console.log('calling base fech')
@@ -156,7 +171,9 @@ export default function Event() {
           onClose={() => setShowModal(false)}
           confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
           uid={auth.uid}
-          eventId={event ? event.event_id : ' '}
+          eventId={
+            events.accessedEventPage ? events.accessedEventPage.event_id : ' '
+          }
           username={username}
           avatar={avatar}
         />
