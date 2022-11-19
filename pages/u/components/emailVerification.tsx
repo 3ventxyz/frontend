@@ -56,7 +56,7 @@ export default function EmailVerification() {
     }
     getInfo()
     verifyEmail()
-  }, [verifiedEmail])
+  }, [email])
 
   const actionCodeSettings = {
     url: fullUrl,
