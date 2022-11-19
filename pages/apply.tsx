@@ -133,17 +133,29 @@ export default function AllowlistApplication() {
   ) => {
     try {
       const docRef = doc(db, 'lists', lid)
-      const userRef = await getDoc(doc(collection(docRef, 'registered_users'), uid))
+      const userRef = await getDoc(
+        doc(collection(docRef, 'registered_users'), uid)
+      )
       if (userRef.exists()) {
-        await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-          uid: uid,
-          twitter_id: twitter_id,
-          discord_id: discord_id,
-          wallet: wallet,
-          email: email,
-          status: status
-        })
+        try {
+          await updateDoc(
+            doc(collection(docRef, 'registered_users'), `${uid}`),
+            {
+              uid: uid,
+              twitter_id: twitter_id,
+              discord_id: discord_id,
+              wallet: wallet,
+              email: email,
+              status: status
+            }
+          )
+          console.log('Data written into doc ID: ', docRef.id)
+          return true
+        } catch (e) {
+          console.error('Error adding data: ', e)
+        }
       } else {
+        console.log('test')
         await setDoc(doc(collection(docRef, 'registered_users'), uid), {
           uid: uid,
           twitter_id: twitter_id,
