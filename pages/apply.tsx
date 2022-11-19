@@ -137,7 +137,6 @@ export default function AllowlistApplication() {
         doc(collection(docRef, 'registered_users'), uid)
       )
       if (userRef.exists()) {
-        try {
           await updateDoc(
             doc(collection(docRef, 'registered_users'), `${uid}`),
             {
@@ -149,11 +148,6 @@ export default function AllowlistApplication() {
               status: status
             }
           )
-          console.log('Data written into doc ID: ', docRef.id)
-          return true
-        } catch (e) {
-          console.error('Error adding data: ', e)
-        }
       } else {
         console.log('test')
         await setDoc(doc(collection(docRef, 'registered_users'), uid), {
