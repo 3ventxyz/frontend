@@ -55,17 +55,19 @@ export interface AllowlistInterface {
   allowlist: Array<string>
 }
 
+export interface UserInterface{
+  uid:string, 
+  username:string,
+  avatar:string,
+  qr_code?:string,
+}
+
 export interface PostInterface{
   avatar: string,
   date_posted: Date,
   post_content: string,
   uid: string,
   username: string,
-}
-export interface RegisteredAttendeeInterface{
-  uid:string,
-  username: string,
-  avatar: string,
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}

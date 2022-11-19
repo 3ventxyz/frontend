@@ -1,7 +1,7 @@
 import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import FetchRegisteredAttendees from '../../../services/fetch_registered_attendees'
-import { RegisteredAttendeeInterface } from '../../../shared/interface/common'
+import { UserInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
 export default function RegisteredAttendees({
@@ -12,7 +12,7 @@ export default function RegisteredAttendees({
   eid?: string
 }) {
   const [attendees, setRegisteredAttendees] =
-    useState<Array<RegisteredAttendeeInterface>>()
+    useState<Array<UserInterface>>()
   const [isFetching, setIsFetching] = useState(true)
   /**
    * --pass the reference of the registered attendees collection.
@@ -21,13 +21,13 @@ export default function RegisteredAttendees({
 
   useEffect(() => {
     const fetchData = async () => {
-      const arrayOfAttendees: Array<RegisteredAttendeeInterface> = []
+      const arrayOfAttendees: Array<UserInterface> = []
       var attendeesDocs: QuerySnapshot<DocumentData> =
         await FetchRegisteredAttendees(eid)
       //IMPORTANT move this to the event context for organizing.
       // console.dir(attendeesDocs.docs)
       for (const attendeeDoc of attendeesDocs.docs) {
-        const newAttendee: RegisteredAttendeeInterface = {
+        const newAttendee: UserInterface = {
           avatar: attendeeDoc.data().avatar,
           uid: attendeeDoc.data().uid,
           username: attendeeDoc.data().username
@@ -72,7 +72,7 @@ export default function RegisteredAttendees({
 function RegisteredAttendee({
   attendee
 }: {
-  attendee: RegisteredAttendeeInterface
+  attendee: UserInterface
 }) {
   return (
     <Link href={`/u/${attendee.uid}`}>
