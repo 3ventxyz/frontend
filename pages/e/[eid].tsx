@@ -2,8 +2,7 @@
 import { doc, getDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { db } from '../../services/firebase_config'
-import { TicketInterface } from '../../shared/interface/common'
+import { TicketInterface, UserInterface } from '../../shared/interface/common'
 import Modal from '../../components/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
@@ -14,6 +13,7 @@ import PurchasedTicketConfirmation from './components/purchasedTicketConfirmatio
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 import NewLoadedPage from './newLoadedEventPage'
+import { useUsers } from '../../contexts/users'
 
 enum EventPageEnum {
   fetchingData,
@@ -22,7 +22,6 @@ enum EventPageEnum {
 }
 
 export default function Event() {
-  const [QRImgUrl, setQRImgUrl] = useState('')
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
@@ -31,6 +30,8 @@ export default function Event() {
   )
   const [showModal, setShowModal] = useState(false)
   const [isEventCreator, setIsEventCreator] = useState(false)
+
+  /**this is going to be needed later in the future */
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [ticketListData, setTicketListData] = useState<
     TicketInterface[] | null
@@ -39,8 +40,7 @@ export default function Event() {
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
-  const [username, setUsername] = useState<string>('')
-  const [avatar, setAvatar] = useState<string>('')
+  const users = useUsers()
 
   const { eid } = router.query
 
@@ -63,7 +63,7 @@ export default function Event() {
           //     setShowModal={setShowModal}
           //   />
           // </LoadedEventPage>
-          <NewLoadedPage avatar={avatar} username={username} />
+          <NewLoadedPage />
         )
       case EventPageEnum.purchasedTicket:
         return (
@@ -74,7 +74,7 @@ export default function Event() {
           //   />
           // </LoadedEventPage>
 
-          <NewLoadedPage avatar={avatar} username={username} />
+          <NewLoadedPage />
         )
       default:
         return <LoadingEventPage />
@@ -89,20 +89,27 @@ export default function Event() {
 
   const fetchData = async () => {
     /**users context */
-    const docRef = doc(db, 'users', auth.uid)
-    const userDoc = await getDoc(docRef)
-      setUsername(userDoc.data()?.username)
-      setAvatar(userDoc.data()?.avatar)
-    const uid_qr_code = userDoc.data()?.qr_code
-    setQRImgUrl(uid_qr_code)
 
-    /**events context */
+    /**this is for fetching the logged in user if its registered. */
+    const loggedInUserData: UserInterface = await users.fetchUserData({
+      uid: auth.uid,
+      isLoggedInUser: true
+    })
+    users.cacheLoggedInUserData(loggedInUserData)
+
+    /**events context, fetching data from the accessed event page*/
     const eventId: any = eid
     const accessedEventData = await events.fetchAccessedEventData(eventId)
     events.cacheAccessedEventData(accessedEventData)
 
+    /**fetching event host data */
+    const hostUser = await users.fetchUserData({
+      uid: accessedEventData.uid
+    })
+    users.cacheEventHostData(hostUser)
+
     /**this should be ok in the front end. */
-    const isUserOwner = events.accessedEventData?.uid === userDoc.id
+    const isUserOwner = events.accessedEventData?.uid === loggedInUserData.uid
     setIsEventCreator(isUserOwner)
     if (!accessedEventData) return
     events.cacheAccessedEventData(accessedEventData)
@@ -124,9 +131,6 @@ export default function Event() {
     fetchedTicketListData.push(ticket)
     setTicketListData(fetchedTicketListData)
 
-    /**
-     * this block is good for user who is not the owner of the event.
-     */
     //checking if the userIsRegistered
     isUserRegistered = await checkRegisteredAttendee({
       uid: auth.uid,
@@ -166,8 +170,16 @@ export default function Event() {
           eventId={
             events.accessedEventData ? events.accessedEventData.event_id : ' '
           }
-          username={username}
-          avatar={avatar}
+          username={
+            users.loggedInUserData?.username !== undefined
+              ? users.loggedInUserData?.username
+              : ''
+          }
+          avatar={
+            users.loggedInUserData?.avatar !== undefined
+              ? users.loggedInUserData?.avatar
+              : ''
+          }
         />
       </Modal>
     </>

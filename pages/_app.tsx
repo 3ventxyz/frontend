@@ -12,6 +12,7 @@ import { EventsProvider } from '../contexts/events'
 import Layout from '../components/layout'
 import { NextPage } from 'next'
 import { AuthGuard } from '../components/auth/authGuard'
+import { UsersProvider } from '../contexts/users'
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.localhost, chain.rinkeby],
@@ -57,22 +58,24 @@ function MyApp(props: AppProps) {
         async
       ></Script>
       <AuthProvider>
-        <EventsProvider>
-          <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains}>
-              <Layout>
-                {/* if requireAuth property is present - protect the page */}
-                {Component.requireAuth ? (
-                  <AuthGuard>
+        <UsersProvider>
+          <EventsProvider>
+            <WagmiConfig client={wagmiClient}>
+              <RainbowKitProvider chains={chains}>
+                <Layout>
+                  {/* if requireAuth property is present - protect the page */}
+                  {Component.requireAuth ? (
+                    <AuthGuard>
+                      <Component {...pageProps} />
+                    </AuthGuard>
+                  ) : (
                     <Component {...pageProps} />
-                  </AuthGuard>
-                ) : (
-                  <Component {...pageProps} />
-                )}
-              </Layout>
-            </RainbowKitProvider>
-          </WagmiConfig>
-        </EventsProvider>
+                  )}
+                </Layout>
+              </RainbowKitProvider>
+            </WagmiConfig>
+          </EventsProvider>
+        </UsersProvider>
       </AuthProvider>
     </div>
   )

@@ -13,6 +13,7 @@ import LocationCard from './components/locationCard'
 import DateCard from './components/dateCard'
 import RegisterEventButton from './components/registerEventButton'
 import { useEvents } from '../../contexts/events'
+import { useUsers } from '../../contexts/users'
 
 enum EventPageEnum {
   fetchingData,
@@ -22,12 +23,8 @@ enum EventPageEnum {
 
 // useRef for passing the host data that is fetched from the eid page.
 export default function NewLoadedPage({
-  avatar,
-  username,
   isEventCreator = false
 }: {
-  avatar: string
-  username: string
   isEventCreator?: boolean
 }) {
   const [profileUrlImg, setProfileUrlImg] = useState('')
@@ -35,6 +32,7 @@ export default function NewLoadedPage({
 
   const router = useRouter()
   const events = useEvents()
+  const users = useUsers()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,8 +73,16 @@ export default function NewLoadedPage({
           />
           <SocialFeed
             isMobile={false}
-            avatar={avatar}
-            username={username}
+            avatar={
+              users.loggedInUserData?.avatar !== undefined
+                ? users.loggedInUserData?.avatar
+                : ''
+            }
+            username={
+              users.loggedInUserData?.username !== undefined
+                ? users.loggedInUserData?.username
+                : ''
+            }
             eid={events?.accessedEventData?.event_id}
             uid={events?.accessedEventData?.uid}
           />

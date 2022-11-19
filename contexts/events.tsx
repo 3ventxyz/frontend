@@ -21,7 +21,6 @@ interface Props {
 
 interface EventsInterface {
   accessedEventData: EventInterface | null
-  // eventTicketList: TicketInterface[] | null
   cachedUpcomingEvents: EventInterface[] | null
   cachedPastEvents: EventInterface[] | null
   cachedRegisteredEvents: EventInterface[] | null
