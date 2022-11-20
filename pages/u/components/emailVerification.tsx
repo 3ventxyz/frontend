@@ -54,7 +54,6 @@ export default function EmailVerification() {
         }
       }
     }
-
     getInfo()
     verifyEmail()
   }, [])
@@ -66,6 +65,16 @@ export default function EmailVerification() {
   const saveEmail = async () => {
     try {
       const docRef = doc(db, 'users', uid)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        if (docSnap.data().email !== email) {
+          updateDoc(docRef, {
+            email_verified: false
+          })
+        }
+      } else {
+        console.log('No such document!')
+      }
       await updateDoc(docRef, {
         email: email
       })

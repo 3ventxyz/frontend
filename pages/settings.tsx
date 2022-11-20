@@ -12,7 +12,6 @@ export default function Settings() {
   const auth = useAuth()
   const { openConnectModal } = useConnectModal()
   const { address } = useAccount()
-  const [email, setEmail] = useState('')
 
   return (
     <div className="flex flex-grow bg-secondaryBg py-[78px]">
