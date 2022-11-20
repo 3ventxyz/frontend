@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { doc, getDoc, setDoc, collection } from 'firebase/firestore'
+import { doc, getDoc, setDoc, collection, updateDoc } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 import { useAuth } from '../contexts/auth'
 import { useRouter } from 'next/router'
@@ -133,14 +133,32 @@ export default function AllowlistApplication() {
   ) => {
     try {
       const docRef = doc(db, 'lists', lid)
-      await setDoc(doc(collection(docRef, 'registered_users'), uid), {
-        uid: uid,
-        twitter_id: twitter_id,
-        discord_id: discord_id,
-        wallet: wallet,
-        email: email,
-        status: status
-      })
+      const userRef = await getDoc(
+        doc(collection(docRef, 'registered_users'), uid)
+      )
+      if (userRef.exists()) {
+          await updateDoc(
+            doc(collection(docRef, 'registered_users'), `${uid}`),
+            {
+              uid: uid,
+              twitter_id: twitter_id,
+              discord_id: discord_id,
+              wallet: wallet,
+              email: email,
+              status: status
+            }
+          )
+      } else {
+        console.log('test')
+        await setDoc(doc(collection(docRef, 'registered_users'), uid), {
+          uid: uid,
+          twitter_id: twitter_id,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          status: status
+        })
+      }
       console.log('Data written into doc ID: ', docRef.id)
       return true
     } catch (e) {

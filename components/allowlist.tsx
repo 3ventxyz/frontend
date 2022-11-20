@@ -7,6 +7,7 @@ import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
 import Button from './button'
 import AllowlistService from '../services/allowlists'
+import Link from 'next/link'
 
 export default function Allowlists() {
   const auth = useAuth()
@@ -77,6 +78,7 @@ export default function Allowlists() {
                     {e.title}
                   </th>
                   <td className="py-4 px-6">{e.allowlist.length}</td>
+                  <td><Link href={`/apply?id=${e.allowlist_id}`}>Application link</Link></td>
                 </tr>
               ))}
             </tbody>
@@ -119,3 +121,4 @@ export default function Allowlists() {
     </>
   )
 }
+
