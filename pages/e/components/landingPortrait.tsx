@@ -1,26 +1,38 @@
-import { EventInterface } from '../../../shared/interface/common'
+import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import Link from 'next/link'
 import Image from 'next/image'
 import EventTile from '../../../components/eventTile'
+import { useEvents } from '../../../contexts/events'
+import { useUsers } from '../../../contexts/users'
 export default function LandingPortrait({
-  title,
-  host,
-  avatar,
-  event
+  event,
+  host
 }: {
-  title: string
-  host: string
-  avatar: string
   event: EventInterface | null
+  host: UserInterface | null
 }) {
-  return (
+  return !host && !event ? (
+    <div className="flex h-[500px] w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
+      <div className="flex w-full flex-col items-start justify-start">
+        <div className="text-[50px] font-bold">no title</div>
+        <DisplayHost
+          event={event}
+          profileUrlImg={''}
+          hostName={'fetching hostname'}
+        />
+      </div>
+      <div>
+        <EventTile eventData={event} eventPageMode={true} />
+      </div>
+    </div>
+  ) : (
     <div className="flex h-[500px] w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
       <div className="flex w-full flex-col items-start justify-start">
         <div className="text-[50px] font-bold">{event?.title}</div>
         <DisplayHost
           event={event}
-          profileUrlImg={''}
-          hostName={'testUser123'}
+          profileUrlImg={host?.avatar !== undefined ? host?.avatar : ''}
+          hostName={host?.username !== undefined ? host?.username : ''}
         />
       </div>
       <div>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { EventInterface } from '../../shared/interface/common'
 import LandingPortrait from './components/landingPortrait'
 import RegisteredAttendees from './components/registeredAttendees'
 import SocialFeed from './components/socialFeed'
@@ -27,37 +26,14 @@ export default function NewLoadedPage({
 }: {
   isEventCreator?: boolean
 }) {
-  const [profileUrlImg, setProfileUrlImg] = useState('')
-  const [hostName, setHostName] = useState('')
-
-  const router = useRouter()
   const events = useEvents()
   const users = useUsers()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const docRef = doc(db, 'users', events?.accessedEventData?.uid || '')
-      const docSnap = await getDoc(docRef)
-
-      if (docSnap.exists()) {
-        setProfileUrlImg(`${docSnap.data().avatar}`)
-        setHostName(docSnap.data().username)
-      } else {
-        console.log('No such document!')
-        router.push('/dashboard')
-      }
-    }
-    if (events?.accessedEventData?.uid) {
-      fetchData()
-    }
-  }, [events?.accessedEventData?.uid])
   return (
     <div className="flex h-auto w-screen flex-col items-center space-y-5 bg-secondaryBg px-[20px] pt-[35px] pb-[70px] md:pb-[106px] md:pt-[0px]">
       <div>
         <LandingPortrait
-          title={'title'}
-          host={'hostname'}
-          avatar={'imgurl'}
+          host={users?.eventHostData}
           event={events?.accessedEventData}
         />
       </div>

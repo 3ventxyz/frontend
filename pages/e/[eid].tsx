@@ -14,6 +14,7 @@ import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 import NewLoadedPage from './newLoadedEventPage'
 import { useUsers } from '../../contexts/users'
+import NewLoadingEventPage from './newLoadingEventPage'
 
 enum EventPageEnum {
   fetchingData,
@@ -31,7 +32,7 @@ export default function Event() {
   const [showModal, setShowModal] = useState(false)
   const [isEventCreator, setIsEventCreator] = useState(false)
 
-  /**this is going to be needed later in the future */
+  // /**this is going to be needed later in the future */
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [ticketListData, setTicketListData] = useState<
     TicketInterface[] | null
@@ -63,6 +64,7 @@ export default function Event() {
           //     setShowModal={setShowModal}
           //   />
           // </LoadedEventPage>
+          // <NewLoadingEventPage />
           <NewLoadedPage />
         )
       case EventPageEnum.purchasedTicket:
@@ -77,7 +79,8 @@ export default function Event() {
           <NewLoadedPage />
         )
       default:
-        return <LoadingEventPage />
+        return <NewLoadingEventPage />
+        // return <NewLoadingEventPage />
     }
   }
 
