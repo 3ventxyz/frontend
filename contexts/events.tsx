@@ -100,7 +100,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     return eventData
   }
 
-  //TODO. add the new event page.
   const fetchAccessedEventData = async (eid: string) => {
     setAcessedEventData(null)
     const eventRef = doc(db, 'events', eid)
@@ -108,9 +107,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     const accessedEventData = newEventData(eventDoc)
     console.log(eventDoc)
     return accessedEventData
-
-    //get the full data of the event page, and the host data of the event page.
-    //properly set the data.
   }
 
   const fetchEventsData = async ({
@@ -134,12 +130,12 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   return (
     <EventsContext.Provider
       value={{
-        cacheAccessedEventData: cacheAccessedEventData,
         accessedEventData: accessedEventData,
         cachedUpcomingEvents: cachedUpcomingEvents,
         cachedPastEvents: cachedPastEvents,
         cachedRegisteredEvents: cachedRegisteredEvents,
         newEventData: newEventData,
+        cacheAccessedEventData: cacheAccessedEventData,
         fetchEventsData: fetchEventsData,
         cacheUpcomingEvents: cacheUpcomingEvents,
         cachePastEvents: cachePastEvents,
