@@ -36,53 +36,50 @@ export default function Event() {
   const { eid } = router.query
 
   const confirmSelectedTicketPurchase = () => {
-    setEventPageStatus(EventPageEnum.purchasedTicket)
+    setEventPageStatus(EventPageEnum.fetchingData)
+    fetchData();
   }
 
   const handleOnClose = () => setShowModal(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const loggedInUserData: UserInterface = await users.fetchUserData({
-        uid: auth.uid,
-        isLoggedInUser: true
-      })
-      users.cacheLoggedInUserData(loggedInUserData)
+  const fetchData = async () => {
+    const loggedInUserData: UserInterface = await users.fetchUserData({
+      uid: auth.uid,
+      isLoggedInUser: true
+    })
+    users.cacheLoggedInUserData(loggedInUserData)
 
-      const eventId: any = eid
-      const accessedEventData = await events.fetchAccessedEventData(eventId)
-      events.cacheAccessedEventData(accessedEventData)
+    const eventId: any = eid
+    const accessedEventData = await events.fetchAccessedEventData(eventId)
+    events.cacheAccessedEventData(accessedEventData)
 
-      const hostUser = await users.fetchUserData({
-        uid: accessedEventData.uid
-      })
-      users.cacheEventHostData(hostUser)
+    const hostUser = await users.fetchUserData({
+      uid: accessedEventData.uid
+    })
+    users.cacheEventHostData(hostUser)
 
-      const isUserOwner = events.accessedEventData?.uid === loggedInUserData.uid
-      setIsEventCreator(isUserOwner)
-      if (!accessedEventData) return
-      events.cacheAccessedEventData(accessedEventData)
+    const isUserOwner = events.accessedEventData?.uid === loggedInUserData.uid
+    setIsEventCreator(isUserOwner)
+    if (!accessedEventData) return
+    events.cacheAccessedEventData(accessedEventData)
 
-      var isUserRegistered: boolean
-      let ticket: TicketInterface = {
-        ticketTitle: 'Free Attendee',
-        registeredUsers: accessedEventData.registered_attendees,
-        capLimit: accessedEventData.ticket_max,
-        tokenId: '',
-        price: 0
-      }
-      setSelectedTicket(ticket)
-      isUserRegistered = await checkRegisteredAttendee({
-        uid: auth.uid,
-        eid: eventId
-      })
-
-      if (isUserRegistered) {
-        setEventPageStatus(EventPageEnum.purchasedTicket)
-      } else {
-        setEventPageStatus(EventPageEnum.fetchedData)
-      }
+    var isUserRegistered: boolean
+    let ticket: TicketInterface = {
+      ticketTitle: 'Free Attendee',
+      registeredUsers: accessedEventData.registered_attendees,
+      capLimit: accessedEventData.ticket_max,
+      tokenId: '',
+      price: 0
     }
+    setSelectedTicket(ticket)
+    isUserRegistered = await checkRegisteredAttendee({
+      uid: auth.uid,
+      eid: eventId
+    })
+    setEventPageStatus(EventPageEnum.fetchedData)
+  }
+
+  useEffect(() => {
     if (eventPageStatus === EventPageEnum.fetchingData && eid) {
       fetchData()
     }
