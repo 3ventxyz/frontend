@@ -26,6 +26,7 @@ export default function CreateAllowlist() {
   const [discordGuild, setDiscordGuild] = useState(false)
   const [twitterAccount, setTwitterAccount] = useState('')
   const [guild, setGuild] = useState('')
+  const [permalink, setPermalink] = useState('')
   const emailVerification = useRef(false)
 
   const changeValue = (ref: any) => {
@@ -48,7 +49,8 @@ export default function CreateAllowlist() {
         discordVerification.current,
         discordGuild,
         guild,
-        emailVerification.current
+        emailVerification.current,
+        permalink
       )
 
       if (!response?.success) {
@@ -139,7 +141,7 @@ export default function CreateAllowlist() {
               onClick={() => setTwitterFollowing(!twitterFollowing)}
             />
           </div>
-          { (twitterFollowing ? (
+          {twitterFollowing ? (
             <div className="mb-6 flex max-w-[400px] items-center justify-between">
               <TextInput
                 id="twitterAccount"
@@ -151,7 +153,7 @@ export default function CreateAllowlist() {
             </div>
           ) : (
             <></>
-          ) )}
+          )}
           <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               DISCORD VERIFICATION
@@ -171,15 +173,26 @@ export default function CreateAllowlist() {
             />
           </div>
           {discordGuild ? (
-            <div className="mb-6 flex max-w-[400px] items-center justify-between">
-              <TextInput
-                id="discordGuild"
-                labelText="DISCORD GUILD ID"
-                placeholder="Discord Guild ID"
-                setValue={setGuild}
-                xMargin="mx-0"
-              />
-            </div>
+            <>
+              <div className="mb-6 flex max-w-[400px] items-center justify-between">
+                <TextInput
+                  id="discordGuild"
+                  labelText="DISCORD GUILD ID"
+                  placeholder="Discord Guild ID"
+                  setValue={setGuild}
+                  xMargin="mx-0"
+                />
+              </div>
+              <div className="mb-6 flex max-w-[400px] items-center justify-between">
+                <TextInput
+                  id="discordPermalink"
+                  labelText="Guild invite permalink"
+                  placeholder="Guild invite permalink"
+                  setValue={setPermalink}
+                  xMargin="mx-0"
+                />
+              </div>
+            </>
           ) : (
             <></>
           )}

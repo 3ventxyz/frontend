@@ -29,6 +29,8 @@ export default function CreateAllowlistForm({
   const [discordGuild, setDiscordGuild] = useState(false)
   const [guild, setGuild] = useState('')
   const [emailVerification, setEmailVerification] = useState(false) 
+  const [permalink, setPermalink] = useState('')
+
 
   const valueChange = (change: (value: boolean) => void, value: boolean) => {
     change(!value)
@@ -51,7 +53,8 @@ export default function CreateAllowlistForm({
         discordVerification,
         discordGuild,
         guild,
-        emailVerification 
+        emailVerification,
+        permalink
       )
 
       if (!response?.success) {

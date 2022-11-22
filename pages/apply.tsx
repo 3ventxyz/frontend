@@ -35,7 +35,7 @@ export default function AllowlistApplication() {
   const [discordGuild, setDiscordGuild] = useState(false)
   const [guild, setGuild] = useState('')
   const [emailVerification, setEmailVerification] = useState(false)
-
+  const [permalink, setPermalink] = useState('')
   const [showModal, setShowModal] = useState(true)
 
   const [lid, setLid] = useState('')
@@ -75,6 +75,7 @@ export default function AllowlistApplication() {
         setDiscordGuild(docSnap.data().discordGuild)
         setGuild(docSnap.data().discordGuildId)
         setEmailVerification(docSnap.data().emailVerif)
+        setPermalink(docSnap.data().permalink)
       } else {
         console.log('No such document!')
       }
@@ -92,7 +93,8 @@ export default function AllowlistApplication() {
     discordGuild,
     guild,
     emailVerification,
-    lid
+    lid,
+    permalink
   ])
 
   /*User Info*/
@@ -268,6 +270,15 @@ export default function AllowlistApplication() {
                 }}
               >
                 <VerifyGuild discordGuildID={guild} lid={lid} />
+              </div>
+              <div className="w-1/2">
+              <p>If you are not a part of the creator&apos;s guild yet, you can join it before applying to the list</p>
+                <a
+                  href={permalink}
+                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4] mt-2"
+                >
+                  Join Guild
+                </a>
               </div>
             </>
           ) : (
