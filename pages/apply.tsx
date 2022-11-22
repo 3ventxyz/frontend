@@ -241,6 +241,15 @@ export default function AllowlistApplication() {
               >
                 <VerifyFollowing twitterAccount={twitterAccount} lid={lid} />
               </div>
+              <div className="w-1/2">
+              <p>If you are not following the creator&apos;s twitter account yet, you can follow it before applying to the list</p>
+                <a
+                  href={`https://twitter.com/intent/user?screen_name=${twitterAccount}`}
+                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+                >
+                  Follow Account
+                </a>
+              </div>
             </>
           ) : (
             <></>
