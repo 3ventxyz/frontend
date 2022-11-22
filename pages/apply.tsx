@@ -310,7 +310,7 @@ export default function AllowlistApplication() {
           )}
 
           <form className="m-4 w-full" onSubmit={() => {}}>
-            <Link href="/creator">
+            <Link href="/allowlists/success">
               <Button
                 type="submit"
                 text="Apply"
