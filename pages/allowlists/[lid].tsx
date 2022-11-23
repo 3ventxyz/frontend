@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import { AllowlistInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import { HiChevronLeft } from 'react-icons/hi'
@@ -20,7 +20,15 @@ export default function Allowlist() {
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
   const auth = useAuth()
-
+  const walletVerification = useRef(false)
+  const twitterVerification = useRef(false)
+  const [twitterFollowing, setTwitterFollowing] = useState(false)
+  const discordVerification = useRef(false)
+  const [discordGuild, setDiscordGuild] = useState(false)
+  const [twitterAccount, setTwitterAccount] = useState('')
+  const [guild, setGuild] = useState('')
+  const [permalink, setPermalink] = useState('')
+  const emailVerification = useRef(false)
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,7 +100,16 @@ export default function Allowlist() {
         description: allowlist?.description ?? '',
         allowlist_id: lid?.toString()
       },
-      auth.currentUser?.uid ?? ''
+      auth.currentUser?.uid ?? '',
+      walletVerification.current,
+      twitterVerification.current,
+      twitterFollowing,
+      twitterAccount,
+      discordVerification.current,
+      discordGuild,
+      guild,
+      emailVerification.current,
+      permalink
     )
     await fetchData()
     setAddresses(new Map())
