@@ -239,7 +239,7 @@ export default function Allowlist() {
         visible={showEditModal}
         onClose={() => setShowEditModal(false)}
         width="w-3/4"
-        height=""
+        height="max-h-96"
       >
         <EditAllowlistForm
           onSuccess={() => {
@@ -249,6 +249,7 @@ export default function Allowlist() {
           allowlist={allowlist}
           id={lid?.toString() ?? ''}
         />
+        
       </Modal>
     </>
   )
