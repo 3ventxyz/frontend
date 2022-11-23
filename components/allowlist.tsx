@@ -8,6 +8,8 @@ import DeleteConfirmation from './deleteConfirmation'
 import Button from './button'
 import AllowlistService from '../services/allowlists'
 import Link from 'next/link'
+import Image from 'next/image'
+import absoluteUrl from 'next-absolute-url'
 
 export default function Allowlists() {
   const auth = useAuth()
@@ -17,9 +19,11 @@ export default function Allowlists() {
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
   const allowlistService = new AllowlistService()
+  const { origin } = absoluteUrl()
 
   useEffect(() => {
     getAllowlists()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -62,6 +66,9 @@ export default function Allowlists() {
                 <th scope="col" className="py-3 px-6">
                   # ENTRIES
                 </th>
+                <th scope="col" className="py-3 px-6">
+                  APPLICATION LINK
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -78,7 +85,22 @@ export default function Allowlists() {
                     {e.title}
                   </th>
                   <td className="py-4 px-6">{e.allowlist.length}</td>
-                  <td><Link href={`/apply?id=${e.allowlist_id}`}>Application link</Link></td>
+                  <td className="flex py-4 px-6">
+                    <p className="hover:cursor-default">{`${origin}/apply?id=${e.allowlist_id}`}</p>
+                    <Image
+                      className="hover:cursor-pointer"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `${origin}/apply?id=${e.allowlist_id}`
+                        )
+                        alert('Text copied')
+                      }}
+                      alt="copy"
+                      src="/assets/copy.svg"
+                      height="20"
+                      width="20"
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -121,4 +143,3 @@ export default function Allowlists() {
     </>
   )
 }
-
