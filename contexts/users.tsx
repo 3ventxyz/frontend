@@ -65,7 +65,8 @@ const UsersProvider = ({ children }: Props): JSX.Element => {
       username: userDoc.data()?.username,
       avatar: userDoc.data()?.avatar,
       uid: uid,
-      qr_code: isLoggedInUser ? userDoc.data()?.qr_code : null
+      qr_code: isLoggedInUser ? userDoc.data()?.qr_code : null,
+      address: userDoc.data()?.location['address'],
     }
     return userData
   }
@@ -79,7 +80,8 @@ const UsersProvider = ({ children }: Props): JSX.Element => {
       const newAttendee: UserInterface = {
         avatar: attendeeDoc.data().avatar,
         uid: attendeeDoc.data().uid,
-        username: attendeeDoc.data().username
+        username: attendeeDoc.data().username,
+        address: attendeeDoc.data().location['address']
       }
       registeredAtteendees.push(newAttendee)
     }

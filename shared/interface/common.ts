@@ -59,6 +59,7 @@ export interface UserInterface{
   uid:string, 
   username:string,
   avatar:string,
+  address:string
   qr_code?:string,
 }
 
