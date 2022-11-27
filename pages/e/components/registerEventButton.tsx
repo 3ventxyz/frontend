@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Button from '../../../components/button'
 import { useUsers } from '../../../contexts/users'
 import { UserInterface } from '../../../shared/interface/common'
+import { IoQrCode } from 'react-icons/io5'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -46,14 +47,14 @@ export default function RegisterEventButton({
           <YellowComponent
             loggedInUserData={users.loggedInUserData}
             setRegisterPage={() => {
-              // setStartRegisterForm(false)
-              setStyleComponent('h-[85px] bg-[#DE6767]')
-              setRegisterPage(RegisterComponentEnum.registerEvent)
+              setStyleComponent('h-[150px] bg-white')
+              setRegisterPage(RegisterComponentEnum.userRegistered)
             }}
           />
         )
       case RegisterComponentEnum.userRegistered:
-      // show that it has been a success in registering the page.
+        // show that it has been a success in registering the page.
+        return GreenComponent()
       default:
         return (
           <RedButton
@@ -66,18 +67,6 @@ export default function RegisterEventButton({
     }
   }
 
-  const setComponentStyle = () => {
-    switch (registerPage) {
-      case RegisterComponentEnum.confirmuserInfo:
-        // set yellow button style.
-        setStyleComponent('h-[210px] bg-[#FFF6C7]')
-      case RegisterComponentEnum.userRegistered:
-      // show that it has been a success in registering the page.
-      default:
-        //set red button style
-        setStyleComponent('h-[85px] bg-[#DE6767]')
-    }
-  }
   return (
     <div
       id="register-event-button"
@@ -91,11 +80,31 @@ export default function RegisterEventButton({
 
 function GreenComponent() {
   return (
-    <div className="bg-white">
-      <div>Ticket Confirmation</div>
-      <div>Date of registration</div>
-      <div>*fetched date from ticket id*</div>
-      <div>2 buttons come here!</div>
+    <div className="w-full space-y-2  bg-white px-[8px]">
+      <div className="flex items-center space-x-1">
+        <IoQrCode className="h-[60px] w-[60px]" />
+        <div>
+          <div className="text-[24px] font-bold ">Ticket Confirmation:</div>
+          <div className="font-semibold">Date of registration:</div>
+          <div>*Wed, Nov 16, 2022, 7:00 PM*</div>
+        </div>
+      </div>
+      <div className="flex space-x-2">
+        <Button
+          text={'view QR'}
+          active={true}
+          onClick={() => {
+            console.log('viewing qr')
+          }}
+        />
+        <Button
+          text={'registered events'}
+          active={true}
+          onClick={() => {
+            console.log('registered events')
+          }}
+        />
+      </div>
     </div>
   )
 }
