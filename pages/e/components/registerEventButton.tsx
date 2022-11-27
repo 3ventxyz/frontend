@@ -1,5 +1,3 @@
-import { TIMEOUT } from 'dns'
-import { off } from 'process'
 import { useEffect, useState } from 'react'
 import Button from '../../../components/button'
 import { useUsers } from '../../../contexts/users'
@@ -7,8 +5,9 @@ import { UserInterface } from '../../../shared/interface/common'
 
 enum RegisterComponentEnum {
   registerEvent,
-  ConfirmRegistration,
-  UserRegistered
+  confirmuserInfo,
+  registeringUser,
+  userRegistered
 }
 
 export default function RegisterEventButton({
@@ -16,7 +15,10 @@ export default function RegisterEventButton({
 }: {
   setShowModal: (toggle: boolean) => void
 }) {
-  const [startRegisterForm, setStartRegisterForm] = useState(false)
+  const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
+    RegisterComponentEnum.registerEvent
+  )
+  const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
 
   useEffect(() => {}, [])
@@ -30,33 +32,59 @@ export default function RegisterEventButton({
    * and after registering, it will be redirected to a page of upcoming registered events page.
    *
    *
-   *
-   *
    * things to do here!!
    * pass the loggedInUser whole info, that is stored in the usersContext or authContext.
    * from that the data will be passed here directly and used for quickly registering the user right away.
    */
+
+  const componentPage = () => {
+    switch (registerPage) {
+      case RegisterComponentEnum.confirmuserInfo:
+        // show the confirm info registration page.
+
+        return (
+          <YellowComponent
+            loggedInUserData={users.loggedInUserData}
+            setRegisterPage={() => {
+              // setStartRegisterForm(false)
+              setStyleComponent('h-[85px] bg-[#DE6767]')
+              setRegisterPage(RegisterComponentEnum.registerEvent)
+            }}
+          />
+        )
+      case RegisterComponentEnum.userRegistered:
+      // show that it has been a success in registering the page.
+      default:
+        return (
+          <RedButton
+            setRegisterPage={() => {
+              setStyleComponent('h-[210px] bg-[#FFF6C7]')
+              setRegisterPage(RegisterComponentEnum.confirmuserInfo)
+            }}
+          />
+        )
+    }
+  }
+
+  const setComponentStyle = () => {
+    switch (registerPage) {
+      case RegisterComponentEnum.confirmuserInfo:
+        // set yellow button style.
+        setStyleComponent('h-[210px] bg-[#FFF6C7]')
+      case RegisterComponentEnum.userRegistered:
+      // show that it has been a success in registering the page.
+      default:
+        //set red button style
+        setStyleComponent('h-[85px] bg-[#DE6767]')
+    }
+  }
   return (
     <div
       id="register-event-button"
-      className={`${
-        startRegisterForm ? 'h-[210px] bg-[#FFF6C7]' : 'h-[85px] bg-[#DE6767]'
-      } flex  items-center justify-center rounded-2xl shadow-md  transition-all  `}
+      className={`
+      ${styleComponent} flex  items-center justify-center rounded-2xl shadow-md  transition-all  `}
     >
-      {startRegisterForm ? (
-        <YellowComponent
-          loggedInUserData={users.loggedInUserData}
-          setStartRegisterForm={() => {
-            setStartRegisterForm(false)
-          }}
-        />
-      ) : (
-        <RedButton
-          setStartRegisterForm={() => {
-            setStartRegisterForm(true)
-          }}
-        />
-      )}
+      {componentPage()}
     </div>
   )
 }
@@ -74,10 +102,10 @@ function GreenComponent() {
 
 function YellowComponent({
   loggedInUserData,
-  setStartRegisterForm
+  setRegisterPage
 }: {
   loggedInUserData: UserInterface | null
-  setStartRegisterForm: () => void
+  setRegisterPage: () => void
 }) {
   function timeout(delay: number) {
     return new Promise((res) => setTimeout(res, delay))
@@ -114,21 +142,17 @@ function YellowComponent({
         <Button
           text="confirm registration"
           active={true}
-          onClick={setStartRegisterForm}
+          onClick={setRegisterPage}
         />
       </div>
     </div>
   )
 }
 
-function RedButton({
-  setStartRegisterForm
-}: {
-  setStartRegisterForm: () => void
-}) {
+function RedButton({ setRegisterPage }: { setRegisterPage: () => void }) {
   return (
     <button
-      onClick={setStartRegisterForm}
+      onClick={setRegisterPage}
       className="h-full w-full transition-shadow hover:shadow-xl"
     >
       <div className="text-[20px] font-bold text-white hover:cursor-pointer  ">
