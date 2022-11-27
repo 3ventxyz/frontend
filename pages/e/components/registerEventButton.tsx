@@ -12,9 +12,11 @@ enum RegisterComponentEnum {
 }
 
 export default function RegisterEventButton({
-  setShowModal
+  setShowRegisterModal,
+  setShowQrCodeModal
 }: {
-  setShowModal: (toggle: boolean) => void
+  setShowRegisterModal: (toggle: boolean) => void
+  setShowQrCodeModal: (toggle: boolean) => void
 }) {
   const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
     RegisterComponentEnum.registerEvent
@@ -33,6 +35,7 @@ export default function RegisterEventButton({
    * and after registering, it will be redirected to a page of upcoming registered events page.
    *
    *
+   * DONE!!
    * things to do here!!
    * pass the loggedInUser whole info, that is stored in the usersContext or authContext.
    * from that the data will be passed here directly and used for quickly registering the user right away.
@@ -54,7 +57,15 @@ export default function RegisterEventButton({
         )
       case RegisterComponentEnum.userRegistered:
         // show that it has been a success in registering the page.
-        return GreenComponent()
+        return (
+          <GreenComponent
+            nextPage={() => {}}
+            qrCodeModal={() => {
+              setStyleComponent('h-[85px] bg-[#DE6767]')
+              setRegisterPage(RegisterComponentEnum.registerEvent)
+            }}
+          />
+        )
       default:
         return (
           <RedButton
@@ -78,9 +89,35 @@ export default function RegisterEventButton({
   )
 }
 
-function GreenComponent() {
+function GreenComponent({
+  qrCodeModal,
+  nextPage
+}: {
+  qrCodeModal: () => void
+  nextPage: () => void
+}) {
+  const [delay, setDelay] = useState(true)
+
+  function timeout(delay: number) {
+    return new Promise((res) => setTimeout(res, delay))
+  }
+
+  useEffect(() => {
+    const delayAnimation = async () => {
+      await timeout(350)
+      setDelay(false)
+    }
+    if (delay) {
+      delayAnimation()
+    }
+  }, [])
+
   return (
-    <div className="w-full space-y-2  bg-white px-[8px]">
+    <div
+      className={`${
+        delay ? ' text-opacity-0' : 'text-opacity-100'
+      }  w-full space-y-2 bg-white px-[8px]  text-black transition-all`}
+    >
       <div className="flex items-center space-x-1">
         <IoQrCode className="h-[60px] w-[60px]" />
         <div>
@@ -95,6 +132,7 @@ function GreenComponent() {
           active={true}
           onClick={() => {
             console.log('viewing qr')
+            qrCodeModal()
           }}
         />
         <Button
@@ -102,6 +140,7 @@ function GreenComponent() {
           active={true}
           onClick={() => {
             console.log('registered events')
+            nextPage()
           }}
         />
       </div>
@@ -123,7 +162,7 @@ function YellowComponent({
   const [delay, setDelay] = useState(true)
   useEffect(() => {
     const delayAnimation = async () => {
-      await timeout(250)
+      await timeout(350)
       setDelay(false)
     }
     if (delay) {
@@ -131,26 +170,40 @@ function YellowComponent({
     }
   }, [])
   return (
-    <div className={`${delay ? 'hidden' : 'block'} transition-all`}>
-      <div className="text-[24px] font-bold transition-all">
-        {delay ? '' : 'Please Confirm your info:'}
+    <div
+      className={`${
+        delay
+          ? 'bg-opacity-0 text-opacity-0'
+          : 'bg-opacity-100 text-opacity-100'
+      }  text-black transition-all`}
+    >
+      <div className={` text-[24px] font-bold transition-all`}>
+        {'Please Confirm your info:'}
       </div>
       <div className="my-[8px] flex flex-col items-center space-y-[8px]">
         <div className="w-full">
           <div className="font-semibold">Username:</div>
-          <div className=" rounded-md bg-white shadow-md">
+          <div
+            className={`${
+              delay ? 'shadow-[0px] bg-opacity-0' : 'bg-opacity-100 shadow-md'
+            } rounded-md bg-white `}
+          >
             {loggedInUserData?.username}
           </div>
         </div>
         <div className="w-full">
-          <div className="font-semibold shadow-md">Address:</div>
-          <div className=" rounded-md bg-white">
+          <div className="font-semibold ">Address:</div>
+          <div
+            className={`${
+              delay ? 'shadow-[0px] bg-opacity-0' : 'bg-opacity-100 shadow-md'
+            } rounded-md bg-white `}
+          >
             {loggedInUserData?.address}
           </div>
         </div>
         <Button
-          text="confirm registration"
-          active={true}
+          text={delay ? 'Loading...' : 'confirm registration'}
+          active={!delay}
           onClick={setRegisterPage}
         />
       </div>
