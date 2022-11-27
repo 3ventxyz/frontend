@@ -11,6 +11,10 @@ enum RegisterComponentEnum {
   userRegistered
 }
 
+function timeout(delay: number) {
+  return new Promise((res) => setTimeout(res, delay))
+}
+
 export default function RegisterEventButton({
   setShowRegisterModal,
   setShowQrCodeModal
@@ -39,7 +43,15 @@ export default function RegisterEventButton({
    * things to do here!!
    * pass the loggedInUser whole info, that is stored in the usersContext or authContext.
    * from that the data will be passed here directly and used for quickly registering the user right away.
-   */
+    
+  **TODO (11/27) for tomorrow 11/28.
+  ** --add a loading component that is used while registering the user to the database.
+  ** --move all the firebase functions, that are used for registering the user to the event, to this register button component
+  ** --also update the logic with the new address being uploaded.
+  ** --set the modal components to this button component, so the qr code can be shown after registering or when the user needs
+  to update its address quickly, before registering to the event.
+  ** --implement the responsive design of this updated page.
+  */
 
   const componentPage = () => {
     switch (registerPage) {
@@ -98,10 +110,6 @@ function GreenComponent({
 }) {
   const [delay, setDelay] = useState(true)
 
-  function timeout(delay: number) {
-    return new Promise((res) => setTimeout(res, delay))
-  }
-
   useEffect(() => {
     const delayAnimation = async () => {
       await timeout(350)
@@ -155,10 +163,7 @@ function YellowComponent({
   loggedInUserData: UserInterface | null
   setRegisterPage: () => void
 }) {
-  function timeout(delay: number) {
-    return new Promise((res) => setTimeout(res, delay))
-  }
-
+  const [request, setRequest] = useState(false)
   const [delay, setDelay] = useState(true)
   useEffect(() => {
     const delayAnimation = async () => {
@@ -169,7 +174,14 @@ function YellowComponent({
       delayAnimation()
     }
   }, [])
-  return (
+
+  const registerUser = async () => {
+    await timeout(1000)
+    setRegisterPage()
+  }
+  return request ? (
+    <div>Loading</div>
+  ) : (
     <div
       className={`${
         delay
@@ -204,7 +216,10 @@ function YellowComponent({
         <Button
           text={delay ? 'Loading...' : 'confirm registration'}
           active={!delay}
-          onClick={setRegisterPage}
+          onClick={() => {
+            setRequest(true)
+            registerUser()
+          }}
         />
       </div>
     </div>
