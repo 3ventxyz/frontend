@@ -5,7 +5,7 @@ import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import { IoQrCode } from 'react-icons/io5'
 import { useEvents } from '../../../contexts/events'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
-import checkRegisteredAttendee from '../../../services/check_registered_attendee'
+import checkRegisteredAttendee from '../../../services/fetch_registered_attendee_data'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -31,7 +31,7 @@ export default function RegisterEventButton({
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
   const events = useEvents()
-  const [registeredUserData, setRegisteredUserData] = useState()
+  const [registeredUserData, setRegisteredUserData] = useState<any>()
   const [checkedDatabase, setCheckedDatabase] = useState(false)
   useEffect(() => {
     /**
@@ -39,7 +39,7 @@ export default function RegisterEventButton({
      * registered or not.
      */
     const fetchData = async () => {
-      const isUserRegistered = await checkRegisteredAttendee({
+      const registeredAttendeeData = await checkRegisteredAttendee({
         uid:
           users.loggedInUserData?.uid === undefined
             ? ''
@@ -49,7 +49,12 @@ export default function RegisterEventButton({
             ? ''
             : events.accessedEventData?.event_id
       })
-      if (isUserRegistered) {
+      if (registeredAttendeeData.exists()) {
+        setRegisteredUserData({
+          date_of_registration: registeredAttendeeData
+            .data()
+            .date_of_registration.toDate()
+        })
         setRegisterPage(RegisterComponentEnum.userRegistered)
         setStyleComponent('h-[150px] bg-white')
       } else {
@@ -79,9 +84,6 @@ export default function RegisterEventButton({
    * from that the data will be passed here directly and used for quickly registering the user right away.
 
   **TODO (11/27) for tomorrow 11/28.
-  ** --add a loading component that is used while registering the user to the database. (DONE)
-  ** --move all the firebase functions, that are used for registering the user to the event, to this register button component
-  ** --also update the logic with the new address being uploaded. (today, only thing left is check the user is registered and display the registered data)
   ** --set the modal components to this button component, so the qr code can be shown after registering or when the user needs
   to update its address quickly, before registering to the event.(today)
   ** --implement the responsive design of this updated page.(plan tomorrow monday, and iterate on tuesday!!!)
@@ -99,6 +101,7 @@ export default function RegisterEventButton({
               setStyleComponent('h-[150px] bg-white')
               setRegisterPage(RegisterComponentEnum.userRegistered)
             }}
+            setRegisteredData={setRegisteredUserData}
           />
         )
       case RegisterComponentEnum.userRegistered:
@@ -106,6 +109,7 @@ export default function RegisterEventButton({
         return (
           <GreenComponent
             nextPage={() => {}}
+            registeredUserData={registeredUserData}
             qrCodeModal={() => {
               setStyleComponent('h-[85px] bg-[#DE6767]')
               setRegisterPage(RegisterComponentEnum.registerEvent)
@@ -136,10 +140,12 @@ export default function RegisterEventButton({
 
 function GreenComponent({
   qrCodeModal,
-  nextPage
+  nextPage,
+  registeredUserData
 }: {
   qrCodeModal: () => void
   nextPage: () => void
+  registeredUserData: any
 }) {
   const [delay, setDelay] = useState(true)
 
@@ -165,7 +171,22 @@ function GreenComponent({
         <div>
           <div className="text-[24px] font-bold ">Ticket Confirmation:</div>
           <div className="font-semibold">Date of registration:</div>
-          <div>*Wed, Nov 16, 2022, 7:00 PM*</div>
+          <div>
+            {registeredUserData.date_of_registration.toLocaleString('en-US', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            }) +
+              ', ' +
+              registeredUserData.date_of_registration.toLocaleTimeString(
+                'en-US',
+                {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }
+              )}
+          </div>
         </div>
       </div>
       <div className="flex space-x-2">
@@ -193,11 +214,13 @@ function GreenComponent({
 function YellowComponent({
   loggedInUserData,
   eventData,
-  setRegisterPage
+  setRegisterPage,
+  setRegisteredData
 }: {
   loggedInUserData: UserInterface | null
   eventData: EventInterface | null
   setRegisterPage: () => void
+  setRegisteredData: (date_of_registration: any) => void
 }) {
   const [request, setRequest] = useState(false)
   const [delay, setDelay] = useState(true)
@@ -232,6 +255,7 @@ function YellowComponent({
       },
       eventData?.event_id === undefined ? '' : eventData?.event_id
     )
+    setRegisteredData({ date_of_registration: new Date() })
 
     setRegisterPage()
   }

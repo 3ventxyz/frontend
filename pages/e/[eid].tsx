@@ -7,8 +7,6 @@ import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
 import { useUsers } from '../../contexts/users'
 import CreateCheckoutSession from './components/createCheckoutSession'
-import checkRegisteredAttendee from '../../services/check_registered_attendee'
-
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 
@@ -37,7 +35,7 @@ export default function Event() {
 
   const confirmSelectedTicketPurchase = () => {
     setEventPageStatus(EventPageEnum.fetchingData)
-    fetchData();
+    fetchData()
   }
 
   const handleOnClose = () => setShowModal(false)
@@ -72,10 +70,6 @@ export default function Event() {
       price: 0
     }
     setSelectedTicket(ticket)
-    isUserRegistered = await checkRegisteredAttendee({
-      uid: auth.uid,
-      eid: eventId
-    })
     setEventPageStatus(EventPageEnum.fetchedData)
   }
 
