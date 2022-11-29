@@ -5,6 +5,7 @@ import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import { IoQrCode } from 'react-icons/io5'
 import { useEvents } from '../../../contexts/events'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
+import checkRegisteredAttendee from '../../../services/check_registered_attendee'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -30,12 +31,36 @@ export default function RegisterEventButton({
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
   const events = useEvents()
-
+  const [registeredUserData, setRegisteredUserData] = useState()
+  const [checkedDatabase, setCheckedDatabase] = useState(false)
   useEffect(() => {
     /**
      * TODO: fetch the registered user data to see if the user is already
      * registered or not.
      */
+    const fetchData = async () => {
+      const isUserRegistered = await checkRegisteredAttendee({
+        uid:
+          users.loggedInUserData?.uid === undefined
+            ? ''
+            : users.loggedInUserData?.uid,
+        eid:
+          events.accessedEventData?.event_id === undefined
+            ? ''
+            : events.accessedEventData?.event_id
+      })
+      if (isUserRegistered) {
+        setRegisterPage(RegisterComponentEnum.userRegistered)
+        setStyleComponent('h-[150px] bg-white')
+      } else {
+        setRegisterPage(RegisterComponentEnum.registerEvent)
+        setStyleComponent('h-[85px] bg-[#DE6767]')
+      }
+      setCheckedDatabase(true)
+    }
+    if (!checkedDatabase) {
+      fetchData()
+    }
   }, [])
   /**
 
@@ -56,7 +81,7 @@ export default function RegisterEventButton({
   **TODO (11/27) for tomorrow 11/28.
   ** --add a loading component that is used while registering the user to the database. (DONE)
   ** --move all the firebase functions, that are used for registering the user to the event, to this register button component
-  ** --also update the logic with the new address being uploaded. (today)
+  ** --also update the logic with the new address being uploaded. (today, only thing left is check the user is registered and display the registered data)
   ** --set the modal components to this button component, so the qr code can be shown after registering or when the user needs
   to update its address quickly, before registering to the event.(today)
   ** --implement the responsive design of this updated page.(plan tomorrow monday, and iterate on tuesday!!!)
@@ -102,8 +127,7 @@ export default function RegisterEventButton({
   return (
     <div
       id="register-event-button"
-      className={`
-      ${styleComponent} flex  items-center justify-center rounded-2xl shadow-md  transition-all  `}
+      className={`${styleComponent} flex items-center justify-center rounded-2xl shadow-md transition-all`}
     >
       {componentPage()}
     </div>
