@@ -58,7 +58,7 @@ export default function LoadedEventPage({
         <div id="second-col" className="w-[330px] space-y-5 ">
           <LocationCard event={events?.accessedEventData} />
           <DateCard event={events?.accessedEventData} />
-          <RegisterEventButton setShowModal={setShowModal} />
+          <RegisterEventButton setShowRegisterModal={()=>{}} setShowQrCodeModal={()=>{}} />
           {isEventCreator ? (
             <div>
               <Button

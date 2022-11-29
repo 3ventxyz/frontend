@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import Button from '../../../components/button'
 import { useUsers } from '../../../contexts/users'
-import { UserInterface } from '../../../shared/interface/common'
+import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import { IoQrCode } from 'react-icons/io5'
+import { useEvents } from '../../../contexts/events'
+import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -27,10 +29,17 @@ export default function RegisterEventButton({
   )
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
+  const events = useEvents()
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    /**
+     * TODO: fetch the registered user data to see if the user is already
+     * registered or not.
+     */
+  }, [])
   /**
-   * quick approach first.
+
+  * quick approach first.
    * when the user clicks this button, this component will update its layout to show the entered info,
    * if the info is correct to the user's perspective, then they will click accept,
    *  and this component will update its layout and  will show the ticket info. with a text button saying "check your registered eevents"
@@ -43,24 +52,24 @@ export default function RegisterEventButton({
    * things to do here!!
    * pass the loggedInUser whole info, that is stored in the usersContext or authContext.
    * from that the data will be passed here directly and used for quickly registering the user right away.
-    
+
   **TODO (11/27) for tomorrow 11/28.
-  ** --add a loading component that is used while registering the user to the database.
+  ** --add a loading component that is used while registering the user to the database. (DONE)
   ** --move all the firebase functions, that are used for registering the user to the event, to this register button component
-  ** --also update the logic with the new address being uploaded.
+  ** --also update the logic with the new address being uploaded. (today)
   ** --set the modal components to this button component, so the qr code can be shown after registering or when the user needs
-  to update its address quickly, before registering to the event.
-  ** --implement the responsive design of this updated page.
+  to update its address quickly, before registering to the event.(today)
+  ** --implement the responsive design of this updated page.(plan tomorrow monday, and iterate on tuesday!!!)
   */
 
   const componentPage = () => {
     switch (registerPage) {
       case RegisterComponentEnum.confirmuserInfo:
         // show the confirm info registration page.
-
         return (
           <YellowComponent
             loggedInUserData={users.loggedInUserData}
+            eventData={events.accessedEventData}
             setRegisterPage={() => {
               setStyleComponent('h-[150px] bg-white')
               setRegisterPage(RegisterComponentEnum.userRegistered)
@@ -115,6 +124,7 @@ function GreenComponent({
       await timeout(350)
       setDelay(false)
     }
+
     if (delay) {
       delayAnimation()
     }
@@ -140,7 +150,7 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('viewing qr')
-            qrCodeModal()
+            // qrCodeModal()
           }}
         />
         <Button
@@ -148,7 +158,7 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('registered events')
-            nextPage()
+            // nextPage()
           }}
         />
       </div>
@@ -158,9 +168,11 @@ function GreenComponent({
 
 function YellowComponent({
   loggedInUserData,
+  eventData,
   setRegisterPage
 }: {
   loggedInUserData: UserInterface | null
+  eventData: EventInterface | null
   setRegisterPage: () => void
 }) {
   const [request, setRequest] = useState(false)
@@ -176,11 +188,31 @@ function YellowComponent({
   }, [])
 
   const registerUser = async () => {
-    await timeout(1000)
+    // await timeout(1000)
+
+    await registerAttendeeToEvent(
+      {
+        address:
+          loggedInUserData?.address === undefined
+            ? ''
+            : loggedInUserData?.address,
+        phone_number: '+111 222 33333',
+        uid: loggedInUserData?.uid === undefined ? '' : loggedInUserData?.uid,
+        date_of_registration: new Date(),
+        username:
+          loggedInUserData?.username === undefined
+            ? ''
+            : loggedInUserData?.username,
+        avatar:
+          loggedInUserData?.avatar === undefined ? '' : loggedInUserData?.avatar
+      },
+      eventData?.event_id === undefined ? '' : eventData?.event_id
+    )
+
     setRegisterPage()
   }
   return request ? (
-    <div>Loading</div>
+    <div className="animate-pulse text-[24px] font-bold">Loading...</div>
   ) : (
     <div
       className={`${
@@ -232,7 +264,7 @@ function RedButton({ setRegisterPage }: { setRegisterPage: () => void }) {
       onClick={setRegisterPage}
       className="h-full w-full transition-shadow hover:shadow-xl"
     >
-      <div className="text-[20px] font-bold text-white hover:cursor-pointer  ">
+      <div className="text-[20px] font-bold text-white hover:cursor-pointer">
         Register Event
       </div>
     </button>

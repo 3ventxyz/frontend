@@ -28,6 +28,8 @@ export default function RegisteredAttendees({
       // console.dir(attendeesDocs.docs)
       for (const attendeeDoc of attendeesDocs.docs) {
         const newAttendee: UserInterface = {
+          address:'',
+          qr_code:'',
           avatar: attendeeDoc.data().avatar,
           uid: attendeeDoc.data().uid,
           username: attendeeDoc.data().username
