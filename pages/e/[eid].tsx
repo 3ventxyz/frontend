@@ -24,6 +24,8 @@ export default function Event() {
     null
   )
   const [showModal, setShowModal] = useState(false)
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showQrCodeModal, setShowQrCodeModal] = useState(false)
   const [isEventCreator, setIsEventCreator] = useState(false)
 
   const router = useRouter()
@@ -38,7 +40,20 @@ export default function Event() {
     fetchData()
   }
 
-  const handleOnClose = () => setShowModal(false)
+  const handleOnClose = () => {
+    setShowModal(false)
+    setShowRegisterModal(false)
+    setShowQrCodeModal(false)
+  }
+
+  const modalChildDisplay = () => {
+    if (showRegisterModal) {
+      return <div>showing registered events modal component</div>
+    } else if (showQrCodeModal) {
+      return <div>showing qr code component</div>
+    }
+    return <></>
+  }
 
   const fetchData = async () => {
     const loggedInUserData: UserInterface = await users.fetchUserData({
@@ -86,6 +101,8 @@ export default function Event() {
           <LoadedEventPage
             setShowModal={setShowModal}
             isEventCreator={isEventCreator}
+            setShowRegisterModal={setShowRegisterModal}
+            setShowQrCodeModal={setShowQrCodeModal}
           />
         )
       default:
@@ -104,25 +121,7 @@ export default function Event() {
         width="w-[600px]"
         height="h-[600px]"
       >
-        <CreateCheckoutSession
-          selectedTicket={selectedTicket}
-          onClose={() => setShowModal(false)}
-          confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
-          uid={auth.uid}
-          eventId={
-            events.accessedEventData ? events.accessedEventData.event_id : ' '
-          }
-          username={
-            users.loggedInUserData?.username !== undefined
-              ? users.loggedInUserData?.username
-              : ''
-          }
-          avatar={
-            users.loggedInUserData?.avatar !== undefined
-              ? users.loggedInUserData?.avatar
-              : ''
-          }
-        />
+        <div>{modalChildDisplay()}</div>
       </Modal>
     </>
   )

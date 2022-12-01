@@ -20,10 +20,12 @@ function timeout(delay: number) {
 
 export default function RegisterEventButton({
   setShowRegisterModal,
-  setShowQrCodeModal
+  setShowQrCodeModal,
+  setShowModal
 }: {
   setShowRegisterModal: (toggle: boolean) => void
   setShowQrCodeModal: (toggle: boolean) => void
+  setShowModal: (toggle: boolean) => void
 }) {
   const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
     RegisterComponentEnum.registerEvent
@@ -84,9 +86,9 @@ export default function RegisterEventButton({
    * from that the data will be passed here directly and used for quickly registering the user right away.
 
   **TODO (11/27) for tomorrow 11/28.
-  ** --set the modal components to this button component, so the qr code can be shown after registering or when the user needs
-  to update its address quickly, before registering to the event.(today)
-  ** --implement the responsive design of this updated page.(plan tomorrow monday, and iterate on tuesday!!!)
+  ** -- set the modal components to this button component, so the qr code can be shown after registering or when the user needs
+  to update its address quickly, before registering to the event. (today)
+  ** -- implement the responsive design of this updated page. (tomorrow friday!!!)
   */
 
   const componentPage = () => {
@@ -110,6 +112,9 @@ export default function RegisterEventButton({
           <GreenComponent
             nextPage={() => {}}
             registeredUserData={registeredUserData}
+            setShowModal={setShowModal}
+            setShowQrCodeModal={setShowQrCodeModal}
+            setShowRegisterModal={setShowRegisterModal}
             qrCodeModal={() => {
               setStyleComponent('h-[85px] bg-[#DE6767]')
               setRegisterPage(RegisterComponentEnum.registerEvent)
@@ -141,11 +146,17 @@ export default function RegisterEventButton({
 function GreenComponent({
   qrCodeModal,
   nextPage,
-  registeredUserData
+  registeredUserData,
+  setShowModal,
+  setShowRegisterModal,
+  setShowQrCodeModal
 }: {
   qrCodeModal: () => void
   nextPage: () => void
   registeredUserData: any
+  setShowModal: (toggle: boolean) => void
+  setShowRegisterModal: (toggle: boolean) => void
+  setShowQrCodeModal: (toggle: boolean) => void
 }) {
   const [delay, setDelay] = useState(true)
 
@@ -196,6 +207,8 @@ function GreenComponent({
           onClick={() => {
             console.log('viewing qr')
             // qrCodeModal()
+            setShowQrCodeModal(true)
+            setShowModal(true)
           }}
         />
         <Button
@@ -204,6 +217,8 @@ function GreenComponent({
           onClick={() => {
             console.log('registered events')
             // nextPage()
+            setShowRegisterModal(true)
+            setShowModal(true)
           }}
         />
       </div>
@@ -235,8 +250,6 @@ function YellowComponent({
   }, [])
 
   const registerUser = async () => {
-    // await timeout(1000)
-
     await registerAttendeeToEvent(
       {
         address:

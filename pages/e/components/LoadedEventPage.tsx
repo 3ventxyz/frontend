@@ -12,10 +12,14 @@ import Button from '../../../components/button'
 // useRef for passing the host data that is fetched from the eid page.
 export default function LoadedEventPage({
   isEventCreator = false,
+  setShowRegisterModal,
+  setShowQrCodeModal,
   setShowModal
 }: {
   setShowModal: (toggle: boolean) => void
   isEventCreator?: boolean
+  setShowRegisterModal: (toggle: boolean) => void
+  setShowQrCodeModal: (toggle: boolean) => void
 }) {
   const events = useEvents()
   const users = useUsers()
@@ -58,7 +62,11 @@ export default function LoadedEventPage({
         <div id="second-col" className="w-[330px] space-y-5 ">
           <LocationCard event={events?.accessedEventData} />
           <DateCard event={events?.accessedEventData} />
-          <RegisterEventButton setShowRegisterModal={()=>{}} setShowQrCodeModal={()=>{}} />
+          <RegisterEventButton
+            setShowModal={setShowModal}
+            setShowRegisterModal={setShowRegisterModal}
+            setShowQrCodeModal={setShowQrCodeModal}
+          />
           {isEventCreator ? (
             <div>
               <Button
