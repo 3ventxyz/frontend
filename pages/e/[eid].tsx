@@ -9,6 +9,7 @@ import { useUsers } from '../../contexts/users'
 import CreateCheckoutSession from './components/createCheckoutSession'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
+import DisplayQRCode from '../u/components/displayQRCode'
 
 enum EventPageEnum {
   fetchingData,
@@ -24,7 +25,6 @@ export default function Event() {
     null
   )
   const [showModal, setShowModal] = useState(false)
-  const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showQrCodeModal, setShowQrCodeModal] = useState(false)
   const [isEventCreator, setIsEventCreator] = useState(false)
 
@@ -42,17 +42,7 @@ export default function Event() {
 
   const handleOnClose = () => {
     setShowModal(false)
-    setShowRegisterModal(false)
     setShowQrCodeModal(false)
-  }
-
-  const modalChildDisplay = () => {
-    if (showRegisterModal) {
-      return <div>showing registered events modal component</div>
-    } else if (showQrCodeModal) {
-      return <div>showing qr code component</div>
-    }
-    return <></>
   }
 
   const fetchData = async () => {
@@ -101,8 +91,6 @@ export default function Event() {
           <LoadedEventPage
             setShowModal={setShowModal}
             isEventCreator={isEventCreator}
-            setShowRegisterModal={setShowRegisterModal}
-            setShowQrCodeModal={setShowQrCodeModal}
           />
         )
       default:
@@ -118,10 +106,10 @@ export default function Event() {
       <Modal
         visible={showModal}
         onClose={handleOnClose}
-        width="w-[600px]"
-        height="h-[600px]"
+        width={'w-[500px]'}
+        height={'h-[500px]'}
       >
-        <div>{modalChildDisplay()}</div>
+        <DisplayQRCode />
       </Modal>
     </>
   )

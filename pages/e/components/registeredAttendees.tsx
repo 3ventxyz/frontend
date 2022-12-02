@@ -24,7 +24,7 @@ export default function RegisteredAttendees({
       const arrayOfAttendees: Array<UserInterface> = []
       var attendeesDocs: QuerySnapshot<DocumentData> =
         await FetchRegisteredAttendees(eid)
-      //IMPORTANT move this to the event context for organizing.
+      // IMPORTANT move this to the event context for organizing.
       // console.dir(attendeesDocs.docs)
       for (const attendeeDoc of attendeesDocs.docs) {
         const newAttendee: UserInterface = {

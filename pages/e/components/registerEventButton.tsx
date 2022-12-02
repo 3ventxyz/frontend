@@ -20,12 +20,8 @@ function timeout(delay: number) {
 }
 
 export default function RegisterEventButton({
-  setShowRegisterModal,
-  setShowQrCodeModal,
   setShowModal
 }: {
-  setShowRegisterModal: (toggle: boolean) => void
-  setShowQrCodeModal: (toggle: boolean) => void
   setShowModal: (toggle: boolean) => void
 }) {
   const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
@@ -71,7 +67,6 @@ export default function RegisterEventButton({
     }
   }, [])
   /**
-
   * quick approach first.
    * when the user clicks this button, this component will update its layout to show the entered info,
    * if the info is correct to the user's perspective, then they will click accept,
@@ -114,8 +109,6 @@ export default function RegisterEventButton({
             nextPage={() => {}}
             registeredUserData={registeredUserData}
             setShowModal={setShowModal}
-            setShowQrCodeModal={setShowQrCodeModal}
-            setShowRegisterModal={setShowRegisterModal}
             qrCodeModal={() => {
               setStyleComponent('h-[85px] bg-[#DE6767]')
               setRegisterPage(RegisterComponentEnum.registerEvent)
@@ -148,19 +141,15 @@ function GreenComponent({
   qrCodeModal,
   nextPage,
   registeredUserData,
-  setShowModal,
-  setShowRegisterModal,
-  setShowQrCodeModal
+  setShowModal
 }: {
   qrCodeModal: () => void
   nextPage: () => void
   registeredUserData: any
   setShowModal: (toggle: boolean) => void
-  setShowRegisterModal: (toggle: boolean) => void
-  setShowQrCodeModal: (toggle: boolean) => void
 }) {
   const [delay, setDelay] = useState(true)
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     const delayAnimation = async () => {
@@ -208,7 +197,6 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('viewing qr')
-            setShowQrCodeModal(true)
             setShowModal(true)
           }}
         />
@@ -217,9 +205,7 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('registered events')
-            router.push('/u');
-            // setShowRegisterModal(true)
-            // setShowModal(true)
+            router.push('/u')
           }}
         />
       </div>
