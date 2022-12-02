@@ -6,6 +6,7 @@ import { IoQrCode } from 'react-icons/io5'
 import { useEvents } from '../../../contexts/events'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 import checkRegisteredAttendee from '../../../services/fetch_registered_attendee_data'
+import { useRouter } from 'next/router'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -159,6 +160,7 @@ function GreenComponent({
   setShowQrCodeModal: (toggle: boolean) => void
 }) {
   const [delay, setDelay] = useState(true)
+  const router = useRouter();
 
   useEffect(() => {
     const delayAnimation = async () => {
@@ -206,7 +208,6 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('viewing qr')
-            // qrCodeModal()
             setShowQrCodeModal(true)
             setShowModal(true)
           }}
@@ -216,9 +217,9 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('registered events')
-            // nextPage()
-            setShowRegisterModal(true)
-            setShowModal(true)
+            router.push('/u');
+            // setShowRegisterModal(true)
+            // setShowModal(true)
           }}
         />
       </div>
