@@ -8,12 +8,14 @@ import { db } from '../services/firebase_config'
 const saveFollowing = async (
   discord_guild: boolean,
   lid: string,
-  uid: string
+  uid: string,
+  discord_username: string
 ) => {
   try {
     const docRef = doc(db, 'lists', `${lid}`)
     await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-      discord_guild: discord_guild
+      discord_guild: discord_guild,
+      discord_username: discord_username
     })
     console.log('Data written into doc ID: ', docRef.id)
     return true
@@ -52,8 +54,16 @@ export async function verifyDiscord(
     data = JSON.stringify(data)
     const token = JSON.parse(data).access_token
     if (token && token !== undefined) {
-      /*Get User ID*/
       const userResponse = await fetch(
+        'https://discordapp.com/api//users/@me',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      const guildResponse = await fetch(
         'https://discordapp.com/api//users/@me/guilds',
         {
           method: 'GET',
@@ -64,11 +74,15 @@ export async function verifyDiscord(
       )
       let userData = await userResponse.json()
       userData = JSON.stringify(userData)
-      const guilds = JSON.parse(userData)
+      const user = JSON.parse(userData)
+
+      let guildsData = await guildResponse.json()
+      guildsData = JSON.stringify(guildsData)
+      const guilds = JSON.parse(guildsData)
       /*check if guild is in the list*/
       guilds.forEach((guild: any) => {
         if (guild.id === guildId) {
-          saveFollowing(true, lid, uid)
+          saveFollowing(true, lid, uid, user.username)
           return true
         }
       })
@@ -102,7 +116,6 @@ export default function VerifyGuild({
       if (pathParts.length >= 2) {
         if (pathParts[1].includes('state')) {
           const separatePath = pathParts[1].split('&state=')
-          console.log('sp', separatePath)
           setHash(separatePath[0])
         } else {
           setHash(pathParts.slice(-1)[0])
@@ -119,7 +132,8 @@ export default function VerifyGuild({
       <p className="font-semibold">Check Guild</p>
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
-          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=guilds&state=${state}`}
+          href={`https://discord.com/api/oauth2/authorize?client_id=997585077548617728&redirect_uri=${url}&response_type=code&scope=identify%20guilds&state=${state}`}
+
           className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4] px-4"
         >
           Verify Guild Membership

@@ -8,6 +8,9 @@ import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
 import DeleteConfirmation from '../../components/deleteConfirmation'
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
+import { db } from '../../services/firebase_config'
+import { AllowlistUser } from '../../shared/interface/common'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -20,7 +23,42 @@ export default function Allowlist() {
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
   const auth = useAuth()
-
+  const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
+  const [gotInfo, setGotInfo] = useState(false)
+  /*Information from each user in allowlist*/
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        let arr: Array<AllowlistUser> = []
+        setGotInfo(true)
+        const docRef = doc(db, 'lists', `${lid}`)
+        /*loop through every user*/
+        const userRef = await getDocs(collection(docRef, 'registered_users'))
+        userRef.forEach((doc) => {
+          /*Make object of each user in the array docs / Define an object ui wise*/
+         arr.push({
+          uid: doc.data().uid,
+          email: doc.data().email,
+          wallet: doc.data().wallet,
+          twitter_id: doc.data().twitter_id,
+          tw_following: doc.data().tw_following,
+          discord_username: doc.data().discord_username,
+          discord_guild: doc.data().discord_guild,
+          status: doc.data().status
+        })
+        })
+        setUserDocs(arr)
+        return true
+      } catch (e) {
+        console.error('Error adding data: ', e)
+      }
+    }
+    console.log('gotinfo', gotInfo)
+    if (!gotInfo) {
+      getUserInfo()
+    }
+  }, [])
+  console.log('arr', userDocs)
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +139,7 @@ export default function Allowlist() {
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
-        <div className="mx-auto flex w-full  flex-row items-end justify-between border-b border-disabled">
+        <div className="mx-auto flex w-full flex-row items-end justify-between border-b border-disabled">
           <button
             className="h-[40px] w-[40px]"
             onClick={() => {
@@ -112,7 +150,7 @@ export default function Allowlist() {
           </button>
         </div>
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 ">
+          <table className="w-full text-left text-sm text-gray-500">
             <caption className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
               <div className="flex flex-row justify-between">
                 <div className="my-auto flex flex-col">
@@ -160,7 +198,7 @@ export default function Allowlist() {
                   scope="col"
                   className=" flex flex-row justify-between py-4 px-6"
                 >
-                  <p>Addresses</p>
+                  <p>Users</p>
                   {selected.length > 0 && (
                     <p
                       className="hover:cursor-pointer hover:underline"
@@ -173,36 +211,59 @@ export default function Allowlist() {
               </tr>
             </thead>
             <tbody>
-              {allowlist?.allowlist.map((e, i, array) => {
-                return (
-                  <tr key={i} className="border-b bg-white hover:bg-gray-50 ">
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          name={e}
-                          checked={addresses?.get(e) ?? false}
-                          onChange={handleCheck}
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                        />
-                        <label
-                          htmlFor="checkbox-table-search-1"
-                          className="sr-only"
+              <>
+                {gotInfo ? (
+                  <>
+                    {userDocs.map((doc, index) => {
+                      return (
+                        <tr
+                          key={index}
+                          className="border-b bg-white hover:bg-gray-50"
                         >
-                          checkbox
-                        </label>
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
-                    >
-                      {e}
-                    </th>
-                  </tr>
-                )
-              })}
+                          <td className="w-4 p-4">
+                            <div className="flex items-center">
+                              <input
+                                id="checkbox-table-search-1"
+                                type="checkbox"
+                                name={index.toString()}
+                                checked={false}
+                                onChange={handleCheck}
+                                className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                              />
+                              <label
+                                htmlFor="checkbox-table-search-1"
+                                className="sr-only"
+                              >
+                                checkbox
+                              </label>
+                            </div>
+                          </td>
+              
+                            <td className="py-4 px-6 font-medium text-gray-900">
+                              {<p>Uid: <span className="float-right">{doc.uid}</span></p>}
+                              <br />
+                              {<p>Email: <span className="float-right">{doc.email}</span></p>}
+                              <br />
+                              {<p>Wallet: <span className="float-right">{doc.wallet}</span></p>}
+                              <br />
+                              {<p>Twitter Account: <span className="float-right"><a href={`https://twitter.com/intent/user?user_id=${doc.twitter_id}`}>Twitter Profile</a></span></p>}
+                              <br />
+                              {<p>Following Twitter: <span className="float-right">{`${doc.tw_following}`}</span></p>}
+                              <br />
+                              {<p>Discord ID: <span className="float-right">{doc.discord_username}</span></p>}
+                              <br />
+                              {<p>Member of Guild: <span className="float-right">{`${doc.discord_guild}`}</span></p>}
+                              <br />
+                              {<p>Status: <span className="float-right">{doc.status}</span></p>}
+                            </td>
+                        </tr>
+                      )
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
             </tbody>
           </table>
         </div>

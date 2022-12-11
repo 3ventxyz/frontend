@@ -19,6 +19,7 @@ export default function AllowlistApplication() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const [submit, setSubmit] = useState(false)
   const [wallet, setWallet] = useState('')
   const [twitter, setTwitter] = useState([])
   const [twitterName, setTwitterName] = useState([])
@@ -37,7 +38,9 @@ export default function AllowlistApplication() {
   const [emailVerification, setEmailVerification] = useState(false)
   const [permalink, setPermalink] = useState('')
   const [showModal, setShowModal] = useState(true)
-
+  const [twitterValue, setTwitterValue] = useState(0)
+  const [guildMember, setGuildMember] = useState(undefined)
+  const [twitterFollower, setTwitterFollower] = useState(undefined)
   const [lid, setLid] = useState('')
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function AllowlistApplication() {
         console.log(lid)
       }
     }
-  }, [lid])
+  }, [lid, asPath])
 
   /*Allowlist Info */
   useEffect(() => {
@@ -122,7 +125,31 @@ export default function AllowlistApplication() {
       }
     }
     getUserInfo()
-  }, [email])
+  }, [email, wallet, twitter, discord, emailVerif, twitterName, uid])
+
+  /*Get user info on list only after you come back from the oauth*/
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const docRef = doc(db, 'lists', lid)
+        const userRef = await getDoc(
+          doc(collection(docRef, 'registered_users'), uid)
+        )
+        if (userRef.exists()) {
+         setTwitterFollower(userRef.data().tw_following)
+         setGuildMember(userRef.data().discord_guild)
+        }
+        return true
+      } catch (e) {
+        console.error('Error adding data: ', e)
+      }
+    }
+    getUserInfo()
+
+  if (twitterFollower && guildMember) {
+    setSubmit(true)
+  }
+  }, [lid, uid, guildMember, twitterFollower])
 
   /*Save info */
   const saveProfile = async (
@@ -139,17 +166,14 @@ export default function AllowlistApplication() {
         doc(collection(docRef, 'registered_users'), uid)
       )
       if (userRef.exists()) {
-          await updateDoc(
-            doc(collection(docRef, 'registered_users'), `${uid}`),
-            {
-              uid: uid,
-              twitter_id: twitter_id,
-              discord_id: discord_id,
-              wallet: wallet,
-              email: email,
-              status: status
-            }
-          )
+        await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          status: status
+        })
       } else {
         console.log('test')
         await setDoc(doc(collection(docRef, 'registered_users'), uid), {
@@ -168,6 +192,9 @@ export default function AllowlistApplication() {
     }
   }
 
+  const handleChange = (e: any) => {
+    setTwitterValue(e.target.value);
+  };
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {lid !== '' ? (
@@ -208,7 +235,7 @@ export default function AllowlistApplication() {
               <p className="border-b-2 border-primary font-medium">
                 VERIFY TWITTER
               </p>
-              <select>
+              <select onChange={handleChange}>
                 {twitter.map((account, index) => {
                   return (
                     <>
@@ -242,13 +269,24 @@ export default function AllowlistApplication() {
                 <VerifyFollowing twitterAccount={twitterAccount} lid={lid} />
               </div>
               <div className="w-1/2">
-              <p>If you are not following the creator&apos;s twitter account yet, you can follow it before applying to the list</p>
-                <a
-                  href={`https://twitter.com/intent/user?screen_name=${twitterAccount}`}
-                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
-                >
-                  Follow Account
-                </a>
+                {!twitterFollower && twitterFollower !== undefined? (
+                  <>
+                    <p>
+                      You are not following the creator&apos;s twitter
+                      account yet, you can follow it before applying to the list
+                    </p>
+                    <a
+                      href={`https://twitter.com/intent/user?user_id=${twitterAccount}`}
+                      className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Follow Account
+                    </a>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </>
           ) : (
@@ -281,13 +319,24 @@ export default function AllowlistApplication() {
                 <VerifyGuild discordGuildID={guild} lid={lid} />
               </div>
               <div className="w-1/2">
-              <p>If you are not a part of the creator&apos;s guild yet, you can join it before applying to the list</p>
-                <a
-                  href={permalink}
-                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4] mt-2"
-                >
-                  Join Guild
-                </a>
+                {!guildMember && guildMember !== undefined? (
+                  <>
+                    <p>
+                      You are not a part of the creator&apos;s guild yet, you
+                      can join it before applying to the list
+                    </p>
+                    <a
+                      href={permalink}
+                      className="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Join Guild
+                    </a>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </>
           ) : (
@@ -314,11 +363,11 @@ export default function AllowlistApplication() {
               <Button
                 type="submit"
                 text="Apply"
-                active={!loading}
+                active={submit}
                 onClick={() => {
                   saveProfile(
                     uid,
-                    twitter[0],
+                    twitter[twitterValue],
                     discord,
                     wallet,
                     email,
