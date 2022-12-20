@@ -1,7 +1,7 @@
 import React, { FormEvent, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
-import Button from '../components/button'
+import Button from '../components/buttons/button'
 import {
   signInWithPhoneNumber,
   RecaptchaVerifier,

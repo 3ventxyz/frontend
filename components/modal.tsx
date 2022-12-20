@@ -2,7 +2,9 @@ import { ReactElement } from 'react'
 
 // author: marthel
 
-/**TODO add description. */
+/**TODO add description. 
+ * move to popup directory.
+*/
 export default function Modal({
   visible,
   onClose,

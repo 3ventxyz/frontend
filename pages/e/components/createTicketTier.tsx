@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react'
-import Button from '../../../components/button'
-import TextInput from '../../../components/textInput'
+import Button from '../../../components/buttons/button'
+import TextInput from '../../../components/inputs/textInput'
 
 export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:boolean}) {
   const [numberOfTicketTiers, setNumberOfTicketTiers] = useState(1)

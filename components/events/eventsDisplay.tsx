@@ -1,7 +1,7 @@
 // author: marthel
 import Link from 'next/link'
 import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
-import { EventInterface } from '../shared/interface/common'
+import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import EventTile from './eventTile'
 

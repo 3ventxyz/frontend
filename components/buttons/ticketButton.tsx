@@ -1,4 +1,4 @@
-import { TicketInterface } from '../shared/interface/common'
+import { TicketInterface } from '../../shared/interface/common'
 
 
 /**TODO: move this to the events directory. */

@@ -1,11 +1,11 @@
 import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import TextInput from '../../../components/textInput'
+import TextInput from '../../../components/inputs/textInput'
 import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import { PostInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
-import Button from '../../../components/button'
+import Button from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
 export default function SocialFeed({
   isMobile,

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
-import Dashboard from '../../components/dashboard'
+import Dashboard from '../../components/events/dashboard'
 import ProfileDisplay from './components/profileDisplay'
 import { LocationData } from '../../shared/interface/common'
 

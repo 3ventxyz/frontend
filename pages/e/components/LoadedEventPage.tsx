@@ -6,7 +6,7 @@ import { EventInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Button from '../../../components/button'
+import Button from '../../../components/buttons/button'
 import SocialFeed from './socialFeed'
 import RegisteredAttendees from './registeredAttendees'
 export default function LoadedEventPage({

@@ -1,6 +1,6 @@
 import React, { FormEvent, useState, useRef, useEffect } from 'react'
 import QRCode from 'qrcode.react'
-import Button from '../../../components/button'
+import Button from '../../../components/buttons/button'
 import { uploadQRImage } from '../../../services/upload_qr_image'
 import { useAuth } from '../../../contexts/auth'
 import { db } from '../../../services/firebase_config'

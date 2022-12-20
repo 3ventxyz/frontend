@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import Button from './button'
+import Button from './buttons/button'
 import ErrorAlert from './alerts/errorAlert'
 import AllowlistService from '../services/allowlists'
 import { AllowlistInterface } from '../shared/interface/common'

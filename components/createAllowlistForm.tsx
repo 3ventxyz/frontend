@@ -1,10 +1,10 @@
 import React, { FormEvent, useState } from 'react'
 import AllowlistService from '../services/allowlists'
-import Button from './button'
+import Button from './buttons/button'
 import { useAuth } from '../contexts/auth'
 import ErrorAlert from './alerts/errorAlert'
-import ToggleSwitch from './toggleSwitch'
-import TextInput from './textInput'
+import ToggleSwitch from './toggles/toggleSwitch'
+import TextInput from './inputs/textInput'
 
 export default function CreateAllowlistForm({
   onSuccess

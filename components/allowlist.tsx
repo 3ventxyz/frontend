@@ -5,7 +5,7 @@ import { AllowlistsInterface } from '../shared/interface/common'
 import Modal from '../components/modal'
 import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
-import Button from './button'
+import Button from './buttons/button'
 import AllowlistService from '../services/allowlists'
 import Link from 'next/link'
 
