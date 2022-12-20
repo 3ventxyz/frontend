@@ -8,8 +8,8 @@ import { useAuth } from '../../contexts/auth'
 
 
 /**Dashboard
- @Description: TODO
- And move this to events directory.
+ @Description: displays a dashboard with 3 sections for the events.
+ past events, upcoming events and registered events. 
  */
 
 export default function Dashboard() {

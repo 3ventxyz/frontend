@@ -9,8 +9,8 @@ import { db } from '../../services/firebase_config'
 
 
 /**EventTile
- * TODO add description
- * move this to events directory.
+ * Input:
+ * - eventData: EventInterface | null, data that is used for building an EventTile component. 
  */
 export default function EventTile({
   eventData

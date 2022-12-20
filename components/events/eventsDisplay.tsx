@@ -1,13 +1,18 @@
 // author: marthel
 import Link from 'next/link'
-import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
 import { EventInterface } from '../../shared/interface/common'
-import Image from 'next/image'
 import EventTile from './eventTile'
 
 /**Events Display
- * TODO:add description
- * move this to events directory.
+ * Input:
+ *  -title: string, text that is used for the title of the main event.
+ *  -route: string, eid that is used for redirecting to show all the events.
+ *  -query: string, eid that is also used for redirecting to show all the events.
+ *  -eventsData: EventInterface[] | null, data that is passed for build a list of event tiles.
+ *  -seeAllOption?: boolean, it allows to display the seeAll button at the right corner.
+ *  -showHeader?: boolean, TODO ???
+ *  -isFetching: boolean, it allows to display the loading animation.
+ *  -emptyMessage: string, it is used when there are no events for notifying the user.
  */
 
 export default function EventsDisplay({
