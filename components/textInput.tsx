@@ -11,6 +11,7 @@ interface TextInputProps {
   xMargin?: string
 }
 
+/**TODO: move this to the inputs directory. */
 export default function TextInput({
   labelText,
   placeholder,

@@ -3,6 +3,7 @@ interface TextInputDisplayProps {
   bodyText: string
 }
 
+/**TODO: move this to the inputs directory. */
 export default function TextInputDisplay({
   labelText,
   bodyText

@@ -1,3 +1,15 @@
+/**Button
+ * parameters:
+ *  --text:add stuff here
+ *  --onClick:add stuff here 
+ *  --active:add stuff here 
+ *  --type:add stuff here 
+ *  --isExpanded:add stuff here 
+ *  --id:add stuff here 
+ *  --auth:add stuff here 
+ *  --activeStyling:add stuff here  
+ * move to buttons directory.
+ */
 export default function Button({
   text,
   onClick,

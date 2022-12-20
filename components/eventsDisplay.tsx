@@ -5,6 +5,11 @@ import { EventInterface } from '../shared/interface/common'
 import Image from 'next/image'
 import EventTile from './eventTile'
 
+/**Events Display
+ * TODO:add description
+ * move this to events directory.
+ */
+
 export default function EventsDisplay({
   title,
   route,

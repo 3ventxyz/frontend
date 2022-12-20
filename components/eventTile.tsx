@@ -7,6 +7,11 @@ import { useEffect, useState } from 'react'
 import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../services/firebase_config'
 
+
+/**EventTile
+ * TODO add description
+ * move this to events directory.
+ */
 export default function EventTile({
   eventData
 }: {

@@ -1,4 +1,6 @@
 // author: marthel
+
+/**TODO add description for this one. */
 export default function Spinner({width=100, height=100}:{width?:number, height?:number}) {
   return (
     <div

@@ -6,6 +6,10 @@ import Image from 'next/image'
 
 //imgUrl for the previous template.
 //if a url is passed but a fileImg is still null, display the imgUrl.
+
+/**FileImageInput
+ * TODO: move this to inputs directory.
+ */
 export default function FileImageInput({
   fileImg,
   setFileImg,

@@ -1,6 +1,8 @@
 import { ReactElement } from 'react'
 
 // author: marthel
+
+/**TODO add description. */
 export default function Modal({
   visible,
   onClose,

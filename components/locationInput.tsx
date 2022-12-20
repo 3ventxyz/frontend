@@ -17,6 +17,8 @@ interface LocationInputProps {
   setLocation: (location: LocationData) => void
 }
 
+
+/**Move this to input directory components. */
 export default function LocationInput({
   labelText,
   id,

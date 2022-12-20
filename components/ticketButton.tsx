@@ -1,5 +1,7 @@
 import { TicketInterface } from '../shared/interface/common'
 
+
+/**TODO: move this to the events directory. */
 export default function TicketButton({
   ticket,
   selected,

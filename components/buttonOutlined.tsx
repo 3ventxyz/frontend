@@ -1,3 +1,16 @@
+/**ButtonOutlined
+ * parameters:
+ *    --text: todo test this component.
+ *    --onClick: todo test this component.
+ *    --active: todo test this component.
+ *    --type: todo test this component.
+ *    --isExpanded: todo test this component.
+ *    --icon: todo test this component.
+ *    --iconAlt: todo test this component.
+ * move to buttons directory.
+ */
+
+
 export default function ButtonOutlined({
   text,
   onClick,

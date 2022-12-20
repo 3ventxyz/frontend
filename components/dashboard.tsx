@@ -6,6 +6,12 @@ import { useEvents } from '../contexts/events'
 import EventsDisplay from './eventsDisplay'
 import { useAuth } from '../contexts/auth'
 
+
+/**Dashboard
+ @Description: TODO
+ And move this to events directory.
+ */
+
 export default function Dashboard() {
   const events = useEvents()
   const auth = useAuth()

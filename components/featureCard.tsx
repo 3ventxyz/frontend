@@ -1,3 +1,5 @@
+
+/**TODO: MOVE THIS TO LANDING DIRECTORY */
 export default function FeatureCard({
   title,
   text,
