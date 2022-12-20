@@ -1,14 +1,13 @@
 /**Button
  * parameters:
- *  --text:add stuff here
- *  --onClick:add stuff here 
- *  --active:add stuff here 
- *  --type:add stuff here 
- *  --isExpanded:add stuff here 
- *  --id:add stuff here 
- *  --auth:add stuff here 
- *  --activeStyling:add stuff here  
- * move to buttons directory.
+ *  --text: passed text that is displayed on the button
+ *  --onClick: passed function that is executed when the component is clicked
+ *  --active: boolean option that allows to click the button
+ *  --type: type of button that is used. (default:button; other options: 'submit', 'reset')
+ *  --isExpanded: boolean option that allows to expand the button width based on its father component width
+ *  --id: the id of the logged in user for any auth activity
+ *  --auth: boolean option that notifies if the button is used for authentication activity
+ *  --activeStyling: boolean option that displays the layout for an active button or not
  */
 export default function Button({
   text,

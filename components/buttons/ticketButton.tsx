@@ -1,7 +1,12 @@
 import { TicketInterface } from '../../shared/interface/common'
 
 
-/**TODO: move this to the events directory. */
+/** TicketButton 
+ * input:
+ *  -ticket: ticket data that is passed for building the ticket button.
+ *  -selected: displays the layout for a selected ticket.
+ *  -isDisabled: displays the layout of a disabled ticket.
+*/
 export default function TicketButton({
   ticket,
   selected,

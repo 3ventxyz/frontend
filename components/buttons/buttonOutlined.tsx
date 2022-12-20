@@ -8,6 +8,7 @@
  *    --icon: todo test this component.
  *    --iconAlt: todo test this component.
  * move to buttons directory.
+ * ASK THIS ON THE GROUP CHAT IF ITS NEEDED.
  */
 
 
