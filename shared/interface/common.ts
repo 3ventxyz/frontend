@@ -38,7 +38,6 @@ export interface AllowlistUser {
   email: string
   wallet: string
   twitter_id: string
-  tw_following: boolean
   discord_username: string
   discord_guild: boolean
   status: string

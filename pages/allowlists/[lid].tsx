@@ -8,7 +8,7 @@ import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
 import DeleteConfirmation from '../../components/deleteConfirmation'
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
+import { doc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import { AllowlistUser } from '../../shared/interface/common'
 
@@ -41,7 +41,6 @@ export default function Allowlist() {
           email: doc.data().email,
           wallet: doc.data().wallet,
           twitter_id: doc.data().twitter_id,
-          tw_following: doc.data().tw_following,
           discord_username: doc.data().discord_username,
           discord_guild: doc.data().discord_guild,
           status: doc.data().status
@@ -247,8 +246,6 @@ export default function Allowlist() {
                               {<p>Wallet: <span className="float-right">{doc.wallet}</span></p>}
                               <br />
                               {<p>Twitter Account: <span className="float-right"><a href={`https://twitter.com/intent/user?user_id=${doc.twitter_id}`}>Twitter Profile</a></span></p>}
-                              <br />
-                              {<p>Following Twitter: <span className="float-right">{`${doc.tw_following}`}</span></p>}
                               <br />
                               {<p>Discord ID: <span className="float-right">{doc.discord_username}</span></p>}
                               <br />
