@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { EventInterface } from '../../shared/interface/common'
 import EventTile from './eventTile'
 
-/**Events Display
- * Input:
+/**Function: EventsDisplay
+ * Inputs:
  *  -title: string, text that is used for the title of the main event.
  *  -route: string, eid that is used for redirecting to show all the events.
  *  -query: string, eid that is also used for redirecting to show all the events.

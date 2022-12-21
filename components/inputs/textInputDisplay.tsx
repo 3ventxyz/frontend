@@ -3,7 +3,7 @@ interface TextInputDisplayProps {
   bodyText: string
 }
 
-/**TODO: move this to the inputs directory. */
+/**THIS SEEMS MORE AS A PHONE NUMBER INPUT */
 export default function TextInputDisplay({
   labelText,
   bodyText

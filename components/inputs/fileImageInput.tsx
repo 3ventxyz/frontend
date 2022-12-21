@@ -4,11 +4,12 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Image from 'next/image'
 
 
-//imgUrl for the previous template.
-//if a url is passed but a fileImg is still null, display the imgUrl.
 
-/**FileImageInput
- * TODO: move this to inputs directory.
+/**Function: FileImageInput
+ **inputs:
+ *    -fileImg: File | null, data for uploading the image
+ *    -setFileImg:(value: File) => void, passed function for setting the fileImage
+ *    -imgUrlTemplate?: string, url of the image that is used for displaying the current image.
  */
 export default function FileImageInput({
   fileImg,

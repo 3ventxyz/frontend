@@ -1,8 +1,8 @@
 import { TicketInterface } from '../../shared/interface/common'
 
 
-/** TicketButton 
- * input:
+/**Function: TicketButton 
+ **inputs:
  *  -ticket: ticket data that is passed for building the ticket button.
  *  -selected: displays the layout for a selected ticket.
  *  -isDisabled: displays the layout of a disabled ticket.

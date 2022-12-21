@@ -1,5 +1,5 @@
 /**Button
- * parameters:
+ **Inputs:
  *  --text: passed text that is displayed on the button
  *  --onClick: passed function that is executed when the component is clicked
  *  --active: boolean option that allows to click the button

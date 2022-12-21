@@ -8,9 +8,9 @@ import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../../services/firebase_config'
 
 
-/**EventTile
- * Input:
- * - eventData: EventInterface | null, data that is used for building an EventTile component. 
+/**Function: EventTile
+ **Input:
+ *  -eventData: EventInterface | null, data that is used for building an EventTile component. 
  */
 export default function EventTile({
   eventData

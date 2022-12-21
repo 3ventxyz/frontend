@@ -18,7 +18,13 @@ interface LocationInputProps {
 }
 
 
-/**Move this to input directory components. */
+/**Function: LocationInput 
+ **inputs:
+ *  -labelText: string, text for showing the label above the input.
+ *  -id: string, id for the form
+ *  -placeholder: string, text that shows an example.
+ *  -setLocation: (location:LocationData)=> void, function that sets the location data.
+*/
 export default function LocationInput({
   labelText,
   id,

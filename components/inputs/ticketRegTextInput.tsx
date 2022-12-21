@@ -1,5 +1,17 @@
 // author: marthel
 //TODO (09/17) update this name.
+
+/**
+ *Function: TicketRegTextInput
+ *inputs:
+ * 	-id: string, unique id for the form.
+ * 	-placeholder: string, text hint for using the input.
+ * 	-inputName: string, name of the input.
+ * 	-htmlFor: string, text that sets the html parameter for the form.
+ * 	-labelTitle: string, label text that is displayed above the input.
+ * 	-width?: string (default value: 'w-auto'), tailwindcss class that sets the component's width.
+ * 	-height?: string (default value: 'h-[43px]'), tailwindcss class that sets the component's height.
+ */
 export default function TicketRegTextInput({
 	id,
 	placeholder,

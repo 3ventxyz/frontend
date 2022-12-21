@@ -3,8 +3,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { useState } from 'react'
 
 
-/**FileInput
- * input directory component.
+/**Function: FileInput
+ *
  */
 export default function FileInput() {
   const [file, setFile] = useState<File>()

@@ -1,5 +1,5 @@
-/**ButtonOutlined
- * parameters:
+/**Function: ButtonOutlined
+ * Input:
  *    --text: todo test this component.
  *    --onClick: todo test this component.
  *    --active: todo test this component.
