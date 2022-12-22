@@ -18,12 +18,12 @@ export default function LocalDatePicker() {
     <div className='relative'>
       <input
         onChange={(e) => {setIsActive(!isActive)}}
-        className={`focus:shadow-outline leading-0 block w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
+        className={`focus:shadow-outline leading-0 block z-0 w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
         type="text"
         placeholder={'09/12/2020'}
         disabled={false}
       />
-      <div className={`${isActive?'absolute': 'hidden'} w-[300px] h-[100px] rounded-xl  bg-white`}>
+      <div className={`${isActive?'absolute': 'hidden'} z-10 w-[300px] h-[100px] rounded-xl  bg-white`}>
 
 	  </div>
     </div>
