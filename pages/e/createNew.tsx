@@ -1,8 +1,4 @@
 import React, { useState } from 'react'
-
-import TextInput from '../../components/textInput'
-import { LocationData } from '../../shared/interface/common'
-
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import FirstStepInputs from './components/firstStepInputs'
@@ -16,13 +12,16 @@ import ThirdStepInputs from './components/thirdStepInputs'
 export default function CreateNew() {
   const router = useRouter()
   const auth = useAuth()
-
-  const [eventId, setEventId] = useState<string>('')
-
-  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
-
-  const [errorMsg, setErrorMsg] = useState<string>('')
-  const [errorField, setErrorField] = useState<string>('')
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>([
+    false,
+    false,
+    false
+  ])
+  const [currentSteps, setCurrentSteps] = useState<boolean[]>([
+    true,
+    false,
+    false
+  ])
 
   return (
     <div className="flex w-full justify-center bg-secondaryBg">
@@ -41,14 +40,26 @@ export default function CreateNew() {
       </div>
       <div
         id="create-event-steps"
-        className="fixed right-[460px]  top-[200px] flex  flex-col space-y-5 "
+        className="fixed right-[460px]  top-[200px] flex  flex-col space-y-[10px] "
       >
-        {/* <div>step 1</div>
-        <div>step 2</div>
-        <div>step 3</div> */}
-        <Step />
-        <Step />
-        <Step />
+        <Step
+          num={1}
+          stepInstruction={'Event title, location and date'}
+          currentStep={true}
+          isComplete={false}
+        />
+        <Step
+          num={2}
+          stepInstruction={'Event description and ticket supply'}
+          currentStep={false}
+          isComplete={true}
+        />
+        <Step
+          num={3}
+          stepInstruction={'Event Images'}
+          currentStep={false}
+          isComplete={false}
+        />
       </div>
     </div>
   )
@@ -57,13 +68,33 @@ export default function CreateNew() {
 function Step({
   num,
   stepInstruction,
-  isActive,
+  currentStep,
   isComplete
 }: {
   num?: number
   stepInstruction?: string
-  isActive?: boolean
+  currentStep?: boolean
   isComplete?: boolean
 }) {
-  return <div className="h-[80px] w-[180px] rounded-xl bg-white">step1</div>
+  return isComplete ? (
+    <div
+      className={`flex h-[50px] w-[180px] items-center space-x-[5px] rounded-xl border-[1px] border-[#BABABA]  bg-[#EDEDED] px-[5px] text-[#828282]`}
+    >
+      <div className="flex h-[28px] w-[30px] items-center justify-center rounded-3xl border-[1px] border-[#BABABA] bg-white">
+        {num}
+      </div>
+      <div className="w-[150px]">{stepInstruction}</div>
+    </div>
+  ) : (
+    <div
+      className={`flex h-[50px] w-[180px] items-center space-x-[5px] rounded-xl border-[1px] border-black ${
+        currentStep ? 'bg-[#B6CFFF]' : 'bg-white'
+      } px-[5px]`}
+    >
+      <div className="flex h-[28px] w-[30px] items-center justify-center rounded-3xl border-[1px] border-black bg-white">
+        {num}
+      </div>
+      <div className="w-[150px]">{stepInstruction}</div>
+    </div>
+  )
 }
