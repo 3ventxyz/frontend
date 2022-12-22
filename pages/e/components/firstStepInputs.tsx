@@ -44,7 +44,7 @@ export default function FirstStepInputs() {
             <LocalTimePicker />
           </div>
         </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+        {/* <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             END DATE
           </label>
@@ -52,7 +52,7 @@ export default function FirstStepInputs() {
             <LocalDatePicker />
             <LocalTimePicker />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
