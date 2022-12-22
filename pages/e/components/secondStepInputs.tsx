@@ -10,7 +10,8 @@ export default function SecondStepInputs() {
     <div id="step-2">
       <h4>2.- Description and max attendee cap</h4>
       <hr />
-      <div className="flex flex-col">
+      <br />
+      <div className="flex flex-col space-y-3">
         <TextInput
           textArea={true}
           id={'event_description'}

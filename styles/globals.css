@@ -25,6 +25,16 @@
     @apply text-[20px] font-semibold text-primary;
   }
 
+   /* DatePicker STYLE */
+  #date-picker-input{
+    border: 1px solid;
+    border-color: black;
+    width: 100px;
+    height: 100px;
+    overflow-wrap: break-word;
+  };
+
+
   /* FAQ STYLE */
   details {
     user-select: none;

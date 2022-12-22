@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/auth'
 import FirstStepInputs from './components/firstStepInputs'
 import SecondStepInputs from './components/secondStepInputs'
 import ThirdStepInputs from './components/thirdStepInputs'
+import 'react-datepicker/dist/react-datepicker.css'
 
 /**
  *

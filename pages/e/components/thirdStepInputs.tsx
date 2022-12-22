@@ -21,6 +21,7 @@ export default function ThirdStepInputs() {
     <div id="step-3">
       <h4>3.- Landing portrait and ticket image</h4>
       <hr />
+      <br />
       <div className="flex flex-col">
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
