@@ -6,7 +6,11 @@ import { LocationData } from '../../../shared/interface/common'
 import LocalDatePicker from './datepicker'
 import LocalTimePicker from './timepicker'
 
-export default function FirstStepInputs() {
+export default function FirstStepInputs({
+  isExpanded = true
+}: {
+  isExpanded: boolean
+}) {
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(new Date())
@@ -21,7 +25,11 @@ export default function FirstStepInputs() {
       <h4>1.- Event title, location and date</h4>
       <hr />
       <br />
-      <div className="flex flex-col space-y-3">
+      <div
+        className={`${
+          isExpanded ? 'h-full' : 'h-[0px] '
+        } flex flex-col space-y-3 transition-transform`}
+      >
         <TextInput
           id={'event_name'}
           labelText={'Title'}
