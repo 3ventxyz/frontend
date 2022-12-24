@@ -17,16 +17,15 @@ import {
 import { useState } from 'react'
 
 export default function LocalDatePicker({
-  date,
-  setDate
+  selectedDate,
+  setSelectedDate
 }: {
-  date: Date
-  setDate: (date: Date) => void
+  selectedDate: Date
+  setSelectedDate: (date: Date) => void
 }) {
   let today: Date = startOfToday()
 
   const [isActive, setIsActive] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(today)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   const colStartClasses = [
     '',
@@ -111,7 +110,6 @@ export default function LocalDatePicker({
               S{' '}
             </div>
           </div>
-          {/* <div className="grid grid-cols-7   gap-x-2 gap-y-2"> */}
           <div className={`grid grid-cols-7   gap-x-2 gap-y-2`}>
             {newDays.map((day: Date, dayIdx: number) => {
               return (
@@ -152,14 +150,10 @@ function DayButton({
   return day ? (
     <button
       onClick={() => {
-        /**prop drill for the setDate */
-        console.log(day.toLocaleDateString())
         setSelectedDate(day)
       }}
     >
-      {/* <div className="flex h-[25px] w-[25px] items-center justify-center rounded-lg hover:cursor-pointer hover:bg-sky-200"> */}
       <div
-        // hover:bg-sky-200
         className={`
       flex
       h-[25px]
@@ -168,7 +162,6 @@ function DayButton({
       justify-center 
       rounded-lg 
       hover:cursor-pointer 
-
       ${isEqual(day, selectedDate) && 'text-white'}
       ${!isEqual(day, selectedDate) && isToday(day) && 'text-red-500'}
       ${

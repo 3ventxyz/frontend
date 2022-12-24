@@ -4,15 +4,16 @@ import TextInput from '../../../components/textInput'
 import { LocationData } from '../../../shared/interface/common'
 import LocalDatePicker from './datepicker'
 import LocalTimePicker from './timepicker'
-
+import { startOfToday } from 'date-fns'
 export default function FirstStepInputs({
   isExpanded = true
 }: {
   isExpanded?: boolean
 }) {
+  let today: Date = startOfToday()
   const [title, setTitle] = useState<string>('')
-  const [startDate, setStartDate] = useState<Date>(new Date())
-  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [startDate, setStartDate] = useState<Date>(today)
+  const [endDate, setEndDate] = useState<Date>(today)
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [eventLocation, setEventLocation] = useState<LocationData>({
     address: '',
@@ -47,7 +48,10 @@ export default function FirstStepInputs({
             START DATE
           </label>
           <div className="flex space-x-3">
-            <LocalDatePicker />
+            <LocalDatePicker
+              setSelectedDate={setStartDate}
+              selectedDate={startDate}
+            />
             <LocalTimePicker />
           </div>
         </div>
@@ -56,7 +60,10 @@ export default function FirstStepInputs({
             END DATE
           </label>
           <div className="flex space-x-3">
-            <LocalDatePicker />
+            <LocalDatePicker
+              setSelectedDate={setEndDate}
+              selectedDate={endDate}
+            />
             <LocalTimePicker />
           </div>
         </div>
