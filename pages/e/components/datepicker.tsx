@@ -1,3 +1,10 @@
+import {
+  eachDayOfInterval,
+  startOfToday,
+  endOfMonth,
+  startOfMonth,
+  format
+} from 'date-fns'
 import { useState } from 'react'
 
 export default function LocalDatePicker() {
@@ -19,6 +26,13 @@ export default function LocalDatePicker() {
   const setDay = () => {}
   const nextPage = () => {}
   const prevPage = () => {}
+
+  let today: any = startOfToday()
+
+  let newDays: any = eachDayOfInterval({
+    start: startOfMonth(today),
+    end: endOfMonth(today)
+  })
   return (
     <div className="relative">
       <input
@@ -38,57 +52,49 @@ export default function LocalDatePicker() {
       >
         <div className="flex justify-evenly">
           <div className="hover:cursor-pointer">{'<'}</div>
-          <div>{'September'}</div>
-          <div>{'2022'}</div>
+          {/* <div>{'September'}</div>
+          <div>{'2022'}</div> */}
+          <div>{format(today, 'MMM yyyy')}</div>
           <div className="hover:cursor-pointer">{'>'}</div>
         </div>
         <div id="calendar" className="flex flex-col items-center space-y-2">
           <div id="row-1" className="flex space-x-3">
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>S </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>M </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>T </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>W </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>T </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>F </div>
-            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>S </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              S{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              M{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              T{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              W{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              T{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              F{' '}
+            </div>
+            <div className="flex h-[25px] w-[25px] items-center justify-center font-bold">
+              S{' '}
+            </div>
           </div>
-          {/* add here the grid in tailwindcss */}
           <div className="grid grid-cols-7  grid-rows-5 gap-x-3 gap-y-3">
-            <DayButton day={1} />
-            <DayButton day={2} />
-            <DayButton day={3} />
-            <DayButton day={4} />
-            <DayButton day={5} />
-            <DayButton day={6} />
-            <DayButton day={7} />
-            <DayButton day={8} />
-            <DayButton day={9} />
-            <DayButton day={10} />
-            <DayButton day={11} />
-            <DayButton day={12} />
-            <DayButton day={13} />
-            <DayButton day={14} />
-            <DayButton day={15} />
-            <DayButton day={16} />
-            <DayButton day={17} />
-            <DayButton day={18} />
-            <DayButton day={19} />
-            <DayButton day={20} />
-            <DayButton day={21} />
-            <DayButton day={22} />
-            <DayButton day={23} />
-            <DayButton day={24} />
-            <DayButton day={25} />
-            <DayButton day={26} />
-            <DayButton day={27} />
-            <DayButton day={28} />
-            <DayButton day={29} />
-            <DayButton day={30} />
-            <DayButton day={31} />
-            <DayButton />
-            <DayButton />
-            <DayButton />
-            <DayButton />
+            {newDays.map((day: any, dayIdx: any) => {
+              return (
+                <div key={day.toString()}>
+                  <button
+                    onClick={() => {
+                      console.log(day.toLocaleDateString())
+                    }}
+                  >
+                    <DayButton day={dayIdx + 1} />
+                  </button>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

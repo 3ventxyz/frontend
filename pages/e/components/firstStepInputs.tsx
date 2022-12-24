@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import DatePicker from 'react-datepicker'
 import LocationInput from '../../../components/locationInput'
 import TextInput from '../../../components/textInput'
 import { LocationData } from '../../../shared/interface/common'
