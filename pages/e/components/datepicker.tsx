@@ -14,33 +14,28 @@ import {
   sub,
   getDay
 } from 'date-fns'
-// import { parse } from 'node:path/win32'
 import { useState } from 'react'
 
-export default function LocalDatePicker() {
-  /**TODO
-   * Build a datepicker component with tailwindcss, where it displays the just a text input. Which
-   * will work like a button.
-   * when clicked on, it will show a modal component below it with a calendar to display the text.(DONE)
-   * When the user clicks a date on it, it will select the date and the modal component will close and the input
-   * will be updated with the new selected date.
-   * 		Also when the user selects a date, the date picker will have a time stamp created.This timestamp will be
-   * used and merged with the timestamp from the timepicker.There must be a way to merge or update the same timestamp variable.
-   * one with date and the other with a time.
-   */
+export default function LocalDatePicker({
+  date,
+  setDate
+}: {
+  date: Date
+  setDate: (date: Date) => void
+}) {
   let today: Date = startOfToday()
 
   const [isActive, setIsActive] = useState(false)
   const [selectedDate, setSelectedDate] = useState(today)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   const colStartClasses = [
-    '', //sun
-    'col-start-2', //mon
-    'col-start-3', //tues
-    'col-start-4', //wed
-    'col-start-5', //thurs
-    'col-start-6', //fri
-    'col-start-7' //sat
+    '',
+    'col-start-2',
+    'col-start-3',
+    'col-start-4',
+    'col-start-5',
+    'col-start-6',
+    'col-start-7'
   ]
 
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
@@ -66,7 +61,7 @@ export default function LocalDatePicker() {
         }}
         className={`focus:shadow-outline leading-0 z-0 block w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
         type="text"
-        placeholder={'09/12/2020'}
+        placeholder={format(selectedDate, 'dd/MM/yyyy')}
         disabled={false}
       />
       <div
@@ -120,7 +115,10 @@ export default function LocalDatePicker() {
           <div className={`grid grid-cols-7   gap-x-2 gap-y-2`}>
             {newDays.map((day: Date, dayIdx: number) => {
               return (
-                <div key={day.toString()} className={`${dayIdx===0 && colStartClasses[getDay(day)]}`}>
+                <div
+                  key={day.toString()}
+                  className={`${dayIdx === 0 && colStartClasses[getDay(day)]}`}
+                >
                   <DayButton
                     day={day}
                     today={today}
@@ -146,8 +144,8 @@ function DayButton({
   setSelectedDate
 }: {
   day?: Date | null
-  today: Date,
-  firstDayCurrentMonth:Date,
+  today: Date
+  firstDayCurrentMonth: Date
   selectedDate: Date
   setSelectedDate: (day: Date) => void
 }) {
