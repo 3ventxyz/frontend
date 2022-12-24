@@ -34,6 +34,7 @@
     "@types/react-datetime-picker": "^3.4.1",
     "@types/react-places-autocomplete": "^7.2.9",
     "axios": "^0.27.2",
+    "date-fns": "^2.29.3",
     "ethers": "^5.7.0",
     "firebase": "^9.9.2",
     "firebase-tools": "^11.16.1",

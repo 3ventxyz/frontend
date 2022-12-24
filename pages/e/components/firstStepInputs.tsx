@@ -9,7 +9,7 @@ import LocalTimePicker from './timepicker'
 export default function FirstStepInputs({
   isExpanded = true
 }: {
-  isExpanded: boolean
+  isExpanded?: boolean
 }) {
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(new Date())

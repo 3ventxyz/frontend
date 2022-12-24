@@ -12,7 +12,13 @@ export default function LocalDatePicker() {
    * one with date and the other with a time.
    */
   const [isActive, setIsActive] = useState(false)
-  const [date, setDate] = useState({})
+  const [date, setDate] = useState(new Date())
+
+  const setMonth = () => {}
+  const setYear = () => {}
+  const setDay = () => {}
+  const nextPage = () => {}
+  const prevPage = () => {}
   return (
     <div className="relative">
       <input
@@ -28,7 +34,7 @@ export default function LocalDatePicker() {
       <div
         className={`${
           isActive ? 'absolute' : 'hidden'
-        } z-10 h-[220px] w-[300px] rounded-xl  bg-white`}
+        } z-10 h-[240px] w-[280px] rounded-xl  bg-white`}
       >
         <div className="flex justify-evenly">
           <div className="hover:cursor-pointer">{'<'}</div>
@@ -38,15 +44,16 @@ export default function LocalDatePicker() {
         </div>
         <div id="calendar" className="flex flex-col items-center space-y-2">
           <div id="row-1" className="flex space-x-3">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>S </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>M </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>T </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>W </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>T </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>F </div>
+            <div className='h-[25px] w-[25px] flex items-center justify-center font-bold'>S </div>
           </div>
-          <div id="row-2" className="flex space-x-3">
+          {/* add here the grid in tailwindcss */}
+          <div className="grid grid-cols-7  grid-rows-5 gap-x-3 gap-y-3">
             <DayButton day={1} />
             <DayButton day={2} />
             <DayButton day={3} />
@@ -54,8 +61,6 @@ export default function LocalDatePicker() {
             <DayButton day={5} />
             <DayButton day={6} />
             <DayButton day={7} />
-          </div>
-          <div id="row-3" className="flex space-x-3">
             <DayButton day={8} />
             <DayButton day={9} />
             <DayButton day={10} />
@@ -63,8 +68,6 @@ export default function LocalDatePicker() {
             <DayButton day={12} />
             <DayButton day={13} />
             <DayButton day={14} />
-          </div>
-          <div id="row-4" className="flex space-x-3">
             <DayButton day={15} />
             <DayButton day={16} />
             <DayButton day={17} />
@@ -72,8 +75,6 @@ export default function LocalDatePicker() {
             <DayButton day={19} />
             <DayButton day={20} />
             <DayButton day={21} />
-          </div>
-          <div id="row-5" className="flex space-x-3">
             <DayButton day={22} />
             <DayButton day={23} />
             <DayButton day={24} />
@@ -81,8 +82,6 @@ export default function LocalDatePicker() {
             <DayButton day={26} />
             <DayButton day={27} />
             <DayButton day={28} />
-          </div>
-          <div id="row-5" className="flex space-x-3">
             <DayButton day={29} />
             <DayButton day={30} />
             <DayButton day={31} />

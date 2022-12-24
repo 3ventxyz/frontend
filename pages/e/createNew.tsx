@@ -10,6 +10,9 @@ import 'react-datepicker/dist/react-datepicker.css'
  *
  * check the figma
  */
+
+interface CreateNewEventInterface {}
+
 export default function CreateNew() {
   const router = useRouter()
   const auth = useAuth()
@@ -33,7 +36,10 @@ export default function CreateNew() {
         </div>
         <div id="create-event-form" className="flex">
           <div className="flex flex-col space-y-10">
-            <FirstStepInputs />
+            {/** bring back the inputs from these steps components
+             * and
+             */}
+            <FirstStepInputs isExpanded={true} />
             <SecondStepInputs />
             <ThirdStepInputs />
           </div>
