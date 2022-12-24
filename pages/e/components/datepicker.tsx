@@ -8,8 +8,13 @@ import {
   startOfWeek,
   isEqual,
   isToday,
-  isSameMonth
+  isSameMonth,
+  parse,
+  add,
+  sub,
+  getDay
 } from 'date-fns'
+// import { parse } from 'node:path/win32'
 import { useState } from 'react'
 
 export default function LocalDatePicker() {
@@ -25,17 +30,32 @@ export default function LocalDatePicker() {
    */
   let today: Date = startOfToday()
 
-  let newDays: Date[] = eachDayOfInterval({
-    start: startOfWeek(startOfMonth(today)),
-    end: endOfWeek(endOfMonth(today))
-  })
   const [isActive, setIsActive] = useState(false)
   const [selectedDate, setSelectedDate] = useState(today)
+  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+  const colStartClasses = [
+    '', //sun
+    'col-start-2', //mon
+    'col-start-3', //tues
+    'col-start-4', //wed
+    'col-start-5', //thurs
+    'col-start-6', //fri
+    'col-start-7' //sat
+  ]
 
-  const setMonth = () => {}
-  const setYear = () => {}
-  const nextMonth = () => {}
-  const prevMonth = () => {}
+  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
+  let newDays: Date[] = eachDayOfInterval({
+    start: startOfWeek(startOfMonth(firstDayCurrentMonth)),
+    end: endOfWeek(endOfMonth(firstDayCurrentMonth))
+  })
+  const nextMonth = () => {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+  }
+  const prevMonth = () => {
+    let firstDayPrevMonth = sub(firstDayCurrentMonth, { months: 1 })
+    setCurrentMonth(format(firstDayPrevMonth, 'MMM-yyyy'))
+  }
 
   return (
     <div className="relative">
@@ -55,9 +75,21 @@ export default function LocalDatePicker() {
         } z-10 h-auto w-[260px] rounded-xl bg-white  py-[5px]`}
       >
         <div className="flex justify-evenly">
-          <div className="hover:cursor-pointer">{'<'}</div>
-          <div>{format(today, 'MMM yyyy')}</div>
-          <div className="hover:cursor-pointer">{'>'}</div>
+          <button
+            onClick={() => {
+              prevMonth()
+            }}
+          >
+            {'<'}
+          </button>
+          <div>{format(firstDayCurrentMonth, 'MMM yyyy')}</div>
+          <button
+            onClick={() => {
+              nextMonth()
+            }}
+          >
+            {'>'}
+          </button>
         </div>
         <hr />
         <div id="calendar" className="flex flex-col items-center space-y-2">
@@ -84,13 +116,15 @@ export default function LocalDatePicker() {
               S{' '}
             </div>
           </div>
-          <div className="grid grid-cols-7   gap-x-2 gap-y-2">
+          {/* <div className="grid grid-cols-7   gap-x-2 gap-y-2"> */}
+          <div className={`grid grid-cols-7   gap-x-2 gap-y-2`}>
             {newDays.map((day: Date, dayIdx: number) => {
               return (
-                <div key={day.toString()}>
+                <div key={day.toString()} className={`${dayIdx===0 && colStartClasses[getDay(day)]}`}>
                   <DayButton
                     day={day}
                     today={today}
+                    firstDayCurrentMonth={firstDayCurrentMonth}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                   />
@@ -107,11 +141,13 @@ export default function LocalDatePicker() {
 function DayButton({
   day,
   today,
+  firstDayCurrentMonth,
   selectedDate,
   setSelectedDate
 }: {
   day?: Date | null
-  today: Date
+  today: Date,
+  firstDayCurrentMonth:Date,
   selectedDate: Date
   setSelectedDate: (day: Date) => void
 }) {
@@ -140,13 +176,13 @@ function DayButton({
       ${
         !isEqual(day, selectedDate) &&
         !isToday(day) &&
-        isSameMonth(day, today) &&
+        isSameMonth(day, firstDayCurrentMonth) &&
         'text-gray-900'
       }
       ${
         !isEqual(day, selectedDate) &&
         !isToday(day) &&
-        !isSameMonth(day, today) &&
+        !isSameMonth(day, firstDayCurrentMonth) &&
         'text-gray-400'
       }
       ${isEqual(day, selectedDate) && isToday(day) && 'bg-red-500'}
