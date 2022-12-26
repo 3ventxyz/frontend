@@ -20,6 +20,9 @@ export default function FirstStepInputs({
     lat: 0,
     long: 0
   })
+
+
+
   return (
     <div id="step-1">
       <h4>1.- Event title, location and date</h4>
@@ -43,7 +46,7 @@ export default function FirstStepInputs({
           placeholder={''}
           setLocation={setEventLocation}
         /> */}
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+        {/* <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             START DATE
           </label>
@@ -57,8 +60,8 @@ export default function FirstStepInputs({
               selectedDate={startDate}
             />
           </div>
-        </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+        </div> */}
+        {/* <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             END DATE
           </label>
@@ -71,7 +74,7 @@ export default function FirstStepInputs({
             setSelectedDate={setEndDate}
             selectedDate={endDate}/>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

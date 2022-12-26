@@ -18,14 +18,18 @@ import { useState } from 'react'
 
 export default function LocalDatePicker({
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
+  isDropDownActive,
+  setIsDropDownActive
 }: {
   selectedDate: Date
   setSelectedDate: (date: Date) => void
+  isDropDownActive: boolean
+  setIsDropDownActive: (bool: boolean) => void
 }) {
   let today: Date = startOfToday()
 
-  const [isActive, setIsActive] = useState(false)
+  // const [isActive, setIsActive] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   const colStartClasses = [
     '',
@@ -56,7 +60,9 @@ export default function LocalDatePicker({
       <input
         onClick={(e) => {
           /** pass the div from the outside place and update */
-          setIsActive(!isActive)
+          // setIsActive(!isActive)
+
+          setIsDropDownActive(!isDropDownActive)
         }}
         className={`focus:shadow-outline leading-0 z-0 block w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
         type="text"
@@ -65,7 +71,7 @@ export default function LocalDatePicker({
       />
       <div
         className={`${
-          isActive ? 'absolute' : 'hidden'
+          isDropDownActive ? 'absolute' : 'hidden'
         } z-10 h-auto w-[260px] rounded-xl bg-white  py-[5px] shadow-lg`}
       >
         <div className="flex justify-evenly">
@@ -116,6 +122,9 @@ export default function LocalDatePicker({
                 <div
                   key={day.toString()}
                   className={`${dayIdx === 0 && colStartClasses[getDay(day)]}`}
+                  onClick={() => {
+                    setIsDropDownActive(false)
+                  }}
                 >
                   <DayButton
                     day={day}

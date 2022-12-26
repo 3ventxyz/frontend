@@ -5,6 +5,11 @@ import FirstStepInputs from './components/firstStepInputs'
 import SecondStepInputs from './components/secondStepInputs'
 import ThirdStepInputs from './components/thirdStepInputs'
 import 'react-datepicker/dist/react-datepicker.css'
+import { startOfToday } from 'date-fns'
+import { LocationData } from '../../shared/interface/common'
+import TextInput from '../../components/textInput'
+import LocalDatePicker from './components/datepicker'
+import LocalTimePicker from './components/timepicker'
 
 /**
  *
@@ -16,6 +21,20 @@ interface CreateNewEventInterface {}
 export default function CreateNew() {
   const router = useRouter()
   const auth = useAuth()
+
+  let today: Date = startOfToday()
+  const [title, setTitle] = useState<string>('')
+  const [startDate, setStartDate] = useState<Date>(today)
+  const [endDate, setEndDate] = useState<Date>(today)
+  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
+  const [eventLocation, setEventLocation] = useState<LocationData>({
+    address: '',
+    lat: 0,
+    long: 0
+  })
+
+  // UI setStates
+
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([
     false,
     false,
@@ -27,8 +46,34 @@ export default function CreateNew() {
     false
   ])
 
+  const [isStartDateDropdownVisible, setIsStartDateDropdownVisible] =
+    useState(false)
+  const [isStartTimeDropdownVisible, setIsStartTimeDropdownVisible] =
+    useState(false)
+  const [isEndDateDropdownVisible, setIsEndDateDropdownVisible] =
+    useState(false)
+  const [isEndTimeDropdownVisible, setIsEndTimeDropdownVisible] =
+    useState(false)
+
+  const onClose = () => {
+    if (isStartDateDropdownVisible) {
+      setIsStartDateDropdownVisible(false)
+    }
+    if (isStartTimeDropdownVisible) {
+      setIsStartTimeDropdownVisible(false)
+    }
+    if (isEndDateDropdownVisible) {
+      setIsEndDateDropdownVisible(false)
+    }
+    if (isEndTimeDropdownVisible) {
+      setIsEndTimeDropdownVisible(false)
+    }
+  }
   return (
-    <div className="flex w-full justify-center bg-secondaryBg">
+    <div
+      onClick={onClose}
+      className="flex w-full justify-center bg-secondaryBg"
+    >
       <div className="w-full max-w-[600px] space-y-10 pt-[60px] pb-[200px] ">
         <div>
           <h3>Create Event</h3>
@@ -39,13 +84,77 @@ export default function CreateNew() {
             {/** bring back the inputs from these steps components
              * and
              */}
-            <FirstStepInputs isExpanded={true} />
+            {/* <FirstStepInputs isExpanded={true} /> */}
+
+            <div id="step-1">
+              <h4>1.- Event title, location and date</h4>
+              <hr />
+              <br />
+              <div
+                className={`${
+                  currentSteps[0] ? 'h-full' : 'h-[0px] '
+                } flex flex-col space-y-3 transition-transform`}
+              >
+                <TextInput
+                  id={'event_name'}
+                  labelText={'Title'}
+                  placeholder={''}
+                  setValue={setTitle}
+                  isDisabled={isCreatingNewEvent}
+                />
+                {/* <LocationInput
+          labelText={'Location*'}
+          id={'event_location'}
+          placeholder={''}
+          setLocation={setEventLocation}
+        /> */}
+                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    START DATE
+                  </label>
+                  <div className="flex space-x-3">
+                    <LocalDatePicker
+                      setSelectedDate={setStartDate}
+                      selectedDate={startDate}
+                      isDropDownActive={isStartDateDropdownVisible}
+                      setIsDropDownActive={setIsStartDateDropdownVisible}
+                    />
+                    <LocalTimePicker
+                      setSelectedDate={setStartDate}
+                      selectedDate={startDate}
+                      isDropDownActive={isStartTimeDropdownVisible}
+                      setIsDropDownActive={setIsStartTimeDropdownVisible}
+                    />
+                  </div>
+                </div>
+                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    END DATE
+                  </label>
+                  <div className="flex space-x-3">
+                    <LocalDatePicker
+                      setSelectedDate={setEndDate}
+                      selectedDate={endDate}
+                      isDropDownActive={isEndDateDropdownVisible}
+                      setIsDropDownActive={setIsEndDateDropdownVisible}
+                    />
+                    <LocalTimePicker
+                      setSelectedDate={setEndDate}
+                      selectedDate={endDate}
+                      isDropDownActive={isEndTimeDropdownVisible}
+                      setIsDropDownActive={setIsEndTimeDropdownVisible}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <SecondStepInputs />
             <ThirdStepInputs />
           </div>
         </div>
       </div>
-      <div
+
+      {/* <div
         id="create-event-steps"
         className="fixed right-[460px]  top-[200px] flex  flex-col space-y-[10px] "
       >
@@ -67,7 +176,7 @@ export default function CreateNew() {
           currentStep={false}
           isComplete={false}
         />
-      </div>
+      </div> */}
     </div>
   )
 }
