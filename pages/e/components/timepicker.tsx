@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { format, set } from 'date-fns'
 
 export default function LocalTimePicker() {
   /**similar to the datepicker, this will display an input with a default time value.
@@ -8,8 +9,16 @@ export default function LocalTimePicker() {
 
   const [isActive, setIsActive] = useState(false)
   const [date, setDate] = useState({})
+  const today = new Date()
 
   const setTime = () => {}
+
+  const formatTimeButton = (num: number) => {
+    if (num >= 0 && num <= 11) {
+      return
+    } else {
+    }
+  }
 
   return (
     <div>
@@ -24,16 +33,24 @@ export default function LocalTimePicker() {
         disabled={false}
       />
       <div
-      id="timepicker-dropdown"
+        id="timepicker-dropdown"
         className={`${
           isActive ? 'absolute' : 'hidden'
-        } z-10 flex h-[250px]  w-[100px] flex-col flex-nowrap items-start space-y-3 overflow-y-auto rounded-xl bg-white pt-3 shadow-lg`}
+        } sflex-nowrap z-10 flex  h-[250px] w-[100px] flex-col items-start space-y-3 overflow-y-auto rounded-xl bg-white pt-3 shadow-lg`}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((el, index) => {
+        {[...Array(24).keys()].map((el, index) => {
+          const time = set(today, { hours: index, minutes: 0 })
+
           return (
-            <div className="hover:bg-sky-300 w-full h-full">
+            <div className="h-full w-full hover:bg-sky-300">
               <div>
-                <button>{index}:00 AM</button>
+                <button
+                  onClick={() => {
+                    formatTimeButton(index)
+                  }}
+                >
+                  {format(time, 'hh:mm a')}
+                </button>
               </div>
             </div>
           )
