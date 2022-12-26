@@ -66,7 +66,7 @@ export default function LocalDatePicker({
       <div
         className={`${
           isActive ? 'absolute' : 'hidden'
-        } z-10 h-auto w-[260px] rounded-xl bg-white  py-[5px]`}
+        } z-10 h-auto w-[260px] rounded-xl bg-white  py-[5px] shadow-lg`}
       >
         <div className="flex justify-evenly">
           <button
