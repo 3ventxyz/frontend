@@ -60,7 +60,7 @@ export default function LocalDatePicker({
         }}
         className={`focus:shadow-outline leading-0 z-0 block w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
         type="text"
-        placeholder={format(selectedDate, 'dd/MM/yyyy')}
+        placeholder={format(selectedDate, 'MM/dd/yyyy')}
         disabled={false}
       />
       <div

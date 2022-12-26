@@ -52,7 +52,10 @@ export default function FirstStepInputs({
               setSelectedDate={setStartDate}
               selectedDate={startDate}
             />
-            <LocalTimePicker />
+            <LocalTimePicker
+              setSelectedDate={setStartDate}
+              selectedDate={startDate}
+            />
           </div>
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -64,7 +67,9 @@ export default function FirstStepInputs({
               setSelectedDate={setEndDate}
               selectedDate={endDate}
             />
-            <LocalTimePicker />
+            <LocalTimePicker 
+            setSelectedDate={setEndDate}
+            selectedDate={endDate}/>
           </div>
         </div>
       </div>
