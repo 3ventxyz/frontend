@@ -43,7 +43,7 @@ export default function LocalTimePicker({
           const selectedTime = set(selectedDate, { hours: index, minutes: 0 })
 
           return (
-            <div className="h-full w-full hover:bg-sky-300">
+            <div key={index} className="h-full w-full hover:bg-sky-300">
               <div>
                 <button
                   onClick={() => {

@@ -10,6 +10,8 @@ import { LocationData } from '../../shared/interface/common'
 import TextInput from '../../components/textInput'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
+import LocationInput from '../../components/locationInput'
+import EventLocationMap from './components/eventLocationMap'
 
 /**
  *
@@ -102,12 +104,13 @@ export default function CreateNew() {
                   setValue={setTitle}
                   isDisabled={isCreatingNewEvent}
                 />
-                {/* <LocationInput
-          labelText={'Location*'}
-          id={'event_location'}
-          placeholder={''}
-          setLocation={setEventLocation}
-        /> */}
+                <LocationInput
+                  labelText={'Location*'}
+                  id={'event_location'}
+                  placeholder={''}
+                  setLocation={setEventLocation}
+                />
+                <EventLocationMap lat={eventLocation.lat} long={eventLocation.long}/>
                 <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
                     START DATE
