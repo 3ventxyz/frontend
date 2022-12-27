@@ -10,7 +10,7 @@ export default function CreateEventStepsDisplay() {
   return (
     <div
       id="create-event-steps"
-      className="fixed right-[460px]  top-[200px] flex  flex-col space-y-[10px] "
+      className="static flex flex-col space-y-[10px] "
     >
       <Step
         num={1}

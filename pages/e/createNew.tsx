@@ -31,6 +31,7 @@ export default function CreateNew() {
     lat: 0,
     long: 0
   })
+
   const [eventDescription, setEventDescription] = useState<string>('')
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [fileImg, setFileImg] = useState<File | null>(null)
@@ -62,15 +63,14 @@ export default function CreateNew() {
   const togglePredefinedTicketImagesMenu = () => {
     setDisplayPredefinedTicketImgsMenu(!displayPredefinedTicketImgsMenu)
   }
+
   const nextPage = () => {
-    /** add the incrementer for the next button */
     page = currentPage
     page++
     setCurrentPage(page)
   }
 
   const prevPage = () => {
-    /** add the decrementer for the prev button */
     page = currentPage
     page--
     setCurrentPage(page)
@@ -88,8 +88,8 @@ export default function CreateNew() {
           <h3>Create Event</h3>
           <hr />
         </div>
-        <div id="create-event-form" className="flex">
-          <div className="flex flex-col space-y-10">
+        <div id="create-event-form" className="flex space-x-5 ">
+          <div className="flex max-w-[400px] flex-col space-y-10">
             <div id="step-1">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -257,6 +257,8 @@ export default function CreateNew() {
               </div>
             </div>
           </div>
+
+          <CreateEventStepsDisplay />
         </div>
 
         <div className="flex w-full justify-between">
@@ -277,7 +279,6 @@ export default function CreateNew() {
           />
         </div>
       </div>
-      <CreateEventStepsDisplay />
     </div>
   )
 }
