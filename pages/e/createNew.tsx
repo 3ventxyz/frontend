@@ -13,11 +13,13 @@ import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import FileImageInput from '../../components/fileImageInput'
 import PredefinedEventPictures from './components/predefinedEventPictures'
 import LandingPortraitImageInput from '../../components/landingPortraitImageInput'
+import Button from '../../components/button'
 
 export default function CreateNew() {
   const router = useRouter()
   const auth = useAuth()
   let today: Date = startOfToday()
+  let page: number = 0
 
   /**input data UI setStates */
   const [title, setTitle] = useState<string>('')
@@ -44,25 +46,38 @@ export default function CreateNew() {
     useState(false)
   const [isEndTimeDropdownVisible, setIsEndTimeDropdownVisible] =
     useState(false)
-  const [currentSteps, setCurrentSteps] = useState<boolean[]>([
-    true,
-    false,
-    false
-  ])
   const [displayPredefinedTicketImgsMenu, setDisplayPredefinedTicketImgsMenu] =
     useState(false)
   const [
     displayPredefinedLandingImgsMenu,
     setDisplayPredefinedLandingImgsMenu
   ] = useState(false)
+  const [currentPage, setCurrentPage] = useState<number>(page)
 
-  /**toogle functions */
+  /**functions */
   const togglePredefinedLandingImagesMenu = () => {
     setDisplayPredefinedLandingImgsMenu(!displayPredefinedLandingImgsMenu)
   }
 
   const togglePredefinedTicketImagesMenu = () => {
     setDisplayPredefinedTicketImgsMenu(!displayPredefinedTicketImgsMenu)
+  }
+  const nextPage = () => {
+    /** add the incrementer for the next button */
+    page = currentPage
+    page++
+    setCurrentPage(page)
+  }
+
+  const prevPage = () => {
+    /** add the decrementer for the prev button */
+    page = currentPage
+    page--
+    setCurrentPage(page)
+  }
+
+  const submitData = () => {
+    /** logic for the submit button, for uploading the info to the 3vent database */
   }
 
   /**HTML code */
@@ -81,7 +96,7 @@ export default function CreateNew() {
               <br />
               <div
                 className={`${
-                  currentSteps[0] ? 'h-full' : 'h-[0px] '
+                  currentPage == 0 ? 'h-full' : 'hidden h-[0px]'
                 } flex flex-col space-y-3 transition-transform`}
               >
                 <TextInput
@@ -145,7 +160,11 @@ export default function CreateNew() {
               <h4>2.- Description and max attendee cap</h4>
               <hr />
               <br />
-              <div className="flex flex-col space-y-3">
+              <div
+                className={`${
+                  currentPage == 1 ? 'h-full' : 'hidden h-[0px]'
+                } flex flex-col space-y-3`}
+              >
                 <TextInput
                   textArea={true}
                   id={'event_description'}
@@ -180,58 +199,85 @@ export default function CreateNew() {
               <h4>3.- Landing portrait and ticket image</h4>
               <hr />
               <br />
-              <div className="flex w-full justify-evenly">
-                <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                  Landing Portrait Image
-                </label>
-                <span
-                  onClick={togglePredefinedLandingImagesMenu}
-                  className="hover:cursor-pointer hover:underline"
-                >
-                  predefined images
-                </span>
-              </div>
-              <div className="flex">
-                <LandingPortraitImageInput title={title} />
-              </div>
-              <div className="flex flex-col">
-                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                  <div className="flex w-full justify-between ">
+              <div
+                className={`${
+                  currentPage == 2 ? 'h-full' : 'hidden h-[0px]'
+                }flex flex-col`}
+              >
+                <div>
+                  <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                    <div className="flex w-full justify-between ">
+                      <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                        Ticket Event Image
+                      </label>
+                      <span
+                        onClick={togglePredefinedTicketImagesMenu}
+                        className="hover:cursor-pointer hover:underline"
+                      >
+                        Predefined Images
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <FileImageInput
+                        fileImg={fileImg}
+                        setFileImg={setFileImg}
+                        imgUrlTemplate={selectedPredefinedEventImgUrl}
+                      />
+                      {fileImg === null && displayPredefinedTicketImgsMenu ? (
+                        <div className="static  ">
+                          <PredefinedEventPictures
+                            setSelectedPredefinedEventImgUrl={
+                              setSelectedPredefinedEventImgUrl
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <div className="flex w-full justify-evenly">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                      Ticket Event Image
+                      Landing Portrait Image
                     </label>
                     <span
-                      onClick={togglePredefinedTicketImagesMenu}
+                      onClick={togglePredefinedLandingImagesMenu}
                       className="hover:cursor-pointer hover:underline"
                     >
                       predefined images
                     </span>
                   </div>
-                  <div className="flex items-center">
-                    <FileImageInput
-                      fileImg={fileImg}
-                      setFileImg={setFileImg}
-                      imgUrlTemplate={selectedPredefinedEventImgUrl}
-                    />
-                    {fileImg === null && displayPredefinedTicketImgsMenu ? (
-                      <div className="static  ">
-                        <PredefinedEventPictures
-                          setSelectedPredefinedEventImgUrl={
-                            setSelectedPredefinedEventImgUrl
-                          }
-                        />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
+                  <div className="flex">
+                    <LandingPortraitImageInput title={title} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div className="flex w-full justify-between">
+          {/* button for pagination and submit newly created event. */}
+          <Button
+            text={'Prev'}
+            active={currentPage > 0 ? true : false}
+            onClick={() => {
+              prevPage()
+            }}
+          />
+          <Button
+            text={'Next'}
+            active={currentPage < 2 ? true : false}
+            onClick={() => {
+              nextPage()
+            }}
+          />
+        </div>
       </div>
-      {/* <CreateEventStepsDisplay /> */}
+      <CreateEventStepsDisplay />
     </div>
   )
 }
