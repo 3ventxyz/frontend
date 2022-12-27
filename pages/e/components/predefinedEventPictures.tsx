@@ -1,6 +1,5 @@
-import PredefinedImageOption from './predefinedImageOption'
 import { useState } from 'react'
-
+import Image from 'next/image'
 export default function PredefinedEventPictures({
   setSelectedPredefinedEventImgUrl
 }: {
@@ -22,11 +21,11 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return (
-    <div>
-      <h4 className="w-full">
+    <div className="w-[300px] rounded-3xl bg-white px-[15px] py-[5px]">
+      <h4 className="">
         <span>predefined images</span>
       </h4>
-      <div className="flex flex-col items-center space-y-2">
+      <div className="  flex flex-col items-center space-y-2">
         <p>
           In case that you don&apos;t have an image for your event. Please
           select one of the pictures that we offer.
@@ -65,5 +64,44 @@ export default function PredefinedEventPictures({
         </div>
       </div>
     </div>
+  )
+}
+
+function PredefinedImageOption({
+  setSelectedPredefinedImgIndex,
+  setSelectedPredefinedEventImgUrl,
+  selectedPredefinedImgIndex,
+  imgIndex,
+  predefinedImgUrl
+}: {
+  setSelectedPredefinedImgIndex: (selectedPredefinedImgIndex: number) => void
+  setSelectedPredefinedEventImgUrl: (predefinedImgUrl: string) => void
+  imgIndex: number
+  selectedPredefinedImgIndex: number
+  predefinedImgUrl: string
+}) {
+  return (
+    <button
+      onClick={() => {
+        setSelectedPredefinedImgIndex(imgIndex)
+        setSelectedPredefinedEventImgUrl(predefinedImgUrl)
+      }}
+    >
+      <div
+        className={`relative h-[120px] w-[120px] rounded-3xl   ${
+          selectedPredefinedImgIndex === imgIndex
+            ? 'border-[3px] border-blue-600'
+            : ''
+        }`}
+      >
+        <Image
+          src={predefinedImgUrl}
+          layout="fill"
+          loading="lazy"
+          objectFit="cover"
+          className="rounded-3xl"
+        />
+      </div>
+    </button>
   )
 }

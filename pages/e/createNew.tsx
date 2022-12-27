@@ -10,7 +10,6 @@ import LocalTimePicker from './components/timepicker'
 import LocationInput from '../../components/locationInput'
 import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
-import PredefinedImageOption from './components/predefinedImageOption'
 import FileImageInput from '../../components/fileImageInput'
 import PredefinedEventPictures from './components/predefinedEventPictures'
 import LandingPortraitImageInput from '../../components/landingPortraitImageInput'
@@ -50,6 +49,21 @@ export default function CreateNew() {
     false,
     false
   ])
+  const [displayPredefinedTicketImgsMenu, setDisplayPredefinedTicketImgsMenu] =
+    useState(false)
+  const [
+    displayPredefinedLandingImgsMenu,
+    setDisplayPredefinedLandingImgsMenu
+  ] = useState(false)
+
+  /**toogle functions */
+  const togglePredefinedLandingImagesMenu = () => {
+    setDisplayPredefinedLandingImgsMenu(!displayPredefinedLandingImgsMenu)
+  }
+
+  const togglePredefinedTicketImagesMenu = () => {
+    setDisplayPredefinedTicketImgsMenu(!displayPredefinedTicketImgsMenu)
+  }
 
   /**HTML code */
   return (
@@ -170,33 +184,47 @@ export default function CreateNew() {
                 <label className="mb-2 block text-sm font-medium text-gray-900 ">
                   Landing Portrait Image
                 </label>
-                <span>predefined images</span>
+                <span
+                  onClick={togglePredefinedLandingImagesMenu}
+                  className="hover:cursor-pointer hover:underline"
+                >
+                  predefined images
+                </span>
               </div>
-              <div>
+              <div className="flex">
                 <LandingPortraitImageInput title={title} />
               </div>
               <div className="flex flex-col">
                 <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                  <div className="flex w-full justify-evenly ">
+                  <div className="flex w-full justify-between ">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       Ticket Event Image
                     </label>
-                    <span>predefined images</span>
+                    <span
+                      onClick={togglePredefinedTicketImagesMenu}
+                      className="hover:cursor-pointer hover:underline"
+                    >
+                      predefined images
+                    </span>
                   </div>
-                  <FileImageInput
-                    fileImg={fileImg}
-                    setFileImg={setFileImg}
-                    imgUrlTemplate={selectedPredefinedEventImgUrl}
-                  />
-                  {fileImg === null ? (
-                    <PredefinedEventPictures
-                      setSelectedPredefinedEventImgUrl={
-                        setSelectedPredefinedEventImgUrl
-                      }
+                  <div className="flex items-center">
+                    <FileImageInput
+                      fileImg={fileImg}
+                      setFileImg={setFileImg}
+                      imgUrlTemplate={selectedPredefinedEventImgUrl}
                     />
-                  ) : (
-                    <></>
-                  )}
+                    {fileImg === null && displayPredefinedTicketImgsMenu ? (
+                      <div className="static  ">
+                        <PredefinedEventPictures
+                          setSelectedPredefinedEventImgUrl={
+                            setSelectedPredefinedEventImgUrl
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
