@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
-export default function CreateEventStepsDisplay() {
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>([
-    false,
-    false,
-    false
-  ])
-
+export default function CreateEventStepsDisplay({
+  currentStep
+}: {
+  currentStep: number
+}) {
   return (
     <div
       id="create-event-steps"
@@ -15,20 +13,20 @@ export default function CreateEventStepsDisplay() {
       <Step
         num={1}
         stepInstruction={'Event title, location and date'}
-        currentStep={true}
-        isComplete={false}
+        currentStep={currentStep == 0}
+        isComplete={currentStep > 0}
       />
       <Step
         num={2}
         stepInstruction={'Event description and ticket supply'}
-        currentStep={false}
-        isComplete={true}
+        currentStep={currentStep == 1}
+        isComplete={currentStep > 1}
       />
       <Step
         num={3}
         stepInstruction={'Event Images'}
-        currentStep={false}
-        isComplete={false}
+        currentStep={currentStep == 2}
+        isComplete={currentStep > 2}
       />
     </div>
   )
