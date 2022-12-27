@@ -7,23 +7,28 @@ import {
   limit,
   query,
   orderBy,
-  DocumentSnapshot
+  DocumentSnapshot,
+  doc
 } from '@firebase/firestore'
 import { ReactNode, useContext, useState } from 'react'
 import { createContext } from 'react'
-import { EventInterface } from '../shared/interface/common'
+import { db } from '../services/firebase_config'
+import { EventInterface, TicketInterface } from '../shared/interface/common'
 
 interface Props {
   children?: ReactNode
 }
 
 interface EventsInterface {
+  accessedEventData: EventInterface | null
   cachedUpcomingEvents: EventInterface[] | null
   cachedPastEvents: EventInterface[] | null
   cachedRegisteredEvents: EventInterface[] | null
   cacheUpcomingEvents: (events: EventInterface[]) => void | void
   cacheRegisteredEvents: (events: EventInterface[]) => void | void
   cachePastEvents: (events: EventInterface[]) => void | void
+  cacheAccessedEventData: (event: EventInterface) => void | void
+  fetchAccessedEventData: (eid: string) => Promise<any> | void
   fetchEventsData: ({
     collectionRef,
     numberOfEvents
@@ -43,9 +48,12 @@ const EventsContext = createContext<EventsInterface>({
   cacheUpcomingEvents: () => undefined,
   cacheRegisteredEvents: () => undefined,
   cachePastEvents: () => undefined,
+  cacheAccessedEventData: () => undefined,
+  fetchAccessedEventData: () => undefined,
   cachedPastEvents: null,
   cachedUpcomingEvents: null,
-  cachedRegisteredEvents: null
+  cachedRegisteredEvents: null,
+  accessedEventData: null
 })
 
 const EventsProvider = ({ children }: Props): JSX.Element => {
@@ -58,6 +66,8 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   const [cachedRegisteredEvents, setCachedRegisteredEvents] = useState<
     EventInterface[] | null
   >(null)
+  const [accessedEventData, setAcessedEventData] =
+    useState<EventInterface | null>(null)
 
   const cacheUpcomingEvents = (events: EventInterface[]) => {
     setCachedUpcomingEvents(events)
@@ -68,11 +78,15 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   const cacheRegisteredEvents = (events: EventInterface[]) => {
     setCachedRegisteredEvents(events)
   }
+  const cacheAccessedEventData = (event: EventInterface) => {
+    setAcessedEventData(event)
+  }
 
   // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
 
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
+      description: eventDoc.data()?.description,
       start_date: eventDoc.data()?.start_date?.toDate(),
       event_id: eventDoc.data()?.event_id,
       uid: eventDoc.data()?.uid,
@@ -84,6 +98,15 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       registered_attendees: eventDoc.data()?.registered_attendees
     }
     return eventData
+  }
+
+  const fetchAccessedEventData = async (eid: string) => {
+    setAcessedEventData(null)
+    const eventRef = doc(db, 'events', eid)
+    const eventDoc = await getDoc(eventRef)
+    const accessedEventData = newEventData(eventDoc)
+    console.log(eventDoc)
+    return accessedEventData
   }
 
   const fetchEventsData = async ({
@@ -107,14 +130,17 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   return (
     <EventsContext.Provider
       value={{
+        accessedEventData: accessedEventData,
         cachedUpcomingEvents: cachedUpcomingEvents,
         cachedPastEvents: cachedPastEvents,
         cachedRegisteredEvents: cachedRegisteredEvents,
         newEventData: newEventData,
+        cacheAccessedEventData: cacheAccessedEventData,
         fetchEventsData: fetchEventsData,
         cacheUpcomingEvents: cacheUpcomingEvents,
         cachePastEvents: cachePastEvents,
-        cacheRegisteredEvents: cacheRegisteredEvents
+        cacheRegisteredEvents: cacheRegisteredEvents,
+        fetchAccessedEventData: fetchAccessedEventData
       }}
     >
       {children}

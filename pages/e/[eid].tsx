@@ -1,19 +1,15 @@
 // author: marthel + ben
-import { doc, getDoc } from '@firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { db } from '../../services/firebase_config'
-import { TicketInterface } from '../../shared/interface/common'
-import { EventInterface } from '../../shared/interface/common'
+import { TicketInterface, UserInterface } from '../../shared/interface/common'
 import Modal from '../../components/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
+import { useUsers } from '../../contexts/users'
 import CreateCheckoutSession from './components/createCheckoutSession'
-import checkRegisteredAttendee from '../../services/check_registered_attendee'
-import SelectAndPurchaseTicket from './components/selectAndPurchaseTicket'
-import PurchasedTicketConfirmation from './components/purchasedTicketConfirmation'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
+import DisplayQRCode from '../u/components/displayQRCode'
 
 enum EventPageEnum {
   fetchingData,
@@ -22,139 +18,98 @@ enum EventPageEnum {
 }
 
 export default function Event() {
-  const [QRImgUrl, setQRImgUrl] = useState('')
   const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
     EventPageEnum.fetchingData
   )
-  const [event, setEvent] = useState<EventInterface | null>(null)
   const [selectedTicket, setSelectedTicket] = useState<TicketInterface | null>(
     null
   )
   const [showModal, setShowModal] = useState(false)
+  const [showQrCodeModal, setShowQrCodeModal] = useState(false)
   const [isEventCreator, setIsEventCreator] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const [ticketListData, setTicketListData] = useState<
-    TicketInterface[] | null
-  >(null)
+
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
-  const [username, setUsername] = useState<string>('')
-  const [avatar, setAvatar] = useState<string>('')
+  const users = useUsers()
 
   const { eid } = router.query
+
+  const confirmSelectedTicketPurchase = () => {
+    setEventPageStatus(EventPageEnum.fetchingData)
+    fetchData()
+  }
+
+  const handleOnClose = () => {
+    setShowModal(false)
+    setShowQrCodeModal(false)
+  }
+
+  const fetchData = async () => {
+    const loggedInUserData: UserInterface = await users.fetchUserData({
+      uid: auth.uid,
+      isLoggedInUser: true
+    })
+    users.cacheLoggedInUserData(loggedInUserData)
+
+    const eventId: any = eid
+    const accessedEventData = await events.fetchAccessedEventData(eventId)
+    events.cacheAccessedEventData(accessedEventData)
+
+    const hostUser = await users.fetchUserData({
+      uid: accessedEventData.uid
+    })
+    users.cacheEventHostData(hostUser)
+
+    const isUserOwner = events.accessedEventData?.uid === loggedInUserData.uid
+    setIsEventCreator(isUserOwner)
+    if (!accessedEventData) return
+    events.cacheAccessedEventData(accessedEventData)
+
+    var isUserRegistered: boolean
+    let ticket: TicketInterface = {
+      ticketTitle: 'Free Attendee',
+      registeredUsers: accessedEventData.registered_attendees,
+      capLimit: accessedEventData.ticket_max,
+      tokenId: '',
+      price: 0
+    }
+    setSelectedTicket(ticket)
+    setEventPageStatus(EventPageEnum.fetchedData)
+  }
+
+  useEffect(() => {
+    if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+      fetchData()
+    }
+  }, [eid])
 
   const EventPage = () => {
     switch (eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
           <LoadedEventPage
-            username={username}
-            event={event}
-            avatar={avatar}
+            setShowModal={setShowModal}
             isEventCreator={isEventCreator}
-          >
-            <SelectAndPurchaseTicket
-              ticketListData={ticketListData}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedTicket={selectedTicket}
-              setSelectedTicket={setSelectedTicket}
-              setShowModal={setShowModal}
-            />
-          </LoadedEventPage>
-        )
-      case EventPageEnum.purchasedTicket:
-        return (
-          <LoadedEventPage username={username} event={event} avatar={avatar}>
-            <PurchasedTicketConfirmation
-              selectedTicket={selectedTicket}
-              QRImgUrl={QRImgUrl}
-            />
-          </LoadedEventPage>
+          />
         )
       default:
         return <LoadingEventPage />
     }
   }
 
-  const confirmSelectedTicketPurchase = () => {
-    setEventPageStatus(EventPageEnum.purchasedTicket)
-  }
-
-  const handleOnClose = () => setShowModal(false)
-  const fetchData = async () => {
-    const docRef = doc(db, 'users', auth.uid)
-    const userDoc = await getDoc(docRef)
-
-    setUsername(userDoc.data()?.username)
-    setAvatar(userDoc.data()?.avatar)
-    const uid_qr_code = userDoc.data()?.qr_code
-    setQRImgUrl(uid_qr_code)
-    const eventId: any = eid
-    const eventRef = doc(db, 'events', eventId)
-    const eventDoc = await getDoc(eventRef)
-    console.log(eventDoc)
-    const eventData = events.newEventData(eventDoc)
-    console.log(eventData)
-    const fetchedTicketListData: Array<TicketInterface> = []
-    var isUserRegistered: boolean
-    const isUserOwner = eventData?.uid === userDoc.id
-    setIsEventCreator(isUserOwner)
-    if (!eventData) return
-    setEvent(eventData)
-    let ticket: TicketInterface = {
-      ticketTitle: 'Free Attendee',
-      registeredUsers: eventData.registered_attendees,
-      capLimit: eventData.ticket_max,
-      tokenId: '',
-      price: 0
-    }
-    fetchedTicketListData.push(ticket)
-    setTicketListData(fetchedTicketListData)
-
-    /**
-     * this block is good for user who is not the owner of the event.
-     */
-    //checking if the userIsRegistered
-    isUserRegistered = await checkRegisteredAttendee({
-      uid: auth.uid,
-      eid: eventId
-    })
-
-    if (isUserRegistered) {
-      setEventPageStatus(EventPageEnum.purchasedTicket)
-    } else {
-      setEventPageStatus(EventPageEnum.fetchedData)
-    }
-  }
-  useEffect(() => {
-    if (eventPageStatus === EventPageEnum.fetchingData && eid) {
-      console.log('calling base fech')
-      fetchData()
-    }
-  }, [eid])
-
   return (
     <>
-      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[85px] lg:space-x-[80px] xl:space-x-[291px]">
+      <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[35px] lg:space-x-[80px] xl:space-x-[291px]">
         {EventPage()}
       </div>
       <Modal
         visible={showModal}
         onClose={handleOnClose}
-        width="w-[600px]"
-        height="h-[600px]"
+        width={'w-[500px]'}
+        height={'h-[500px]'}
       >
-        <CreateCheckoutSession
-          selectedTicket={selectedTicket}
-          onClose={() => setShowModal(false)}
-          confirmSelectedTicketPurchase={confirmSelectedTicketPurchase}
-          uid={auth.uid}
-          eventId={event ? event.event_id : ' '}
-          username={username}
-          avatar={avatar}
-        />
+        <DisplayQRCode />
       </Modal>
     </>
   )

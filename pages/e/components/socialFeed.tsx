@@ -81,6 +81,8 @@ export default function SocialFeed({
             textArea={true}
             labelText={''}
             setValue={setComment}
+            maxWidth={600}
+            maxWidthForm={600}
           />
           <Button
             text={'comment'}
@@ -109,6 +111,7 @@ export default function SocialFeed({
         </div>
       </div>
       <br />
+      <hr />
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
       <div id="social-feed-mobile" className="h-[500px] overflow-y-auto">
         <div className="space-y-[25px]">
@@ -121,6 +124,7 @@ export default function SocialFeed({
             })}
         </div>
       </div>
+      <hr />
     </div>
   )
 }
