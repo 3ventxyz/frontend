@@ -259,7 +259,7 @@ export default function CreateEvent() {
                     </span>
                   </div>
                   <div className="absolute">
-                    <LandingPortraitImageInput title={title} />
+                    <LandingPortraitImageInput />
                   </div>
                 </div>
               </div>
