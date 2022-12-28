@@ -6,10 +6,7 @@ export default function CreateEventStepsDisplay({
   currentStep: number
 }) {
   return (
-    <div
-      id="create-event-steps"
-      className="static flex flex-col space-y-[10px] "
-    >
+    <div id="create-event-steps" className="flex flex-col space-y-[10px] ">
       <Step
         num={1}
         stepInstruction={'Event title, location and date'}

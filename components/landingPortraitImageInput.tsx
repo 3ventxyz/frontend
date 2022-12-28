@@ -1,5 +1,5 @@
 import EventTile from './eventTile'
-
+import {BiLandscape} from 'react-icons/bi'
 export default function LandingPortraitImageInput({
   title,
   username,
@@ -10,10 +10,14 @@ export default function LandingPortraitImageInput({
   avatar?: string
 }) {
   return (
-    <div className="flex h-[250px] w-[525px] hover:bg-gray-600 hover:cursor-pointer space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
-      <div className="flex w-full flex-col items-start justify-start">
-        <div className="text-[50px] font-bold">{title}</div>
-		landing portrait image upload
+    <div className="flex h-[357px] w-[750px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px] hover:cursor-pointer hover:bg-gray-600">
+      <div className="flex w-full flex-col items-center justify-center">
+        <div>
+        <BiLandscape className='h-[200px] w-[200px]'/>
+        </div>
+        <div className="text-[20px] font-semibold">
+        landing portrait image upload
+        </div>
       </div>
     </div>
   )

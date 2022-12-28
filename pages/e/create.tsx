@@ -82,14 +82,14 @@ export default function CreateEvent() {
 
   /**HTML code */
   return (
-    <div className="flex w-full flex-col items-center bg-secondaryBg">
-      <div className="w-full max-w-[600px] space-y-10 pt-[60px] pb-[200px] ">
+    <div className="flex  w-full flex-col items-center bg-secondaryBg">
+      <div className="w-full max-w-[600px]  space-y-10 pt-[60px] pb-[200px]">
         <div>
           <h3>Create Event</h3>
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[400px] flex-col space-y-10">
+          <div className="flex max-w-[400px] flex-col space-y-0">
             <div id="step-1">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -195,7 +195,7 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
-            <div id="step-3">
+            <div id="step-3" className="h-[800px]">
               <h4>3.- Landing portrait and ticket image</h4>
               <hr />
               <br />
@@ -212,19 +212,21 @@ export default function CreateEvent() {
                       </label>
                       <span
                         onClick={togglePredefinedTicketImagesMenu}
-                        className="hover:cursor-pointer hover:underline"
+                        className="text-blue-800 hover:cursor-pointer hover:underline"
                       >
                         Predefined Images
                       </span>
                     </div>
-                    <div className="flex items-center">
-                      <FileImageInput
-                        fileImg={fileImg}
-                        setFileImg={setFileImg}
-                        imgUrlTemplate={selectedPredefinedEventImgUrl}
-                      />
+                    <div className="flex items-center ">
+                      <div className="z-20">
+                        <FileImageInput
+                          fileImg={fileImg}
+                          setFileImg={setFileImg}
+                          imgUrlTemplate={selectedPredefinedEventImgUrl}
+                        />
+                      </div>
                       {fileImg === null && displayPredefinedTicketImgsMenu ? (
-                        <div className="static  ">
+                        <div className="absolute right-[380px] z-10">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={
                               setSelectedPredefinedEventImgUrl
@@ -238,7 +240,7 @@ export default function CreateEvent() {
                   </div>
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col space-y-5">
                   <div className="flex w-full justify-evenly">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       Landing Portrait Image
@@ -250,17 +252,19 @@ export default function CreateEvent() {
                       predefined images
                     </span>
                   </div>
-                  <div className="flex">
+                  <div className="absolute">
                     <LandingPortraitImageInput title={title} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <CreateEventStepsDisplay currentStep={currentStep} />
+          <div className="sticky bottom-[0px]">
+            <CreateEventStepsDisplay currentStep={currentStep} />
+          </div>
         </div>
       </div>
-      <div className="sticky bottom-0  my-[5px] flex h-[80px] w-[800px] items-center justify-center rounded-3xl bg-[#f0eded]   shadow-xl">
+      <div className="sticky z-40 bottom-[0px]  my-[5px] flex h-[80px] w-[800px] items-center justify-center rounded-3xl bg-[#f0eded]   shadow-xl">
         {/* button for pagination and submit newly created event. */}
         <div className="flex w-full max-w-[600px] justify-between space-x-5">
           <Button

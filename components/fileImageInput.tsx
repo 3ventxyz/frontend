@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Image from 'next/image'
 
-
 //imgUrl for the previous template.
 //if a url is passed but a fileImg is still null, display the imgUrl.
 export default function FileImageInput({
@@ -26,7 +25,7 @@ export default function FileImageInput({
         onMouseLeave={() => {
           setMouseHover(false)
         }}
-        className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
+        className="relative  h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
       >
         <label htmlFor="img-input">
           <Image
@@ -52,8 +51,7 @@ export default function FileImageInput({
             onChange={(event: any) => {
               setFileImg(event.target.files[0])
               setImgUrl(URL.createObjectURL(event.target.files[0]))
-              
-              
+
               // console.log('fileImg type:',fileImg?.type)
               setMouseHover(false)
             }}

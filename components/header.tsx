@@ -43,7 +43,7 @@ export default function Header() {
   if (auth.currentUser) {
     // NAVBAR: LOGGED IN, APP LAUNCHED
     return (
-      <nav className="fixed top-0 left-0 z-10 flex h-[78px] w-full flex-row items-center justify-between bg-white px-[20px] md:px-[112px]">
+      <nav className="fixed top-0 left-0 z-50 flex h-[78px] w-full flex-row items-center justify-between bg-white px-[20px] md:px-[112px]">
         <div className="flex flex-row items-center space-x-[32px]">
           <Link href="/">
             <div className="flex cursor-pointer flex-row items-center">

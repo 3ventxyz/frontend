@@ -21,7 +21,7 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return (
-    <div className="w-[300px] rounded-3xl bg-white px-[15px] py-[5px]">
+    <div className="w-[300px]  rounded-r-3xl bg-white px-[15px] py-[5px]">
       <h4 className="">
         <span>predefined images</span>
       </h4>
