@@ -18,6 +18,12 @@ import Button from '../../components/button'
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
+  const stepsText = ['Step 1', 'Step 2', 'Step 3']
+  const instructionsText = [
+    'Event title, location and date',
+    'Event description and ticket supply',
+    'Event Images'
+  ]
   let today: Date = startOfToday()
   let page: number = 0
 
@@ -264,23 +270,31 @@ export default function CreateEvent() {
           </div>
         </div>
       </div>
-      <div className="sticky z-40 bottom-[0px]  my-[5px] flex h-[80px] w-[800px] items-center justify-center rounded-3xl bg-[#f0eded]   shadow-xl">
+      <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
         {/* button for pagination and submit newly created event. */}
-        <div className="flex w-full max-w-[600px] justify-between space-x-5">
-          <Button
-            text={'Prev'}
-            active={currentStep > 0 ? true : false}
-            onClick={() => {
-              prevPage()
-            }}
-          />
-          <Button
-            text={'Next'}
-            active={currentStep < 2 ? true : false}
-            onClick={() => {
-              nextPage()
-            }}
-          />
+        <div className="flex w-full max-w-[800px] items-center justify-between space-x-5 ">
+          <div>
+            <div className="text-[20px] font-bold">
+              {stepsText[currentStep]}
+            </div>
+            <div>{instructionsText[currentStep]}</div>
+          </div>
+          <div className="flex space-x-2">
+            <Button
+              text={'Prev'}
+              active={currentStep > 0 ? true : false}
+              onClick={() => {
+                prevPage()
+              }}
+            />
+            <Button
+              text={'Next'}
+              active={currentStep < 2 ? true : false}
+              onClick={() => {
+                nextPage()
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
