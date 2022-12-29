@@ -61,7 +61,7 @@ export default function CreateEvent() {
   ] = useState(false)
   const [currentStep, setCurrentStep] = useState<number>(page)
 
-  /**functions */
+  /**logic functions */
   const togglePredefinedLandingImagesMenu = () => {
     setDisplayPredefinedLandingImgsMenu(!displayPredefinedLandingImgsMenu)
   }
@@ -84,7 +84,17 @@ export default function CreateEvent() {
 
   const submitData = () => {
     /** logic for the submit button, for uploading the info to the 3vent database */
+    console.log('===creating event===');
+    console.log('title: ',title);
+    console.log('startDate: ',startDate);
+    console.log('endDate: ',endDate);
+    console.log('eventLocation: ',eventLocation);
+    console.log('eventDescription: ',eventDescription);
+    console.log('ticketMax: ',ticketMax);
+    console.log('fileImg: ',fileImg);
   }
+
+  const formValidator =()=>{}
 
   /**HTML code */
   return (
@@ -214,7 +224,7 @@ export default function CreateEvent() {
                   <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                     <div className="flex w-full justify-between ">
                       <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                        Ticket Event Image
+                        TICKET EVENT IMAGE
                       </label>
                       <span
                         onClick={togglePredefinedTicketImagesMenu}
@@ -245,11 +255,11 @@ export default function CreateEvent() {
                     </div>
                   </div>
                 </div>
-
-                <div className="flex flex-col space-y-5">
+                <br />
+                <div className="flex flex-col space-y-7">
                   <div className="flex w-full justify-evenly">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                      Landing Portrait Image
+                      LANDING PORTRAIT IMAGE
                     </label>
                     <span
                       onClick={togglePredefinedLandingImagesMenu}
@@ -258,14 +268,14 @@ export default function CreateEvent() {
                       predefined images
                     </span>
                   </div>
-                  <div className="absolute">
+                  <div className="absolute z-10">
                     <LandingPortraitImageInput />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="sticky bottom-[0px]">
+          <div className="sticky bottom-[0px] z-0">
             <CreateEventStepsDisplay currentStep={currentStep} />
           </div>
         </div>
@@ -287,13 +297,23 @@ export default function CreateEvent() {
                 prevPage()
               }}
             />
-            <Button
-              text={'Next'}
-              active={currentStep < 2 ? true : false}
-              onClick={() => {
-                nextPage()
-              }}
-            />
+            {currentStep < 2 ? (
+              <Button
+                text={'Next'}
+                active={currentStep < 2 ? true : false}
+                onClick={() => {
+                  nextPage()
+                }}
+              />
+            ) : (
+              <Button
+                text={'Create Event'}
+                active={true}
+                onClick={() => {
+                  submitData();
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
