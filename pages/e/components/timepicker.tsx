@@ -37,24 +37,27 @@ export default function LocalTimePicker({
         id="timepicker-dropdown"
         className={`${
           isDropDownActive ? 'absolute' : 'hidden'
-        } sflex-nowrap z-10 flex  h-[250px] w-[100px] flex-col items-start space-y-3 overflow-y-auto rounded-xl bg-white pt-3 shadow-lg`}
+        } z-10 flex  h-[250px] w-[100px] flex-col items-start  overflow-y-auto rounded-b-xl bg-white pt-1 shadow-lg`}
       >
         {[...Array(24).keys()].map((el, index) => {
           const selectedTime = set(selectedDate, { hours: index, minutes: 0 })
 
           return (
-            <div id={"time-picker-slot"} key={index} className="h-full timepicker-slot-css w-full hover:bg-sky-300">
-              <div>
-                <button
-                  onClick={() => {
-                    setSelectedDate(selectedTime)
-                    setIsDropDownActive(false)
-                    console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
-                  }}
-                >
-                  {format(selectedTime, 'hh:mm a')}
-                </button>
+            <div id={'time-picker-slot'} key={index} className="w-full ">
+              <div className="flex h-[30px] items-center justify-center hover:bg-sky-200 hover:font-semibold">
+                <div>
+                  <button
+                    onClick={() => {
+                      setSelectedDate(selectedTime)
+                      setIsDropDownActive(false)
+                      console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
+                    }}
+                  >
+                    {format(selectedTime, 'hh:mm a')}
+                  </button>
+                </div>
               </div>
+              <hr />
             </div>
           )
         })}

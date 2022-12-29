@@ -13,10 +13,12 @@
 
   #timepicker-dropdown::-webkit-scrollbar {
     width: 8px;
+    
   }
 
   #timepicker-dropdown::-webkit-scrollbar-track {
-    background: #ffffff;
+    background: rgba(0, 0, 0, 0.0);
+    border-radius: 10px;
   }
 
   #timepicker-dropdown::-webkit-scrollbar-thumb {
