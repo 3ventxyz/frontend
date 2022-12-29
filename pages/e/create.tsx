@@ -84,17 +84,17 @@ export default function CreateEvent() {
 
   const submitData = () => {
     /** logic for the submit button, for uploading the info to the 3vent database */
-    console.log('===creating event===');
-    console.log('title: ',title);
-    console.log('startDate: ',startDate);
-    console.log('endDate: ',endDate);
-    console.log('eventLocation: ',eventLocation);
-    console.log('eventDescription: ',eventDescription);
-    console.log('ticketMax: ',ticketMax);
-    console.log('fileImg: ',fileImg);
+    console.log('===creating event===')
+    console.log('title: ', title)
+    console.log('startDate: ', startDate)
+    console.log('endDate: ', endDate)
+    console.log('eventLocation: ', eventLocation)
+    console.log('eventDescription: ', eventDescription)
+    console.log('ticketMax: ', ticketMax)
+    console.log('fileImg: ', fileImg)
   }
 
-  const formValidator =()=>{}
+  const formValidator = () => {}
 
   /**HTML code */
   return (
@@ -106,14 +106,13 @@ export default function CreateEvent() {
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[400px] flex-col space-y-0">
-            <div id="step-1">
+            <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
-              <br />
               <div
                 className={`${
                   currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col space-y-3 transition-transform`}
+                } flex flex-col space-y-3 transition-transform my-[10px]`}
               >
                 <TextInput
                   id={'event_name'}
@@ -132,7 +131,7 @@ export default function CreateEvent() {
                   lat={eventLocation.lat}
                   long={eventLocation.long}
                 />
-                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
                     START DATE
                   </label>
@@ -151,7 +150,7 @@ export default function CreateEvent() {
                     />
                   </div>
                 </div>
-                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
                     END DATE
                   </label>
@@ -172,14 +171,13 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
-            <div id="step-2">
+            <div id="step-2" className="">
               <h4>2.- Description and max attendee cap</h4>
               <hr />
-              <br />
               <div
                 className={`${
                   currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col space-y-3`}
+                } flex flex-col space-y-3 my-[10px]`}
               >
                 <TextInput
                   textArea={true}
@@ -233,7 +231,7 @@ export default function CreateEvent() {
                         Predefined Images
                       </span>
                     </div>
-                    <div className="flex items-center ">
+                    <div className="flex items-end ">
                       <div className="z-20">
                         <FileImageInput
                           fileImg={fileImg}
@@ -310,7 +308,7 @@ export default function CreateEvent() {
                 text={'Create Event'}
                 active={true}
                 onClick={() => {
-                  submitData();
+                  submitData()
                 }}
               />
             )}

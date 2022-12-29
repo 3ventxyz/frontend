@@ -21,11 +21,11 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return (
-    <div className="w-[300px]  rounded-r-3xl bg-white px-[15px] py-[5px]">
+    <div className="w-[308px] h-[355px] rounded-r-3xl bg-white pl-[25px] pr-[15px] py-[2px]">
       <h4 className="">
         <span>predefined images</span>
       </h4>
-      <div className="  flex flex-col items-center space-y-2">
+      <div className="  flex flex-col items-end space-y-[3px]">
         <p>
           In case that you don&apos;t have an image for your event. Please
           select one of the pictures that we offer.

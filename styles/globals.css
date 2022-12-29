@@ -6,6 +6,26 @@
   .custom-bg {
     background: blue;
   }
+  #timepicker-dropdown {
+    scrollbar-width: thin;
+    scrollbar-color: #303030 #ffffff;
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar-thumb {
+    background-color: #303030;
+    border-radius: 15px;
+    border: 2px solid #ffffff;
+  }
+
+
 }
 
 @layer base {
@@ -33,10 +53,6 @@
     height: 100px;
     overflow-wrap: break-word;
   };
-
-  /*TODO(12/26/2022): work on this part later on thursday!!*/
-  #timepicker-dropdown{}
-
 
   /* FAQ STYLE */
   details {
