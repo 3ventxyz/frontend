@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { format, set } from 'date-fns'
-
+import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalTimePicker({
   selectedDate,
   setSelectedDate,
@@ -23,21 +23,29 @@ export default function LocalTimePicker({
   // const [isActive, setIsActive] = useState(false)
   return (
     <div>
-      <input
+      <div
         onClick={(e) => {
-          // setIsActive(!isActive)
           setIsDropDownActive(!isDropDownActive)
         }}
-        className={`focus:shadow-outline leading-0 z-0 block w-[100px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
-        type="text"
+        className={` leading-0 z-0 flex w-[106px] max-w-[400px] items-center  rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 hover:cursor-pointer ${
+          isDropDownActive
+            ? 'shadow-outline border-blue-500 outline-none ring-blue-500 '
+            : ''
+        }`}
         placeholder={format(selectedDate, 'hh:mm a')}
-        disabled={false}
-      />
+      >
+        <div>{format(selectedDate, 'hh:mm a')}</div>
+        {isDropDownActive?
+        
+        <RiArrowDropUpLine className="h-[20px] w-[20px]"/>:
+        <RiArrowDropDownLine className="h-[20px] w-[20px]" />
+        }
+      </div>
       <div
         id="timepicker-dropdown"
         className={`${
           isDropDownActive ? 'absolute' : 'hidden'
-        } z-10 flex  h-[250px] w-[100px] flex-col items-start  overflow-y-auto rounded-b-xl bg-white pt-1 shadow-lg`}
+        } z-10 flex  h-[250px] w-[106px] flex-col items-start  overflow-y-auto rounded-b-xl bg-white pt-1 shadow-lg`}
       >
         {[...Array(24).keys()].map((el, index) => {
           const selectedTime = set(selectedDate, { hours: index, minutes: 0 })
