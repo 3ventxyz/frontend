@@ -37,11 +37,15 @@ export default function CreateEvent() {
     lat: 0,
     long: 0
   })
-
   const [eventDescription, setEventDescription] = useState<string>('')
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
+    useState<string>('')
+
+
+  const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
+  const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
     useState<string>('')
 
   /** UI page setStates */
@@ -83,7 +87,7 @@ export default function CreateEvent() {
   }
 
   const submitData = () => {
-    /** logic for the submit button, for uploading the info to the 3vent database */
+    /*Logic for the submit button, for uploading the info to the 3vent database */
     console.log('===creating event===')
     console.log('title: ', title)
     console.log('startDate: ', startDate)
@@ -94,7 +98,9 @@ export default function CreateEvent() {
     console.log('fileImg: ', fileImg)
   }
 
-  const formValidator = () => {}
+  const formValidator = () => {
+    /**TODO: migrate the form validator logic from the previous create event page to this function. */
+  }
 
   /**HTML code */
   return (
@@ -112,7 +118,7 @@ export default function CreateEvent() {
               <div
                 className={`${
                   currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col space-y-3 transition-transform my-[10px]`}
+                } my-[10px] flex flex-col space-y-3 transition-transform`}
               >
                 <TextInput
                   id={'event_name'}
@@ -177,7 +183,7 @@ export default function CreateEvent() {
               <div
                 className={`${
                   currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col space-y-3 my-[10px]`}
+                } my-[10px] flex flex-col space-y-3`}
               >
                 <TextInput
                   textArea={true}
@@ -255,19 +261,23 @@ export default function CreateEvent() {
                 </div>
                 <br />
                 <div className="flex flex-col space-y-7">
-                  <div className="flex w-full justify-evenly">
+                  <div className="">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
                     </label>
-                    <span
+                    {/* <span
                       onClick={togglePredefinedLandingImagesMenu}
                       className="hover:cursor-pointer hover:underline"
                     >
                       predefined images
-                    </span>
+                    </span> */}
                   </div>
                   <div className="absolute z-10">
-                    <LandingPortraitImageInput />
+                    <LandingPortraitImageInput
+                      fileImg={landingfileImg}
+                      setFileImg={setLandingFileImg}
+                      imgUrlTemplate2={selectedPredefinedLandingImgUrl}
+                    />
                   </div>
                 </div>
               </div>
