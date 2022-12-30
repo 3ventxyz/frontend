@@ -14,10 +14,15 @@ import FileImageInput from '../../components/fileImageInput'
 import PredefinedEventPictures from './components/predefinedEventPictures'
 import LandingPortraitImageInput from '../../components/landingPortraitImageInput'
 import Button from '../../components/button'
+import { useEvents } from '../../contexts/events'
+import { uploadImageToStorage } from '../../services/upload_image_to_storage'
+import CheckEventId from '../../services/check_event_id'
+import setFiletype from '../../shared/utils/setFileType'
 
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
+  const events = useEvents()
   const stepsText = ['Step 1', 'Step 2', 'Step 3']
   const instructionsText = [
     'Event title, location and date',
@@ -27,7 +32,9 @@ export default function CreateEvent() {
   let today: Date = startOfToday()
   let page: number = 0
 
-  /**input data UI setStates */
+  /**
+   * input data UI setStates
+   **/
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(today)
@@ -37,18 +44,21 @@ export default function CreateEvent() {
     lat: 0,
     long: 0
   })
+  const [eventId, setEventId] = useState<string>('test-id')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
     useState<string>('')
 
+  // const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
+  // const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
+  //   useState<string>('')
+  const [errorMsg, setErrorMsg] = useState<string>('')
 
-  const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
-  const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
-    useState<string>('')
-
-  /** UI page setStates */
+  /**
+   * UI page setStates
+   **/
   const [isStartDateDropdownVisible, setIsStartDateDropdownVisible] =
     useState(false)
   const [isStartTimeDropdownVisible, setIsStartTimeDropdownVisible] =
@@ -65,7 +75,9 @@ export default function CreateEvent() {
   ] = useState(false)
   const [currentStep, setCurrentStep] = useState<number>(page)
 
-  /**logic functions */
+  /**
+   * logic functions
+   **/
   const togglePredefinedLandingImagesMenu = () => {
     setDisplayPredefinedLandingImgsMenu(!displayPredefinedLandingImgsMenu)
   }
@@ -98,11 +110,111 @@ export default function CreateEvent() {
     console.log('fileImg: ', fileImg)
   }
 
-  const formValidator = () => {
-    /**TODO: migrate the form validator logic from the previous create event page to this function. */
+  const createEvent = async () => {
+    console.log('===creating event===')
+    console.log('title: ', title)
+    console.log('event_id: ', eventId)
+    console.log('startDate: ', startDate)
+    console.log('endDate: ', endDate)
+    console.log('eventLocation: ', eventLocation)
+    console.log('eventDescription: ', eventDescription)
+    console.log('ticketMax: ', ticketMax)
+    console.log('fileImg: ', fileImg)
+    console.log('========================')
+
+    let isFormValid
+    setIsCreatingNewEvent(true)
+    setErrorMsg('')
+    isFormValid = formValidator()
+    if (!isFormValid) {
+      setIsCreatingNewEvent(false)
+      return
+    }
+    let isEventIdTaken = await CheckEventId(eventId)
+    if (isEventIdTaken) {
+      setIsCreatingNewEvent(false)
+      setErrorMsg(
+        'Event ID: event id has been taken, please enter a different id'
+      )
+      return
+    }
+    try {
+      if (fileImg !== null) {
+        console.log('fileImg: ', fileImg?.type)
+        const fileType = setFiletype(fileImg)
+        const storagePath: string = `${auth.uid}/${eventId + fileType}`
+        console.log('uploading image: ', fileImg?.name)
+        await uploadImageToStorage(
+          fileImg,
+          storagePath,
+          async (url: string) => {
+            await events.submitEventToFirebase(
+              {
+                title: title,
+                end_date: endDate,
+                start_date: startDate,
+                uid: auth.uid,
+                description: eventDescription,
+                location: eventLocation,
+                img_url: url,
+                ticket_max: ticketMax,
+                event_id: eventId,
+                registered_attendees: 0
+              },
+              {
+                title: title,
+                uid: auth.uid,
+                event_id: eventId,
+                start_date: startDate,
+                end_date: endDate
+              }
+            )
+            console.log('pushing to event page')
+            router.push(`/e/${eventId}`)
+          }
+        )
+      } else {
+        await events.submitEventToFirebase(
+          {
+            title: title,
+            end_date: endDate,
+            start_date: startDate,
+            uid: auth.uid,
+            description: eventDescription,
+            location: eventLocation,
+            img_url: selectedPredefinedEventImgUrl,
+            ticket_max: ticketMax,
+            event_id: eventId,
+            registered_attendees: 0
+          },
+          {
+            title: title,
+            uid: auth.uid,
+            event_id: eventId,
+            start_date: startDate,
+            end_date: endDate
+          }
+        )
+        console.log('pushing to event page')
+        router.push(`/e/${eventId}`)
+      }
+    } catch (e) {
+      console.error('event/create:', e)
+      alert(
+        'error 404: form could not be created due to an unknown error, please try again later.'
+      )
+      setIsCreatingNewEvent(false)
+    }
   }
 
-  /**HTML code */
+  const formValidator = () => {
+    /**TODO: migrate the form validator logic from the previous create event page to this function. */
+    return true
+  }
+
+  /**
+   * HTML code
+   **/
   return (
     <div className="flex  w-full flex-col items-center bg-secondaryBg">
       <div className="w-full max-w-[600px]  space-y-10 pt-[60px] pb-[200px]">
@@ -272,13 +384,13 @@ export default function CreateEvent() {
                       predefined images
                     </span> */}
                   </div>
-                  <div className="absolute z-10">
+                  {/* <div className="absolute z-10">
                     <LandingPortraitImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
                       imgUrlTemplate2={selectedPredefinedLandingImgUrl}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -318,7 +430,8 @@ export default function CreateEvent() {
                 text={'Create Event'}
                 active={true}
                 onClick={() => {
-                  submitData()
+                  // submitData()
+                  createEvent()
                 }}
               />
             )}
