@@ -15,6 +15,7 @@ import {
   getDay
 } from 'date-fns'
 import { useState } from 'react'
+import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 
 export default function LocalDatePicker({
   selectedDate,
@@ -28,8 +29,6 @@ export default function LocalDatePicker({
   setIsDropDownActive: (bool: boolean) => void
 }) {
   let today: Date = startOfToday()
-
-  // const [isActive, setIsActive] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   const colStartClasses = [
     '',
@@ -57,18 +56,24 @@ export default function LocalDatePicker({
 
   return (
     <div className="relative">
-      <input
-        onClick={(e) => {
-          /** pass the div from the outside place and update */
-          // setIsActive(!isActive)
-
+      <div
+        onClick={() => {
           setIsDropDownActive(!isDropDownActive)
         }}
-        className={`focus:shadow-outline leading-0 z-0 block w-[150px] max-w-[400px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
-        type="text"
-        placeholder={format(selectedDate, 'MM/dd/yyyy')}
-        disabled={false}
-      />
+        className={`leading-0 z-0 flex w-[120px] items-center justify-between rounded-lg border-[1.5px] bg-gray-50 py-2.5 px-1.5 text-sm text-gray-900 hover:cursor-pointer 
+        ${
+          isDropDownActive
+            ? 'shadow-outline border-blue-500 outline-none ring-blue-500'
+            : ''
+        }`}
+      >
+        <div>{format(selectedDate, 'MM/dd/yyyy')}</div>
+        {isDropDownActive ? (
+          <RiArrowDropUpLine className="h-[20px] w-[20px]" />
+        ) : (
+          <RiArrowDropDownLine className="h-[20px] w-[20px]" />
+        )}
+      </div>
       <div
         className={`${
           isDropDownActive ? 'absolute' : 'hidden'

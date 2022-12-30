@@ -24,22 +24,21 @@ export default function LocalTimePicker({
   return (
     <div>
       <div
-        onClick={(e) => {
+        onClick={() => {
           setIsDropDownActive(!isDropDownActive)
         }}
-        className={` leading-0 z-0 flex w-[106px] max-w-[400px] items-center  rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 hover:cursor-pointer ${
+        className={` leading-0 z-0 flex w-[106px] max-w-[400px] items-center justify-between  rounded-lg border-[1.5px] bg-gray-50 py-2.5 px-1.5 text-sm text-gray-900 hover:cursor-pointer ${
           isDropDownActive
             ? 'shadow-outline border-blue-500 outline-none ring-blue-500 '
             : ''
         }`}
-        placeholder={format(selectedDate, 'hh:mm a')}
       >
         <div>{format(selectedDate, 'hh:mm a')}</div>
-        {isDropDownActive?
-        
-        <RiArrowDropUpLine className="h-[20px] w-[20px]"/>:
-        <RiArrowDropDownLine className="h-[20px] w-[20px]" />
-        }
+        {isDropDownActive ? (
+          <RiArrowDropUpLine className="h-[20px] w-[20px]" />
+        ) : (
+          <RiArrowDropDownLine className="h-[20px] w-[20px]" />
+        )}
       </div>
       <div
         id="timepicker-dropdown"
