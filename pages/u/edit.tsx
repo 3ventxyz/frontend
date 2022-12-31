@@ -1,12 +1,12 @@
-import TextInput from '../../components/textInput'
-import LocationInput from '../../components/locationInput'
+import TextInput from '../../components/inputs/textInput'
+import LocationInput from '../../components/inputs/locationInput'
 import { useState, useEffect } from 'react'
-import Button from '../../components/button'
+import Button from '../../components/buttons/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { useAuth } from '../../contexts/auth'
-import FileImageInput from '../../components/fileImageInput'
+import FileImageInput from '../../components/inputs/fileImageInput'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 
 interface LocationData {

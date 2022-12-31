@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useAuth } from '../contexts/auth'
-import Button from './button'
+import { useAuth } from '../../contexts/auth'
+import Button from '../buttons/button'
 import { useConnectModal, ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
-import SignInButton from './siwe'
+import SignInButton from '../siwe'
 
 const userMenuShow = (userMenu: boolean, setUserMenu: any) => {
   setUserMenu(true)

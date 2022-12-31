@@ -1,4 +1,4 @@
-import { storage } from '../services/firebase_config'
+import { storage } from '../../services/firebase_config'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { useState } from 'react'
 

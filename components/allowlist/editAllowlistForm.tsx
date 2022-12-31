@@ -1,11 +1,11 @@
 import React, { FormEvent, useState, useRef } from 'react'
-import Button from './button'
-import ErrorAlert from './alerts/errorAlert'
-import AllowlistService from '../services/allowlists'
-import { AllowlistInterface } from '../shared/interface/common'
-import { useAuth } from '../contexts/auth'
-import ToggleSwitch from './toggleSwitch'
-import TextInput from './textInput'
+import Button from '../buttons/button'
+import ErrorAlert from '../alerts/errorAlert'
+import AllowlistService from '../../services/allowlists'
+import { AllowlistInterface } from '../../shared/interface/common'
+import { useAuth } from '../../contexts/auth'
+import ToggleSwitch from '../toggles/toggleSwitch'
+import TextInput from '../inputs/textInput'
 
 export default function EditAllowlistForm({
   onSuccess,
