@@ -223,7 +223,7 @@ export default function CreateEvent() {
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[600px] flex-col space-y-0 lg:max-w-[400px]">
+          <div className="flex max-w-[400px] flex-col space-y-0 lg:max-w-[600px]">
             <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -402,14 +402,16 @@ export default function CreateEvent() {
       </div>
       <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
         {/* button for pagination and submit newly created event. */}
-        <div className="flex w-full max-w-[800px] items-center justify-between space-x-5 ">
+        <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] lg:max-w-[700px]">
           <div>
-            <div className="text-[20px] font-bold">
+            <div className="text-[17px] font-bold sm:text-[20px]">
               {stepsText[currentStep]}
             </div>
-            <div>{instructionsText[currentStep]}</div>
+            <div className="text-[14px] sm:text-[16px]">
+              {instructionsText[currentStep]}
+            </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="  flex space-x-2">
             <Button
               text={'Prev'}
               active={currentStep > 0 ? true : false}
