@@ -216,14 +216,14 @@ export default function CreateEvent() {
    * HTML code
    **/
   return (
-    <div className="flex  w-full flex-col items-center bg-secondaryBg">
-      <div className="w-full max-w-[600px]  space-y-10 pt-[60px] pb-[200px]">
+    <div className="flex w-full flex-col items-center bg-secondaryBg">
+      <div className="w-full max-w-[300px] space-y-10 pt-[60px] pb-[200px] sm:max-w-[400px] lg:max-w-[600px] ">
         <div>
           <h3>Create Event</h3>
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[400px] flex-col space-y-0">
+          <div className="flex max-w-[600px] flex-col space-y-0 lg:max-w-[400px]">
             <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -395,7 +395,7 @@ export default function CreateEvent() {
               </div>
             </div>
           </div>
-          <div className="sticky bottom-[0px] z-0">
+          <div className="sticky bottom-[0px] z-0 hidden lg:block">
             <CreateEventStepsDisplay currentStep={currentStep} />
           </div>
         </div>
