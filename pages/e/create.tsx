@@ -223,7 +223,7 @@ export default function CreateEvent() {
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[400px] flex-col space-y-0 lg:max-w-[600px]">
+          <div className="flex max-w-[300px] sm:max-w-[400px]  flex-col space-y-0 lg:max-w-[600px]">
             <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
