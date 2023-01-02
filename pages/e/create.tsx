@@ -390,7 +390,7 @@ export default function CreateEvent() {
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
                       imgUrlTemplate={selectedPredefinedLandingImgUrl}
-                      mode={'img-input-empty-landing'}
+                      mode={'landing'}
                     />
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 // author: marthel
 import { useEffect, useState } from 'react'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
+import { BiLandscape } from 'react-icons/bi'
 import Image from 'next/image'
 
 //imgUrl for the previous template.
@@ -9,12 +10,12 @@ export default function FileImageInput({
   fileImg,
   setFileImg,
   imgUrlTemplate = '',
-  mode = 'img-input-empty'
+  mode = 'event'
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
   imgUrlTemplate?: string
-  mode?: string
+  mode?: 'event' | 'landing' | undefined
 }) {
   const [imgUrl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
@@ -33,9 +34,13 @@ export default function FileImageInput({
         onMouseLeave={() => {
           setMouseHover(false)
         }}
-        className="relative  h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
+        className={`${
+          mode === 'event'
+            ? 'h-[384px] max-h-[320px] w-[380px]'
+            : 'h-[285px] w-[600px]'
+        } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
       >
-        <label htmlFor={mode}>
+        <label htmlFor={`img-input-${mode}`}>
           <Image
             src={imgUrlTemplate}
             layout="fill"
@@ -59,8 +64,6 @@ export default function FileImageInput({
             onChange={(event: any) => {
               setFileImg(event.target.files[0])
               setImgUrl(URL.createObjectURL(event.target.files[0]))
-              console.log('onchange 2 from fileImageInput')
-              // console.log('fileImg type:',fileImg?.type)
               setMouseHover(false)
             }}
           />
@@ -78,11 +81,14 @@ export default function FileImageInput({
       onMouseLeave={() => {
         setMouseHover(false)
       }}
-      className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
+      className={`${
+        mode === 'event'
+          ? 'h-[384px] max-h-[320px] w-[380px]'
+          : 'h-[285px] w-[600px]'
+      } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
     >
-      <label htmlFor={mode}>
+      <label htmlFor={`img-input-${mode}`}>
         <Image
-          // id={mode}
           src={imgUrl}
           layout="fill"
           objectFit="cover"
@@ -96,9 +102,8 @@ export default function FileImageInput({
         ) : (
           <></>
         )}
-
         <input
-          id={mode}
+          id={`img-input-${mode}`}
           type="file"
           className="hidden"
           accept="image/*"
@@ -106,29 +111,41 @@ export default function FileImageInput({
             setFileImg(event.target.files[0])
             setImgUrl(URL.createObjectURL(event.target.files[0]))
             setMouseHover(false)
-            console.log('onchange 3 from fileImageInput')
           }}
         />
       </label>
     </div>
   ) : (
     // upload an image
-    <div className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:bg-gray-400 sm:max-h-full">
-      <label htmlFor={mode}>
+    <div
+      className={`${
+        mode === 'event'
+          ? 'h-[384px] max-h-[320px] w-[380px]'
+          : 'h-[285px] w-[600px]'
+      } relative rounded-3xl bg-gray-300 hover:bg-gray-400 sm:max-h-full`}
+    >
+      <label htmlFor={`img-input-${mode}`}>
         <input
-          id={mode}
+          id={`img-input-${mode}`}
           type="file"
           className="hidden"
           accept="image/*"
           onChange={(event: any) => {
             setFileImg(event.target.files[0])
             setImgUrl(URL.createObjectURL(event.target.files[0]))
-            console.log(event.target.files[0])
           }}
         />
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center text-gray-400 hover:text-gray-500">
-          <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px]" />
-          <div>Please add an Image</div>
+          {mode === 'event' ? (
+            <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px]" />
+          ) : (
+            <BiLandscape className="h-[150px] w-[150px]" />
+          )}
+          <div>
+            {mode === 'event'
+              ? 'Please add an Image'
+              : 'Please add a Landing Portrait'}
+          </div>
         </div>
       </label>
     </div>
