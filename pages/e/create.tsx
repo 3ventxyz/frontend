@@ -50,11 +50,9 @@ export default function CreateEvent() {
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
     useState<string>('')
-
   const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
   const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
     useState<string>('')
-
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
