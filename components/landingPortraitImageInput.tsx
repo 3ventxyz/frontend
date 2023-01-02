@@ -46,6 +46,7 @@ export default function LandingPortraitImageInput({
   const [landingImgUrl, setLandingImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
   if (imgUrlTemplate2 !== '' && landingImgUrl === '') {
+
     return (
       <div
         onMouseEnter={() => {
@@ -81,6 +82,7 @@ export default function LandingPortraitImageInput({
               setFileImg(event.target.files[0])
               setLandingImgUrl(URL.createObjectURL(event.target.files[0]))
 
+              console.log("onChange 1")
               // console.log('fileImg type:',fileImg?.type)
               setMouseHover(false)
             }}
@@ -89,7 +91,7 @@ export default function LandingPortraitImageInput({
       </div>
     )
   }
-
+  console.log("landingPortraitImageInput:",fileImg);
   return fileImg !== null ? (
     <div
       onMouseEnter={() => {
@@ -117,7 +119,7 @@ export default function LandingPortraitImageInput({
         )}
 
         <input
-          id="img-input"
+          id="img-input-empty"
           type="file"
           className="hidden"
           accept="image/*"
@@ -125,6 +127,7 @@ export default function LandingPortraitImageInput({
             setFileImg(event.target.files[0])
             setLandingImgUrl(URL.createObjectURL(event.target.files[0]))
             setMouseHover(false)
+            console.log("onChange 2")
           }}
         />
       </label>
@@ -140,6 +143,7 @@ export default function LandingPortraitImageInput({
           onChange={(event: any) => {
             setFileImg(event.target.files[0])
             setLandingImgUrl(URL.createObjectURL(event.target.files[0]))
+            console.log("onChange 3")
           }}
         />
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center text-gray-400 hover:text-gray-500">

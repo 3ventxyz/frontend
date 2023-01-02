@@ -51,9 +51,10 @@ export default function CreateEvent() {
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
     useState<string>('')
 
-  // const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
-  // const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
-  //   useState<string>('')
+  const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
+  const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
+    useState<string>('')
+
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
@@ -223,7 +224,7 @@ export default function CreateEvent() {
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[300px] sm:max-w-[400px]  flex-col space-y-0 lg:max-w-[600px]">
+          <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] lg:max-w-[600px]">
             <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -334,7 +335,7 @@ export default function CreateEvent() {
               <div
                 className={`${
                   currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
-                }flex flex-col`}
+                } flex flex-col`}
               >
                 <div>
                   <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -377,20 +378,21 @@ export default function CreateEvent() {
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
                     </label>
-                    {/* <span
+                    <span
                       onClick={togglePredefinedLandingImagesMenu}
                       className="hover:cursor-pointer hover:underline"
                     >
                       predefined images
-                    </span> */}
+                    </span>
                   </div>
-                  {/* <div className="absolute z-10">
-                    <LandingPortraitImageInput
+                  <div className="absolute z-10">
+                    <FileImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
-                      imgUrlTemplate2={selectedPredefinedLandingImgUrl}
+                      imgUrlTemplate={selectedPredefinedLandingImgUrl}
+                      mode={'img-input-empty-landing'}
                     />
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 // author: marthel
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import Image from 'next/image'
 
@@ -8,14 +8,22 @@ import Image from 'next/image'
 export default function FileImageInput({
   fileImg,
   setFileImg,
-  imgUrlTemplate = ''
+  imgUrlTemplate = '',
+  mode = 'img-input-empty'
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
   imgUrlTemplate?: string
+  mode?: string
 }) {
   const [imgUrl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
+
+  useEffect(() => {
+    console.log(fileImg, imgUrlTemplate, mode)
+  }, [fileImg, imgUrlTemplate, mode])
+
+  // display predefined image
   if (imgUrlTemplate !== '' && imgUrl === '') {
     return (
       <div
@@ -27,7 +35,7 @@ export default function FileImageInput({
         }}
         className="relative  h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
       >
-        <label htmlFor="img-input">
+        <label htmlFor={mode}>
           <Image
             src={imgUrlTemplate}
             layout="fill"
@@ -44,14 +52,14 @@ export default function FileImageInput({
           )}
 
           <input
-            id="img-input"
+            id={mode}
             type="file"
             className="hidden"
             accept="image/*"
             onChange={(event: any) => {
               setFileImg(event.target.files[0])
               setImgUrl(URL.createObjectURL(event.target.files[0]))
-
+              console.log('onchange 2 from fileImageInput')
               // console.log('fileImg type:',fileImg?.type)
               setMouseHover(false)
             }}
@@ -61,6 +69,7 @@ export default function FileImageInput({
     )
   }
 
+  // image has been uploaded
   return fileImg !== null ? (
     <div
       onMouseEnter={() => {
@@ -71,8 +80,9 @@ export default function FileImageInput({
       }}
       className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full"
     >
-      <label htmlFor="img-input">
+      <label htmlFor={mode}>
         <Image
+          // id={mode}
           src={imgUrl}
           layout="fill"
           objectFit="cover"
@@ -88,7 +98,7 @@ export default function FileImageInput({
         )}
 
         <input
-          id="img-input"
+          id={mode}
           type="file"
           className="hidden"
           accept="image/*"
@@ -96,21 +106,24 @@ export default function FileImageInput({
             setFileImg(event.target.files[0])
             setImgUrl(URL.createObjectURL(event.target.files[0]))
             setMouseHover(false)
+            console.log('onchange 3 from fileImageInput')
           }}
         />
       </label>
     </div>
   ) : (
+    // upload an image
     <div className="relative h-[384px] max-h-[320px] w-[380px] rounded-3xl bg-gray-300 hover:bg-gray-400 sm:max-h-full">
-      <label htmlFor="img-input-empty">
+      <label htmlFor={mode}>
         <input
-          id="img-input-empty"
+          id={mode}
           type="file"
           className="hidden"
           accept="image/*"
           onChange={(event: any) => {
             setFileImg(event.target.files[0])
             setImgUrl(URL.createObjectURL(event.target.files[0]))
+            console.log(event.target.files[0])
           }}
         />
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center text-gray-400 hover:text-gray-500">
