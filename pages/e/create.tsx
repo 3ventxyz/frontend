@@ -351,7 +351,7 @@ export default function CreateEvent() {
                     <div className="flex items-end ">
                       <div className="z-20">
                         <FileImageInput
-                        isCreateMode={true}
+                          isCreateMode={true}
                           fileImg={fileImg}
                           setFileImg={setFileImg}
                           imgUrlTemplate={selectedPredefinedEventImgUrl}
@@ -386,13 +386,32 @@ export default function CreateEvent() {
                   </div>
                   <div className="absolute z-10">
                     <FileImageInput
-                    isCreateMode={true}
+                      isCreateMode={true}
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
                       imgUrlTemplate={selectedPredefinedLandingImgUrl}
                       mode={'landing'}
                     />
                   </div>
+                  <div className="absolute right-[490px] top-[780px] z-20">
+                      <PredefinedEventPictures
+                        setSelectedPredefinedEventImgUrl={
+                          setSelectedPredefinedLandingImgUrl
+                        }
+                        landingMode={true}
+                      />
+                    </div>
+                  {/* {fileImg === null && displayPredefinedLandingImgsMenu ? (
+                    <div className="absolute right-[380px] z-20">
+                      <PredefinedEventPictures
+                        setSelectedPredefinedEventImgUrl={
+                          setSelectedPredefinedEventImgUrl
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <></>
+                  )} */}
                 </div>
               </div>
             </div>
