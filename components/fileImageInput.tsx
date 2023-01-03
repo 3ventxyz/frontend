@@ -17,13 +17,15 @@ export default function FileImageInput({
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
-  isCreateMode = false
+  isCreateMode = false,
+  isDisabled = true
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
   imgUrlTemplate?: string
   mode?: 'event' | 'landing' | undefined
   isCreateMode: boolean
+  isDisabled?: boolean
 }) {
   const [imgUrl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
@@ -49,6 +51,7 @@ export default function FileImageInput({
         } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
       >
         <DisplayPredefinedImage
+          isDisabled={isDisabled}
           mode={mode}
           imgUrlTemplate={imgUrlTemplate}
           isMouseHover={isMouseHover}
@@ -82,6 +85,7 @@ export default function FileImageInput({
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
         setMouseHover={setMouseHover}
+        isDisabled={isDisabled}
       />
     </div>
   ) : (
@@ -98,6 +102,7 @@ export default function FileImageInput({
         isCreateMode={isCreateMode}
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
+        isDisabled={isDisabled}
       />
     </div>
   )
@@ -107,16 +112,19 @@ function UploadFileImage({
   mode,
   isCreateMode,
   setFileImg,
-  setImgUrl
+  setImgUrl,
+  isDisabled
 }: {
   mode: string
   isCreateMode: boolean
   setFileImg: (file: File) => void
   setImgUrl: (url: string) => void
+  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
       <input
+        disabled={isDisabled}
         id={`img-input-${mode}`}
         type="file"
         className="hidden"
@@ -139,11 +147,7 @@ function UploadFileImage({
               )}
             </div>
           )}
-          <div
-            className={`${
-              isCreateMode ? 'text-wrap  ' : ''
-            } px-[5px]`}
-          >
+          <div className={`${isCreateMode ? 'text-wrap  ' : ''} px-[5px]`}>
             {mode === 'event'
               ? 'Please select a ticket image'
               : 'Please select a landing portrait'}
@@ -163,6 +167,7 @@ function FileImageUploaded({
   mode,
   imgUrl,
   isMouseHover,
+  isDisabled,
   setFileImg,
   setImgUrl,
   setMouseHover
@@ -173,6 +178,7 @@ function FileImageUploaded({
   setFileImg: (file: File) => void
   setImgUrl: (url: string) => void
   setMouseHover: (mouseHover: boolean) => void
+  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
@@ -192,6 +198,7 @@ function FileImageUploaded({
       )}
       <input
         id={`img-input-${mode}`}
+        disabled={isDisabled}
         type="file"
         className="hidden"
         accept="image/*"
@@ -208,6 +215,7 @@ function DisplayPredefinedImage({
   mode,
   imgUrlTemplate,
   isMouseHover,
+  isDisabled,
   setFileImg,
   setImgUrl,
   setMouseHover
@@ -218,6 +226,7 @@ function DisplayPredefinedImage({
   setFileImg: (file: File) => void
   setImgUrl: (url: string) => void
   setMouseHover: (mouseHover: boolean) => void
+  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
@@ -237,6 +246,7 @@ function DisplayPredefinedImage({
       )}
       <input
         id={mode}
+        disabled={isDisabled}
         type="file"
         className="hidden"
         accept="image/*"
