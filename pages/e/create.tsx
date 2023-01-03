@@ -351,6 +351,7 @@ export default function CreateEvent() {
                     <div className="flex items-end ">
                       <div className="z-20">
                         <FileImageInput
+                        isCreateMode={true}
                           fileImg={fileImg}
                           setFileImg={setFileImg}
                           imgUrlTemplate={selectedPredefinedEventImgUrl}
@@ -385,6 +386,7 @@ export default function CreateEvent() {
                   </div>
                   <div className="absolute z-10">
                     <FileImageInput
+                    isCreateMode={true}
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
                       imgUrlTemplate={selectedPredefinedLandingImgUrl}
@@ -432,7 +434,6 @@ export default function CreateEvent() {
                 text={'Create Event'}
                 active={true}
                 onClick={() => {
-                  // submitData()
                   createEvent()
                 }}
               />
