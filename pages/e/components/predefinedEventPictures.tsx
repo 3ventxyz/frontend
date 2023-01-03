@@ -27,38 +27,47 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return landingMode ? (
-    <div className="h-[250px] w-[375px] rounded-3xl bg-gray-200 px-[2px]">
-      <div className="flex space-x-2 space-y-2">
-        <PredefinedLandingImageOption
-          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-          imgIndex={1}
-          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-          predefinedImgUrl={staticEventImgUrl1}
-        />
-        <PredefinedLandingImageOption
-          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-          imgIndex={2}
-          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-          predefinedImgUrl={staticEventImgUrl2}
-        />
+    <div className="flex h-[255px] w-[525px] rounded-3xl bg-gray-200 px-[5px] py-[5px]">
+      <div className="w-full">
+      <h4 className="">
+        <span>predefined images</span>
+      </h4>
+      <p> Please select one of the pictures that we offer.
+        </p>
       </div>
-      <div className="flex space-x-2 space-y-2">
-        <PredefinedLandingImageOption
-          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-          imgIndex={3}
-          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-          predefinedImgUrl={staticEventImgUrl3}
-        />
-        <PredefinedLandingImageOption
-          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-          imgIndex={4}
-          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-          predefinedImgUrl={staticEventImgUrl4}
-        />
+      <div className='space-y-2'>
+        <div className="flex space-x-2 ">
+          <PredefinedLandingImageOption
+            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+            imgIndex={1}
+            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+            predefinedImgUrl={staticEventImgUrl1}
+          />
+          <PredefinedLandingImageOption
+            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+            imgIndex={2}
+            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+            predefinedImgUrl={staticEventImgUrl2}
+          />
+        </div>
+        <div className="flex space-x-2">
+          <PredefinedLandingImageOption
+            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+            imgIndex={3}
+            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+            predefinedImgUrl={staticEventImgUrl3}
+          />
+          <PredefinedLandingImageOption
+            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+            imgIndex={4}
+            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+            predefinedImgUrl={staticEventImgUrl4}
+          />
+        </div>
       </div>
     </div>
   ) : (
