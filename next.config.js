@@ -9,7 +9,12 @@ const nextConfig = {
       'www.gravatar.com',
       'maps.googleapis.com',
       'res.cloudinary.com',
-      // emulators 
+      'i.pinimg.com',
+      'cdn.wallpapersafari.com',
+      'wallpaper-mania.com',
+      'wallpaperfx.com',
+
+      // emulators
       'localhost',
       'cloudflare-ipfs.com',
       'loremflickr.com'

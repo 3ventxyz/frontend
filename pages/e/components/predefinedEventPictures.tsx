@@ -19,18 +19,18 @@ export default function PredefinedEventPictures({
   const staticEventImgUrl4: string =
     'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent4.jpg?alt=media&token=145fdc18-f398-4d26-b441-0f63356db72e'
 
-  const staticLandingImgUrl1: string = ''
-  const staticLandingImgUrl2: string = ''
-  const staticLandingImgUrl3: string = ''
-  const staticLandingImgUrl4: string = ''
+  const staticLandingImgUrl1: string = 'https://i.pinimg.com/736x/e0/57/e0/e057e07ff1a469fac36649e001cb8222.jpg'
+  const staticLandingImgUrl2: string = 'https://cdn.wallpapersafari.com/34/54/Q7OhUp.jpg'
+  const staticLandingImgUrl3: string = 'https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700008792.jpg'
+  const staticLandingImgUrl4: string = 'https://wallpaperfx.com/view_image/honshu-island-japan-1440x900-wallpaper-15579.jpg'
   const [selectedPredefinedImgIndex, setSelectedPredefinedImgIndex] =
     useState<number>(0)
 
   return landingMode ? (
-    <div className="flex h-[255px] w-[525px] rounded-3xl bg-gray-200 px-[5px] py-[5px]">
+    <div className="flex h-[255px] w-[525px] rounded-3xl bg-white px-[5px] py-[5px]">
       <div className="w-full">
       <h4 className="">
-        <span>predefined images</span>
+        <span>Predefined landing images</span>
       </h4>
       <p> Please select one of the pictures that we offer.
         </p>
@@ -42,14 +42,14 @@ export default function PredefinedEventPictures({
             setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
             imgIndex={1}
             selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticEventImgUrl1}
+            predefinedImgUrl={staticLandingImgUrl1}
           />
           <PredefinedLandingImageOption
             setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
             setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
             imgIndex={2}
             selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticEventImgUrl2}
+            predefinedImgUrl={staticLandingImgUrl2}
           />
         </div>
         <div className="flex space-x-2">
@@ -58,14 +58,14 @@ export default function PredefinedEventPictures({
             setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
             imgIndex={3}
             selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticEventImgUrl3}
+            predefinedImgUrl={staticLandingImgUrl3}
           />
           <PredefinedLandingImageOption
             setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
             setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
             imgIndex={4}
             selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticEventImgUrl4}
+            predefinedImgUrl={staticLandingImgUrl4}
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function PredefinedEventPictures({
   ) : (
     <div className="h-[355px] w-[308px] rounded-r-3xl bg-white py-[2px] pl-[25px] pr-[15px]">
       <h4 className="">
-        <span>predefined images</span>
+        <span>Predefined event images</span>
       </h4>
       <div className="  flex flex-col items-end space-y-[3px]">
         <p>
