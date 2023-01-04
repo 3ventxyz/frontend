@@ -12,13 +12,11 @@ import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import FileImageInput from '../../components/fileImageInput'
 import PredefinedEventPictures from './components/predefinedEventPictures'
-import LandingPortraitImageInput from '../../components/landingPortraitImageInput'
 import Button from '../../components/button'
 import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
-import PredefinedLandingPictures from './components/predefinedLandingPictures'
 import NumberInput from '../../components/numberInput'
 
 export default function CreateEvent() {
@@ -60,32 +58,28 @@ export default function CreateEvent() {
   /**
    * UI page setStates
    **/
-  const [isStartDateDropdownVisible, setIsStartDateDropdownVisible] =
-    useState(false)
-  const [isStartTimeDropdownVisible, setIsStartTimeDropdownVisible] =
-    useState(false)
-  const [isEndDateDropdownVisible, setIsEndDateDropdownVisible] =
-    useState(false)
-  const [isEndTimeDropdownVisible, setIsEndTimeDropdownVisible] =
-    useState(false)
-  const [displayPredefinedTicketImgsMenu, setDisplayPredefinedTicketImgsMenu] =
-    useState(false)
-  const [
-    displayPredefinedLandingImgsMenu,
-    setDisplayPredefinedLandingImgsMenu
-  ] = useState(false)
+  const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
+  const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
+  const [endDatePickerVisible, setEndDatePickerVisible] = useState(false)
+  const [endTimePickerVisible, setEndTimePickerVisible] = useState(false)
+
+  const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
+  const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
   const [currentStep, setCurrentStep] = useState<number>(page)
+  const [modalVisible, setModalVisible] = useState(false)
 
   /**
    * logic functions
    **/
   const togglePredefinedLandingImagesMenu = () => {
-    setDisplayPredefinedLandingImgsMenu(!displayPredefinedLandingImgsMenu)
+    setLandingImgsMenuVisible(!landingImgsMenuVisible)
   }
 
   const togglePredefinedTicketImagesMenu = () => {
-    setDisplayPredefinedTicketImgsMenu(!displayPredefinedTicketImgsMenu)
+    setTicketImgsMenuVisible(!ticketImgsMenuVisible)
   }
+
+  const modalOnClose = () => {}
 
   const onChangePredefinedImage = ({
     setImgUrl,
@@ -259,14 +253,14 @@ export default function CreateEvent() {
                     <LocalDatePicker
                       setSelectedDate={setStartDate}
                       selectedDate={startDate}
-                      isDropDownActive={isStartDateDropdownVisible}
-                      setIsDropDownActive={setIsStartDateDropdownVisible}
+                      isDropDownActive={startDatePickerVisible}
+                      setIsDropDownActive={setStartDatePickerVisible}
                     />
                     <LocalTimePicker
                       setSelectedDate={setStartDate}
                       selectedDate={startDate}
-                      isDropDownActive={isStartTimeDropdownVisible}
-                      setIsDropDownActive={setIsStartTimeDropdownVisible}
+                      isDropDownActive={startTimePickerVisible}
+                      setIsDropDownActive={setStartTimePickerVisible}
                     />
                   </div>
                 </div>
@@ -278,14 +272,14 @@ export default function CreateEvent() {
                     <LocalDatePicker
                       setSelectedDate={setEndDate}
                       selectedDate={endDate}
-                      isDropDownActive={isEndDateDropdownVisible}
-                      setIsDropDownActive={setIsEndDateDropdownVisible}
+                      isDropDownActive={endDatePickerVisible}
+                      setIsDropDownActive={setEndDatePickerVisible}
                     />
                     <LocalTimePicker
                       setSelectedDate={setEndDate}
                       selectedDate={endDate}
-                      isDropDownActive={isEndTimeDropdownVisible}
-                      setIsDropDownActive={setIsEndTimeDropdownVisible}
+                      isDropDownActive={endTimePickerVisible}
+                      setIsDropDownActive={setEndTimePickerVisible}
                     />
                   </div>
                 </div>
@@ -349,7 +343,7 @@ export default function CreateEvent() {
                           imgUrlTemplate={selectedPredefinedEventImgUrl}
                         />
                       </div>
-                      {fileImg === null && displayPredefinedTicketImgsMenu ? (
+                      {fileImg === null && ticketImgsMenuVisible ? (
                         <div className="absolute right-[380px] z-10">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={(
@@ -358,8 +352,7 @@ export default function CreateEvent() {
                               onChangePredefinedImage({
                                 imgUrl: imgUrl,
                                 setImgUrl: setSelectedPredefinedEventImgUrl,
-                                setMenuVisibility:
-                                  setDisplayPredefinedTicketImgsMenu
+                                setMenuVisibility: setTicketImgsMenuVisible
                               })
                             }}
                           />
@@ -391,22 +384,16 @@ export default function CreateEvent() {
                       mode={'landing'}
                     />
                   </div>
-                  {displayPredefinedLandingImgsMenu ? (
+                  {landingImgsMenuVisible ? (
                     <div className="absolute right-[35px] top-[14px] z-20">
                       <PredefinedEventPictures
-                        setSelectedPredefinedEventImgUrl={
-                          (
-                            imgUrl: string
-                          ) => {
-                            onChangePredefinedImage({
-                              imgUrl: imgUrl,
-                              setImgUrl: setSelectedPredefinedLandingImgUrl,
-                              setMenuVisibility:
-                                setDisplayPredefinedLandingImgsMenu
-                            })
-                          }
-                          
-                        }
+                        setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
+                          onChangePredefinedImage({
+                            imgUrl: imgUrl,
+                            setImgUrl: setSelectedPredefinedLandingImgUrl,
+                            setMenuVisibility: setLandingImgsMenuVisible
+                          })
+                        }}
                         landingMode={true}
                       />
                     </div>
