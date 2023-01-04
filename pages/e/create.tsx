@@ -19,6 +19,7 @@ import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import PredefinedLandingPictures from './components/predefinedLandingPictures'
+import NumberInput from '../../components/numberInput'
 
 export default function CreateEvent() {
   const router = useRouter()
@@ -298,19 +299,9 @@ export default function CreateEvent() {
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
                     TICKET SUPPLY
                   </label>
-                  <input
-                    onChange={(e) => {
-                      setTicketMax(parseInt(e.target.value))
-                    }}
-                    className={`focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] ${
-                      isCreatingNewEvent
-                        ? 'border-gray-300  text-gray-300'
-                        : 'border-black  text-gray-700'
-                    } px-2  focus:outline-none`}
-                    id={'event_ticket_max'}
-                    type="number"
-                    placeholder={'0'}
-                    disabled={isCreatingNewEvent}
+                  <NumberInput
+                  setValue={setTicketMax}
+                  disabled={isCreatingNewEvent}
                   />
                 </div>
               </div>
