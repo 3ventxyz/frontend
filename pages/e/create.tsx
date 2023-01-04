@@ -87,6 +87,19 @@ export default function CreateEvent() {
     setDisplayPredefinedTicketImgsMenu(!displayPredefinedTicketImgsMenu)
   }
 
+  const onChangePredefinedImage = ({
+    setImgUrl,
+    imgUrl,
+    setMenuVisibility
+  }: {
+    setImgUrl: (imgUrl: string) => void
+    imgUrl: string
+    setMenuVisibility: (visibility: boolean) => void
+  }) => {
+    setImgUrl(imgUrl)
+    setMenuVisibility(false)
+  }
+
   const nextPage = () => {
     page = currentStep
     page++
@@ -300,8 +313,8 @@ export default function CreateEvent() {
                     TICKET SUPPLY
                   </label>
                   <NumberInput
-                  setValue={setTicketMax}
-                  disabled={isCreatingNewEvent}
+                    setValue={setTicketMax}
+                    disabled={isCreatingNewEvent}
                   />
                 </div>
               </div>
@@ -339,9 +352,16 @@ export default function CreateEvent() {
                       {fileImg === null && displayPredefinedTicketImgsMenu ? (
                         <div className="absolute right-[380px] z-10">
                           <PredefinedEventPictures
-                            setSelectedPredefinedEventImgUrl={
-                              setSelectedPredefinedEventImgUrl
-                            }
+                            setSelectedPredefinedEventImgUrl={(
+                              imgUrl: string
+                            ) => {
+                              onChangePredefinedImage({
+                                imgUrl: imgUrl,
+                                setImgUrl: setSelectedPredefinedEventImgUrl,
+                                setMenuVisibility:
+                                  setDisplayPredefinedTicketImgsMenu
+                              })
+                            }}
                           />
                         </div>
                       ) : (
@@ -375,7 +395,17 @@ export default function CreateEvent() {
                     <div className="absolute right-[35px] top-[14px] z-20">
                       <PredefinedEventPictures
                         setSelectedPredefinedEventImgUrl={
-                          setSelectedPredefinedLandingImgUrl
+                          (
+                            imgUrl: string
+                          ) => {
+                            onChangePredefinedImage({
+                              imgUrl: imgUrl,
+                              setImgUrl: setSelectedPredefinedLandingImgUrl,
+                              setMenuVisibility:
+                                setDisplayPredefinedLandingImgsMenu
+                            })
+                          }
+                          
                         }
                         landingMode={true}
                       />
