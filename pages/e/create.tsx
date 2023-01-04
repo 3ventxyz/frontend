@@ -18,6 +18,7 @@ import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
+import PredefinedLandingPictures from './components/predefinedLandingPictures'
 
 export default function CreateEvent() {
   const router = useRouter()
@@ -95,18 +96,6 @@ export default function CreateEvent() {
     page = currentStep
     page--
     setCurrentStep(page)
-  }
-
-  const submitData = () => {
-    /*Logic for the submit button, for uploading the info to the 3vent database */
-    console.log('===creating event===')
-    console.log('title: ', title)
-    console.log('startDate: ', startDate)
-    console.log('endDate: ', endDate)
-    console.log('eventLocation: ', eventLocation)
-    console.log('eventDescription: ', eventDescription)
-    console.log('ticketMax: ', ticketMax)
-    console.log('fileImg: ', fileImg)
   }
 
   const createEvent = async () => {
@@ -351,7 +340,6 @@ export default function CreateEvent() {
                     <div className="flex items-end ">
                       <div className="z-20">
                         <FileImageInput
-                          isCreateMode={true}
                           fileImg={fileImg}
                           setFileImg={setFileImg}
                           imgUrlTemplate={selectedPredefinedEventImgUrl}
@@ -372,28 +360,28 @@ export default function CreateEvent() {
                   </div>
                 </div>
                 <br />
-                <div className="flex flex-col space-y-7">
-                  <div className="">
+                <div className="absolute top-[780px] z-20 flex w-[600px] flex-col space-y-7">
+                  <div className="flex justify-between">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
                     </label>
                     <span
                       onClick={togglePredefinedLandingImagesMenu}
-                      className="hover:cursor-pointer hover:underline"
+                      className="text-blue-800 hover:cursor-pointer hover:underline"
                     >
-                      predefined images
+                      Change Landing Portrait
                     </span>
                   </div>
                   <div className="absolute z-10">
                     <FileImageInput
-                      isCreateMode={true}
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
                       imgUrlTemplate={selectedPredefinedLandingImgUrl}
                       mode={'landing'}
                     />
                   </div>
-                  <div className="absolute right-[490px] top-[780px] z-20">
+                  {displayPredefinedLandingImgsMenu ? (
+                    <div className="absolute right-[35px] top-[14px] z-20">
                       <PredefinedEventPictures
                         setSelectedPredefinedEventImgUrl={
                           setSelectedPredefinedLandingImgUrl
@@ -401,17 +389,9 @@ export default function CreateEvent() {
                         landingMode={true}
                       />
                     </div>
-                  {/* {fileImg === null && displayPredefinedLandingImgsMenu ? (
-                    <div className="absolute right-[380px] z-20">
-                      <PredefinedEventPictures
-                        setSelectedPredefinedEventImgUrl={
-                          setSelectedPredefinedEventImgUrl
-                        }
-                      />
-                    </div>
                   ) : (
                     <></>
-                  )} */}
+                  )}
                 </div>
               </div>
             </div>

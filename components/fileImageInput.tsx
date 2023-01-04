@@ -17,14 +17,14 @@ export default function FileImageInput({
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
-  isCreateMode = false,
+  // isCreateMode = false,
   isDisabled = true
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
   imgUrlTemplate?: string
   mode?: 'event' | 'landing' | undefined
-  isCreateMode: boolean
+  // isCreateMode: boolean
   isDisabled?: boolean
 }) {
   const [imgUrl, setImgUrl] = useState('')
@@ -99,7 +99,7 @@ export default function FileImageInput({
     >
       <UploadFileImage
         mode={mode}
-        isCreateMode={isCreateMode}
+        // isCreateMode={isCreateMode}
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
         isDisabled={isDisabled}
@@ -110,13 +110,13 @@ export default function FileImageInput({
 
 function UploadFileImage({
   mode,
-  isCreateMode,
+  // isCreateMode,
   setFileImg,
   setImgUrl,
   isDisabled
 }: {
   mode: string
-  isCreateMode: boolean
+  // isCreateMode: boolean
   setFileImg: (file: File) => void
   setImgUrl: (url: string) => void
   isDisabled: boolean
@@ -139,25 +139,14 @@ function UploadFileImage({
           {mode === 'event' ? (
             <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px] " />
           ) : (
-            <div>
-              {isCreateMode ? (
-                <BiLandscape className="h-[150px] w-[150px]" />
-              ) : (
-                <BiLandscape className="h-[150px] w-[150px]" />
-              )}
-            </div>
+            <BiLandscape className="h-[150px] w-[150px]" />
           )}
-          <div className={`${isCreateMode ? 'text-wrap  ' : ''} px-[5px]`}>
+          <div>
             {mode === 'event'
               ? 'Please select a ticket image'
               : 'Please select a landing portrait'}
           </div>
         </div>
-        {isCreateMode && mode === 'landing' ? (
-          <div className="h-[250px] w-[380px] rounded-3xl  bg-white"></div>
-        ) : (
-          <></>
-        )}
       </div>
     </label>
   )
