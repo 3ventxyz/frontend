@@ -19,64 +19,66 @@ export default function PredefinedEventPictures({
   const staticEventImgUrl4: string =
     'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent4.jpg?alt=media&token=145fdc18-f398-4d26-b441-0f63356db72e'
 
-  const staticLandingImgUrl1: string = 'https://i.pinimg.com/736x/e0/57/e0/e057e07ff1a469fac36649e001cb8222.jpg'
-  const staticLandingImgUrl2: string = 'https://cdn.wallpapersafari.com/34/54/Q7OhUp.jpg'
-  const staticLandingImgUrl3: string = 'https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700008792.jpg'
-  const staticLandingImgUrl4: string = 'https://wallpaperfx.com/view_image/honshu-island-japan-1440x900-wallpaper-15579.jpg'
+  const staticLandingImgUrl1: string =
+    'https://i.pinimg.com/736x/e0/57/e0/e057e07ff1a469fac36649e001cb8222.jpg'
+  const staticLandingImgUrl2: string =
+    'https://cdn.wallpapersafari.com/34/54/Q7OhUp.jpg'
+  const staticLandingImgUrl3: string =
+    'https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700008792.jpg'
+  const staticLandingImgUrl4: string =
+    'https://wallpaperfx.com/view_image/honshu-island-japan-1440x900-wallpaper-15579.jpg'
   const [selectedPredefinedImgIndex, setSelectedPredefinedImgIndex] =
     useState<number>(0)
 
   return landingMode ? (
-    <div className="flex h-[255px] w-[525px] rounded-3xl bg-white px-[5px] py-[5px]">
-      <div className="w-full">
-      <h4 className="">
-        <span>Predefined landing images</span>
-      </h4>
-      <p> Please select one of the pictures that we offer.
+    <div className="flex h-max-[255px] w-max-[525px]   flex-col rounded-3xl bg-white px-[5px] py-[5px] md:flex-row">
+      <div className="w-max-[230px]">
+        <h4 className="">
+          <span>Predefined landing images</span>
+        </h4>
+        <p className="hidden md:block">
+          {' '}
+          Please select one of the pictures that we offer.
         </p>
       </div>
-      <div className='space-y-2'>
-        <div className="flex space-x-2 ">
-          <PredefinedLandingImageOption
-            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-            imgIndex={1}
-            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticLandingImgUrl1}
-          />
-          <PredefinedLandingImageOption
-            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-            imgIndex={2}
-            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticLandingImgUrl2}
-          />
-        </div>
-        <div className="flex space-x-2">
-          <PredefinedLandingImageOption
-            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-            imgIndex={3}
-            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticLandingImgUrl3}
-          />
-          <PredefinedLandingImageOption
-            setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
-            setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
-            imgIndex={4}
-            selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-            predefinedImgUrl={staticLandingImgUrl4}
-          />
-        </div>
+      <div className="grid w-full grid-rows-4 content-center gap-y-[2px] md:gap-x-[5px] md:grid-cols-2 md:grid-rows-2">
+        <PredefinedLandingImageOption
+          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+          imgIndex={1}
+          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+          predefinedImgUrl={staticLandingImgUrl1}
+        />
+        <PredefinedLandingImageOption
+          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+          imgIndex={2}
+          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+          predefinedImgUrl={staticLandingImgUrl2}
+        />
+        <PredefinedLandingImageOption
+          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+          imgIndex={3}
+          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+          predefinedImgUrl={staticLandingImgUrl3}
+        />
+        <PredefinedLandingImageOption
+          setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
+          setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
+          imgIndex={4}
+          selectedPredefinedImgIndex={selectedPredefinedImgIndex}
+          predefinedImgUrl={staticLandingImgUrl4}
+        />
       </div>
     </div>
   ) : (
-    <div className="h-[355px] w-[308px] rounded-r-3xl bg-white py-[2px] pl-[25px] pr-[15px]">
+    <div className="rounded-3xl bg-white md:h-[355px] md:w-[308px] md:rounded-r-3xl md:py-[2px] md:pl-[25px] md:pr-[15px]">
       <h4 className="">
         <span>Predefined event images</span>
       </h4>
-      <div className="  flex flex-col items-end space-y-[3px]">
-        <p>
+      <div className="  flex flex-col space-y-[3px] md:items-end">
+        <p className="hidden md:block">
           In case that you don&apos;t have an image for your event. Please
           select one of the pictures that we offer.
         </p>
@@ -138,7 +140,7 @@ function PredefinedLandingImageOption({
       }}
     >
       <div
-        className={`relative h-[120px] w-[175px] rounded-3xl   ${
+        className={`relative h-[140px] w-[220px] md:h-[120px] md:w-[175px] rounded-3xl   ${
           selectedPredefinedImgIndex === imgIndex
             ? 'border-[3px] border-blue-600'
             : ''
@@ -177,7 +179,7 @@ function PredefinedImageOption({
       }}
     >
       <div
-        className={`relative h-[120px] w-[120px] rounded-3xl   ${
+        className={`relative h-[140px] w-[140px] rounded-3xl md:h-[120px] md:w-[120px]   ${
           selectedPredefinedImgIndex === imgIndex
             ? 'border-[3px] border-blue-600'
             : ''

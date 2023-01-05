@@ -17,14 +17,12 @@ export default function FileImageInput({
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
-  // isCreateMode = false,
   isDisabled = true
 }: {
   fileImg: File | null
   setFileImg: (value: File) => void
   imgUrlTemplate?: string
   mode?: 'event' | 'landing' | undefined
-  // isCreateMode: boolean
   isDisabled?: boolean
 }) {
   const [imgUrl, setImgUrl] = useState('')
@@ -99,7 +97,6 @@ export default function FileImageInput({
     >
       <UploadFileImage
         mode={mode}
-        // isCreateMode={isCreateMode}
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
         isDisabled={isDisabled}
@@ -110,13 +107,11 @@ export default function FileImageInput({
 
 function UploadFileImage({
   mode,
-  // isCreateMode,
   setFileImg,
   setImgUrl,
   isDisabled
 }: {
   mode: string
-  // isCreateMode: boolean
   setFileImg: (file: File) => void
   setImgUrl: (url: string) => void
   isDisabled: boolean
@@ -134,14 +129,14 @@ function UploadFileImage({
           setImgUrl(URL.createObjectURL(event.target.files[0]))
         }}
       />
-      <div className="flex h-full   items-center justify-center text-gray-400 ">
+      <div className="flex h-full items-center justify-center text-gray-400 ">
         <div className="flex w-[150px] flex-col items-center  justify-center ">
           {mode === 'event' ? (
             <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px] " />
           ) : (
             <BiLandscape className="h-[75px] w-[75px] md:h-[150px] md:w-[150px]" />
           )}
-          <div className='text-[12px] md:text-0' >
+          <div className="md:text-0 text-[12px]">
             {mode === 'event'
               ? 'Please select a ticket image'
               : 'Please select a landing portrait'}
@@ -177,7 +172,7 @@ function FileImageUploaded({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover &&!isDisabled ? (
+      {isMouseHover && !isDisabled ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
           <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>
@@ -225,7 +220,7 @@ function DisplayPredefinedImage({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover &&!isDisabled ? (
+      {isMouseHover && !isDisabled ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
           <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>

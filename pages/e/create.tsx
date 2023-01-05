@@ -311,7 +311,7 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
-            <div id="step-3" className="h-[800px]">
+            <div id="step-3" className="h-full md:h-[800px]">
               <h4>3.- Landing portrait and ticket image</h4>
               <hr />
               <br />
@@ -333,7 +333,7 @@ export default function CreateEvent() {
                         Predefined Images
                       </span>
                     </div>
-                    <div className="flex items-end ">
+                    <div className="items-end md:flex space-y-[5px]">
                       <div className="z-20">
                         <FileImageInput
                           fileImg={fileImg}
@@ -342,7 +342,7 @@ export default function CreateEvent() {
                         />
                       </div>
                       {fileImg === null && ticketImgsMenuVisible ? (
-                        <div className="absolute right-[380px] z-10">
+                        <div className="right-[380px] z-10 md:absolute">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={(
                               imgUrl: string
@@ -362,7 +362,7 @@ export default function CreateEvent() {
                   </div>
                 </div>
                 <br />
-                <div className="top-[780px] z-20 flex w-[600px] flex-col space-y-7 md:absolute">
+                <div className="top-[780px] z-20 flex md:w-[600px] flex-col space-y-7 md:absolute">
                   <div className="flex justify-between">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
@@ -374,7 +374,7 @@ export default function CreateEvent() {
                       Change Landing Portrait
                     </span>
                   </div>
-                  <div className="md:absolute z-10">
+                  <div className="z-10 md:absolute">
                     <FileImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
@@ -383,7 +383,7 @@ export default function CreateEvent() {
                     />
                   </div>
                   {landingImgsMenuVisible ? (
-                    <div className="right-[35px] top-[14px] z-20 md:absolute">
+                    <div className="z-20 md:absolute md:right-[35px] md:top-[14px]">
                       <PredefinedEventPictures
                         setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
                           onChangePredefinedImage({
