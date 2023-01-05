@@ -58,7 +58,7 @@ export default class AllowlistService {
     discord: boolean,
     discordGuild: boolean,
     discordGuildId: string,
-    email: boolean, 
+    email: boolean,
     permalink: string
   ) => {
     try {
@@ -84,7 +84,7 @@ export default class AllowlistService {
             discordVerif: discord,
             discordGuild: discordGuild,
             discordGuildId: discordGuildId,
-            emailVerif: email, 
+            emailVerif: email,
             permalink: permalink
           })
           return { success: true, message: 'List created successfully' }
@@ -137,7 +137,20 @@ export default class AllowlistService {
     }
   }
 
-  update = async (id: string, allowlist: AllowlistInterface, uid: string) => {
+  update = async (
+    id: string,
+    allowlist: AllowlistInterface,
+    uid: string,
+    wallet: boolean,
+    twitter: boolean,
+    twitterFollowing: boolean,
+    twitterAccountId: string,
+    discord: boolean,
+    discordGuild: boolean,
+    discordGuildId: string,
+    email: boolean,
+    permalink: string
+  ) => {
     try {
       if (id) {
         const authVerification = await this.checkAuth(id, uid)
@@ -145,7 +158,16 @@ export default class AllowlistService {
           title: allowlist.title,
           description: allowlist.description,
           allowlist: allowlist.allowlist,
-          uid: doc(db, 'users', uid)
+          uid: doc(db, 'users', uid),
+          walletVerif: wallet,
+          twitterVerif: twitter,
+          twitterFollowing: twitterFollowing,
+          twitterAccountId: twitterAccountId,
+          discordVerif: discord,
+          discordGuild: discordGuild,
+          discordGuildId: discordGuildId,
+          emailVerif: email,
+          permalink: permalink
         })
         return { success: true, message: 'Allowlist updated successfully' }
       }
