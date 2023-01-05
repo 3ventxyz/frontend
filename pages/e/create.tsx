@@ -23,12 +23,7 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
   const events = useEvents()
-  const stepsText = ['Step 1', 'Step 2', 'Step 3']
-  const instructionsText = [
-    'Event title, location and date',
-    'Event description and ticket supply',
-    'Event Images'
-  ]
+
   let today: Date = startOfToday()
   let page: number = 0
 
@@ -333,7 +328,7 @@ export default function CreateEvent() {
                         Predefined Images
                       </span>
                     </div>
-                    <div className="items-end md:flex space-y-[5px]">
+                    <div className="items-end space-y-[5px] md:flex">
                       <div className="z-20">
                         <FileImageInput
                           fileImg={fileImg}
@@ -362,7 +357,7 @@ export default function CreateEvent() {
                   </div>
                 </div>
                 <br />
-                <div className="top-[780px] z-20 flex md:w-[600px] flex-col space-y-7 md:absolute">
+                <div className="top-[780px] z-20 flex flex-col space-y-7 md:absolute md:w-[600px]">
                   <div className="flex justify-between">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
@@ -407,43 +402,70 @@ export default function CreateEvent() {
           </div>
         </div>
       </div>
-      <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
-        {/* button for pagination and submit newly created event. */}
-        <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] lg:max-w-[700px]">
-          <div>
-            <div className="text-[17px] font-bold sm:text-[20px]">
-              {stepsText[currentStep]}
-            </div>
-            <div className="text-[14px] sm:text-[16px]">
-              {instructionsText[currentStep]}
-            </div>
+      <CreateEventFooter
+        currentStep={currentStep}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        createEvent={createEvent}
+      />
+    </div>
+  )
+}
+
+function CreateEventFooter({
+  currentStep,
+  prevPage,
+  nextPage,
+  createEvent
+}: {
+  currentStep: number
+  prevPage: () => void
+  nextPage: () => void
+  createEvent: () => void
+}) {
+  const stepsText = ['Step 1', 'Step 2', 'Step 3']
+  const instructionsText = [
+    'Event title, location and date',
+    'Event description and ticket supply',
+    'Event Images'
+  ]
+  return (
+    <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
+      {/* button for pagination and submit newly created event. */}
+      <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] lg:max-w-[700px]">
+        <div>
+          <div className="text-[17px] font-bold sm:text-[20px]">
+            {stepsText[currentStep]}
           </div>
-          <div className="  flex space-x-2">
+          <div className="text-[14px] sm:text-[16px]">
+            {instructionsText[currentStep]}
+          </div>
+        </div>
+        <div className="  flex space-x-2">
+          <Button
+            text={'Prev'}
+            active={currentStep > 0 ? true : false}
+            onClick={() => {
+              prevPage()
+            }}
+          />
+          {currentStep < 2 ? (
             <Button
-              text={'Prev'}
-              active={currentStep > 0 ? true : false}
+              text={'Next'}
+              active={currentStep < 2 ? true : false}
               onClick={() => {
-                prevPage()
+                nextPage()
               }}
             />
-            {currentStep < 2 ? (
-              <Button
-                text={'Next'}
-                active={currentStep < 2 ? true : false}
-                onClick={() => {
-                  nextPage()
-                }}
-              />
-            ) : (
-              <Button
-                text={'Create Event'}
-                active={true}
-                onClick={() => {
-                  createEvent()
-                }}
-              />
-            )}
-          </div>
+          ) : (
+            <Button
+              text={'Create Event'}
+              active={true}
+              onClick={() => {
+                createEvent()
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
