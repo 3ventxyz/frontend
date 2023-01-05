@@ -206,7 +206,7 @@ export default function CreateEvent() {
    **/
   return (
     <div className="flex w-full flex-col items-center bg-secondaryBg">
-      <div className="w-full max-w-[300px] space-y-10 pt-[60px] pb-[200px] sm:max-w-[400px] lg:max-w-[600px] ">
+      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] lg:max-w-[600px] ">
         <div>
           <h3>Create Event</h3>
           <hr />
@@ -313,11 +313,11 @@ export default function CreateEvent() {
               <div
                 className={`${
                   currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col`}
+                } flex flex-col items-center md:items-start space-y-3`}
               >
                 <div>
-                  <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                    <div className="flex w-full justify-between ">
+                  <div className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
+                    <div className="flex w-full justify-between">
                       <label className="mb-2 block text-sm font-medium text-gray-900 ">
                         TICKET EVENT IMAGE
                       </label>
@@ -357,9 +357,9 @@ export default function CreateEvent() {
                   </div>
                 </div>
                 <br />
-                <div className="top-[780px] z-20 flex flex-col space-y-7 md:absolute md:w-[600px]">
+                <div className="top-[780px] z-20 flex flex-col space-y-1 md:space-y-7 md:absolute md:w-[600px]">
                   <div className="flex justify-between">
-                    <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    <label className="md:mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
                     </label>
                     <span

@@ -31,7 +31,7 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return landingMode ? (
-    <div className="flex h-max-[255px] w-max-[525px]   flex-col rounded-3xl bg-white px-[5px] py-[5px] md:flex-row">
+    <div className="h-max-[255px] w-max-[525px] flex   flex-col rounded-3xl bg-white px-[5px] py-[5px] md:flex-row">
       <div className="w-max-[230px]">
         <h4 className="">
           <span>Predefined landing images</span>
@@ -41,7 +41,7 @@ export default function PredefinedEventPictures({
           Please select one of the pictures that we offer.
         </p>
       </div>
-      <div className="grid w-full grid-rows-4 content-center gap-y-[2px] md:gap-x-[5px] md:grid-cols-2 md:grid-rows-2">
+      <div className="grid w-full grid-rows-4 place-items-center  content-center  gap-y-[5px]  md:grid-cols-2 md:grid-rows-2 md:gap-x-[5px]">
         <PredefinedLandingImageOption
           setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
           setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
@@ -73,11 +73,11 @@ export default function PredefinedEventPictures({
       </div>
     </div>
   ) : (
-    <div className="rounded-3xl bg-white md:h-[355px] md:w-[308px] md:rounded-r-3xl md:py-[2px] md:pl-[25px] md:pr-[15px]">
+    <div className="rounded-3xl bg-white px-[10px] py-[10px] md:h-[355px] md:w-[308px] md:rounded-r-3xl md:px-[0px] md:py-[2px] md:pl-[25px] md:pr-[15px]">
       <h4 className="">
         <span>Predefined event images</span>
       </h4>
-      <div className="  flex flex-col space-y-[3px] md:items-end">
+      <div className="flex flex-col items-center space-y-[3px] md:items-end">
         <p className="hidden md:block">
           In case that you don&apos;t have an image for your event. Please
           select one of the pictures that we offer.
@@ -138,9 +138,10 @@ function PredefinedLandingImageOption({
         setSelectedPredefinedImgIndex(imgIndex)
         setSelectedPredefinedEventImgUrl(predefinedImgUrl)
       }}
+      className=""
     >
       <div
-        className={`relative h-[140px] w-[220px] md:h-[120px] md:w-[175px] rounded-3xl   ${
+        className={`relative h-[150px] w-[265px] rounded-3xl  md:h-[120px]  md:w-[175px] ${
           selectedPredefinedImgIndex === imgIndex
             ? 'border-[3px] border-blue-600'
             : ''
