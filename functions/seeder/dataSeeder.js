@@ -158,7 +158,7 @@ module.exports = class DataSeeder {
           .collection('events')
           .doc(`${eventId}`)
           .set({
-            description: faker.commerce.productDescription(),
+            description: faker.lorem.lines(20),
             end_date: endDate,
             start_date: startDate,
             img_url: faker.image.abstract(640, 640, true),
@@ -167,7 +167,6 @@ module.exports = class DataSeeder {
             ticket_max: randomCapTickets,
             event_id: eventId,
             registered_attendees: 0,
-            description: faker.commerce.productDescription(),
             location: {
               address: faker.address.streetAddress(),
               lat: faker.address.latitude(),

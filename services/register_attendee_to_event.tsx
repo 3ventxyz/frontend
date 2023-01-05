@@ -8,17 +8,12 @@ import {
   updateDoc
 } from '@firebase/firestore'
 interface AttendeeRegistrationInterface {
-  first_name: string
-  last_name: string
   address: string
-  state: string
-  city: string
   phone_number: string
-  zip_code: string
   uid: string
-  date_of_registration: Date,
-  avatar: string, 
-  username: string,
+  date_of_registration: Date
+  avatar: string
+  username: string
 }
 
 export default async function registerAttendeeToEvent(
@@ -31,7 +26,7 @@ export default async function registerAttendeeToEvent(
   //registering the user, to the event document.
   const eventDoc: DocumentData = await getDoc(eventDocRef)
   console.log(eventDoc)
-  let registered_attendees:number = eventDoc.data().registered_attendees
+  let registered_attendees: number = eventDoc.data().registered_attendees
   await updateDoc(eventDocRef, {
     registered_attendees: registered_attendees + 1
   })
