@@ -313,7 +313,7 @@ export default function CreateEvent() {
               <div
                 className={`${
                   currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col items-center md:items-start space-y-3`}
+                } flex flex-col items-center space-y-3 md:items-start`}
               >
                 <div>
                   <div className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
@@ -356,20 +356,19 @@ export default function CreateEvent() {
                     </div>
                   </div>
                 </div>
-                <br />
-                <div className="top-[780px] z-20 flex flex-col space-y-1 md:space-y-7 md:absolute md:w-[600px]">
+                <div className="top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0">
                   <div className="flex justify-between">
-                    <label className="md:mb-2 block text-sm font-medium text-gray-900 ">
-                      LANDING PORTRAIT IMAGE
+                    <label className="block text-sm font-medium text-gray-900 md:mb-2 ">
+                      LANDING PORTRAIT IMAGES
                     </label>
                     <span
                       onClick={togglePredefinedLandingImagesMenu}
                       className="text-blue-800 hover:cursor-pointer hover:underline"
                     >
-                      Change Landing Portrait
+                      Predefined Images
                     </span>
                   </div>
-                  <div className="z-10 md:absolute">
+                  <div className="z-10">
                     <FileImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
@@ -378,7 +377,7 @@ export default function CreateEvent() {
                     />
                   </div>
                   {landingImgsMenuVisible ? (
-                    <div className="z-20 md:absolute md:right-[35px] md:top-[14px]">
+                    <div className="z-20 px-[15px] md:absolute md:top-[42px]">
                       <PredefinedEventPictures
                         setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
                           onChangePredefinedImage({

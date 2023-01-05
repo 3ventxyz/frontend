@@ -31,8 +31,8 @@ export default function PredefinedEventPictures({
     useState<number>(0)
 
   return landingMode ? (
-    <div className="h-max-[255px] w-max-[525px] flex   flex-col rounded-3xl bg-white px-[5px] py-[5px] md:flex-row">
-      <div className="w-max-[230px]">
+    <div className="h-max-[255px] w-max-[525px] flex flex-col rounded-3xl  bg-white px-[5px] py-[5px] md:flex-row">
+      <div className="w-[280px]">
         <h4 className="">
           <span>Predefined landing images</span>
         </h4>
@@ -41,7 +41,7 @@ export default function PredefinedEventPictures({
           Please select one of the pictures that we offer.
         </p>
       </div>
-      <div className="grid w-full grid-rows-4 place-items-center  content-center  gap-y-[5px]  md:grid-cols-2 md:grid-rows-2 md:gap-x-[5px]">
+      <div className="grid w-full grid-rows-4 place-items-center  content-center gap-y-[5px]  md:grid-cols-2 md:grid-rows-2 md:gap-x-[0px]">
         <PredefinedLandingImageOption
           setSelectedPredefinedImgIndex={setSelectedPredefinedImgIndex}
           setSelectedPredefinedEventImgUrl={setSelectedPredefinedEventImgUrl}
