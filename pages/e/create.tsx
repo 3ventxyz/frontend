@@ -66,7 +66,7 @@ export default function CreateEvent() {
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
   const [currentStep, setCurrentStep] = useState<number>(page)
-  const [modalVisible, setModalVisible] = useState(false)
+  // const [modalVisible, setModalVisible] = useState(false)
 
   /**
    * logic functions
@@ -78,8 +78,6 @@ export default function CreateEvent() {
   const togglePredefinedTicketImagesMenu = () => {
     setTicketImgsMenuVisible(!ticketImgsMenuVisible)
   }
-
-  const modalOnClose = () => {}
 
   const onChangePredefinedImage = ({
     setImgUrl,
@@ -364,7 +362,7 @@ export default function CreateEvent() {
                   </div>
                 </div>
                 <br />
-                <div className="absolute top-[780px] z-20 flex w-[600px] flex-col space-y-7">
+                <div className="top-[780px] z-20 flex w-[600px] flex-col space-y-7 md:absolute">
                   <div className="flex justify-between">
                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
                       LANDING PORTRAIT IMAGE
@@ -376,7 +374,7 @@ export default function CreateEvent() {
                       Change Landing Portrait
                     </span>
                   </div>
-                  <div className="absolute z-10">
+                  <div className="md:absolute z-10">
                     <FileImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
@@ -385,7 +383,7 @@ export default function CreateEvent() {
                     />
                   </div>
                   {landingImgsMenuVisible ? (
-                    <div className="absolute right-[35px] top-[14px] z-20">
+                    <div className="right-[35px] top-[14px] z-20 md:absolute">
                       <PredefinedEventPictures
                         setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
                           onChangePredefinedImage({

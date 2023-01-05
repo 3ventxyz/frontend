@@ -46,8 +46,8 @@ export default function FileImageInput({
         }}
         className={`${
           mode === 'event'
-            ? 'h-[384px] max-h-[320px] w-[380px]'
-            : 'h-[285px] w-[600px]'
+            ? 'h-[325px] max-h-[320px] w-[325px] md:h-[384px] md:w-[380px]'
+            : 'h-[166px] w-[352px] md:h-[285px] md:w-[600px]'
         } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
       >
         <DisplayPredefinedImage
@@ -74,8 +74,8 @@ export default function FileImageInput({
       }}
       className={`${
         mode === 'event'
-          ? 'h-[384px] max-h-[320px] w-[380px]'
-          : 'h-[285px] w-[600px]'
+          ? 'h-[325px] max-h-[320px] w-[325px] md:h-[384px] md:w-[380px]'
+          : 'h-[166px] w-[352px] md:h-[285px] md:w-[600px]'
       } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
     >
       <FileImageUploaded
@@ -93,8 +93,8 @@ export default function FileImageInput({
     <div
       className={`${
         mode === 'event'
-          ? 'h-[384px] max-h-[320px] w-[380px]'
-          : 'h-[285px] w-[600px]'
+          ? 'h-[325px] max-h-[320px] w-[325px] md:h-[384px] md:w-[380px]'
+          : 'h-[166px] w-[352px] md:h-[285px] md:w-[600px]'
       } relative rounded-3xl bg-gray-300 hover:cursor-pointer  sm:max-h-full`}
     >
       <UploadFileImage
@@ -137,11 +137,11 @@ function UploadFileImage({
       <div className="flex h-full   items-center justify-center text-gray-400 ">
         <div className="flex w-[150px] flex-col items-center  justify-center ">
           {mode === 'event' ? (
-            <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px] " />
+            <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px] " />
           ) : (
-            <BiLandscape className="h-[150px] w-[150px]" />
+            <BiLandscape className="h-[75px] w-[75px] md:h-[150px] md:w-[150px]" />
           )}
-          <div>
+          <div className='text-[12px] md:text-0' >
             {mode === 'event'
               ? 'Please select a ticket image'
               : 'Please select a landing portrait'}
@@ -177,9 +177,9 @@ function FileImageUploaded({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover ? (
+      {isMouseHover &&!isDisabled ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
-          <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px]" />
+          <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>
         </div>
       ) : (
@@ -225,9 +225,9 @@ function DisplayPredefinedImage({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover ? (
+      {isMouseHover &&!isDisabled ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
-          <MdOutlineAddPhotoAlternate className="h-[150px] w-[150px]" />
+          <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>
         </div>
       ) : (
