@@ -163,8 +163,10 @@ export default function CreateEvent() {
             router.push(`/e/${eventId}`)
           }
         )
-      } else if(selectedPredefinedEventImgUrl !== null && selectedPredefinedLandingImgUrl
-        !== null) {
+      } else if (
+        selectedPredefinedEventImgUrl !== null &&
+        selectedPredefinedLandingImgUrl !== null
+      ) {
         await events.submitEventToFirebase(
           {
             title: title,
@@ -188,9 +190,8 @@ export default function CreateEvent() {
         )
         console.log('pushing to event page')
         router.push(`/e/${eventId}`)
-      }
-      else{
-        throw('no image selected');
+      } else {
+        throw 'no image selected'
       }
     } catch (e) {
       console.error('event/create:', e)
@@ -235,7 +236,7 @@ export default function CreateEvent() {
                 />
                 <TextInput
                   id={'event_id'}
-                  labelText={'Event ID'}
+                  labelText={'Event ID*'}
                   placeholder={''}
                   setValue={setEventId}
                   isDisabled={isCreatingNewEvent}
@@ -318,10 +319,11 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
-            <div id="step-3" className="h-full md:h-[800px]">
-              <h4>3.- Landing portrait and ticket image</h4>
+            <div id="step-3" className="h-full md:h-[800px] space-y-[11px]">
+              <div>
+                <h4>3.- Landing portrait and ticket image</h4>
+              </div>
               <hr />
-              <br />
               <div
                 className={`${
                   currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
@@ -456,9 +458,9 @@ function CreateEventFooter({
           </div>
         </div>
         {isCreatingNewEvent ? (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <Spinner width={25} height={25} />
-            <div className='ml-[10px]'>Creating event, please wait...</div>
+            <div className="ml-[10px]">Creating event, please wait...</div>
           </div>
         ) : (
           <div className="  flex space-x-2">
