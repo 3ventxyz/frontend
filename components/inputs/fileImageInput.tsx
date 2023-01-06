@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import { BiLandscape } from 'react-icons/bi'
 import Image from 'next/image'
-import CreateEvent from '../pages/e/create'
+import CreateEvent from '../../pages/e/create'
 
 //imgUrl for the previous template.
 //if a url is passed but a fileImg is still null, display the imgUrl.

@@ -1,4 +1,4 @@
-import Allowlists from '../../components/allowlist'
+import Allowlists from '../../components/allowlist/allowlist'
 
 export default function Allowlist() {
   return (

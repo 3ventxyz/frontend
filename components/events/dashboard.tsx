@@ -1,10 +1,10 @@
 // author: marthel
 import { useEffect, useState } from 'react'
-import { db } from '../services/firebase_config'
+import { db } from '../../services/firebase_config'
 import { doc, collection } from '@firebase/firestore'
-import { useEvents } from '../contexts/events'
+import { useEvents } from '../../contexts/events'
 import EventsDisplay from './eventsDisplay'
-import { useAuth } from '../contexts/auth'
+import { useAuth } from '../../contexts/auth'
 
 export default function Dashboard() {
   const events = useEvents()

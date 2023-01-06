@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { db } from '../../../services/firebase_config'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useAuth } from '../../../contexts/auth'
-import Button from '../../../components/button'
+import Button from '../../../components/buttons/button'
 import { sendSignInLinkToEmail } from 'firebase/auth'
 import { auth } from '../../../services/firebase_config'
 import { useRouter } from 'next/router'
 import absoluteUrl from 'next-absolute-url'
-import TextInputDisplay from '../../../components/textInputDisplay'
-import TextInput from '../../../components/textInput'
+import TextInputDisplay from '../../../components/inputs/textInputDisplay'
+import TextInput from '../../../components/inputs/textInput'
 
 export default function EmailVerification() {
   const [email, setEmail] = useState('')

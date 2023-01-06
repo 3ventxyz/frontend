@@ -4,10 +4,10 @@ import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
 import { EventInterface } from '../../shared/interface/common'
 import { useRouter } from 'next/router'
-import Button from '../../components/button'
-import EventTile from '../../components/eventTile'
+import Button from '../../components/buttons/button'
+import EventTile from '../../components/events/eventTile'
 import { collection, doc } from '@firebase/firestore'
-import Allowlists from '../../components/allowlist'
+import Allowlists from '../../components/allowlist/allowlist'
 
 export default function Creator() {
   const events = useEvents()

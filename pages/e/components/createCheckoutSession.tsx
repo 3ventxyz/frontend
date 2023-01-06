@@ -1,10 +1,10 @@
 // author: marthel
 import { useState, FormEvent } from 'react'
-import Button from '../../../components/button'
-import Spinner from '../../../components/spinner'
-import TicketButton from '../../../components/ticketButton'
+import Button from '../../../components/buttons/button'
+import Spinner from '../../../components/utils/spinner'
+import TicketButton from '../../../components/buttons/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
-import TicketRegTextInput from '../../../components/ticketRegTextInput'
+import TicketRegTextInput from '../../../components/inputs/ticketRegTextInput'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 
 enum CheckoutPageEnum {

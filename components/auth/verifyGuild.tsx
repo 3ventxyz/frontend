@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import absoluteUrl from 'next-absolute-url'
-import { useAuth } from '../contexts/auth'
 import { doc, updateDoc, collection } from 'firebase/firestore'
-import { db } from '../services/firebase_config'
+import { useAuth } from '../../contexts/auth'
+import { db } from '../../services/firebase_config'
 
 const saveFollowing = async (
   discord_guild: boolean,
@@ -109,7 +109,7 @@ export default function VerifyGuild({
   const url = `${origin}${router.pathname}`
   const [hash, setHash] = useState('')
   const state = btoa(lid)
-  
+
   useEffect(() => {
     const pathParts = asPath.split('code=')
     {
@@ -133,8 +133,7 @@ export default function VerifyGuild({
       <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
         <a
           href={`https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${url}&response_type=code&scope=identify%20guilds&state=${state}`}
-
-          className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4] px-4"
+          className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] px-4 text-[14px] font-semibold text-white hover:bg-[#4752c4]"
         >
           Verify Guild Membership
         </a>

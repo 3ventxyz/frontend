@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { verifyDiscord, verifyTwitter } from '../services/verify_profile'
+import { verifyDiscord, verifyTwitter } from '../../services/verify_profile'
 import absoluteUrl from 'next-absolute-url'
-import { useAuth } from '../contexts/auth'
+import { useAuth } from '../../contexts/auth'
 import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../services/firebase_config'
+import { db } from '../../services/firebase_config'
 
 const TWITTER_CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID
 

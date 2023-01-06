@@ -3,11 +3,11 @@ import { doc, getDoc, setDoc, collection, updateDoc } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 import { useAuth } from '../contexts/auth'
 import { useRouter } from 'next/router'
-import Button from '../components/button'
+import Button from '../components/buttons/button'
 import ErrorAlert from '../components/alerts/errorAlert'
-import VerifyGuild from '../components/verifyGuild'
+import VerifyGuild from '../components/auth/verifyGuild'
 import Link from 'next/link'
-import Modal from '../components/modal'
+import Modal from '../components/utils/modal'
 
 export default function AllowlistApplication() {
   const auth = useAuth()

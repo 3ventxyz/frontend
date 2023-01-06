@@ -1,7 +1,7 @@
 import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import Link from 'next/link'
 import Image from 'next/image'
-import EventTile from '../../../components/eventTile'
+import EventTile from '../../../components/events/eventTile'
 import Tilt from 'react-parallax-tilt';
 export default function LandingPortrait({
   event,
