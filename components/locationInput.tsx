@@ -68,7 +68,7 @@ export default function LocationInput({
               placeholder: placeholder,
               id: id,
               className:
-                'leading-0 h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] border-black px-2'
+                'focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'
             })}
           />
           <div className="z-20 divide-y-2 rounded-[15px] bg-secondaryBg">

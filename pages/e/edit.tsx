@@ -176,11 +176,11 @@ export default function EditEvent() {
               registered_attendees: registeredAttendees
             })
             await updateCreatedEventToUser({
-              eventTitle: title,
+              title: title,
               uid: auth.uid,
-              eventId: eventId,
-              startDate: startDate,
-              endDate: endDate
+              event_id: eventId,
+              start_date: startDate,
+              end_date: endDate
             })
             router.push(`/e/${eventId}`)
           }
@@ -199,11 +199,11 @@ export default function EditEvent() {
           registered_attendees: registeredAttendees
         })
         await updateCreatedEventToUser({
-          eventTitle: title,
+          title: title,
           uid: auth.uid,
-          eventId: eventId,
-          startDate: startDate,
-          endDate: endDate
+          event_id: eventId,
+          start_date: startDate,
+          end_date: endDate
         })
         router.push(`/e/${eventId}`)
       }

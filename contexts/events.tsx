@@ -13,7 +13,13 @@ import {
 import { ReactNode, useContext, useState } from 'react'
 import { createContext } from 'react'
 import { db } from '../services/firebase_config'
-import { EventInterface, TicketInterface } from '../shared/interface/common'
+import updateCreatedEventToUser from '../services/update_created_event_to_user'
+import { uploadEventInfo } from '../services/upload_event_info'
+import {
+  EventHostInterface,
+  EventInterface,
+  TicketInterface
+} from '../shared/interface/common'
 
 interface Props {
   children?: ReactNode
@@ -29,6 +35,10 @@ interface EventsInterface {
   cachePastEvents: (events: EventInterface[]) => void | void
   cacheAccessedEventData: (event: EventInterface) => void | void
   fetchAccessedEventData: (eid: string) => Promise<any> | void
+  submitEventToFirebase: (
+    newEventData: EventInterface,
+    eventHost: EventHostInterface
+  ) => Promise<any> | void
   fetchEventsData: ({
     collectionRef,
     numberOfEvents
@@ -50,6 +60,7 @@ const EventsContext = createContext<EventsInterface>({
   cachePastEvents: () => undefined,
   cacheAccessedEventData: () => undefined,
   fetchAccessedEventData: () => undefined,
+  submitEventToFirebase: () => undefined,
   cachedPastEvents: null,
   cachedUpcomingEvents: null,
   cachedRegisteredEvents: null,
@@ -80,6 +91,43 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   }
   const cacheAccessedEventData = (event: EventInterface) => {
     setAcessedEventData(event)
+  }
+
+  const submitEventToFirebase = async (
+    newEventData: EventInterface,
+    eventHost: EventHostInterface
+  ) => {
+    try
+    {
+
+    
+
+    await uploadEventInfo(newEventData)
+    // {
+    //   title: title,
+    //   end_date: endDate,
+    //   start_date: startDate,
+    //   uid: auth.uid,
+    //   description: eventDescription,
+    //   location: eventLocation,
+    //   img_url: url,
+    //   ticket_max: ticketMax,
+    //   event_id: eventId,
+    //   registered_attendees: registeredAttendees
+    // }
+    await updateCreatedEventToUser(eventHost)
+  }catch(e){
+    console.log('error at events context');
+    console.error(e);
+  }
+    //   {
+    //   eventTitle: title,
+    //   uid: auth.uid,
+    //   eventId: eventId,
+    //   startDate: startDate,
+    //   endDate: endDate
+    // }
+
   }
 
   // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
@@ -134,6 +182,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
         cachedUpcomingEvents: cachedUpcomingEvents,
         cachedPastEvents: cachedPastEvents,
         cachedRegisteredEvents: cachedRegisteredEvents,
+        submitEventToFirebase: submitEventToFirebase,
         newEventData: newEventData,
         cacheAccessedEventData: cacheAccessedEventData,
         fetchEventsData: fetchEventsData,

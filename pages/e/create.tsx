@@ -1,136 +1,121 @@
-// author: Marthel, Ben
-import TextInput from '../../components/textInput'
-import Button from '../../components/button'
-import FileImageInput from '../../components/fileImageInput'
-import { useState } from 'react'
-import Spinner from '../../components/spinner'
-import LocationInput from '../../components/locationInput'
-import { LocationData } from '../../shared/interface/common'
-import { uploadEventInfo } from '../../services/upload_event_info'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { startOfToday } from 'date-fns'
+import { LocationData } from '../../shared/interface/common'
+import TextInput from '../../components/textInput'
+import LocalDatePicker from './components/datepicker'
+import LocalTimePicker from './components/timepicker'
+import LocationInput from '../../components/locationInput'
+import EventLocationMap from './components/eventLocationMap'
+import CreateEventStepsDisplay from './components/createEventStepsDisplay'
+import FileImageInput from '../../components/fileImageInput'
+import PredefinedEventPictures from './components/predefinedEventPictures'
+import Button from '../../components/button'
+import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
-import updateCreatedEventToUser from '../../services/update_created_event_to_user'
 import CheckEventId from '../../services/check_event_id'
-import ErrorFormMsg from '../../components/errorMsg'
 import setFiletype from '../../shared/utils/setFileType'
-import Image from 'next/image'
-import PredefinedImageOption from './components/predefinedImageOption'
+import NumberInput from '../../components/numberInput'
+import Spinner from '../../components/spinner'
 
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
+  const events = useEvents()
 
-  const staticImgUrl1: string =
-    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent1.jpg?alt=media&token=841706c6-4890-4716-8ea1-16a1af49154a'
-  const staticImgUrl2: string =
-    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent2.jpg?alt=media&token=8be3fca4-9f01-4c0a-8654-984990ea8963'
-  const staticImgUrl3: string =
-    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent3.jpg?alt=media&token=ae0f2e20-6c24-4c0f-b080-8b4cdaf0ba7d'
-  const staticImgUrl4: string =
-    'https://firebasestorage.googleapis.com/v0/b/vent-d1d85.appspot.com/o/eventsPics%2FpastEvent4.jpg?alt=media&token=145fdc18-f398-4d26-b441-0f63356db72e'
+  let today: Date = startOfToday()
+  let page: number = 0
 
-  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
+  /**
+   * input data UI setStates
+   **/
   const [title, setTitle] = useState<string>('')
-  const [eventId, setEventId] = useState<string>('')
-  const [eventDescription, setEventDescription] = useState<string>('')
+  const [startDate, setStartDate] = useState<Date>(today)
+  const [endDate, setEndDate] = useState<Date>(today)
+  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [eventLocation, setEventLocation] = useState<LocationData>({
     address: '',
     lat: 0,
     long: 0
   })
-  const [fileImg, setFileImg] = useState<File | null>(null)
+  const [eventId, setEventId] = useState<string>('test-id')
+  const [eventDescription, setEventDescription] = useState<string>('')
   const [ticketMax, setTicketMax] = useState<number>(0)
-  const [startDate, setStartDate] = useState<Date>(new Date())
-  const [endDate, setEndDate] = useState<Date>(new Date())
-  const [errorMsg, setErrorMsg] = useState<string>('')
-  const [errorField, setErrorField] = useState<string>('')
-
+  const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
-    useState<string>('')
-  const [selectedPredefinedImgIndex, setSelectedPredefinedImgIndex] =
-    useState<number>(0)
+    useState<string | null>(null)
+  const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
+  const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
+    useState<string | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string>('')
 
-  const typeofFileValidator = (fileType: string) => {
-    if (fileType === 'image/jpeg' || fileType === 'image/png') {
-      console.log('valid image type', fileType)
-      return true
-    }
-    console.error('invalid image type', fileType)
-    return false
+  /**
+   * UI page setStates
+   **/
+  const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
+  const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
+  const [endDatePickerVisible, setEndDatePickerVisible] = useState(false)
+  const [endTimePickerVisible, setEndTimePickerVisible] = useState(false)
+
+  const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
+  const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
+  const [currentStep, setCurrentStep] = useState<number>(page)
+  // const [modalVisible, setModalVisible] = useState(false)
+
+  /**
+   * logic functions
+   **/
+  const togglePredefinedLandingImagesMenu = () => {
+    setLandingImgsMenuVisible(!landingImgsMenuVisible)
   }
 
-  const validateForm = () => {
-    if (title === '') {
-      setErrorField('Event Title')
-      setErrorMsg('title is empty')
-      return false
-    }
-    if (eventId === '') {
-      setErrorField('Event id')
-      setErrorMsg('event id is empty, please add a custom id')
-      return false
-    }
-    if (
-      eventLocation.address === '' ||
-      eventLocation.lat === 0 ||
-      eventLocation.long === 0
-    ) {
-      setErrorField('Location')
-      setErrorMsg('event location is not selected')
-      return false
-    }
-    if (startDate.getTime() === endDate.getTime()) {
-      setErrorField('Start Date/End Date')
-      setErrorMsg('start date and end date cannot have the same time period')
-      return false
-    }
-    if (startDate.getTime() === endDate.getTime()) {
-      setErrorField('Start Date/End Date')
-      setErrorMsg('start date and end date cannot have the same time period')
-      return false
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      setErrorField('Start Date/End Date')
-      setErrorMsg('end date cannot be behind the start date schedule')
-      return false
-    }
+  const togglePredefinedTicketImagesMenu = () => {
+    setTicketImgsMenuVisible(!ticketImgsMenuVisible)
+  }
 
-    if (!fileImg && selectedPredefinedEventImgUrl === '') {
-      setErrorField('Event Image')
-      setErrorMsg(
-        'An event image has not been selected. Please selecte an event image'
-      )
-      return false
-    }
-    if (fileImg !== null && !typeofFileValidator(fileImg.type)) {
-      setErrorField('Event Image')
-      setErrorMsg(
-        'Selected Image is invalid type. Please upload jpg or png image.'
-      )
-      return false
-    }
+  const onChangePredefinedImage = ({
+    setImgUrl,
+    imgUrl,
+    setMenuVisibility
+  }: {
+    setImgUrl: (imgUrl: string) => void
+    imgUrl: string
+    setMenuVisibility: (visibility: boolean) => void
+  }) => {
+    setImgUrl(imgUrl)
+    setMenuVisibility(false)
+  }
 
-    if (isNaN(ticketMax)) {
-      setErrorField('Tickets')
-      setErrorMsg('Please enter a valid number of tickets')
-      return false
-    }
-    if (ticketMax === 0) {
-      setErrorField('Tickets')
-      setErrorMsg('please add a ticket supply higher than 0')
-      return false
-    }
-    return true
+  const nextPage = () => {
+    page = currentStep
+    page++
+    setCurrentStep(page)
+  }
+
+  const prevPage = () => {
+    page = currentStep
+    page--
+    setCurrentStep(page)
   }
 
   const createEvent = async () => {
+    console.log('===creating event===')
+    console.log('title: ', title)
+    console.log('event_id: ', eventId)
+    console.log('startDate: ', startDate)
+    console.log('endDate: ', endDate)
+    console.log('eventLocation: ', eventLocation)
+    console.log('eventDescription: ', eventDescription)
+    console.log('ticketMax: ', ticketMax)
+    console.log('fileImg: ', fileImg)
+    console.log('========================')
+
     let isFormValid
     setIsCreatingNewEvent(true)
     setErrorMsg('')
-    isFormValid = validateForm()
+    isFormValid = formValidator()
     if (!isFormValid) {
       setIsCreatingNewEvent(false)
       return
@@ -147,55 +132,66 @@ export default function CreateEvent() {
       if (fileImg !== null) {
         console.log('fileImg: ', fileImg?.type)
         const fileType = setFiletype(fileImg)
-        const storagePath = `${auth.uid}/${eventId + fileType}`
+        const storagePath: string = `${auth.uid}/${eventId + fileType}`
         console.log('uploading image: ', fileImg?.name)
         await uploadImageToStorage(
           fileImg,
           storagePath,
           async (url: string) => {
-            const returnedId = await uploadEventInfo({
-              title: title,
-              end_date: endDate,
-              start_date: startDate,
-              uid: auth.uid,
-              description: eventDescription,
-              location: eventLocation,
-              img_url: url,
-              ticket_max: ticketMax,
-              event_id: eventId,
-              registered_attendees: 0
-            })
-            await updateCreatedEventToUser({
-              eventTitle: title,
-              uid: auth.uid,
-              eventId: eventId,
-              startDate: startDate,
-              endDate: endDate
-            })
+            await events.submitEventToFirebase(
+              {
+                title: title,
+                end_date: endDate,
+                start_date: startDate,
+                uid: auth.uid,
+                description: eventDescription,
+                location: eventLocation,
+                img_url: url,
+                ticket_max: ticketMax,
+                event_id: eventId,
+                registered_attendees: 0
+              },
+              {
+                title: title,
+                uid: auth.uid,
+                event_id: eventId,
+                start_date: startDate,
+                end_date: endDate
+              }
+            )
+            console.log('pushing to event page')
             router.push(`/e/${eventId}`)
           }
         )
-      } else {
-        const returnedId = await uploadEventInfo({
-          title: title,
-          end_date: endDate,
-          start_date: startDate,
-          uid: auth.uid,
-          description: eventDescription,
-          location: eventLocation,
-          img_url: selectedPredefinedEventImgUrl,
-          ticket_max: ticketMax,
-          event_id: eventId,
-          registered_attendees: 0
-        })
-        await updateCreatedEventToUser({
-          eventTitle: title,
-          uid: auth.uid,
-          eventId: eventId,
-          startDate: startDate,
-          endDate: endDate
-        })
+      } else if (
+        selectedPredefinedEventImgUrl !== null &&
+        selectedPredefinedLandingImgUrl !== null
+      ) {
+        await events.submitEventToFirebase(
+          {
+            title: title,
+            end_date: endDate,
+            start_date: startDate,
+            uid: auth.uid,
+            description: eventDescription,
+            location: eventLocation,
+            img_url: selectedPredefinedEventImgUrl,
+            ticket_max: ticketMax,
+            event_id: eventId,
+            registered_attendees: 0
+          },
+          {
+            title: title,
+            uid: auth.uid,
+            event_id: eventId,
+            start_date: startDate,
+            end_date: endDate
+          }
+        )
+        console.log('pushing to event page')
         router.push(`/e/${eventId}`)
+      } else {
+        throw 'no image selected'
       }
     } catch (e) {
       console.error('event/create:', e)
@@ -206,182 +202,294 @@ export default function CreateEvent() {
     }
   }
 
+  const formValidator = () => {
+    /**TODO: migrate the form validator logic from the previous create event page to this function. */
+    return true
+  }
+
+  /**
+   * HTML code
+   **/
   return (
-    <div className="flex w-screen flex-col items-center space-y-[35px] bg-secondaryBg pb-[100px] pt-[35px]">
-      <h3 className="w-full max-w-[600px] border-b border-disabled">Event</h3>
-      <div className="flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
-        <TextInput
-          id={'event_name'}
-          labelText={'Title'}
-          placeholder={''}
-          setValue={setTitle}
-          isDisabled={isCreatingNewEvent}
-        />
-        <div className="w-full">
-          <TextInput
-            id={'event_id'}
-            labelText={'URL'}
-            placeholder={'www.3vent.xyz/e/'}
-            setValue={setEventId}
-            isDisabled={isCreatingNewEvent}
-          />
-          <p className="mx-auto flex max-w-[400px] text-[14px]">
-            *event id cannot be updated
-          </p>
+    <div className="flex w-full flex-col items-center bg-secondaryBg">
+      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
+        <div>
+          <h3>Create Event</h3>
+          <hr />
         </div>
-        <TextInput
-          textArea={true}
-          id={'event_description'}
-          labelText={'Description'}
-          placeholder={''}
-          setValue={setEventDescription}
-          isDisabled={isCreatingNewEvent}
-        />
-        <LocationInput
-          labelText={'Location*'}
-          id={'event_location'}
-          placeholder={''}
-          setLocation={setEventLocation}
-        />
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <label className="mb-2 block text-sm font-medium text-gray-900 ">
-            START DATE
-          </label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
-            showTimeSelect
-            dateFormat="Pp"
-          />
-        </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <label className="mb-2 block text-sm font-medium text-gray-900 ">
-            END DATE
-          </label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date: Date) => setEndDate(date)}
-            showTimeSelect
-            dateFormat="Pp"
-          />
-        </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <label className="mb-2 block text-sm font-medium text-gray-900 ">
-            IMAGE
-          </label>
-          <FileImageInput
-            fileImg={fileImg}
-            setFileImg={setFileImg}
-            imgUrlTemplate={selectedPredefinedEventImgUrl}
-          />
-          {fileImg === null ? (
-            <div>
-              <h4 className="w-full">
-                <span>predefined images</span>
-              </h4>
-              <div className="flex flex-col items-center space-y-2">
-                <p>
-                  In case that you don&apos;t have an image for your event.
-                  Please select one of the pictures that we offer.
-                </p>
-                <div className="flex space-x-2">
-                  <PredefinedImageOption
-                    setSelectedPredefinedImgIndex={
-                      setSelectedPredefinedImgIndex
-                    }
-                    setSelectedPredefinedEventImgUrl={
-                      setSelectedPredefinedEventImgUrl
-                    }
-                    imgIndex={1}
-                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                    predefinedImgUrl={staticImgUrl1}
-                  />
-                  <PredefinedImageOption
-                    setSelectedPredefinedImgIndex={
-                      setSelectedPredefinedImgIndex
-                    }
-                    setSelectedPredefinedEventImgUrl={
-                      setSelectedPredefinedEventImgUrl
-                    }
-                    imgIndex={2}
-                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                    predefinedImgUrl={staticImgUrl2}
-                  />
+        <div id="create-event-form" className="flex space-x-5 ">
+          <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] md:max-w-[600px]">
+            <div id="step-1" className="">
+              <h4>1.- Event title, location and date</h4>
+              <hr />
+              <div
+                className={`${
+                  currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
+                } my-[10px] flex flex-col space-y-3 transition-transform`}
+              >
+                <TextInput
+                  id={'event_name'}
+                  labelText={'Title'}
+                  placeholder={''}
+                  setValue={setTitle}
+                  isDisabled={isCreatingNewEvent}
+                />
+                <TextInput
+                  id={'event_id'}
+                  labelText={'Event ID*'}
+                  placeholder={''}
+                  setValue={setEventId}
+                  isDisabled={isCreatingNewEvent}
+                />
+                <LocationInput
+                  labelText={'Location*'}
+                  id={'event_location'}
+                  placeholder={''}
+                  setLocation={setEventLocation}
+                />
+                <EventLocationMap
+                  lat={eventLocation.lat}
+                  long={eventLocation.long}
+                />
+                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    START DATE
+                  </label>
+                  <div className="flex space-x-3">
+                    <LocalDatePicker
+                      setSelectedDate={setStartDate}
+                      selectedDate={startDate}
+                      isDropDownActive={startDatePickerVisible}
+                      setIsDropDownActive={setStartDatePickerVisible}
+                    />
+                    <LocalTimePicker
+                      setSelectedDate={setStartDate}
+                      selectedDate={startDate}
+                      isDropDownActive={startTimePickerVisible}
+                      setIsDropDownActive={setStartTimePickerVisible}
+                    />
+                  </div>
                 </div>
-                <div className="flex space-x-2">
-                  <PredefinedImageOption
-                    setSelectedPredefinedImgIndex={
-                      setSelectedPredefinedImgIndex
-                    }
-                    setSelectedPredefinedEventImgUrl={
-                      setSelectedPredefinedEventImgUrl
-                    }
-                    imgIndex={3}
-                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                    predefinedImgUrl={staticImgUrl3}
-                  />
-                  <PredefinedImageOption
-                    setSelectedPredefinedImgIndex={
-                      setSelectedPredefinedImgIndex
-                    }
-                    setSelectedPredefinedEventImgUrl={
-                      setSelectedPredefinedEventImgUrl
-                    }
-                    imgIndex={4}
-                    selectedPredefinedImgIndex={selectedPredefinedImgIndex}
-                    predefinedImgUrl={staticImgUrl4}
+                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    END DATE
+                  </label>
+                  <div className="flex space-x-3">
+                    <LocalDatePicker
+                      setSelectedDate={setEndDate}
+                      selectedDate={endDate}
+                      isDropDownActive={endDatePickerVisible}
+                      setIsDropDownActive={setEndDatePickerVisible}
+                    />
+                    <LocalTimePicker
+                      setSelectedDate={setEndDate}
+                      selectedDate={endDate}
+                      isDropDownActive={endTimePickerVisible}
+                      setIsDropDownActive={setEndTimePickerVisible}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="step-2" className="">
+              <h4>2.- Description and max attendee cap</h4>
+              <hr />
+              <div
+                className={`${
+                  currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
+                } my-[10px] flex flex-col space-y-3`}
+              >
+                <TextInput
+                  textArea={true}
+                  id={'event_description'}
+                  labelText={'Description'}
+                  placeholder={''}
+                  setValue={setEventDescription}
+                  isDisabled={isCreatingNewEvent}
+                />
+
+                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                    TICKET SUPPLY
+                  </label>
+                  <NumberInput
+                    setValue={setTicketMax}
+                    disabled={isCreatingNewEvent}
                   />
                 </div>
               </div>
             </div>
-          ) : (
-            <></>
-          )}
+            <div id="step-3" className="h-full md:h-[800px] space-y-[11px]">
+              <div>
+                <h4>3.- Landing portrait and ticket image</h4>
+              </div>
+              <hr />
+              <div
+                className={`${
+                  currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
+                } flex flex-col items-center space-y-3 md:items-start`}
+              >
+                <div>
+                  <div className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
+                    <div className="flex w-full justify-between">
+                      <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                        TICKET EVENT IMAGE
+                      </label>
+                      <span
+                        onClick={togglePredefinedTicketImagesMenu}
+                        className="text-blue-800 hover:cursor-pointer hover:underline"
+                      >
+                        Predefined Images
+                      </span>
+                    </div>
+                    <div className=" space-y-[5px] ">
+                      <div className="z-10">
+                        <FileImageInput
+                          fileImg={fileImg}
+                          setFileImg={setFileImg}
+                          imgUrlTemplate={selectedPredefinedEventImgUrl ?? ''}
+                        />
+                      </div>
+                      {fileImg === null && ticketImgsMenuVisible ? (
+                        <div className="top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]">
+                          <PredefinedEventPictures
+                            setSelectedPredefinedEventImgUrl={(
+                              imgUrl: string
+                            ) => {
+                              onChangePredefinedImage({
+                                imgUrl: imgUrl,
+                                setImgUrl: setSelectedPredefinedEventImgUrl,
+                                setMenuVisibility: setTicketImgsMenuVisible
+                              })
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0">
+                  <div className="flex justify-between">
+                    <label className="block text-sm font-medium text-gray-900 md:mb-2 ">
+                      LANDING PORTRAIT IMAGES
+                    </label>
+                    <span
+                      onClick={togglePredefinedLandingImagesMenu}
+                      className="text-blue-800 hover:cursor-pointer hover:underline"
+                    >
+                      Predefined Images
+                    </span>
+                  </div>
+                  <div className="z-10">
+                    <FileImageInput
+                      fileImg={landingfileImg}
+                      setFileImg={setLandingFileImg}
+                      imgUrlTemplate={selectedPredefinedLandingImgUrl ?? ''}
+                      mode={'landing'}
+                    />
+                  </div>
+                  {landingImgsMenuVisible ? (
+                    <div className="z-20 px-[15px] md:absolute md:top-[42px]">
+                      <PredefinedEventPictures
+                        setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
+                          onChangePredefinedImage({
+                            imgUrl: imgUrl,
+                            setImgUrl: setSelectedPredefinedLandingImgUrl,
+                            setMenuVisibility: setLandingImgsMenuVisible
+                          })
+                        }}
+                        landingMode={true}
+                      />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="sticky bottom-[0px] z-0 hidden md:block">
+            <CreateEventStepsDisplay currentStep={currentStep} />
+          </div>
         </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          <label className="mb-2 block text-sm font-medium text-gray-900 ">
-            TICKET SUPPLY
-          </label>
-          <input
-            onChange={(e) => {
-              setTicketMax(parseInt(e.target.value))
-            }}
-            className={`focus:shadow-outline leading-0 h-full min-h-[56px] w-full max-w-[400px] rounded-[16px] border-[1.5px] ${
-              isCreatingNewEvent
-                ? 'border-gray-300  text-gray-300'
-                : 'border-black  text-gray-700'
-            } px-2  focus:outline-none`}
-            id={'event_ticket_max'}
-            type="number"
-            placeholder={'0'}
-            disabled={isCreatingNewEvent}
-          />
+      </div>
+      <CreateEventFooter
+        currentStep={currentStep}
+        isCreatingNewEvent={isCreatingNewEvent}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        createEvent={createEvent}
+      />
+    </div>
+  )
+}
+
+function CreateEventFooter({
+  currentStep,
+  isCreatingNewEvent,
+  prevPage,
+  nextPage,
+  createEvent
+}: {
+  currentStep: number
+  isCreatingNewEvent: boolean
+  prevPage: () => void
+  nextPage: () => void
+  createEvent: () => void
+}) {
+  const stepsText = ['Step 1', 'Step 2', 'Step 3']
+  const instructionsText = [
+    'Event title, location and date',
+    'Event description and ticket supply',
+    'Event Images'
+  ]
+  return (
+    <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
+      {/* button for pagination and submit newly created event. */}
+      <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] md:max-w-[700px]">
+        <div>
+          <div className="text-[17px] font-bold sm:text-[20px]">
+            {stepsText[currentStep]}
+          </div>
+          <div className="text-[14px] sm:text-[16px]">
+            {instructionsText[currentStep]}
+          </div>
         </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-          {isCreatingNewEvent ? (
-            <>
-              <Spinner width={40} height={40} />
-              <p>Creating new event, please do not refresh</p>
-            </>
-          ) : (
+        {isCreatingNewEvent ? (
+          <div className="flex items-center">
+            <Spinner width={25} height={25} />
+            <div className="ml-[10px]">Creating event, please wait...</div>
+          </div>
+        ) : (
+          <div className="  flex space-x-2">
             <Button
-              type="submit"
-              text={'Create'}
-              onClick={() => createEvent()}
-              active={true}
+              text={'Prev'}
+              active={currentStep > 0 ? true : false}
+              onClick={() => {
+                prevPage()
+              }}
             />
-          )}
-        </div>
-        <div className="mx-auto text-[13px] ">
-          {errorMsg === '' ? (
-            <></>
-          ) : (
-            ErrorFormMsg({
-              errorField: errorField,
-              errorMsg: errorMsg
-            })
-          )}
-        </div>
+            {currentStep < 2 ? (
+              <Button
+                text={'Next'}
+                active={currentStep < 2 ? true : false}
+                onClick={() => {
+                  nextPage()
+                }}
+              />
+            ) : (
+              <Button
+                text={'Create Event'}
+                active={true}
+                onClick={() => {
+                  createEvent()
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

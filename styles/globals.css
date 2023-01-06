@@ -6,6 +6,28 @@
   .custom-bg {
     background: blue;
   }
+  #timepicker-dropdown {
+    scrollbar-width: thin;
+    scrollbar-color: #303030 #ffffff;
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar {
+    width: 8px;
+    
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.0);
+    border-radius: 10px;
+  }
+
+  #timepicker-dropdown::-webkit-scrollbar-thumb {
+    background-color: #303030;
+    border-radius: 15px;
+    border: 2px solid #ffffff;
+  }
+
+
 }
 
 @layer base {
@@ -24,6 +46,15 @@
   h4 {
     @apply text-[20px] font-semibold text-primary;
   }
+
+   /* DatePicker STYLE */
+  #date-picker-input{
+    border: 1px solid;
+    border-color: black;
+    width: 100px;
+    height: 100px;
+    overflow-wrap: break-word;
+  };
 
   /* FAQ STYLE */
   details {
