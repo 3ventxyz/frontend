@@ -18,6 +18,7 @@ import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/numberInput'
+import Spinner from '../../components/spinner'
 
 export default function CreateEvent() {
   const router = useRouter()
@@ -44,10 +45,10 @@ export default function CreateEvent() {
   const [ticketMax, setTicketMax] = useState<number>(0)
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
-    useState<string>('')
+    useState<string | null>(null)
   const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
   const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
-    useState<string>('')
+    useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
@@ -162,7 +163,8 @@ export default function CreateEvent() {
             router.push(`/e/${eventId}`)
           }
         )
-      } else {
+      } else if(selectedPredefinedEventImgUrl !== null && selectedPredefinedLandingImgUrl
+        !== null) {
         await events.submitEventToFirebase(
           {
             title: title,
@@ -186,6 +188,9 @@ export default function CreateEvent() {
         )
         console.log('pushing to event page')
         router.push(`/e/${eventId}`)
+      }
+      else{
+        throw('no image selected');
       }
     } catch (e) {
       console.error('event/create:', e)
@@ -226,6 +231,13 @@ export default function CreateEvent() {
                   labelText={'Title'}
                   placeholder={''}
                   setValue={setTitle}
+                  isDisabled={isCreatingNewEvent}
+                />
+                <TextInput
+                  id={'event_id'}
+                  labelText={'Event ID'}
+                  placeholder={''}
+                  setValue={setEventId}
                   isDisabled={isCreatingNewEvent}
                 />
                 <LocationInput
@@ -333,11 +345,11 @@ export default function CreateEvent() {
                         <FileImageInput
                           fileImg={fileImg}
                           setFileImg={setFileImg}
-                          imgUrlTemplate={selectedPredefinedEventImgUrl}
+                          imgUrlTemplate={selectedPredefinedEventImgUrl ?? ''}
                         />
                       </div>
                       {fileImg === null && ticketImgsMenuVisible ? (
-                        <div className="z-20 md:absolute top-[345px] md:py-[40px] md:px-[30px]">
+                        <div className="top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={(
                               imgUrl: string
@@ -372,7 +384,7 @@ export default function CreateEvent() {
                     <FileImageInput
                       fileImg={landingfileImg}
                       setFileImg={setLandingFileImg}
-                      imgUrlTemplate={selectedPredefinedLandingImgUrl}
+                      imgUrlTemplate={selectedPredefinedLandingImgUrl ?? ''}
                       mode={'landing'}
                     />
                   </div>
@@ -403,6 +415,7 @@ export default function CreateEvent() {
       </div>
       <CreateEventFooter
         currentStep={currentStep}
+        isCreatingNewEvent={isCreatingNewEvent}
         prevPage={prevPage}
         nextPage={nextPage}
         createEvent={createEvent}
@@ -413,11 +426,13 @@ export default function CreateEvent() {
 
 function CreateEventFooter({
   currentStep,
+  isCreatingNewEvent,
   prevPage,
   nextPage,
   createEvent
 }: {
   currentStep: number
+  isCreatingNewEvent: boolean
   prevPage: () => void
   nextPage: () => void
   createEvent: () => void
@@ -440,32 +455,39 @@ function CreateEventFooter({
             {instructionsText[currentStep]}
           </div>
         </div>
-        <div className="  flex space-x-2">
-          <Button
-            text={'Prev'}
-            active={currentStep > 0 ? true : false}
-            onClick={() => {
-              prevPage()
-            }}
-          />
-          {currentStep < 2 ? (
+        {isCreatingNewEvent ? (
+          <div className='flex items-center'>
+            <Spinner width={25} height={25} />
+            <div className='ml-[10px]'>Creating event, please wait...</div>
+          </div>
+        ) : (
+          <div className="  flex space-x-2">
             <Button
-              text={'Next'}
-              active={currentStep < 2 ? true : false}
+              text={'Prev'}
+              active={currentStep > 0 ? true : false}
               onClick={() => {
-                nextPage()
+                prevPage()
               }}
             />
-          ) : (
-            <Button
-              text={'Create Event'}
-              active={true}
-              onClick={() => {
-                createEvent()
-              }}
-            />
-          )}
-        </div>
+            {currentStep < 2 ? (
+              <Button
+                text={'Next'}
+                active={currentStep < 2 ? true : false}
+                onClick={() => {
+                  nextPage()
+                }}
+              />
+            ) : (
+              <Button
+                text={'Create Event'}
+                active={true}
+                onClick={() => {
+                  createEvent()
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
