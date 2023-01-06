@@ -33,12 +33,13 @@ export interface EventInterface {
   registered_attendees: number
 }
 
-export interface EventHostInterface{
+export interface EventHostInterface {
   title:string
   uid:string
   event_id:string
   start_date:Date
   end_date:Date
+}
 
 export interface AllowlistUser {
   uid: string
