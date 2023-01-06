@@ -206,13 +206,13 @@ export default function CreateEvent() {
    **/
   return (
     <div className="flex w-full flex-col items-center bg-secondaryBg">
-      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] lg:max-w-[600px] ">
+      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
         <div>
           <h3>Create Event</h3>
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] lg:max-w-[600px]">
+          <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] md:max-w-[600px]">
             <div id="step-1" className="">
               <h4>1.- Event title, location and date</h4>
               <hr />
@@ -328,8 +328,8 @@ export default function CreateEvent() {
                         Predefined Images
                       </span>
                     </div>
-                    <div className="items-end space-y-[5px] md:flex">
-                      <div className="z-20">
+                    <div className=" space-y-[5px] ">
+                      <div className="z-10">
                         <FileImageInput
                           fileImg={fileImg}
                           setFileImg={setFileImg}
@@ -337,7 +337,7 @@ export default function CreateEvent() {
                         />
                       </div>
                       {fileImg === null && ticketImgsMenuVisible ? (
-                        <div className="right-[380px] z-10 md:absolute">
+                        <div className="z-20 md:absolute top-[345px] md:py-[40px] md:px-[30px]">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={(
                               imgUrl: string
@@ -396,7 +396,7 @@ export default function CreateEvent() {
               </div>
             </div>
           </div>
-          <div className="sticky bottom-[0px] z-0 hidden lg:block">
+          <div className="sticky bottom-[0px] z-0 hidden md:block">
             <CreateEventStepsDisplay currentStep={currentStep} />
           </div>
         </div>
@@ -431,7 +431,7 @@ function CreateEventFooter({
   return (
     <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
       {/* button for pagination and submit newly created event. */}
-      <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] lg:max-w-[700px]">
+      <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] md:max-w-[700px]">
         <div>
           <div className="text-[17px] font-bold sm:text-[20px]">
             {stepsText[currentStep]}
