@@ -7,7 +7,7 @@ import DateCard from './dateCard'
 import RegisterEventButton from './registerEventButton'
 import { useEvents } from '../../../contexts/events'
 import { useUsers } from '../../../contexts/users'
-import Button from '../../../components/button'
+import Button from '../../../components/buttons/button'
 
 // useRef for passing the host data that is fetched from the eid page.
 export default function LoadedEventPage({

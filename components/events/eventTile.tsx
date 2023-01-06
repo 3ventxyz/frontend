@@ -1,11 +1,11 @@
 // author: marthel
 import Link from 'next/link'
 import { TbPhotoOff, TbPhoto } from 'react-icons/tb'
-import { EventInterface } from '../shared/interface/common'
+import { EventInterface } from '../../shared/interface/common'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { doc, getDoc } from '@firebase/firestore'
-import { db } from '../services/firebase_config'
+import { db } from '../../services/firebase_config'
 
 // TODO (15/11/2022)add a boolean option that is used for the portrait picture
 //

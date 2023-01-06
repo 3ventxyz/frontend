@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { db } from '../../services/firebase_config'
 import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../../contexts/auth'
-import Dashboard from '../../components/dashboard'
+import Dashboard from '../../components/events/dashboard'
 import ProfileDisplay from './components/profileDisplay'
 
 interface LocationData {
