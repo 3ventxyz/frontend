@@ -134,7 +134,7 @@ export default function CreateAllowlist() {
           </div>
           <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
-              CHECK TWITTER FOLLOWING
+              ASK USER TO FOLLOW TWITTER ACCOUNT
             </span>
             <ToggleSwitch
               label="twitterFollowing"
