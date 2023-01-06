@@ -1,3 +1,5 @@
+import { EmailAuthCredential } from '@firebase/auth'
+
 export interface TicketInterface {
   ticketTitle: string
   registeredUsers: number
@@ -31,6 +33,16 @@ export interface EventInterface {
   registered_attendees: number
 }
 
+export interface AllowlistUser {
+  uid: string
+  email: string
+  wallet: string
+  twitter_id: string
+  discord_username: string
+  discord_guild: boolean
+  status: string
+}
+
 export interface UserProfileEvents {
   upcomingEvents: EventInterface[]
   pastEvents: EventInterface[]
@@ -53,6 +65,19 @@ export interface AllowlistInterface {
   description?: string
   allowlist_id?: string
   allowlist: Array<string>
+}
+
+export interface PostInterface {
+  avatar: string
+  date_posted: Date
+  post_content: string
+  uid: string
+  username: string
+}
+export interface RegisteredAttendeeInterface {
+  uid: string
+  username: string
+  avatar: string
 }
 
 export interface UserInterface{

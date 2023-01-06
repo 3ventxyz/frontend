@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/auth'
 import { useRouter } from 'next/router'
 import Button from '../components/button'
 import ErrorAlert from '../components/alerts/errorAlert'
-import VerifyFollowing from '../components/verifyTwFollowing'
 import VerifyGuild from '../components/verifyGuild'
 import Link from 'next/link'
 import Modal from '../components/modal'
@@ -16,9 +15,9 @@ export default function AllowlistApplication() {
 
   const { asPath } = useRouter()
 
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const [submit, setSubmit] = useState(false)
   const [wallet, setWallet] = useState('')
   const [twitter, setTwitter] = useState([])
   const [twitterName, setTwitterName] = useState([])
@@ -37,7 +36,8 @@ export default function AllowlistApplication() {
   const [emailVerification, setEmailVerification] = useState(false)
   const [permalink, setPermalink] = useState('')
   const [showModal, setShowModal] = useState(true)
-
+  const [twitterValue, setTwitterValue] = useState(0)
+  const [guildMember, setGuildMember] = useState(undefined)
   const [lid, setLid] = useState('')
 
   useEffect(() => {
@@ -53,12 +53,10 @@ export default function AllowlistApplication() {
     if (asPath.includes('id')) {
       const pathParts = asPath.split('id=')
       if (pathParts.length >= 2) {
-        console.log(pathParts[1])
         setLid(pathParts[1])
-        console.log(lid)
       }
     }
-  }, [lid])
+  }, [lid, asPath])
 
   /*Allowlist Info */
   useEffect(() => {
@@ -79,6 +77,7 @@ export default function AllowlistApplication() {
       } else {
         console.log('No such document!')
       }
+      console.log('fetching',twitterVerification)
     }
     if (lid !== '') {
       getListInfo()
@@ -99,13 +98,6 @@ export default function AllowlistApplication() {
 
   /*User Info*/
   useEffect(() => {
-    const modal = () => {
-      setShowModal(
-        wallet != '' && twitter.length != 0 && discord != '' && emailVerif
-          ? false
-          : true
-      )
-    }
     const getUserInfo = async () => {
       const docRef = doc(db, 'users', uid)
       const docSnap = await getDoc(docRef)
@@ -116,13 +108,53 @@ export default function AllowlistApplication() {
         setEmailVerif(docSnap.data().email_verified)
         setTwitterName(docSnap.data().twitter_name)
         setEmail(docSnap.data().email)
-        modal()
       } else {
         console.log('No such document!')
       }
     }
     getUserInfo()
-  }, [email])
+  }, [email, wallet, twitter, discord, emailVerif, twitterName, uid])
+
+  /*Get user info on list only after you come back from the oauth*/
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const docRef = doc(db, 'lists', lid)
+        const userRef = await getDoc(
+          doc(collection(docRef, 'registered_users'), uid)
+        )
+        if (userRef.exists()) {
+          setGuildMember(userRef.data().discord_guild)
+        }
+        return true
+      } catch (e) {
+        console.error('Error adding data: ', e)
+      }
+    }
+    getUserInfo()
+
+    if (discordGuild && guildMember) {
+        setSubmit(true)
+    }
+  }, [lid, uid, guildMember, discordGuild])
+  /*Modal Visibility*/
+  useEffect(() => {
+    const ModalVisibility = () => {
+      const walletVar = !walletVerification ? true : (wallet ? true : false)
+      const discordVar = !discordVerification ? true : (discord !== '' ? true : false)
+      const twitterVar = !twitterVerification ? true : (twitter.length > 0 ? true : false)
+      const emailVar = !emailVerification ? true : (emailVerif ? true : false)
+      
+      console.log('wallet: ' + walletVar + ' disc: ' + discordVar + ' twitter: ' + twitterVar + ' emailVar: ' + emailVar)
+      setShowModal(
+        walletVar && discordVar && twitterVar && emailVar
+          ? false
+          : true
+      )
+      console.log(showModal)
+    }
+    ModalVisibility()
+  }, [twitterVerification])
 
   /*Save info */
   const saveProfile = async (
@@ -139,19 +171,15 @@ export default function AllowlistApplication() {
         doc(collection(docRef, 'registered_users'), uid)
       )
       if (userRef.exists()) {
-          await updateDoc(
-            doc(collection(docRef, 'registered_users'), `${uid}`),
-            {
-              uid: uid,
-              twitter_id: twitter_id,
-              discord_id: discord_id,
-              wallet: wallet,
-              email: email,
-              status: status
-            }
-          )
+        await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          status: status
+        })
       } else {
-        console.log('test')
         await setDoc(doc(collection(docRef, 'registered_users'), uid), {
           uid: uid,
           twitter_id: twitter_id,
@@ -168,6 +196,9 @@ export default function AllowlistApplication() {
     }
   }
 
+  const handleChange = (e: any) => {
+    setTwitterValue(e.target.value)
+  }
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {lid !== '' ? (
@@ -208,7 +239,7 @@ export default function AllowlistApplication() {
               <p className="border-b-2 border-primary font-medium">
                 VERIFY TWITTER
               </p>
-              <select>
+              <select onChange={handleChange}>
                 {twitter.map((account, index) => {
                   return (
                     <>
@@ -229,27 +260,25 @@ export default function AllowlistApplication() {
             <></>
           )}
           {twitterFollowing ? (
-            /*When clicked it saves info on db */
             <>
-              <p className="border-b-2 border-primary font-medium">
-                VERIFY YOU&apos;RE FOLLOWING THE CREATOR&apos;S ACCOUNT
+             <p className="border-b-2 border-primary font-medium">
+                FOLLOW CREATOR&apos;S TWITTER
               </p>
-              <div
+              <p>
+                If you are not following the creator&apos;s twitter account yet,
+                you can follow it before applying to the list
+              </p>
+              <a
+                href={`https://twitter.com/intent/user?user_id=${twitterAccount}`}
+                className="inline-flex h-[40px] w-1/2 items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
+                target="_blank"
+                rel="noreferrer"
                 onClick={() => {
                   saveProfile(uid, twitter, discord, wallet, email, status)
                 }}
               >
-                <VerifyFollowing twitterAccount={twitterAccount} lid={lid} />
-              </div>
-              <div className="w-1/2">
-              <p>If you are not following the creator&apos;s twitter account yet, you can follow it before applying to the list</p>
-                <a
-                  href={`https://twitter.com/intent/user?screen_name=${twitterAccount}`}
-                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#1d9bf0] text-[14px] font-semibold text-white hover:bg-[#1a8cd8]"
-                >
-                  Follow Account
-                </a>
-              </div>
+                Follow Account
+              </a>
             </>
           ) : (
             <></>
@@ -281,13 +310,24 @@ export default function AllowlistApplication() {
                 <VerifyGuild discordGuildID={guild} lid={lid} />
               </div>
               <div className="w-1/2">
-              <p>If you are not a part of the creator&apos;s guild yet, you can join it before applying to the list</p>
-                <a
-                  href={permalink}
-                  className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4] mt-2"
-                >
-                  Join Guild
-                </a>
+                {!guildMember && guildMember !== undefined ? (
+                  <>
+                    <p>
+                      You are not a part of the creator&apos;s guild yet, you
+                      can join it before applying to the list
+                    </p>
+                    <a
+                      href={permalink}
+                      className="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-[10px] bg-[#5865f2] text-[14px] font-semibold text-white hover:bg-[#4752c4]"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Join Guild
+                    </a>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </>
           ) : (
@@ -314,11 +354,11 @@ export default function AllowlistApplication() {
               <Button
                 type="submit"
                 text="Apply"
-                active={!loading}
+                active={submit}
                 onClick={() => {
                   saveProfile(
                     uid,
-                    twitter[0],
+                    twitter[twitterValue],
                     discord,
                     wallet,
                     email,
