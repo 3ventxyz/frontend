@@ -9,7 +9,7 @@ export default function EventLocationMap({
   return lat === 0 && long === 0 ? (
     <></>
   ) : (
-    <div className="relative h-[150px] max-w-[600px] rounded-2xl border-[1px] border-solid border-black bg-white">
+    <div className="relative h-[150px] max-w-[600px] rounded-2xl border-[1px] border-solid border-gray bg-gray-50">
       <a
         rel="noreferrer noopener"
         target="_blank"
