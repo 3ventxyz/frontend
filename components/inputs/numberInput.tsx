@@ -1,15 +1,16 @@
 export default function NumberInput({
   setValue,
+  value,
   disabled = false
 }: {
-  setValue: (value: number) => void
+  setValue: (value: any) => void
+  value:number
   disabled?: boolean
 }) {
   return (
     <input
-      onChange={(e) => {
-        setValue(parseInt(e.target.value))
-      }}
+    value={value}
+      onChange={setValue}
       className={`focus:shadow-outline leading-0 h-full w-full max-w-[400px] rounded-lg border-[1.5px] p-2.5 text-sm ${
         disabled
           ? 'border-gray-300  text-gray-300'

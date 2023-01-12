@@ -19,6 +19,7 @@ import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
+import CreateEventTextInput from '../../components/inputs/createEventTextInput'
 
 interface createEventInputs {
   title: string
@@ -56,7 +57,6 @@ const initialValues: createEventInputs = {
   landing_img_url: ''
 }
 
-
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
@@ -68,29 +68,12 @@ export default function CreateEvent() {
   /**
    * input data UI setStates
    **/
-  const [values, setValues] = useState<createEventInputs>(initialValues);
-  // const [title, setTitle] = useState<string>('')
-  // const [startDate, setStartDate] = useState<Date>(today)
-  // const [endDate, setEndDate] = useState<Date>(today)
-  // const [eventLocation, setEventLocation] = useState<LocationData>({
-    //   address: '',
-    //   lat: 0,
-    //   long: 0
-  // })
-  // const [eventId, setEventId] = useState<string>('test-id')
-  // const [eventDescription, setEventDescription] = useState<string>('')
-  // const [ticketMax, setTicketMax] = useState<number>(0)
-  // const [fileImg, setFileImg] = useState<File | null>(null)
-  // const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
-  //   useState<string | null>(null)
-  // const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
-  // const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
-  //   useState<string | null>(null)
+  const [values, setValues] = useState<createEventInputs>(initialValues)
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
    * UI page setStates
-  **/
+   **/
   const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
@@ -138,13 +121,13 @@ export default function CreateEvent() {
     setCurrentStep(page)
   }
 
-  const handleInputChange = (e:any) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target
     setValues({
       ...values,
-      [name]: value,
-    });
-  };
+      [name]: value
+    })
+  }
 
   const createEvent = async () => {
     console.log('===creating event===')
@@ -210,8 +193,8 @@ export default function CreateEvent() {
           }
         )
       } else if (
-        values.selected_predefined_event_img_url  !== null &&
-        values.selected_predefined_landing_img_url  !== null
+        values.selected_predefined_event_img_url !== null &&
+        values.selected_predefined_landing_img_url !== null
       ) {
         await events.submitEventToFirebase(
           {
@@ -230,8 +213,8 @@ export default function CreateEvent() {
             title: values.title,
             uid: auth.uid,
             event_id: values.event_id,
-            start_date: values.start_date ,
-            end_date: values.end_date 
+            start_date: values.start_date,
+            end_date: values.end_date
           }
         )
         console.log('pushing to event page')
@@ -273,17 +256,19 @@ export default function CreateEvent() {
                   currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3 transition-transform`}
               >
-                <TextInput
+                <CreateEventTextInput
                   id={'event_name'}
                   labelText={'Title'}
                   placeholder={''}
+                  value={values.title}
                   setValue={handleInputChange}
                   isDisabled={isCreatingNewEvent}
                 />
-                <TextInput
+                <CreateEventTextInput
                   id={'event_id'}
                   labelText={'Event ID*'}
                   placeholder={''}
+                  value={values.event_id}
                   setValue={handleInputChange}
                   isDisabled={isCreatingNewEvent}
                 />
@@ -345,11 +330,12 @@ export default function CreateEvent() {
                   currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3`}
               >
-                <TextInput
+                <CreateEventTextInput
                   textArea={true}
                   id={'event_description'}
                   labelText={'Description'}
                   placeholder={''}
+                  value={values.event_description}
                   setValue={handleInputChange}
                   isDisabled={isCreatingNewEvent}
                 />
@@ -359,13 +345,14 @@ export default function CreateEvent() {
                     TICKET SUPPLY
                   </label>
                   <NumberInput
+                    value={values.ticket_max}
                     setValue={handleInputChange}
                     disabled={isCreatingNewEvent}
                   />
                 </div>
               </div>
             </div>
-            <div id="step-3" className="h-full md:h-[800px] space-y-[11px]">
+            <div id="step-3" className="h-full space-y-[11px] md:h-[800px]">
               <div>
                 <h4>3.- Landing portrait and ticket image</h4>
               </div>
@@ -393,7 +380,9 @@ export default function CreateEvent() {
                         <FileImageInput
                           fileImg={values.file_img}
                           setFileImg={handleInputChange}
-                          imgUrlTemplate={values.selected_predefined_event_img_url ?? ''}
+                          imgUrlTemplate={
+                            values.selected_predefined_event_img_url ?? ''
+                          }
                         />
                       </div>
                       {values.file_img === null && ticketImgsMenuVisible ? (
@@ -432,7 +421,9 @@ export default function CreateEvent() {
                     <FileImageInput
                       fileImg={values.landing_file_img}
                       setFileImg={handleInputChange}
-                      imgUrlTemplate={values.selected_predefined_landing_img_url ?? ''}
+                      imgUrlTemplate={
+                        values.selected_predefined_landing_img_url ?? ''
+                      }
                       mode={'landing'}
                     />
                   </div>
