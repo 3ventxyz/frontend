@@ -7,9 +7,17 @@ import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
 import Button from '../buttons/button'
 import AllowlistService from '../../services/allowlists'
-import Link from 'next/link'
 import Image from 'next/image'
 import absoluteUrl from 'next-absolute-url'
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper
+} from '@mui/material'
 
 export default function Allowlists() {
   const auth = useAuth()
@@ -57,36 +65,49 @@ export default function Allowlists() {
           />
         </div>
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 ">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
-              <tr>
-                <th scope="col" className="py-3 px-6">
-                  NAME
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  # ENTRIES
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  APPLICATION LINK
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {allowlists.map((e, i) => (
-                <tr
-                  key={i}
-                  className="cursor-pointer border-b bg-white hover:bg-gray-50"
-                >
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
-                    onClick={() => router.push(`allowlists/${e.allowlist_id}`)}
-                  >
-                    {e.title}
-                  </th>
-                  <td className="py-4 px-6">{e.allowlist.length}</td>
-                  <td className="flex py-4 px-6">
-                    <p className="hover:cursor-default">{`${origin}/apply?id=${e.allowlist_id}`}</p>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow className="bg-gray-50">
+                  <TableCell>
+                    <span className="text-xs font-bold uppercase text-gray-700">
+                      name
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-xs font-bold uppercase text-gray-700">
+                      # entries
+                    </span>
+                  </TableCell>
+                  <TableCell align="center">
+                    <span className="text-xs font-bold uppercase text-gray-700">
+                      application link
+                    </span>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allowlists.map((e, i) => (
+                  <TableRow key={i}>
+                    <TableCell
+                    align="left"
+                      key={i}
+                      onClick={() =>
+                        router.push(`allowlists/${e.allowlist_id}`)
+                      }
+                      padding="none"
+                    >
+                      <span className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 text-left">
+                        {e.title}
+                      </span>
+                    </TableCell>
+                    <TableCell key={i} align="left">
+                      <span className="py-4 px-6 text-sm text-gray-500 text-left">
+                        {e.allowlist.length}
+                      </span>
+                    </TableCell>
+                    <TableCell key={i} align="left">
+                      <span className="hover:cursor-default whitespace-nowrap py-4 px-6 font-medium text-sm text-gray-500 text-left">{`${origin}/apply?id=${e.allowlist_id}`}</span>
                     <Image
                       className="hover:cursor-pointer"
                       onClick={() => {
@@ -100,11 +121,12 @@ export default function Allowlists() {
                       height="20"
                       width="20"
                     />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
       <Modal
