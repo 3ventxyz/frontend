@@ -319,7 +319,7 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
-            <div id="step-3" className="h-full md:h-[800px] space-y-[11px]">
+            <div id="step-3" className="h-full space-y-[11px] md:h-[800px]">
               <div>
                 <h4>3.- Landing portrait and ticket image</h4>
               </div>
@@ -411,7 +411,10 @@ export default function CreateEvent() {
             </div>
           </div>
           <div className="sticky bottom-[0px] z-0 hidden md:block">
-            <CreateEventStepsDisplay currentStep={currentStep} />
+            <CreateEventStepsDisplay
+              currentStep={currentStep}
+              setCurrentStep={setCurrentStep}
+            />
           </div>
         </div>
       </div>
