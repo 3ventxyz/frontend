@@ -14,13 +14,17 @@ interface LocationInputProps {
   labelText: string
   id: string
   placeholder: string
-  setLocation: (location: LocationData) => void
+  value: any
+  name: string
+  setLocation: (location: any) => void
 }
 
 export default function LocationInput({
   labelText,
   id,
   placeholder,
+  // value,
+  name,
   setLocation
 }: LocationInputProps) {
   const [searchText, setSearchText] = useState('')
@@ -40,9 +44,7 @@ export default function LocationInput({
       })
       .then((latLng) => {
         setLocation({
-          lat: latLng['lat'],
-          long: latLng['lng'],
-          address: address
+          [name]: { lat: latLng['lat'], long: latLng['lng'], address: address }
         })
         return console.log('Success', latLng)
       })

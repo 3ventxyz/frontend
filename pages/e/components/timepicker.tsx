@@ -4,13 +4,15 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalTimePicker({
   selectedDate,
   setSelectedDate,
+  name,
   isDropDownActive,
   setIsDropDownActive
 }: {
   selectedDate: Date
-  setSelectedDate: (date: Date) => void
+  setSelectedDate: (date: any) => void
   isDropDownActive: boolean
   setIsDropDownActive: (bool: boolean) => void
+  name: string
 }) {
   /**similar to the datepicker, this will display an input with a default time value.
    * when the user clicks on it, a scrollable dropdown menu will appear. With the options
@@ -55,7 +57,7 @@ export default function LocalTimePicker({
                 <div>
                   <button
                     onClick={() => {
-                      setSelectedDate(selectedTime)
+                      setSelectedDate({ [name]: selectedTime })
                       setIsDropDownActive(false)
                       console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
                     }}

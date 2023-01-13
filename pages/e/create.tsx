@@ -122,11 +122,26 @@ export default function CreateEvent() {
   }
 
   const handleInputChange = (e: any) => {
+    
     const { name, value } = e.target
+    console.log('name: '+name+', value: '+ value);
     setValues({
       ...values,
       [name]: value
     })
+  }
+
+  const updateEvent = () => {
+    console.log('===creating event===')
+    console.log('title: ', values.title)
+    console.log('event_id: ', values.event_id)
+    console.log('startDate: ', values.start_date)
+    console.log('endDate: ', values.end_date)
+    console.log('eventLocation: ', values.event_location)
+    console.log('eventDescription: ', values.event_description)
+    console.log('ticketMax: ', values.ticket_max)
+    console.log('fileImg: ', values.file_img)
+    console.log('========================')
   }
 
   const createEvent = async () => {
@@ -257,7 +272,8 @@ export default function CreateEvent() {
                 } my-[10px] flex flex-col space-y-3 transition-transform`}
               >
                 <CreateEventTextInput
-                  id={'event_name'}
+                  id={'event_title'}
+                  name={'title'}
                   labelText={'Title'}
                   placeholder={''}
                   value={values.title}
@@ -266,6 +282,7 @@ export default function CreateEvent() {
                 />
                 <CreateEventTextInput
                   id={'event_id'}
+                  name={'event_id'}
                   labelText={'Event ID*'}
                   placeholder={''}
                   value={values.event_id}
@@ -275,7 +292,9 @@ export default function CreateEvent() {
                 <LocationInput
                   labelText={'Location*'}
                   id={'event_location'}
+                  name={'event_location'}
                   placeholder={''}
+                  value={values.event_location}
                   setLocation={handleInputChange}
                 />
                 <EventLocationMap
@@ -292,10 +311,12 @@ export default function CreateEvent() {
                       selectedDate={values.start_date}
                       isDropDownActive={startDatePickerVisible}
                       setIsDropDownActive={setStartDatePickerVisible}
+                      name={'start_date'}
                     />
                     <LocalTimePicker
                       setSelectedDate={handleInputChange}
                       selectedDate={values.start_date}
+                      name={'start_date'}
                       isDropDownActive={startTimePickerVisible}
                       setIsDropDownActive={setStartTimePickerVisible}
                     />
@@ -311,10 +332,12 @@ export default function CreateEvent() {
                       selectedDate={values.end_date}
                       isDropDownActive={endDatePickerVisible}
                       setIsDropDownActive={setEndDatePickerVisible}
+                      name={'end_date'}
                     />
                     <LocalTimePicker
                       setSelectedDate={handleInputChange}
                       selectedDate={values.end_date}
+                      name={'end_date'}
                       isDropDownActive={endTimePickerVisible}
                       setIsDropDownActive={setEndTimePickerVisible}
                     />
@@ -332,6 +355,7 @@ export default function CreateEvent() {
               >
                 <CreateEventTextInput
                   textArea={true}
+                  name={'event_description'}
                   id={'event_description'}
                   labelText={'Description'}
                   placeholder={''}
@@ -346,6 +370,7 @@ export default function CreateEvent() {
                   </label>
                   <NumberInput
                     value={values.ticket_max}
+                    name={'ticket_max'}
                     setValue={handleInputChange}
                     disabled={isCreatingNewEvent}
                   />
@@ -457,7 +482,8 @@ export default function CreateEvent() {
         isCreatingNewEvent={isCreatingNewEvent}
         prevPage={prevPage}
         nextPage={nextPage}
-        createEvent={createEvent}
+        createEvent={updateEvent}
+        // createEvent={createEvent}
       />
     </div>
   )
@@ -522,6 +548,7 @@ function CreateEventFooter({
                 active={true}
                 onClick={() => {
                   createEvent()
+                  // updateEvent()
                 }}
               />
             )}
