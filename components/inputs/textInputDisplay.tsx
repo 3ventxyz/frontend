@@ -3,6 +3,12 @@ interface TextInputDisplayProps {
   bodyText: string
 }
 
+/**Function: TextInputDisplay
+ **Inputs:
+ *  -labelText: 
+ *  -bodyText:
+ */
+
 export default function TextInputDisplay({
   labelText,
   bodyText

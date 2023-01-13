@@ -13,6 +13,19 @@ interface TextInputProps {
   xMargin?: string
 }
 
+
+/**Function: TextInput
+ **Inputs:
+ *  -labelText: string, text that is displayed above the input.
+ *  -placeholder?: string, text that shows an example usage.
+ *  -id: string, id for the submitted form.
+ *  -textArea?: boolean (defualt: false), option that enables textArea component.
+ *  -isDisabled?: boolean, option that enables user to input text.
+ *  -setValue: (value: string) => void, function that sets the inputted text value.
+ *  -width?: string (default: 'w-full'), tailwindcss class for the component's width.
+ *  -xMargin?: string (default: 'mx-auto'), tailwindcss class for the component's horizontal margin.
+ * 
+*/
 export default function TextInput({
   labelText,
   placeholder,

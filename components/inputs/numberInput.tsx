@@ -1,3 +1,9 @@
+
+/**Function: NumberInput
+ **Inputs:
+ *  -setValue: function, setter that changes the value from the entered number.
+ *  -disabled: boolean, disables the ability to change the current value.
+*/
 export default function NumberInput({
   setNumberValue,
   name,

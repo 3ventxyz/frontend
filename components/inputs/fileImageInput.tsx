@@ -12,6 +12,15 @@ import CreateEvent from '../../pages/e/create'
 // create event page or from edit.
 //a dissable upload option will be added and it will be removed, once
 //the storage issue has been fixed.
+
+/**Function: FileImageInput
+ **inputs:
+ *    -fileImg: File | null, data for uploading the image
+ *    -setFileImg:(value: File) => void, passed function for setting the fileImage
+ *    -imgUrlTemplate?: string, url of the image that is used for displaying the current image.
+ *    -mode?: 'event' | 'landing' | undefined: sets the UI component between an event picture and a landing portrait picture.
+ *    -isDisabled: boolean,
+ */
 export default function FileImageInput({
   fileImg,
   setFileImg,
