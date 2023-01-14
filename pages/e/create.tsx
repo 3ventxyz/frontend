@@ -4,7 +4,6 @@ import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
 import { startOfToday } from 'date-fns'
 import { LocationData } from '../../shared/interface/common'
-import TextInput from '../../components/inputs/textInput'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
 import LocationInput from '../../components/inputs/locationInput'
@@ -19,6 +18,7 @@ import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
+import CreateEventTextInput from './components/createEventTextInput'
 
 
 export default function CreateEvent() {
@@ -229,14 +229,14 @@ export default function CreateEvent() {
                   currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3 transition-transform`}
               >
-                <TextInput
+                <CreateEventTextInput
                   id={'event_name'}
                   labelText={'Title'}
                   placeholder={''}
                   setValue={setTitle}
                   isDisabled={isCreatingNewEvent}
                 />
-                <TextInput
+                <CreateEventTextInput
                   id={'event_id'}
                   labelText={'Event ID*'}
                   placeholder={''}
@@ -301,7 +301,7 @@ export default function CreateEvent() {
                   currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3`}
               >
-                <TextInput
+                <CreateEventTextInput
                   textArea={true}
                   id={'event_description'}
                   labelText={'Description'}
