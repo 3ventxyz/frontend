@@ -327,30 +327,6 @@ module.exports = class DataSeeder {
   }
 
   /**
-   * function: initDummyData
-   * description: this function runs the functions, that seeds the generated dummy
-   * data to firebase emulators.
-   */
-  async initDummyData() {
-    this.user1UID = await this.setDummyAuthUser(
-      'test123@gmail.com',
-      '+13233546886',
-      '1234567890'
-    )
-    this.user2UID = await this.setDummyAuthUser(
-      'test321@gmail.com',
-      '+10002223333',
-      '0987654321'
-    )
-    await this.setDummyEventsCollectionInDB()
-    await this.setDummyEventsToUserPropietaryDB()
-    await this.setDummyUsersInDB()
-    await this.setRegisteredAttendeesToEvents()
-    await this.setRegisteredEventsToUsers()
-    await this.setSocialFeedDummyData()
-  }
-
-  /**
    * function: setDummyAllowlistData
    * --description: it creates an array of generated allowlists, with data randomnly generated for each list.
    * Each generated dummy list is added right away to the 'lists' collection firestore,
@@ -381,4 +357,30 @@ module.exports = class DataSeeder {
       console.error(error, 'database seed failed')
     }
   }
+
+  /**
+   * function: initDummyData
+   * description: this function runs the functions, that seeds the generated dummy
+   * data to firebase emulators.
+   */
+  async initDummyData() {
+    this.user1UID = await this.setDummyAuthUser(
+      'test123@gmail.com',
+      '+13233546886',
+      '1234567890'
+    )
+    this.user2UID = await this.setDummyAuthUser(
+      'test321@gmail.com',
+      '+10002223333',
+      '0987654321'
+    )
+    await this.setDummyEventsCollectionInDB()
+    await this.setDummyEventsToUserPropietaryDB()
+    await this.setDummyUsersInDB()
+    await this.setRegisteredAttendeesToEvents()
+    await this.setRegisteredEventsToUsers()
+    await this.setSocialFeedDummyData()
+    await this.setDummyAllowlistData()
+  }
+
 }
