@@ -1,22 +1,7 @@
 import { startOfToday } from 'date-fns'
 import React, { useState } from 'react'
-import { LocationData } from '../../../../shared/interface/common'
+import { createEventFormInterface, LocationData } from '../../../../shared/interface/common'
 
-interface createEventFormInterface {
-  title: string
-  start_date: Date
-  end_date: Date
-  event_location: LocationData
-  event_id: string
-  event_description: string
-  ticket_max: number
-  file_img: File | null
-  event_img_url: string
-  selected_predefined_event_img_url: string
-  landing_file_img: File | null
-  landing_img_url: string
-  selected_predefined_landing_img_url: string
-}
 
 const initialInputValues: createEventFormInterface = {
   title: '',
@@ -38,12 +23,13 @@ const initialInputValues: createEventFormInterface = {
   landing_img_url: ''
 }
 
+
 export default function useCreateEventFormState({
-  inputValues = initialInputValues
+  initialState = initialInputValues
 }: {
-  inputValues?: createEventFormInterface
+  initialState: createEventFormInterface
 }) {
-  const [values, setValues] = useState(inputValues)
+  const [values, setValues] = useState(initialState)
 
   const handleInputChange = (name: string, value: any) => {
     setValues({ ...values, [name]: value })
