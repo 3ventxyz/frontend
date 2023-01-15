@@ -104,4 +104,21 @@ export interface PostInterface{
   username: string,
 }
 
+
+export interface createEventFormInterface {
+  title: string
+  start_date: Date
+  end_date: Date
+  event_location: LocationData
+  event_id: string
+  event_description: string
+  ticket_max: number
+  file_img: File | null
+  event_img_url: string
+  selected_predefined_event_img_url: string
+  landing_file_img: File | null
+  landing_img_url: string
+  selected_predefined_landing_img_url: string
+}
+
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}
