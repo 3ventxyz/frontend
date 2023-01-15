@@ -50,6 +50,26 @@ const createEventStatus: createEventStatusInterface = {
 }
 
 
+const inputValues: createEventFormInterface = {
+  title: '',
+  start_date: startOfToday(),
+  end_date: startOfToday(),
+  event_location: {
+    address: '',
+    lat: 0,
+    long: 0
+  },
+  event_id: '',
+  event_description: '',
+  ticket_max: 0,
+  file_img: null,
+  selected_predefined_event_img_url: '',
+  landing_file_img: null,
+  selected_predefined_landing_img_url: '',
+  event_img_url: '',
+  landing_img_url: ''
+}
+
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
