@@ -45,5 +45,8 @@ export default function useCreateEventFormState({
 }) {
   const [values, setValues] = useState(inputValues)
 
-  return [values, setValues]
+  const handleInputChange = (name: string, value: any) => {
+    setValues({ ...values, [name]: value })
+  }
+  return [values, { onChange: handleInputChange }]
 }
