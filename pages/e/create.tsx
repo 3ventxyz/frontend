@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
 import { startOfToday } from 'date-fns'
-import { LocationData } from '../../shared/interface/common'
+import { createEventFormInterface, LocationData } from '../../shared/interface/common'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
 import LocationInput from '../../components/inputs/locationInput'
@@ -19,7 +19,28 @@ import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
+import useCreateEventFormState from './hooks/create/useCreateEventForm'
 
+
+const inputValues: createEventFormInterface = {
+  title: '',
+  start_date: startOfToday(),
+  end_date: startOfToday(),
+  event_location: {
+    address: '',
+    lat: 0,
+    long: 0
+  },
+  event_id: '',
+  event_description: '',
+  ticket_max: 0,
+  file_img: null,
+  selected_predefined_event_img_url: '',
+  landing_file_img: null,
+  selected_predefined_landing_img_url: '',
+  event_img_url: '',
+  landing_img_url: ''
+}
 
 export default function CreateEvent() {
   const router = useRouter()
@@ -32,7 +53,7 @@ export default function CreateEvent() {
   /**
    * input data UI setStates
    **/
-  // const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useCreateEventFormState({initialState:inputValues})
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(today)
