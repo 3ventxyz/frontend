@@ -24,6 +24,7 @@ import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
 import useCreateEventFormState from './hooks/create/useCreateEventForm'
 import CreateEventLocationInput from './components/createEventLocationInput'
+import useCreateEventStatus from './hooks/create/useCreateEventStatus'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -45,20 +46,30 @@ const inputValues: createEventFormInterface = {
   landing_img_url: ''
 }
 
+const createEventStatus = {
+  startDatePickerVisible: false,
+  startTimePickerVisible: false,
+  endDatePickerVisible: false,
+  endTimePickerVisible: false,
+  ticketImgsMenuVisible: false,
+  landingImgsMenuVisible: false,
+  currentStep: 0,
+  isCreatingNewEvent: false,
+  errorMsg: ''
+}
+
 export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
   const events = useEvents()
-
-  let today: Date = startOfToday()
-  let page: number = 0
-
+  let page: number = createEventStatus.currentStep
   /**
    * input data UI setStates
    **/
   const [values, onChange] = useCreateEventFormState({
     initialState: inputValues
   })
+
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
     useState<string | null>(null)
@@ -69,6 +80,9 @@ export default function CreateEvent() {
   /**
    * UI page state setStates
    **/
+  const [status, setStatus] = useCreateEventStatus({
+    initialState: createEventStatus
+  })
   const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
   const [endDatePickerVisible, setEndDatePickerVisible] = useState(false)
