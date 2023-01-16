@@ -23,6 +23,7 @@ import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
 import useCreateEventFormState from './hooks/create/useCreateEventForm'
+import CreateEventLocationInput from './components/createEventLocationInput'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -57,11 +58,6 @@ export default function CreateEvent() {
    **/
   const [values, onChange] = useCreateEventFormState({
     initialState: inputValues
-  })
-  const [eventLocation, setEventLocation] = useState<LocationData>({
-    address: '',
-    lat: 0,
-    long: 0
   })
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
@@ -262,11 +258,12 @@ export default function CreateEvent() {
                   name={'event_id'}
                   isDisabled={isCreatingNewEvent}
                 />
-                <LocationInput
+                <CreateEventLocationInput
                   labelText={'Location*'}
                   id={'event_location'}
                   placeholder={''}
-                  setLocation={setEventLocation}
+                  name={'event_location'}
+                  onChange={onChange}
                 />
                 <EventLocationMap
                   lat={values.event_location.lat}
