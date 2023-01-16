@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
 import { startOfToday } from 'date-fns'
-import { createEventFormInterface, LocationData } from '../../shared/interface/common'
+import {
+  createEventFormInterface,
+  LocationData
+} from '../../shared/interface/common'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
 import LocationInput from '../../components/inputs/locationInput'
@@ -20,7 +23,6 @@ import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
 import useCreateEventFormState from './hooks/create/useCreateEventForm'
-
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -53,7 +55,9 @@ export default function CreateEvent() {
   /**
    * input data UI setStates
    **/
-  const [values, setValues] = useCreateEventFormState({initialState:inputValues})
+  var [values, onChange] = useCreateEventFormState({
+    initialState: inputValues
+  })
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(today)
