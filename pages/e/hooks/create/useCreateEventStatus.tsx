@@ -33,26 +33,38 @@ export default function useCreateEventStatus(
       isCreatingNewEvent: bool
     })
   }
+<<<<<<< HEAD
 
   const setErrorMsg = (errorMsg: string) => {
+=======
+  const setErrorMsg=(errorMsg:string)=>{
+>>>>>>> b12c088 (errorMsg moved up to useCreateEventStatus hook)
     setStatus({
       ...currStatus,
       errorMsg: errorMsg
     })
   }
+<<<<<<< HEAD
 
   const setCurrentStep = (step: number) => {
     setStatus({ ...currStatus, currentStep: step })
   }
 
+=======
+>>>>>>> b12c088 (errorMsg moved up to useCreateEventStatus hook)
   return [
     currStatus,
     {
       nextPage,
       prevPage,
+<<<<<<< HEAD
       setCreatingNewEvent,
       setErrorMsg,
       setCurrentStep
+=======
+      creatingNewEvent,
+      setErrorMsg
+>>>>>>> b12c088 (errorMsg moved up to useCreateEventStatus hook)
     }
   ]
 }
