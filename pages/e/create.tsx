@@ -85,7 +85,6 @@ export default function CreateEvent() {
   })
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
-  const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
    * logic functions
@@ -117,7 +116,7 @@ export default function CreateEvent() {
 
     let isFormValid
     setStatus.creatingNewEvent(true)
-    setErrorMsg('')
+    setStatus.setErrorMsg('')
     isFormValid = formValidator()
     if (!isFormValid) {
       setStatus.creatingNewEvent(false)
@@ -126,7 +125,7 @@ export default function CreateEvent() {
     let isEventIdTaken = await CheckEventId(values.event_id)
     if (isEventIdTaken) {
       setStatus.creatingNewEvent(false)
-      setErrorMsg(
+      setStatus.setErrorMsg(
         'Event ID: event id has been taken, please enter a different id'
       )
       return

@@ -17,6 +17,7 @@ interface useCreateEventStatus {
   nextPage: () => void
   prevPage: () => void
   creatingNewEvent: (bool: boolean) => void
+  setErrorMsg:(msg: string)=>void
 }
 
 export default function useCreateEventStatus({
@@ -50,14 +51,20 @@ export default function useCreateEventStatus({
       isCreatingNewEvent: bool
     })
   }
-
+  const setErrorMsg=(errorMsg:string)=>{
+    setStatus({
+      ...currStatus,
+      errorMsg: errorMsg
+    })
+  }
   return [
     currStatus,
     {
       handleStatusChange,
       nextPage,
       prevPage,
-      creatingNewEvent
+      creatingNewEvent,
+      setErrorMsg
     }
   ]
 }
