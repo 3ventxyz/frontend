@@ -49,7 +49,6 @@ const createEventStatus: createEventStatusInterface = {
   errorMsg: ''
 }
 
-
 const inputValues: createEventFormInterface = {
   title: '',
   start_date: startOfToday(),
