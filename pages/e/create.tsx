@@ -55,15 +55,14 @@ export default function CreateEvent() {
   /**
    * input data UI setStates
    **/
-  var [values, onChange] = useCreateEventFormState({
+  const [values, onChange] = useCreateEventFormState({
     initialState: inputValues
   })
   const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(today)
-  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [eventLocation, setEventLocation] = useState<LocationData>({
-    address: '',
+      address: '',
     lat: 0,
     long: 0
   })
@@ -76,20 +75,19 @@ export default function CreateEvent() {
   const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
   const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
     useState<string | null>(null)
-  const [errorMsg, setErrorMsg] = useState<string>('')
-
+  
   /**
-   * UI page setStates
+   * UI page state setStates
    **/
   const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
   const [endDatePickerVisible, setEndDatePickerVisible] = useState(false)
   const [endTimePickerVisible, setEndTimePickerVisible] = useState(false)
-
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
   const [currentStep, setCurrentStep] = useState<number>(page)
-  // const [modalVisible, setModalVisible] = useState(false)
+  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
    * logic functions
@@ -129,14 +127,14 @@ export default function CreateEvent() {
 
   const createEvent = async () => {
     console.log('===creating event===')
-    console.log('title: ', title)
-    console.log('event_id: ', eventId)
-    console.log('startDate: ', startDate)
-    console.log('endDate: ', endDate)
-    console.log('eventLocation: ', eventLocation)
-    console.log('eventDescription: ', eventDescription)
-    console.log('ticketMax: ', ticketMax)
-    console.log('fileImg: ', fileImg)
+    console.log('title: ', values.title)
+    console.log('event_id: ', values.event_id)
+    console.log('startDate: ', values.start_date)
+    console.log('endDate: ', values.end_date)
+    console.log('eventLocation: ', values.event_location)
+    console.log('eventDescription: ', values.event_description)
+    console.log('ticketMax: ', values.ticket_max)
+    console.log('fileImg: ', values.file_img)
     console.log('========================')
 
     let isFormValid
@@ -147,7 +145,7 @@ export default function CreateEvent() {
       setIsCreatingNewEvent(false)
       return
     }
-    let isEventIdTaken = await CheckEventId(eventId)
+    let isEventIdTaken = await CheckEventId(values.event_id)
     if (isEventIdTaken) {
       setIsCreatingNewEvent(false)
       setErrorMsg(
@@ -156,67 +154,67 @@ export default function CreateEvent() {
       return
     }
     try {
-      if (fileImg !== null) {
-        console.log('fileImg: ', fileImg?.type)
-        const fileType = setFiletype(fileImg)
-        const storagePath: string = `${auth.uid}/${eventId + fileType}`
-        console.log('uploading image: ', fileImg?.name)
+      if (values.file_img !== null) {
+        console.log('fileImg: ', values.file_img?.type)
+        const fileType = setFiletype(values.file_img)
+        const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
+        console.log('uploading image: ', values.file_img?.name)
         await uploadImageToStorage(
-          fileImg,
+          values.file_img,
           storagePath,
           async (url: string) => {
             await events.submitEventToFirebase(
               {
-                title: title,
-                end_date: endDate,
-                start_date: startDate,
+                title: values.title,
+                end_date: values.end_date,
+                start_date: values.start_date,
                 uid: auth.uid,
-                description: eventDescription,
-                location: eventLocation,
+                description: values.event_description,
+                location: values.event_location,
                 img_url: url,
-                ticket_max: ticketMax,
-                event_id: eventId,
+                ticket_max: values.ticket_max,
+                event_id: values.event_id,
                 registered_attendees: 0
               },
               {
-                title: title,
+                title: values.title,
                 uid: auth.uid,
-                event_id: eventId,
-                start_date: startDate,
-                end_date: endDate
+                event_id: values.event_id,
+                start_date: values.start_date,
+                end_date: values.end_date
               }
             )
             console.log('pushing to event page')
-            router.push(`/e/${eventId}`)
+            router.push(`/e/${values.event_id}`)
           }
         )
       } else if (
-        selectedPredefinedEventImgUrl !== null &&
-        selectedPredefinedLandingImgUrl !== null
+        values.selected_predefined_event_img_url !== null &&
+        values.selected_predefined_landing_img_url !== null
       ) {
         await events.submitEventToFirebase(
           {
-            title: title,
-            end_date: endDate,
-            start_date: startDate,
+            title: values.title,
+            end_date: values.end_date,
+            start_date: values.start_date,
             uid: auth.uid,
-            description: eventDescription,
-            location: eventLocation,
-            img_url: selectedPredefinedEventImgUrl,
-            ticket_max: ticketMax,
-            event_id: eventId,
+            description: values.event_description,
+            location: values.event_location,
+            img_url: values.selected_predefined_event_img_url,
+            ticket_max: values.ticket_max,
+            event_id: values.event_id,
             registered_attendees: 0
           },
           {
-            title: title,
+            title: values.title,
             uid: auth.uid,
-            event_id: eventId,
-            start_date: startDate,
-            end_date: endDate
+            event_id: values.event_id,
+            start_date: values.start_date,
+            end_date: values.end_date
           }
         )
         console.log('pushing to event page')
-        router.push(`/e/${eventId}`)
+        router.push(`/e/${values.event_id}`)
       } else {
         throw 'no image selected'
       }
@@ -275,8 +273,8 @@ export default function CreateEvent() {
                   setLocation={setEventLocation}
                 />
                 <EventLocationMap
-                  lat={eventLocation.lat}
-                  long={eventLocation.long}
+                  lat={values.event_location.lat}
+                  long={values.event_location.long}
                 />
                 <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
@@ -372,12 +370,12 @@ export default function CreateEvent() {
                     <div className=" space-y-[5px] ">
                       <div className="z-10">
                         <FileImageInput
-                          fileImg={fileImg}
+                          fileImg={values.file_img}
                           setFileImg={setFileImg}
-                          imgUrlTemplate={selectedPredefinedEventImgUrl ?? ''}
+                          imgUrlTemplate={values.selected_predefined_event_img_url ?? ''}
                         />
                       </div>
-                      {fileImg === null && ticketImgsMenuVisible ? (
+                      {values.file_img === null && ticketImgsMenuVisible ? (
                         <div className="top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]">
                           <PredefinedEventPictures
                             setSelectedPredefinedEventImgUrl={(
@@ -411,9 +409,9 @@ export default function CreateEvent() {
                   </div>
                   <div className="z-10">
                     <FileImageInput
-                      fileImg={landingfileImg}
+                      fileImg={values.landing_file_img}
                       setFileImg={setLandingFileImg}
-                      imgUrlTemplate={selectedPredefinedLandingImgUrl ?? ''}
+                      imgUrlTemplate={values.selected_predefined_landing_img_url ?? ''}
                       mode={'landing'}
                     />
                   </div>
