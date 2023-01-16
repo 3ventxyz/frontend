@@ -83,27 +83,13 @@ export default function CreateEvent() {
   const [status, setStatus] = useCreateEventStatus({
     initialState: createEventStatus
   })
-  const [startDatePickerVisible, setStartDatePickerVisible] = useState(false)
-  const [startTimePickerVisible, setStartTimePickerVisible] = useState(false)
-  const [endDatePickerVisible, setEndDatePickerVisible] = useState(false)
-  const [endTimePickerVisible, setEndTimePickerVisible] = useState(false)
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
-  const [currentStep, setCurrentStep] = useState<number>(page)
-  const [isCreatingNewEvent, setIsCreatingNewEvent] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string>('')
 
   /**
    * logic functions
    **/
-  const togglePredefinedLandingImagesMenu = () => {
-    setLandingImgsMenuVisible(!landingImgsMenuVisible)
-  }
-
-  const togglePredefinedTicketImagesMenu = () => {
-    setTicketImgsMenuVisible(!ticketImgsMenuVisible)
-  }
-
   const onChangePredefinedImage = ({
     setImgUrl,
     imgUrl,
@@ -115,18 +101,6 @@ export default function CreateEvent() {
   }) => {
     setImgUrl(imgUrl)
     setMenuVisibility(false)
-  }
-
-  const nextPage = () => {
-    page = currentStep
-    page++
-    setCurrentStep(page)
-  }
-
-  const prevPage = () => {
-    page = currentStep
-    page--
-    setCurrentStep(page)
   }
 
   const createEvent = async () => {
@@ -142,16 +116,16 @@ export default function CreateEvent() {
     console.log('========================')
 
     let isFormValid
-    setIsCreatingNewEvent(true)
+    setStatus.creatingNewEvent(true)
     setErrorMsg('')
     isFormValid = formValidator()
     if (!isFormValid) {
-      setIsCreatingNewEvent(false)
+      setStatus.creatingNewEvent(false)
       return
     }
     let isEventIdTaken = await CheckEventId(values.event_id)
     if (isEventIdTaken) {
-      setIsCreatingNewEvent(false)
+      setStatus.creatingNewEvent(false)
       setErrorMsg(
         'Event ID: event id has been taken, please enter a different id'
       )
@@ -227,7 +201,7 @@ export default function CreateEvent() {
       alert(
         'error 404: form could not be created due to an unknown error, please try again later.'
       )
-      setIsCreatingNewEvent(false)
+      setStatus.creatingNewEvent(false)
     }
   }
 
@@ -253,7 +227,7 @@ export default function CreateEvent() {
               <hr />
               <div
                 className={`${
-                  currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
+                  status.currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3 transition-transform`}
               >
                 <CreateEventTextInput
@@ -262,7 +236,7 @@ export default function CreateEvent() {
                   placeholder={''}
                   onChange={onChange}
                   name={'title'}
-                  isDisabled={isCreatingNewEvent}
+                  isDisabled={status.isCreatingNewEvent}
                 />
                 <CreateEventTextInput
                   id={'event_id'}
@@ -270,7 +244,7 @@ export default function CreateEvent() {
                   placeholder={''}
                   onChange={onChange}
                   name={'event_id'}
-                  isDisabled={isCreatingNewEvent}
+                  isDisabled={status.isCreatingNewEvent}
                 />
                 <CreateEventLocationInput
                   labelText={'Location*'}
@@ -292,15 +266,11 @@ export default function CreateEvent() {
                       onChange={onChange}
                       name={'start_date'}
                       selectedDate={values.start_date}
-                      isDropDownActive={startDatePickerVisible}
-                      setIsDropDownActive={setStartDatePickerVisible}
                     />
                     <LocalTimePicker
                       onChange={onChange}
                       name={'start_date'}
                       selectedDate={values.start_date}
-                      isDropDownActive={startTimePickerVisible}
-                      setIsDropDownActive={setStartTimePickerVisible}
                     />
                   </div>
                 </div>
@@ -313,15 +283,11 @@ export default function CreateEvent() {
                       onChange={onChange}
                       name={'end_date'}
                       selectedDate={values.end_date}
-                      isDropDownActive={endDatePickerVisible}
-                      setIsDropDownActive={setEndDatePickerVisible}
                     />
                     <LocalTimePicker
                       onChange={onChange}
                       name={'end_date'}
                       selectedDate={values.end_date}
-                      isDropDownActive={endTimePickerVisible}
-                      setIsDropDownActive={setEndTimePickerVisible}
                     />
                   </div>
                 </div>
@@ -332,7 +298,7 @@ export default function CreateEvent() {
               <hr />
               <div
                 className={`${
-                  currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
+                  status.currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
                 } my-[10px] flex flex-col space-y-3`}
               >
                 <CreateEventTextInput
@@ -342,7 +308,7 @@ export default function CreateEvent() {
                   placeholder={''}
                   onChange={onChange}
                   name={'event_description'}
-                  isDisabled={isCreatingNewEvent}
+                  isDisabled={status.isCreatingNewEvent}
                 />
 
                 <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -352,7 +318,7 @@ export default function CreateEvent() {
                   <NumberInput
                     onChange={onChange}
                     name={'ticket_max'}
-                    disabled={isCreatingNewEvent}
+                    disabled={status.isCreatingNewEvent}
                   />
                 </div>
               </div>
@@ -364,7 +330,7 @@ export default function CreateEvent() {
               <hr />
               <div
                 className={`${
-                  currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
+                  status.currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
                 } flex flex-col items-center space-y-3 md:items-start`}
               >
                 <div>
@@ -374,7 +340,9 @@ export default function CreateEvent() {
                         TICKET EVENT IMAGE
                       </label>
                       <span
-                        onClick={togglePredefinedTicketImagesMenu}
+                        onClick={() => {
+                          setTicketImgsMenuVisible(!ticketImgsMenuVisible)
+                        }}
                         className="text-blue-800 hover:cursor-pointer hover:underline"
                       >
                         Predefined Images
@@ -416,7 +384,9 @@ export default function CreateEvent() {
                       LANDING PORTRAIT IMAGES
                     </label>
                     <span
-                      onClick={togglePredefinedLandingImagesMenu}
+                      onClick={() => {
+                        setLandingImgsMenuVisible(!landingImgsMenuVisible)
+                      }}
                       className="text-blue-800 hover:cursor-pointer hover:underline"
                     >
                       Predefined Images
@@ -454,17 +424,17 @@ export default function CreateEvent() {
           </div>
           <div className="sticky bottom-[0px] z-0 hidden md:block">
             <CreateEventStepsDisplay
-              currentStep={currentStep}
+              currentStep={status.currentStep}
               setCurrentStep={setCurrentStep}
             />
           </div>
         </div>
       </div>
       <CreateEventFooter
-        currentStep={currentStep}
-        isCreatingNewEvent={isCreatingNewEvent}
-        prevPage={prevPage}
-        nextPage={nextPage}
+        currentStep={status.currentStep}
+        isCreatingNewEvent={status.isCreatingNewEvent}
+        prevPage={setStatus.prevPage}
+        nextPage={setStatus.nextPage}
         createEvent={createEvent}
       />
     </div>
