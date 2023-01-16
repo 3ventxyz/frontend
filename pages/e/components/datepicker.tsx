@@ -20,16 +20,13 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalDatePicker({
   selectedDate,
   onChange,
-  name,
-  isDropDownActive,
-  setIsDropDownActive
+  name
 }: {
   selectedDate: Date
-  onChange: (name:string,date: Date) => void
-  name:string,
-  isDropDownActive: boolean
-  setIsDropDownActive: (bool: boolean) => void
+  onChange: (name: string, date: Date) => void
+  name: string
 }) {
+  //data variables
   let today: Date = startOfToday()
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   const colStartClasses = [
@@ -55,22 +52,24 @@ export default function LocalDatePicker({
     let firstDayPrevMonth = sub(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayPrevMonth, 'MMM-yyyy'))
   }
-
+  //dropdown toggler
+  const [dropdown, setDropdown] = useState(false)
+  
   return (
     <div className="relative">
       <div
         onClick={() => {
-          setIsDropDownActive(!isDropDownActive)
+          setDropdown(!dropdown)
         }}
         className={`leading-0 z-0 flex w-[120px] items-center justify-between rounded-lg border-[1.5px] bg-gray-50 py-2.5 px-1.5 text-sm text-gray-900 hover:cursor-pointer 
         ${
-          isDropDownActive
+          dropdown
             ? 'shadow-outline border-blue-500 outline-none ring-blue-500'
             : ''
         }`}
       >
         <div>{format(selectedDate, 'MM/dd/yyyy')}</div>
-        {isDropDownActive ? (
+        {dropdown ? (
           <RiArrowDropUpLine className="h-[20px] w-[20px]" />
         ) : (
           <RiArrowDropDownLine className="h-[20px] w-[20px]" />
@@ -78,7 +77,7 @@ export default function LocalDatePicker({
       </div>
       <div
         className={`${
-          isDropDownActive ? 'absolute' : 'hidden'
+          dropdown ? 'absolute' : 'hidden'
         } z-10 h-auto w-[260px] rounded-xl bg-white  py-[5px] shadow-lg`}
       >
         <div className="flex justify-evenly">
@@ -130,7 +129,7 @@ export default function LocalDatePicker({
                   key={day.toString()}
                   className={`${dayIdx === 0 && colStartClasses[getDay(day)]}`}
                   onClick={() => {
-                    setIsDropDownActive(false)
+                    setDropdown(false)
                   }}
                 >
                   <DayButton
@@ -163,13 +162,13 @@ function DayButton({
   today: Date
   firstDayCurrentMonth: Date
   selectedDate: Date
-  name:string
-  onChange: (name:string,day: Date) => void
+  name: string
+  onChange: (name: string, day: Date) => void
 }) {
   return day ? (
     <button
       onClick={() => {
-        onChange(name,day)
+        onChange(name, day)
       }}
     >
       <div
