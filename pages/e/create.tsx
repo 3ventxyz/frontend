@@ -58,8 +58,6 @@ export default function CreateEvent() {
   const [values, onChange] = useCreateEventFormState({
     initialState: inputValues
   })
-  const [startDate, setStartDate] = useState<Date>(today)
-  const [endDate, setEndDate] = useState<Date>(today)
   const [eventLocation, setEventLocation] = useState<LocationData>({
     address: '',
     lat: 0,
@@ -280,14 +278,16 @@ export default function CreateEvent() {
                   </label>
                   <div className="flex space-x-3">
                     <LocalDatePicker
-                      setSelectedDate={setStartDate}
-                      selectedDate={startDate}
+                      onChange={onChange}
+                      name={'start_date'}
+                      selectedDate={values.start_date}
                       isDropDownActive={startDatePickerVisible}
                       setIsDropDownActive={setStartDatePickerVisible}
                     />
                     <LocalTimePicker
-                      setSelectedDate={setStartDate}
-                      selectedDate={startDate}
+                      onChange={onChange}
+                      name={'start_date'}
+                      selectedDate={values.start_date}
                       isDropDownActive={startTimePickerVisible}
                       setIsDropDownActive={setStartTimePickerVisible}
                     />
@@ -299,14 +299,16 @@ export default function CreateEvent() {
                   </label>
                   <div className="flex space-x-3">
                     <LocalDatePicker
-                      setSelectedDate={setEndDate}
-                      selectedDate={endDate}
+                      onChange={onChange}
+                      name={'end_date'}
+                      selectedDate={values.end_date}
                       isDropDownActive={endDatePickerVisible}
                       setIsDropDownActive={setEndDatePickerVisible}
                     />
                     <LocalTimePicker
-                      setSelectedDate={setEndDate}
-                      selectedDate={endDate}
+                      onChange={onChange}
+                      name={'end_date'}
+                      selectedDate={values.end_date}
                       isDropDownActive={endTimePickerVisible}
                       setIsDropDownActive={setEndTimePickerVisible}
                     />

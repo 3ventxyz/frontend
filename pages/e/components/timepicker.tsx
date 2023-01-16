@@ -3,12 +3,14 @@ import { format, set } from 'date-fns'
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalTimePicker({
   selectedDate,
-  setSelectedDate,
+  name,
+  onChange,
   isDropDownActive,
   setIsDropDownActive
 }: {
   selectedDate: Date
-  setSelectedDate: (date: Date) => void
+  name:string
+  onChange: (name: string, date: Date) => void
   isDropDownActive: boolean
   setIsDropDownActive: (bool: boolean) => void
 }) {
@@ -55,7 +57,8 @@ export default function LocalTimePicker({
                 <div>
                   <button
                     onClick={() => {
-                      setSelectedDate(selectedTime)
+                      // setSelectedDate(selectedTime)
+                      onChange(name, selectedTime)
                       setIsDropDownActive(false)
                       console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
                     }}
