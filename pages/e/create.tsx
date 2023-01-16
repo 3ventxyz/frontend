@@ -58,24 +58,20 @@ export default function CreateEvent() {
   const [values, onChange] = useCreateEventFormState({
     initialState: inputValues
   })
-  const [title, setTitle] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(today)
   const [eventLocation, setEventLocation] = useState<LocationData>({
-      address: '',
+    address: '',
     lat: 0,
     long: 0
   })
-  const [eventId, setEventId] = useState<string>('test-id')
-  const [eventDescription, setEventDescription] = useState<string>('')
-  const [ticketMax, setTicketMax] = useState<number>(0)
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
     useState<string | null>(null)
   const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
   const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
     useState<string | null>(null)
-  
+
   /**
    * UI page state setStates
    **/
@@ -256,14 +252,16 @@ export default function CreateEvent() {
                   id={'event_name'}
                   labelText={'Title'}
                   placeholder={''}
-                  setValue={setTitle}
+                  onChange={onChange}
+                  name={'title'}
                   isDisabled={isCreatingNewEvent}
                 />
                 <CreateEventTextInput
                   id={'event_id'}
                   labelText={'Event ID*'}
                   placeholder={''}
-                  setValue={setEventId}
+                  onChange={onChange}
+                  name={'event_id'}
                   isDisabled={isCreatingNewEvent}
                 />
                 <LocationInput
@@ -329,7 +327,8 @@ export default function CreateEvent() {
                   id={'event_description'}
                   labelText={'Description'}
                   placeholder={''}
-                  setValue={setEventDescription}
+                  onChange={onChange}
+                  name={'event_description'}
                   isDisabled={isCreatingNewEvent}
                 />
 
@@ -338,7 +337,8 @@ export default function CreateEvent() {
                     TICKET SUPPLY
                   </label>
                   <NumberInput
-                    setValue={setTicketMax}
+                    onChange={onChange}
+                    name={'ticket_max'}
                     disabled={isCreatingNewEvent}
                   />
                 </div>
@@ -372,7 +372,9 @@ export default function CreateEvent() {
                         <FileImageInput
                           fileImg={values.file_img}
                           setFileImg={setFileImg}
-                          imgUrlTemplate={values.selected_predefined_event_img_url ?? ''}
+                          imgUrlTemplate={
+                            values.selected_predefined_event_img_url ?? ''
+                          }
                         />
                       </div>
                       {values.file_img === null && ticketImgsMenuVisible ? (
@@ -411,7 +413,9 @@ export default function CreateEvent() {
                     <FileImageInput
                       fileImg={values.landing_file_img}
                       setFileImg={setLandingFileImg}
-                      imgUrlTemplate={values.selected_predefined_landing_img_url ?? ''}
+                      imgUrlTemplate={
+                        values.selected_predefined_landing_img_url ?? ''
+                      }
                       mode={'landing'}
                     />
                   </div>
