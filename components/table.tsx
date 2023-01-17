@@ -77,7 +77,8 @@ export default function TventTable(
       onRowsPerPageChange={handleChangeRowsPerPage}
     />
   )
-
+/* Sorting Functions stableSort, getComparator and descendingComparator are used to sort the list of objects, in this case the list collection
+I'm not sure if I'm sorting correctly on line 85 or if I'm having type errors and that's why it's not running correctly*/
   function stableSort<T>(array: Array<Object>, comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
