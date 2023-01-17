@@ -55,10 +55,14 @@ export default function LocalDatePicker({
   //dropdown toggler
   const [dropdown, setDropdown] = useState(false)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
   
 >>>>>>> a3d95e6 (dropdown menu toggler moved down to local timepicker and datepicker components)
+=======
+
+>>>>>>> 431e24f (useCreateEventStatus and useCreateEventValues revaamp; params from createEvent components renamed)
   return (
     <div className="relative">
       <div
@@ -168,19 +172,27 @@ function DayButton({
   selectedDate: Date
   name: string
 <<<<<<< HEAD
+<<<<<<< HEAD
   setDate: (name: string, day: Date) => void
 =======
   onChange: (name: string, day: Date) => void
 >>>>>>> a3d95e6 (dropdown menu toggler moved down to local timepicker and datepicker components)
+=======
+  setDate: (name: string, day: Date) => void
+>>>>>>> 431e24f (useCreateEventStatus and useCreateEventValues revaamp; params from createEvent components renamed)
 }) {
   return day ? (
     <button
       onClick={() => {
 <<<<<<< HEAD
+<<<<<<< HEAD
         setDate(name, day)
 =======
         onChange(name, day)
 >>>>>>> a3d95e6 (dropdown menu toggler moved down to local timepicker and datepicker components)
+=======
+        setDate(name, day)
+>>>>>>> 431e24f (useCreateEventStatus and useCreateEventValues revaamp; params from createEvent components renamed)
       }}
     >
       <div

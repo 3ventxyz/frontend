@@ -48,10 +48,14 @@ export default function LocalTimePicker({
                   <button
                     onClick={() => {
 <<<<<<< HEAD
+<<<<<<< HEAD
                       setDate(name, selectedTime)
 =======
                       onChange(name, selectedTime)
 >>>>>>> a3d95e6 (dropdown menu toggler moved down to local timepicker and datepicker components)
+=======
+                      setDate(name, selectedTime)
+>>>>>>> 431e24f (useCreateEventStatus and useCreateEventValues revaamp; params from createEvent components renamed)
                       setDropdown(false)
                       console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
                     }}
