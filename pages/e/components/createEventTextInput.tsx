@@ -7,7 +7,7 @@ interface TextInputProps {
   errorMsg?: string
   textArea?: boolean
   isDisabled?: boolean
-  onChange: (name: string, value: string) => void
+  setTextValue: (name: string, value: string) => void
   name: string
   width?: string
   height?: string
@@ -22,7 +22,7 @@ export default function CreateEventTextInput({
   maxWidthForm = 400,
   textArea = false,
   isDisabled = false,
-  onChange,
+  setTextValue,
   name,
   width = 'w-full',
   height = 'w-full',
@@ -40,7 +40,7 @@ export default function CreateEventTextInput({
       </label>
       {textArea !== true ? (
         <input
-          onChange={(e) => onChange(name, e.target.value)}
+          onChange={(e) => setTextValue(name, e.target.value)}
           className={`${width} focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
           id={id}
           type="text"
@@ -49,7 +49,7 @@ export default function CreateEventTextInput({
         />
       ) : (
         <textarea
-          onChange={(e) => onChange(name, e.target.value)}
+          onChange={(e) => setTextValue(name, e.target.value)}
           name="textarea"
           className={`${width} focus:shadow-outline leading-0 block max-w-[${maxWidth}px] min-h-[80px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
           id={id}

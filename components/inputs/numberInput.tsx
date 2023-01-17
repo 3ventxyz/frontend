@@ -1,16 +1,16 @@
 export default function NumberInput({
-  onChange,
+  setNumberValue,
   name,
   disabled = false
 }: {
-  onChange: (name: string, value: number) => void
+  setNumberValue: (name: string, value: number) => void
   name: string
   disabled?: boolean
 }) {
   return (
     <input
       onChange={(e) => {
-        onChange(name, parseInt(e.target.value))
+        setNumberValue(name, parseInt(e.target.value))
       }}
       className={`focus:shadow-outline leading-0 h-full w-full max-w-[400px] rounded-lg border-[1.5px] p-2.5 text-sm ${
         disabled

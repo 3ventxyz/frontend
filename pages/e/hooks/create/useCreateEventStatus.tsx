@@ -13,11 +13,10 @@ const initialCreateEventStatus: createEventStatusInterface = {
 }
 
 interface useCreateEventStatus {
-  handleStatusChange: (name: string, status: boolean | number | string) => void
   nextPage: () => void
   prevPage: () => void
-  creatingNewEvent: (bool: boolean) => void
-  setErrorMsg:(msg: string)=>void
+  setCreatingNewEvent: (bool: boolean) => void
+  setErrorMsg: (msg: string) => void
 }
 
 export default function useCreateEventStatus({
@@ -25,14 +24,8 @@ export default function useCreateEventStatus({
 }: {
   initialState: createEventStatusInterface
 }): [createEventStatusInterface, useCreateEventStatus] {
-  const [currStatus, setStatus] = useState(initialState)
-
-  const handleStatusChange = (
-    name: string,
-    status: boolean | number | string
-  ) => {
-    setStatus({ ...currStatus, [name]: status })
-  }
+  const [currStatus, setStatus] =
+    useState<createEventStatusInterface>(initialState)
 
   const nextPage = () => {
     let page = currStatus.currentStep
@@ -45,25 +38,27 @@ export default function useCreateEventStatus({
     page--
     setStatus({ ...currStatus, currentStep: page })
   }
-  const creatingNewEvent = (bool: boolean) => {
+
+  const setCreatingNewEvent = (bool: boolean) => {
     setStatus({
       ...currStatus,
       isCreatingNewEvent: bool
     })
   }
-  const setErrorMsg=(errorMsg:string)=>{
+
+  const setErrorMsg = (errorMsg: string) => {
     setStatus({
       ...currStatus,
       errorMsg: errorMsg
     })
   }
+
   return [
     currStatus,
     {
-      handleStatusChange,
       nextPage,
       prevPage,
-      creatingNewEvent,
+      setCreatingNewEvent,
       setErrorMsg
     }
   ]

@@ -19,11 +19,11 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 
 export default function LocalDatePicker({
   selectedDate,
-  onChange,
+  setDate,
   name
 }: {
   selectedDate: Date
-  onChange: (name: string, date: Date) => void
+  setDate: (name: string, date: Date) => void
   name: string
 }) {
   //data variables
@@ -54,7 +54,7 @@ export default function LocalDatePicker({
   }
   //dropdown toggler
   const [dropdown, setDropdown] = useState(false)
-  
+
   return (
     <div className="relative">
       <div
@@ -137,7 +137,7 @@ export default function LocalDatePicker({
                     today={today}
                     firstDayCurrentMonth={firstDayCurrentMonth}
                     selectedDate={selectedDate}
-                    onChange={onChange}
+                    setDate={setDate}
                     name={name}
                   />
                 </div>
@@ -156,19 +156,19 @@ function DayButton({
   firstDayCurrentMonth,
   selectedDate,
   name,
-  onChange
+  setDate
 }: {
   day?: Date | null
   today: Date
   firstDayCurrentMonth: Date
   selectedDate: Date
   name: string
-  onChange: (name: string, day: Date) => void
+  setDate: (name: string, day: Date) => void
 }) {
   return day ? (
     <button
       onClick={() => {
-        onChange(name, day)
+        setDate(name, day)
       }}
     >
       <div

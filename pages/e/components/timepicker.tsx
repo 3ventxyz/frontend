@@ -4,11 +4,11 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalTimePicker({
   selectedDate,
   name,
-  onChange
+  setDate
 }: {
   selectedDate: Date
   name: string
-  onChange: (name: string, date: Date) => void
+  setDate: (name: string, date: Date) => void
 }) {
   // dropdown toggler
   const [dropdown, setDropdown] = useState(false)
@@ -47,7 +47,7 @@ export default function LocalTimePicker({
                 <div>
                   <button
                     onClick={() => {
-                      onChange(name, selectedTime)
+                      setDate(name, selectedTime)
                       setDropdown(false)
                       console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
                     }}

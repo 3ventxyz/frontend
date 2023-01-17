@@ -15,7 +15,7 @@ import PlacesAutocomplete, {
 	id: string
 	placeholder: string
 	name: string
-	onChange: (name: string, location: LocationData) => void
+	setLocation: (name: string, location: LocationData) => void
   }
   
   export default function CreateEventLocationInput({
@@ -23,7 +23,7 @@ import PlacesAutocomplete, {
 	id,
 	placeholder,
 	name,
-	onChange
+	setLocation
   }: LocationInputProps) {
 	const [searchText, setSearchText] = useState('')
 	const [address, setAddress] = useState('')
@@ -41,7 +41,7 @@ import PlacesAutocomplete, {
 		  return getLatLng(results[0])
 		})
 		.then((latLng) => {
-		  onChange(name, {
+			setLocation(name, {
 			lat: latLng['lat'],
 			long: latLng['lng'],
 			address: address

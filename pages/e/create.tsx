@@ -22,9 +22,9 @@ import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
-import useCreateEventFormState from './hooks/create/useCreateEventForm'
 import CreateEventLocationInput from './components/createEventLocationInput'
 import useCreateEventStatus from './hooks/create/useCreateEventStatus'
+import useCreateEventValues from './hooks/create/useCreateEventValues'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -47,12 +47,6 @@ const inputValues: createEventFormInterface = {
 }
 
 const createEventStatus = {
-  startDatePickerVisible: false,
-  startTimePickerVisible: false,
-  endDatePickerVisible: false,
-  endTimePickerVisible: false,
-  ticketImgsMenuVisible: false,
-  landingImgsMenuVisible: false,
   currentStep: 0,
   isCreatingNewEvent: false,
   errorMsg: ''
@@ -63,12 +57,15 @@ export default function CreateEvent() {
   const auth = useAuth()
   const events = useEvents()
   let page: number = createEventStatus.currentStep
+
   /**
    * input data UI setStates
    **/
-  const [values, onChange] = useCreateEventFormState({
-    initialState: inputValues
-  })
+  const [values, { setTextValue, setNumberValue, setDate, setLocation }] =
+    useCreateEventValues({
+      initialState: inputValues
+    })
+
 
   const [fileImg, setFileImg] = useState<File | null>(null)
   const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
@@ -80,9 +77,10 @@ export default function CreateEvent() {
   /**
    * UI page state setStates
    **/
-  const [status, setStatus] = useCreateEventStatus({
-    initialState: createEventStatus
-  })
+  const [status, { nextPage, prevPage, setCreatingNewEvent, setErrorMsg }] =
+    useCreateEventStatus({
+      initialState: createEventStatus
+    })
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
 
@@ -115,17 +113,17 @@ export default function CreateEvent() {
     console.log('========================')
 
     let isFormValid
-    setStatus.creatingNewEvent(true)
-    setStatus.setErrorMsg('')
+    setCreatingNewEvent(true)
+    setErrorMsg('')
     isFormValid = formValidator()
     if (!isFormValid) {
-      setStatus.creatingNewEvent(false)
+      setCreatingNewEvent(false)
       return
     }
     let isEventIdTaken = await CheckEventId(values.event_id)
     if (isEventIdTaken) {
-      setStatus.creatingNewEvent(false)
-      setStatus.setErrorMsg(
+      setCreatingNewEvent(false)
+      setErrorMsg(
         'Event ID: event id has been taken, please enter a different id'
       )
       return
@@ -200,7 +198,7 @@ export default function CreateEvent() {
       alert(
         'error 404: form could not be created due to an unknown error, please try again later.'
       )
-      setStatus.creatingNewEvent(false)
+      setCreatingNewEvent(false)
     }
   }
 
@@ -233,7 +231,7 @@ export default function CreateEvent() {
                   id={'event_name'}
                   labelText={'Title'}
                   placeholder={''}
-                  onChange={onChange}
+                  setTextValue={setTextValue}
                   name={'title'}
                   isDisabled={status.isCreatingNewEvent}
                 />
@@ -241,7 +239,7 @@ export default function CreateEvent() {
                   id={'event_id'}
                   labelText={'Event ID*'}
                   placeholder={''}
-                  onChange={onChange}
+                  setTextValue={setTextValue}
                   name={'event_id'}
                   isDisabled={status.isCreatingNewEvent}
                 />
@@ -250,7 +248,7 @@ export default function CreateEvent() {
                   id={'event_location'}
                   placeholder={''}
                   name={'event_location'}
-                  onChange={onChange}
+                  setLocation={setLocation}
                 />
                 <EventLocationMap
                   lat={values.event_location.lat}
@@ -262,12 +260,12 @@ export default function CreateEvent() {
                   </label>
                   <div className="flex space-x-3">
                     <LocalDatePicker
-                      onChange={onChange}
+                      setDate={setDate}
                       name={'start_date'}
                       selectedDate={values.start_date}
                     />
                     <LocalTimePicker
-                      onChange={onChange}
+                      setDate={setDate}
                       name={'start_date'}
                       selectedDate={values.start_date}
                     />
@@ -279,12 +277,12 @@ export default function CreateEvent() {
                   </label>
                   <div className="flex space-x-3">
                     <LocalDatePicker
-                      onChange={onChange}
+                      setDate={setDate}
                       name={'end_date'}
                       selectedDate={values.end_date}
                     />
                     <LocalTimePicker
-                      onChange={onChange}
+                      setDate={setDate}
                       name={'end_date'}
                       selectedDate={values.end_date}
                     />
@@ -305,17 +303,16 @@ export default function CreateEvent() {
                   id={'event_description'}
                   labelText={'Description'}
                   placeholder={''}
-                  onChange={onChange}
+                  setTextValue={setTextValue}
                   name={'event_description'}
                   isDisabled={status.isCreatingNewEvent}
                 />
-
                 <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
                   <label className="mb-2 block text-sm font-medium text-gray-900 ">
                     TICKET SUPPLY
                   </label>
                   <NumberInput
-                    onChange={onChange}
+                    setNumberValue={setNumberValue}
                     name={'ticket_max'}
                     disabled={status.isCreatingNewEvent}
                   />
@@ -432,8 +429,8 @@ export default function CreateEvent() {
       <CreateEventFooter
         currentStep={status.currentStep}
         isCreatingNewEvent={status.isCreatingNewEvent}
-        prevPage={setStatus.prevPage}
-        nextPage={setStatus.nextPage}
+        prevPage={prevPage}
+        nextPage={nextPage}
         createEvent={createEvent}
       />
     </div>
