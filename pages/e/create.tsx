@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
 import { startOfToday } from 'date-fns'
-import { createEventFormInterface } from '../../shared/interface/common'
+import {
+  createEventFormInterface,
+  createEventStatusInterface
+} from '../../shared/interface/common'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
 import EventLocationMap from './components/eventLocationMap'
@@ -40,7 +43,7 @@ const inputValues: createEventFormInterface = {
   landing_img_url: ''
 }
 
-const createEventStatus = {
+const createEventStatus: createEventStatusInterface = {
   currentStep: 0,
   isCreatingNewEvent: false,
   errorMsg: ''
@@ -50,7 +53,6 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
   const events = useEvents()
-  let page: number = createEventStatus.currentStep
 
   /**
    * input data UI setStates
@@ -65,17 +67,13 @@ export default function CreateEvent() {
       setFileImg,
       setPredefinedImgUrl
     }
-  ] = useCreateEventValues({
-    initialState: inputValues
-  })
+  ] = useCreateEventValues(inputValues)
 
   /**
    * UI page state setStates
    **/
   const [status, { nextPage, prevPage, setCreatingNewEvent, setErrorMsg }] =
-    useCreateEventStatus({
-      initialState: createEventStatus
-    })
+    useCreateEventStatus(createEventStatus)
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
 
@@ -98,17 +96,6 @@ export default function CreateEvent() {
   }
 
   const createEvent = async () => {
-    console.log('===creating event===')
-    console.log('title: ', values.title)
-    console.log('event_id: ', values.event_id)
-    console.log('startDate: ', values.start_date)
-    console.log('endDate: ', values.end_date)
-    console.log('eventLocation: ', values.event_location)
-    console.log('eventDescription: ', values.event_description)
-    console.log('ticketMax: ', values.ticket_max)
-    console.log('fileImg: ', values.file_img)
-    console.log('========================')
-
     let isFormValid
     setCreatingNewEvent(true)
     setErrorMsg('')

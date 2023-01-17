@@ -13,11 +13,9 @@ interface useCreateEventValuesInterface {
   setPredefinedImgUrl: (name: string, fileImgUrl: string) => void
 }
 
-export default function useCreateEventValues({
-  initialState
-}: {
+export default function useCreateEventValues(
   initialState: createEventFormInterface
-}): [createEventFormInterface, useCreateEventValuesInterface] {
+): [createEventFormInterface, useCreateEventValuesInterface] {
   const [values, setValues] = useState(initialState)
 
   const setTextValue = (name: string, value: string) => {

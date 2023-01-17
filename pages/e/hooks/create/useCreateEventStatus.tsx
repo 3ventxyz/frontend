@@ -1,16 +1,5 @@
 import { useState } from 'react'
-
-interface createEventStatusInterface {
-  currentStep: number
-  isCreatingNewEvent: boolean
-  errorMsg: string
-}
-
-const initialCreateEventStatus: createEventStatusInterface = {
-  currentStep: 0,
-  isCreatingNewEvent: false,
-  errorMsg: ''
-}
+import { createEventStatusInterface } from '../../../../shared/interface/common'
 
 interface useCreateEventStatus {
   nextPage: () => void
@@ -19,11 +8,9 @@ interface useCreateEventStatus {
   setErrorMsg: (msg: string) => void
 }
 
-export default function useCreateEventStatus({
-  initialState = initialCreateEventStatus
-}: {
+export default function useCreateEventStatus(
   initialState: createEventStatusInterface
-}): [createEventStatusInterface, useCreateEventStatus] {
+): [createEventStatusInterface, useCreateEventStatus] {
   const [currStatus, setStatus] =
     useState<createEventStatusInterface>(initialState)
 
