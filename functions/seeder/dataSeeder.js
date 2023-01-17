@@ -1,7 +1,5 @@
 // author: marthel
-const useAuth = require('../../contexts/auth')
 const { faker } = require('@faker-js/faker')
-const auth = useAuth()
 
 const userSize = 10
 const eventSize = 10
@@ -336,7 +334,7 @@ module.exports = class DataSeeder {
    */
   async setDummyAllowlistData() {
     try {
-      ;[...Array(listSize).keys()].map(() => {
+      ;[...Array(listSize).keys()].map(async() => {
         const dummyAllowlistData = {
           allowlist: faker.finance.ethereumAddress(),
           description: faker.commerce.productDescription(),
@@ -349,7 +347,7 @@ module.exports = class DataSeeder {
           twitterAccountId: '783214',
           twitterFollowing: faker.datatype.boolean(),
           twitterVerif: faker.datatype.boolean(),
-          uid: `/users/${auth.currentUser?.uid}`,
+          uid: await this.db.collection('users').doc(this.user1UID),
           walletVerif: faker.datatype.boolean()
         }
         this.db.collection('lists').add(dummyAllowlistData)
