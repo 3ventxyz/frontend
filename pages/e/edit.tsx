@@ -301,11 +301,12 @@ export default function EditEvent() {
           <label className="mb-2 block text-sm font-medium text-gray-900 ">
             IMAGE
           </label>
-          <FileImageInput
+          {/** temporal disabled*/}
+          {/* <FileImageInput
             fileImg={fileImg}
             setFileImg={setFileImg}
             imgUrlTemplate={currEventImgURl}
-          />
+          /> */}
         </div>
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
           <label className="mb-2 block text-sm font-medium text-gray-900 ">

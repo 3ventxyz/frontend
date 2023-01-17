@@ -3,13 +3,9 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
 import { startOfToday } from 'date-fns'
-import {
-  createEventFormInterface,
-  LocationData
-} from '../../shared/interface/common'
+import { createEventFormInterface } from '../../shared/interface/common'
 import LocalDatePicker from './components/datepicker'
 import LocalTimePicker from './components/timepicker'
-import LocationInput from '../../components/inputs/locationInput'
 import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import FileImageInput from '../../components/inputs/fileImageInput'
@@ -39,9 +35,7 @@ const inputValues: createEventFormInterface = {
   event_description: '',
   ticket_max: 0,
   file_img: null,
-  selected_predefined_event_img_url: '',
   landing_file_img: null,
-  selected_predefined_landing_img_url: '',
   event_img_url: '',
   landing_img_url: ''
 }
@@ -61,18 +55,19 @@ export default function CreateEvent() {
   /**
    * input data UI setStates
    **/
-  const [values, { setTextValue, setNumberValue, setDate, setLocation }] =
-    useCreateEventValues({
-      initialState: inputValues
-    })
-
-
-  const [fileImg, setFileImg] = useState<File | null>(null)
-  const [selectedPredefinedEventImgUrl, setSelectedPredefinedEventImgUrl] =
-    useState<string | null>(null)
-  const [landingfileImg, setLandingFileImg] = useState<File | null>(null)
-  const [selectedPredefinedLandingImgUrl, setSelectedPredefinedLandingImgUrl] =
-    useState<string | null>(null)
+  const [
+    values,
+    {
+      setTextValue,
+      setNumberValue,
+      setDate,
+      setLocation,
+      setFileImg,
+      setPredefinedImgUrl
+    }
+  ] = useCreateEventValues({
+    initialState: inputValues
+  })
 
   /**
    * UI page state setStates
@@ -88,15 +83,17 @@ export default function CreateEvent() {
    * logic functions
    **/
   const onChangePredefinedImage = ({
-    setImgUrl,
+    setPredefinedImgUrl,
+    name,
     imgUrl,
     setMenuVisibility
   }: {
-    setImgUrl: (imgUrl: string) => void
+    setPredefinedImgUrl: (name: string, imgUrl: string) => void
     imgUrl: string
+    name: string
     setMenuVisibility: (visibility: boolean) => void
   }) => {
-    setImgUrl(imgUrl)
+    setPredefinedImgUrl(name, imgUrl)
     setMenuVisibility(false)
   }
 
@@ -164,8 +161,8 @@ export default function CreateEvent() {
           }
         )
       } else if (
-        values.selected_predefined_event_img_url !== null &&
-        values.selected_predefined_landing_img_url !== null
+        values.event_img_url !== null &&
+        values.landing_img_url !== null
       ) {
         await events.submitEventToFirebase(
           {
@@ -175,7 +172,7 @@ export default function CreateEvent() {
             uid: auth.uid,
             description: values.event_description,
             location: values.event_location,
-            img_url: values.selected_predefined_event_img_url,
+            img_url: values.event_img_url,
             ticket_max: values.ticket_max,
             event_id: values.event_id,
             registered_attendees: 0
@@ -347,11 +344,10 @@ export default function CreateEvent() {
                     <div className=" space-y-[5px] ">
                       <div className="z-10">
                         <FileImageInput
+                          name={'file_img'}
                           fileImg={values.file_img}
                           setFileImg={setFileImg}
-                          imgUrlTemplate={
-                            values.selected_predefined_event_img_url ?? ''
-                          }
+                          imgUrlTemplate={values.event_img_url ?? ''}
                         />
                       </div>
                       {values.file_img === null && ticketImgsMenuVisible ? (
@@ -361,8 +357,9 @@ export default function CreateEvent() {
                               imgUrl: string
                             ) => {
                               onChangePredefinedImage({
+                                name: 'event_img_url',
                                 imgUrl: imgUrl,
-                                setImgUrl: setSelectedPredefinedEventImgUrl,
+                                setPredefinedImgUrl: setPredefinedImgUrl,
                                 setMenuVisibility: setTicketImgsMenuVisible
                               })
                             }}
@@ -391,10 +388,9 @@ export default function CreateEvent() {
                   <div className="z-10">
                     <FileImageInput
                       fileImg={values.landing_file_img}
-                      setFileImg={setLandingFileImg}
-                      imgUrlTemplate={
-                        values.selected_predefined_landing_img_url ?? ''
-                      }
+                      name={'landing_file_img'}
+                      setFileImg={setFileImg}
+                      imgUrlTemplate={values.landing_img_url ?? ''}
                       mode={'landing'}
                     />
                   </div>
@@ -404,7 +400,8 @@ export default function CreateEvent() {
                         setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
                           onChangePredefinedImage({
                             imgUrl: imgUrl,
-                            setImgUrl: setSelectedPredefinedLandingImgUrl,
+                            name: 'landing_img_url',
+                            setPredefinedImgUrl: setPredefinedImgUrl,
                             setMenuVisibility: setLandingImgsMenuVisible
                           })
                         }}
