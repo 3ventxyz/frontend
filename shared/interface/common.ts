@@ -124,7 +124,6 @@ export interface createEventStatusInterface {
   errorMsg: string
 }
 
-
 export interface createEventFormInterface {
   title: string
   start_date: Date
@@ -135,10 +134,14 @@ export interface createEventFormInterface {
   ticket_max: number
   file_img: File | null
   event_img_url: string
-  selected_predefined_event_img_url: string
   landing_file_img: File | null
   landing_img_url: string
-  selected_predefined_landing_img_url: string
+}
+
+export interface createEventStatusInterface {
+  currentStep: number
+  isCreatingNewEvent: boolean
+  errorMsg: string
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}
