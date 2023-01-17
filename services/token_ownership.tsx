@@ -1,30 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useContractRead } from 'wagmi'
 import { useAuth } from '../contexts/auth'
 import abi from './abi.json'
 
-const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
-const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API
-
-
-
 export default function TokenOwnership() {
-  /*Save fetched abi in a variable to be able to use not as a promise but text*/
-  const axios = require('axios')
-  const url = `https://api.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`
-  const auth = useAuth()
-  let abiData = ''
-  const fetchAbi = async () => {
-    const res = await axios.get(url)
-    const abi = JSON.parse(res.data.result)
-    abiData = abi
-    console.log(abi)
-  }
-  fetchAbi()
-
+   const auth = useAuth()
+   const contractAddress = '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
   /*Check if wallet is connected*/
   if (auth.userModel?.wallet) {
     /*use Contract Read and check tokens owned*/
     if (contractAddress !== undefined) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { data, isError, isLoading } = useContractRead({
         addressOrName: contractAddress,
         contractInterface: abi,
