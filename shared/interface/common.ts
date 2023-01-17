@@ -51,6 +51,11 @@ export interface AllowlistUser {
   status: string
 }
 
+export interface AllowlistTableHeader {
+  id: string
+  label: string
+}
+
 export interface UserProfileEvents {
   upcomingEvents: EventInterface[]
   pastEvents: EventInterface[]

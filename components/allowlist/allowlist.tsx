@@ -18,6 +18,7 @@ import {
   TableCell,
   Paper
 } from '@mui/material'
+import TventTable from '../table'
 
 export default function Allowlists() {
   const auth = useAuth()
@@ -51,6 +52,14 @@ export default function Allowlists() {
     router.push('/allowlists')
   }
 
+  const allowlistIndexHeader = [
+    { id: 'AllowlistName', label: 'Name' },
+    { id: 'AllowlistEntries', label: 'Entries' },
+    { id: 'AllowlistLink', label: 'Application Link' }
+  ]
+
+  const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } = TventTable(allowlists, allowlistIndexHeader)
+
   return (
     <>
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center space-y-[20px] bg-secondaryBg">
@@ -65,54 +74,26 @@ export default function Allowlists() {
           />
         </div>
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow className="bg-gray-50">
+          <TblContainer>
+            <TblHead />
+            <TableBody>
+              {listAfterPagingAndSorting().map((list, i) => (
+                <TableRow key={i} className="bg-white">
                   <TableCell>
-                    <span className="text-xs font-bold uppercase text-gray-700">
-                      name
+                    <span className="text-gray-900">{list.title}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-gray-500">
+                      {list.allowlist.length}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className="text-xs font-bold uppercase text-gray-700">
-                      # entries
-                    </span>
-                  </TableCell>
-                  <TableCell align="center">
-                    <span className="text-xs font-bold uppercase text-gray-700">
-                      application link
-                    </span>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {allowlists.map((e, i) => (
-                  <TableRow key={i}>
-                    <TableCell
-                    align="left"
-                      key={i}
-                      onClick={() =>
-                        router.push(`allowlists/${e.allowlist_id}`)
-                      }
-                      padding="none"
-                    >
-                      <span className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 text-left">
-                        {e.title}
-                      </span>
-                    </TableCell>
-                    <TableCell key={i} align="left">
-                      <span className="py-4 px-6 text-sm text-gray-500 text-left">
-                        {e.allowlist.length}
-                      </span>
-                    </TableCell>
-                    <TableCell key={i} align="left">
-                      <span className="hover:cursor-default whitespace-nowrap py-4 px-6 font-medium text-sm text-gray-500 text-left">{`${origin}/apply?id=${e.allowlist_id}`}</span>
+                    <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
                     <Image
                       className="hover:cursor-pointer"
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `${origin}/apply?id=${e.allowlist_id}`
+                          `${origin}/apply?id=${list.allowlist_id}`
                         )
                         alert('Text copied')
                       }}
@@ -121,12 +102,12 @@ export default function Allowlists() {
                       height="20"
                       width="20"
                     />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TblPagination />
+          </TblContainer>
         </div>
       </div>
       <Modal
