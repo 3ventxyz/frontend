@@ -23,6 +23,7 @@ import CreateEventLocationInput from './components/createEventLocationInput'
 import useCreateEventStatus from './hooks/create/useCreateEventStatus'
 import useCreateEventValues from './hooks/create/useCreateEventValues'
 import { CreateEventFooter } from './components/createEventFooter'
+import CreateEventFormSection from './components/createEventFormSection'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -202,206 +203,189 @@ export default function CreateEvent() {
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] md:max-w-[600px]">
-            <div id="step-1" className="">
-              <h4>1.- Event title, location and date</h4>
-              <hr />
-              <div
-                className={`${
-                  status.currentStep == 0 ? 'h-full' : 'hidden h-[0px]'
-                } my-[10px] flex flex-col space-y-3 transition-transform`}
-              >
-                <CreateEventTextInput
-                  id={'event_name'}
-                  labelText={'Title'}
-                  placeholder={''}
-                  setTextValue={setTextValue}
-                  name={'title'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <CreateEventTextInput
-                  id={'event_id'}
-                  labelText={'Event ID*'}
-                  placeholder={''}
-                  setTextValue={setTextValue}
-                  name={'event_id'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <CreateEventLocationInput
-                  labelText={'Location*'}
-                  id={'event_location'}
-                  placeholder={''}
-                  name={'event_location'}
-                  setLocation={setLocation}
-                />
-                <EventLocationMap
-                  lat={values.event_location.lat}
-                  long={values.event_location.long}
-                />
-                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                    START DATE
-                  </label>
-                  <div className="flex space-x-3">
-                    <LocalDatePicker
-                      setDate={setDate}
-                      name={'start_date'}
-                      selectedDate={values.start_date}
-                    />
-                    <LocalTimePicker
-                      setDate={setDate}
-                      name={'start_date'}
-                      selectedDate={values.start_date}
-                    />
-                  </div>
-                </div>
-                <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                    END DATE
-                  </label>
-                  <div className="flex space-x-3">
-                    <LocalDatePicker
-                      setDate={setDate}
-                      name={'end_date'}
-                      selectedDate={values.end_date}
-                    />
-                    <LocalTimePicker
-                      setDate={setDate}
-                      name={'end_date'}
-                      selectedDate={values.end_date}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="step-2" className="">
-              <h4>2.- Description and max attendee cap</h4>
-              <hr />
-              <div
-                className={`${
-                  status.currentStep == 1 ? 'h-full' : 'hidden h-[0px]'
-                } my-[10px] flex flex-col space-y-3`}
-              >
-                <CreateEventTextInput
-                  textArea={true}
-                  id={'event_description'}
-                  labelText={'Description'}
-                  placeholder={''}
-                  setTextValue={setTextValue}
-                  name={'event_description'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                  <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                    TICKET SUPPLY
-                  </label>
-                  <NumberInput
-                    setNumberValue={setNumberValue}
-                    name={'ticket_max'}
-                    disabled={status.isCreatingNewEvent}
+            <CreateEventFormSection
+              isExpanded={status.currentStep == 0}
+              title={'1.- Event title, location and date'}
+            >
+              <CreateEventTextInput
+                id={'event_name'}
+                labelText={'Title'}
+                placeholder={''}
+                setTextValue={setTextValue}
+                name={'title'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <CreateEventTextInput
+                id={'event_id'}
+                labelText={'Event ID*'}
+                placeholder={''}
+                setTextValue={setTextValue}
+                name={'event_id'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <CreateEventLocationInput
+                labelText={'Location*'}
+                id={'event_location'}
+                placeholder={''}
+                name={'event_location'}
+                setLocation={setLocation}
+              />
+              <EventLocationMap
+                lat={values.event_location.lat}
+                long={values.event_location.long}
+              />
+              <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                  START DATE
+                </label>
+                <div className="flex space-x-3">
+                  <LocalDatePicker
+                    setDate={setDate}
+                    name={'start_date'}
+                    selectedDate={values.start_date}
+                  />
+                  <LocalTimePicker
+                    setDate={setDate}
+                    name={'start_date'}
+                    selectedDate={values.start_date}
                   />
                 </div>
               </div>
-            </div>
-
-            <div id="step-3" className="h-full space-y-[11px] md:h-[800px]">
-              <div>
-                <h4>3.- Landing portrait and ticket image</h4>
-              </div>
-              <hr />
-              <div
-                className={`${
-                  status.currentStep == 2 ? 'h-full' : 'hidden h-[0px]'
-                } flex flex-col items-center space-y-3 md:items-start`}
-              >
-                <div>
-                  <div className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
-                    <div className="flex w-full justify-between">
-                      <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                        TICKET EVENT IMAGE
-                      </label>
-                      <span
-                        onClick={() => {
-                          setTicketImgsMenuVisible(!ticketImgsMenuVisible)
-                        }}
-                        className="text-blue-800 hover:cursor-pointer hover:underline"
-                      >
-                        Predefined Images
-                      </span>
-                    </div>
-                    <div className=" space-y-[5px] ">
-                      <div className="z-10">
-                        <FileImageInput
-                          name={'file_img'}
-                          fileImg={values.file_img}
-                          setFileImg={setFileImg}
-                          imgUrlTemplate={values.event_img_url ?? ''}
-                        />
-                      </div>
-                      {values.file_img === null && ticketImgsMenuVisible ? (
-                        <div className="top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]">
-                          <PredefinedEventPictures
-                            setSelectedPredefinedEventImgUrl={(
-                              imgUrl: string
-                            ) => {
-                              onChangePredefinedImage({
-                                name: 'event_img_url',
-                                imgUrl: imgUrl,
-                                setPredefinedImgUrl: setPredefinedImgUrl,
-                                setMenuVisibility: setTicketImgsMenuVisible
-                              })
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  </div>
+              <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                  END DATE
+                </label>
+                <div className="flex space-x-3">
+                  <LocalDatePicker
+                    setDate={setDate}
+                    name={'end_date'}
+                    selectedDate={values.end_date}
+                  />
+                  <LocalTimePicker
+                    setDate={setDate}
+                    name={'end_date'}
+                    selectedDate={values.end_date}
+                  />
                 </div>
-                <div className="top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0">
-                  <div className="flex justify-between">
-                    <label className="block text-sm font-medium text-gray-900 md:mb-2 ">
-                      LANDING PORTRAIT IMAGES
+              </div>
+            </CreateEventFormSection>
+            <CreateEventFormSection
+              isExpanded={status.currentStep == 1}
+              title={'2.- Description and max attendee cap'}
+            >
+              <CreateEventTextInput
+                textArea={true}
+                id={'event_description'}
+                labelText={'Description'}
+                placeholder={''}
+                setTextValue={setTextValue}
+                name={'event_description'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
+                <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                  TICKET SUPPLY
+                </label>
+                <NumberInput
+                  setNumberValue={setNumberValue}
+                  name={'ticket_max'}
+                  disabled={status.isCreatingNewEvent}
+                />
+              </div>
+            </CreateEventFormSection>
+            <CreateEventFormSection
+              isExpanded={status.currentStep == 2}
+              title={'3.- Landing portrait and ticket image'}
+              fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
+              childrenClassName={'my-[10px] md:items-start'}
+            >
+              <div>
+                <div className="mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal">
+                  <div className="flex w-full justify-between">
+                    <label className="mb-2 block text-sm font-medium text-gray-900 ">
+                      TICKET EVENT IMAGE
                     </label>
                     <span
                       onClick={() => {
-                        setLandingImgsMenuVisible(!landingImgsMenuVisible)
+                        setTicketImgsMenuVisible(!ticketImgsMenuVisible)
                       }}
                       className="text-blue-800 hover:cursor-pointer hover:underline"
                     >
                       Predefined Images
                     </span>
                   </div>
-                  <div className="z-10">
-                    <FileImageInput
-                      fileImg={values.landing_file_img}
-                      name={'landing_file_img'}
-                      setFileImg={setFileImg}
-                      imgUrlTemplate={values.landing_img_url ?? ''}
-                      mode={'landing'}
-                    />
-                  </div>
-                  {landingImgsMenuVisible ? (
-                    <div className="z-20 px-[15px] md:absolute md:top-[42px]">
-                      <PredefinedEventPictures
-                        setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
-                          onChangePredefinedImage({
-                            imgUrl: imgUrl,
-                            name: 'landing_img_url',
-                            setPredefinedImgUrl: setPredefinedImgUrl,
-                            setMenuVisibility: setLandingImgsMenuVisible
-                          })
-                        }}
-                        landingMode={true}
+                  <div className=" space-y-[5px] ">
+                    <div className="z-10">
+                      <FileImageInput
+                        name={'file_img'}
+                        fileImg={values.file_img}
+                        setFileImg={setFileImg}
+                        imgUrlTemplate={values.event_img_url ?? ''}
                       />
                     </div>
-                  ) : (
-                    <></>
-                  )}
+                    {values.file_img === null && ticketImgsMenuVisible ? (
+                      <div className="top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]">
+                        <PredefinedEventPictures
+                          setSelectedPredefinedEventImgUrl={(
+                            imgUrl: string
+                          ) => {
+                            onChangePredefinedImage({
+                              name: 'event_img_url',
+                              imgUrl: imgUrl,
+                              setPredefinedImgUrl: setPredefinedImgUrl,
+                              setMenuVisibility: setTicketImgsMenuVisible
+                            })
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+              <div className="top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0">
+                <div className="flex justify-between">
+                  <label className="block text-sm font-medium text-gray-900 md:mb-2 ">
+                    LANDING PORTRAIT IMAGES
+                  </label>
+                  <span
+                    onClick={() => {
+                      setLandingImgsMenuVisible(!landingImgsMenuVisible)
+                    }}
+                    className="text-blue-800 hover:cursor-pointer hover:underline"
+                  >
+                    Predefined Images
+                  </span>
+                </div>
+                <div className="z-10">
+                  <FileImageInput
+                    fileImg={values.landing_file_img}
+                    name={'landing_file_img'}
+                    setFileImg={setFileImg}
+                    imgUrlTemplate={values.landing_img_url ?? ''}
+                    mode={'landing'}
+                  />
+                </div>
+                {landingImgsMenuVisible ? (
+                  <div className="z-20 px-[15px] md:absolute md:top-[42px]">
+                    <PredefinedEventPictures
+                      setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
+                        onChangePredefinedImage({
+                          imgUrl: imgUrl,
+                          name: 'landing_img_url',
+                          setPredefinedImgUrl: setPredefinedImgUrl,
+                          setMenuVisibility: setLandingImgsMenuVisible
+                        })
+                      }}
+                      landingMode={true}
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </CreateEventFormSection>
           </div>
 
           <div className="sticky bottom-[0px] z-0 hidden md:block">
