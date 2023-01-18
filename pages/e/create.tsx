@@ -13,17 +13,16 @@ import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import FileImageInput from '../../components/inputs/fileImageInput'
 import PredefinedEventPictures from './components/predefinedEventPictures'
-import Button from '../../components/buttons/button'
 import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
-import Spinner from '../../components/utils/spinner'
 import CreateEventTextInput from './components/createEventTextInput'
 import CreateEventLocationInput from './components/createEventLocationInput'
 import useCreateEventStatus from './hooks/create/useCreateEventStatus'
 import useCreateEventValues from './hooks/create/useCreateEventValues'
+import { CreateEventFooter } from './components/createEventFooter'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -274,6 +273,7 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
+
             <div id="step-2" className="">
               <h4>2.- Description and max attendee cap</h4>
               <hr />
@@ -303,6 +303,7 @@ export default function CreateEvent() {
                 </div>
               </div>
             </div>
+
             <div id="step-3" className="h-full space-y-[11px] md:h-[800px]">
               <div>
                 <h4>3.- Landing portrait and ticket image</h4>
@@ -402,6 +403,7 @@ export default function CreateEvent() {
               </div>
             </div>
           </div>
+
           <div className="sticky bottom-[0px] z-0 hidden md:block">
             <CreateEventStepsDisplay
               currentStep={status.currentStep}
@@ -410,6 +412,7 @@ export default function CreateEvent() {
           </div>
         </div>
       </div>
+
       <CreateEventFooter
         currentStep={status.currentStep}
         isCreatingNewEvent={status.isCreatingNewEvent}
@@ -417,75 +420,6 @@ export default function CreateEvent() {
         nextPage={nextPage}
         createEvent={createEvent}
       />
-    </div>
-  )
-}
-
-function CreateEventFooter({
-  currentStep,
-  isCreatingNewEvent,
-  prevPage,
-  nextPage,
-  createEvent
-}: {
-  currentStep: number
-  isCreatingNewEvent: boolean
-  prevPage: () => void
-  nextPage: () => void
-  createEvent: () => void
-}) {
-  const stepsText = ['Step 1', 'Step 2', 'Step 3']
-  const instructionsText = [
-    'Event title, location and date',
-    'Event description and ticket supply',
-    'Event Images'
-  ]
-  return (
-    <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
-      {/* button for pagination and submit newly created event. */}
-      <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] md:max-w-[700px]">
-        <div>
-          <div className="text-[17px] font-bold sm:text-[20px]">
-            {stepsText[currentStep]}
-          </div>
-          <div className="text-[14px] sm:text-[16px]">
-            {instructionsText[currentStep]}
-          </div>
-        </div>
-        {isCreatingNewEvent ? (
-          <div className="flex items-center">
-            <Spinner width={25} height={25} />
-            <div className="ml-[10px]">Creating event, please wait...</div>
-          </div>
-        ) : (
-          <div className="  flex space-x-2">
-            <Button
-              text={'Prev'}
-              active={currentStep > 0 ? true : false}
-              onClick={() => {
-                prevPage()
-              }}
-            />
-            {currentStep < 2 ? (
-              <Button
-                text={'Next'}
-                active={currentStep < 2 ? true : false}
-                onClick={() => {
-                  nextPage()
-                }}
-              />
-            ) : (
-              <Button
-                text={'Create Event'}
-                active={true}
-                onClick={() => {
-                  createEvent()
-                }}
-              />
-            )}
-          </div>
-        )}
-      </div>
     </div>
   )
 }
