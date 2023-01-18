@@ -24,6 +24,7 @@ import useCreateEventStatus from './hooks/create/useCreateEventStatus'
 import useCreateEventValues from './hooks/create/useCreateEventValues'
 import { CreateEventFooter } from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
+import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -53,10 +54,6 @@ export default function CreateEvent() {
   const router = useRouter()
   const auth = useAuth()
   const events = useEvents()
-
-  /**
-   * input data UI setStates
-   **/
   const [
     values,
     {
@@ -202,7 +199,7 @@ export default function CreateEvent() {
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[300px] flex-col  space-y-0 sm:max-w-[400px] md:max-w-[600px]">
+          <div className="flex max-w-[300px] flex-col space-y-0 sm:max-w-[400px] md:max-w-[600px]">
             <CreateEventFormSection
               isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
@@ -234,40 +231,18 @@ export default function CreateEvent() {
                 lat={values.event_location.lat}
                 long={values.event_location.long}
               />
-              <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                  START DATE
-                </label>
-                <div className="flex space-x-3">
-                  <LocalDatePicker
-                    setDate={setDate}
-                    name={'start_date'}
-                    selectedDate={values.start_date}
-                  />
-                  <LocalTimePicker
-                    setDate={setDate}
-                    name={'start_date'}
-                    selectedDate={values.start_date}
-                  />
-                </div>
-              </div>
-              <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                  END DATE
-                </label>
-                <div className="flex space-x-3">
-                  <LocalDatePicker
-                    setDate={setDate}
-                    name={'end_date'}
-                    selectedDate={values.end_date}
-                  />
-                  <LocalTimePicker
-                    setDate={setDate}
-                    name={'end_date'}
-                    selectedDate={values.end_date}
-                  />
-                </div>
-              </div>
+              <CreateEventDateTimePicker
+                labelText={'START DATE'}
+                setDate={setDate}
+                name={'start_date'}
+                date={values.start_date}
+              />
+              <CreateEventDateTimePicker
+                labelText={'END DATE'}
+                setDate={setDate}
+                name={'end_date'}
+                date={values.end_date}
+              />
             </CreateEventFormSection>
             <CreateEventFormSection
               isExpanded={status.currentStep == 1}
@@ -314,7 +289,7 @@ export default function CreateEvent() {
                       Predefined Images
                     </span>
                   </div>
-                  <div className=" space-y-[5px] ">
+                  <div className="space-y-[5px]">
                     <div className="z-10">
                       <FileImageInput
                         name={'file_img'}
