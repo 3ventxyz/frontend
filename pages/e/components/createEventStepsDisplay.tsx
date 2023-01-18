@@ -8,28 +8,30 @@ export default function CreateEventStepsDisplay({
   setCurrentStep: (step: number) => void
 }) {
   return (
-    <div id="create-event-steps" className="flex flex-col space-y-[10px] ">
-      <Step
-        num={1}
-        stepInstruction={'Event title, location and date'}
-        currentStep={currentStep == 0}
-        isComplete={currentStep > 0}
-        onClick={setCurrentStep}
-      />
-      <Step
-        num={2}
-        stepInstruction={'Event description and ticket supply'}
-        currentStep={currentStep == 1}
-        isComplete={currentStep > 1}
-        onClick={setCurrentStep}
-      />
-      <Step
-        num={3}
-        stepInstruction={'Event Images'}
-        currentStep={currentStep == 2}
-        isComplete={currentStep > 2}
-        onClick={setCurrentStep}
-      />
+    <div className="sticky bottom-[0px] z-0 hidden md:block">
+      <div id="create-event-steps" className="flex flex-col space-y-[10px] ">
+        <Step
+          num={1}
+          stepInstruction={'Event title, location and date'}
+          currentStep={currentStep == 0}
+          isComplete={currentStep > 0}
+          onClick={setCurrentStep}
+        />
+        <Step
+          num={2}
+          stepInstruction={'Event description and ticket supply'}
+          currentStep={currentStep == 1}
+          isComplete={currentStep > 1}
+          onClick={setCurrentStep}
+        />
+        <Step
+          num={3}
+          stepInstruction={'Event Images'}
+          currentStep={currentStep == 2}
+          isComplete={currentStep > 2}
+          onClick={setCurrentStep}
+        />
+      </div>
     </div>
   )
 }

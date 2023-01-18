@@ -387,13 +387,10 @@ export default function CreateEvent() {
               </div>
             </CreateEventFormSection>
           </div>
-
-          <div className="sticky bottom-[0px] z-0 hidden md:block">
-            <CreateEventStepsDisplay
-              currentStep={status.currentStep}
-              setCurrentStep={setCurrentStep}
-            />
-          </div>
+          <CreateEventStepsDisplay 
+          currentStep={status.currentStep}
+          
+          setCurrentStep={setCurrentStep}/>
         </div>
       </div>
 
