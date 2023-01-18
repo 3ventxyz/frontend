@@ -16,9 +16,12 @@ export default function NumberInput({
           : 'bg-gray-50   text-gray-700'
       } px-2  focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
       id={'event_ticket_max'}
-      type="number"
+      type="text"
       placeholder={'0'}
       disabled={disabled}
     />
   )
 }
+
+
+
