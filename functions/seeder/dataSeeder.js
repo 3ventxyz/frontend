@@ -4,6 +4,8 @@ const { faker } = require('@faker-js/faker')
 const userSize = 10
 const eventSize = 10
 const postsSize = 15
+const listSize = 5
+
 module.exports = class DataSeeder {
   constructor(firebaseApp) {
     this.app = firebaseApp
@@ -325,6 +327,38 @@ module.exports = class DataSeeder {
   }
 
   /**
+   * function: setDummyAllowlistData
+   * --description: it creates an array of generated allowlists, with data randomnly generated for each list.
+   * Each generated dummy list is added right away to the 'lists' collection firestore,
+   * this.db setting the generated data to their respective fields.
+   */
+  async setDummyAllowlistData() {
+    try {
+      ;[...Array(listSize).keys()].map(async() => {
+        const dummyAllowlistData = {
+          allowlist: faker.finance.ethereumAddress(),
+          description: faker.commerce.productDescription(),
+          discordGuild: faker.datatype.boolean(),
+          discordGuildId: '605866305094156333',
+          discordVerif: faker.datatype.boolean(),
+          emailVerif: faker.datatype.boolean(),
+          permalink: 'https://discord.gg/U4Qzdbz',
+          title: faker.datatype.string(),
+          twitterAccountId: '783214',
+          twitterFollowing: faker.datatype.boolean(),
+          twitterVerif: faker.datatype.boolean(),
+          uid: await this.db.collection('users').doc(this.user1UID),
+          walletVerif: faker.datatype.boolean()
+        }
+        this.db.collection('lists').add(dummyAllowlistData)
+      })
+      console.log('setAllowlistInDB: seed was successful')
+    } catch (error) {
+      console.error(error, 'database seed failed')
+    }
+  }
+
+  /**
    * function: initDummyData
    * description: this function runs the functions, that seeds the generated dummy
    * data to firebase emulators.
@@ -346,5 +380,7 @@ module.exports = class DataSeeder {
     await this.setRegisteredAttendeesToEvents()
     await this.setRegisteredEventsToUsers()
     await this.setSocialFeedDummyData()
+    await this.setDummyAllowlistData()
   }
+
 }
