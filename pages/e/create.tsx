@@ -257,16 +257,12 @@ export default function CreateEvent() {
                 name={'event_description'}
                 isDisabled={status.isCreatingNewEvent}
               />
-              <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
-                <label className="mb-2 block text-sm font-medium text-gray-900 ">
-                  TICKET SUPPLY
-                </label>
-                <NumberInput
-                  setNumberValue={setNumberValue}
-                  name={'ticket_max'}
-                  disabled={status.isCreatingNewEvent}
-                />
-              </div>
+              <NumberInput
+                labelText="TICKET SUPPLY"
+                setNumberValue={setNumberValue}
+                name={'ticket_max'}
+                disabled={status.isCreatingNewEvent}
+              />
             </CreateEventFormSection>
             <CreateEventFormSection
               isExpanded={status.currentStep == 2}
