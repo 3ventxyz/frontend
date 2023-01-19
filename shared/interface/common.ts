@@ -54,6 +54,7 @@ export interface AllowlistUser {
 export interface AllowlistTableHeader {
   id: string
   label: string
+  disableSorting: boolean
 }
 
 export interface UserProfileEvents {

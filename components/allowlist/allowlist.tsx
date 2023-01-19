@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
-import { AllowlistsInterface } from '../../shared/interface/common'
+import { AllowlistsInterface, AllowlistInterface } from '../../shared/interface/common'
 import Modal from '../utils/modal'
 import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
@@ -53,9 +53,9 @@ export default function Allowlists() {
   }
 
   const allowlistIndexHeader = [
-    { id: 'AllowlistName', label: 'Name' },
-    { id: 'AllowlistEntries', label: 'Entries' },
-    { id: 'AllowlistLink', label: 'Application Link' }
+    { id: 'AllowlistName', label: 'Name', disableSorting: false },
+    { id: 'AllowlistEntries', label: '# Entries', disableSorting: false },
+    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
   ]
 
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } = TventTable(allowlists, allowlistIndexHeader)
@@ -77,7 +77,7 @@ export default function Allowlists() {
           <TblContainer>
             <TblHead />
             <TableBody>
-              {listAfterPagingAndSorting().map((list, i) => (
+              {listAfterPagingAndSorting().map((list: AllowlistInterface, i) => (
                 <TableRow key={i} className="bg-white">
                   <TableCell>
                     <span className="text-gray-900">{list.title}</span>

@@ -4,15 +4,14 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  makeStyles,
+
   TablePagination,
   TableSortLabel
 } from '@material-ui/core'
-import { AllowlistTableHeader } from '../shared/interface/common'
-import { recoverAddress } from 'ethers/lib/utils'
+import { AllowlistTableHeader, AllowlistsInterface, AllowlistInterface } from '../shared/interface/common'
 
 export default function TventTable(
-  list: Array<Object>,
+  list: Array<AllowlistInterface>,
   headCells: Array<AllowlistTableHeader>
 ) {
   type Order = 'asc' | 'desc' | undefined
@@ -20,7 +19,7 @@ export default function TventTable(
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(pages[page])
   const [order, setOrder] = useState<Order>()
-  const [orderBy, setOrderBy] = useState('')
+  const [orderBy, setOrderBy] = useState("")
 
   const TblContainer = (props: any) => {
     return <Table>{props.children}</Table>
@@ -38,6 +37,7 @@ export default function TventTable(
           {headCells.map((headCell) => (
             <TableCell key={headCell.id}>
               <span className="text-xs font-bold uppercase text-gray-700">
+                {headCell.disableSorting?headCell.label:
                 <TableSortLabel
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : 'asc'}
@@ -46,7 +46,7 @@ export default function TventTable(
                   }}
                 >
                   {headCell.label}
-                </TableSortLabel>
+                </TableSortLabel>}
               </span>
             </TableCell>
           ))}
@@ -77,10 +77,9 @@ export default function TventTable(
       onRowsPerPageChange={handleChangeRowsPerPage}
     />
   )
-/* Sorting Functions stableSort, getComparator and descendingComparator are used to sort the list of objects, in this case the list collection
-I'm not sure if I'm sorting correctly on line 85 or if I'm having type errors and that's why it's not running correctly*/
-  function stableSort<T>(array: Array<Object>, comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+  function stableSort<AllowlistsInterface>(array: Array<AllowlistsInterface>, comparator: (a: AllowlistInterface, b: AllowlistInterface) => number) {
+    
+    const stabilizedThis = array.map((el, index) => [el, index] as [AllowlistInterface, number]);
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
       if (order !== 0) {
@@ -91,30 +90,58 @@ I'm not sure if I'm sorting correctly on line 85 or if I'm having type errors an
     return stabilizedThis.map((el) => el[0]);
   }
 
-  function getComparator<Key extends keyof any>(
+  function compareEntries(
     order: Order,
-    orderBy: Key,
+    orderBy: string,
   ): (
-    a: { [key in Key]: number | string },
-    b: { [key in Key]: number | string },
+    a: AllowlistInterface,
+    b: AllowlistInterface
   ) => number {
     return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
+      ? (a, b) => allowlistLengthComparator(a, b)
+      : (a, b) => -allowlistLengthComparator(a, b);
   }
 
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
+  function allowlistLengthComparator(a: AllowlistInterface, b: AllowlistInterface) {
+    if (b.allowlist.length < a.allowlist.length) {
       return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (b.allowlist.length > a.allowlist.length) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function compareNames(
+    order: Order,
+    orderBy: string,
+  ): (
+    a: AllowlistInterface,
+    b: AllowlistInterface
+  ) => number {
+    return order === 'desc'
+      ? (a, b) => allowlistNameComparator(a, b)
+      : (a, b) => -allowlistNameComparator(a, b);
+  }
+
+  function allowlistNameComparator(a: AllowlistInterface, b: AllowlistInterface) {
+    if (b.title < a.title) {
+      return -1;
+    }
+    if (b.title > a.title) {
       return 1;
     }
     return 0;
   }
 
   const listAfterPagingAndSorting = () => {
-    return stableSort(list, getComparator(order, orderBy)).slice(
+    if(orderBy === 'AllowlistName') {
+      return stableSort(list, compareNames(order, orderBy)).slice(
+        page * rowsPerPage,
+        (page + 1) * rowsPerPage
+      )
+    }
+    return stableSort(list, compareEntries(order, orderBy)).slice(
       page * rowsPerPage,
       (page + 1) * rowsPerPage
     )
@@ -122,31 +149,3 @@ I'm not sure if I'm sorting correctly on line 85 or if I'm having type errors an
 
   return { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting }
 }
-
-/*
-    function stableSort(array, comparator) {
-        const stabilizedThis = array.map((el, index) => [el, index]);
-        stabilizedThis.sort((a, b) => {
-            const order = comparator(a[0], b[0]);
-            if (order !== 0) return order;
-            return a[1] - b[1];
-        });
-        return stabilizedThis.map((el) => el[0]);
-    }
-
-    function getComparator(order, orderBy) {
-        return order === 'desc'
-            ? (a, b) => descendingComparator(a, b, orderBy)
-            : (a, b) => -descendingComparator(a, b, orderBy);
-    }
-
-    function descendingComparator(a, b, orderBy) {
-        if (b[orderBy] < a[orderBy]) {
-            return -1;
-        }
-        if (b[orderBy] > a[orderBy]) {
-            return 1;
-        }
-        return 0;
-    }
-     */
