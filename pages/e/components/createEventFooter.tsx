@@ -1,7 +1,7 @@
 import Button from '../../../components/buttons/button'
 import Spinner from '../../../components/utils/spinner'
 
-export function CreateEventFooter({
+export default function CreateEventFooter({
   currentStep,
   isCreatingNewEvent,
   prevPage,

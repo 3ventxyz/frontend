@@ -18,7 +18,7 @@ import CreateEventTextInput from './components/createEventTextInput'
 import CreateEventLocationInput from './components/createEventLocationInput'
 import useCreateEventStatus from './hooks/create/useCreateEventStatus'
 import useCreateEventValues from './hooks/create/useCreateEventValues'
-import { CreateEventFooter } from './components/createEventFooter'
+import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
@@ -273,9 +273,7 @@ export default function CreateEvent() {
                 parentClassName={
                   'top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
                 }
-                imgMenuClassName={
-                  'z-20 px-[15px] md:absolute md:top-[42px]'
-                }
+                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
                 landingMode={true}
               />
             </CreateEventFormSection>
