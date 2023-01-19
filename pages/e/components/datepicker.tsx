@@ -54,7 +54,6 @@ export default function LocalDatePicker({
   }
   //dropdown toggler
   const [dropdown, setDropdown] = useState(false)
-
   return (
     <div className="relative">
       <div
