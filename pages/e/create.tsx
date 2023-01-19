@@ -35,7 +35,7 @@ const inputValues: createEventFormInterface = {
   event_id: '',
   event_description: '',
   ticket_max: 0,
-  file_img: null,
+  event_file_img: null,
   landing_file_img: null,
   event_img_url: '',
   landing_img_url: ''
@@ -90,13 +90,13 @@ export default function CreateEvent() {
       return
     }
     try {
-      if (values.file_img !== null) {
-        console.log('fileImg: ', values.file_img?.type)
-        const fileType = setFiletype(values.file_img)
+      if (values.event_file_img !== null) {
+        console.log('fileImg: ', values.event_file_img?.type)
+        const fileType = setFiletype(values.event_file_img)
         const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
-        console.log('uploading image: ', values.file_img?.name)
+        console.log('uploading image: ', values.event_file_img?.name)
         await uploadImageToStorage(
-          values.file_img,
+          values.event_file_img,
           storagePath,
           async (url: string) => {
             await events.submitEventToFirebase(
@@ -252,32 +252,28 @@ export default function CreateEvent() {
             >
               <CreateEventImageInput
                 labelText={'TICKET EVENT IMAGE'}
-                fileImgName={'file_img'}
-                predefinedImgName={'event_img_url'}
-                fileImg={values.file_img}
+                fileImg={values.event_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
-                eventImgUrl={values.event_img_url}
+                imgUrl={values.event_img_url}
                 parentClassName={
                   'mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal'
                 }
-                imageInputMenuClasses={
+                imgMenuClassName={
                   'top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]'
                 }
                 landingMode={false}
               />
               <CreateEventImageInput
                 labelText={'LANDING PORTRAIT IMAGES'}
-                fileImgName={'landing_file_img'}
-                predefinedImgName={'landing_img_url'}
                 fileImg={values.landing_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
-                eventImgUrl={values.landing_img_url}
+                imgUrl={values.landing_img_url}
                 parentClassName={
                   'top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
                 }
-                imageInputMenuClasses={
+                imgMenuClassName={
                   'z-20 px-[15px] md:absolute md:top-[42px]'
                 }
                 landingMode={true}

@@ -4,28 +4,26 @@ import PredefinedEventPictures from './predefinedEventPictures'
 
 export default function CreateEventImageInput({
   labelText,
-  fileImgName,
-  predefinedImgName,
   fileImg,
-  eventImgUrl,
+  imgUrl,
   parentClassName = '',
-  imageInputMenuClasses = '',
+  imgMenuClassName = '',
   landingMode,
   setFileImg,
   setPredefinedImgUrl
 }: {
   labelText: string
-  fileImgName: string
-  predefinedImgName: string
   fileImg: File | null
-  eventImgUrl: string
+  imgUrl: string
   parentClassName: string
-  imageInputMenuClasses: string
+  imgMenuClassName: string
   landingMode: boolean
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, predefinedImgUrl: string) => void
 }) {
   const [menuVisible, setMenuVisible] = useState(true)
+  const imgUrlName = landingMode ? 'landing_img_url' : 'event_img_url'
+  const fileImgName = landingMode ? 'landing_file_img' : 'event_file_img'
 
   const onChangePredefinedImage = ({
     setPredefinedImgUrl,
@@ -34,7 +32,7 @@ export default function CreateEventImageInput({
     setPredefinedImgUrl: (name: string, imgUrl: string) => void
     imgUrl: string
   }) => {
-    setPredefinedImgUrl(predefinedImgName, imgUrl)
+    setPredefinedImgUrl(imgUrlName, imgUrl)
     setMenuVisible(false)
   }
 
@@ -58,12 +56,12 @@ export default function CreateEventImageInput({
           name={fileImgName}
           fileImg={fileImg}
           setFileImg={setFileImg}
-          imgUrlTemplate={eventImgUrl ?? ''}
+          imgUrlTemplate={imgUrl ?? ''}
           mode={landingMode ? 'landing' : 'event'}
         />
       </div>
       {fileImg === null && menuVisible ? (
-        <div className={imageInputMenuClasses}>
+        <div className={imgMenuClassName}>
           <PredefinedEventPictures
             setSelectedPredefinedEventImgUrl={(imgUrl: string) => {
               onChangePredefinedImage({
