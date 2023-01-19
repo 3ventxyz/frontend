@@ -17,11 +17,13 @@ export default function FileImageInput({
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
+  name,
   isDisabled = true
 }: {
   fileImg: File | null
-  setFileImg: (value: File) => void
+  setFileImg: (name: string, value: File) => void
   imgUrlTemplate?: string
+  name: string
   mode?: 'event' | 'landing' | undefined
   isDisabled?: boolean
 }) {
@@ -49,6 +51,7 @@ export default function FileImageInput({
         } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
       >
         <DisplayPredefinedImage
+          name={name}
           isDisabled={isDisabled}
           mode={mode}
           imgUrlTemplate={imgUrlTemplate}
@@ -77,6 +80,7 @@ export default function FileImageInput({
       } relative rounded-3xl bg-gray-300 hover:cursor-pointer hover:bg-gray-500 sm:max-h-full`}
     >
       <FileImageUploaded
+        name={name}
         mode={mode}
         imgUrl={imgUrl}
         isMouseHover={isMouseHover}
@@ -96,6 +100,7 @@ export default function FileImageInput({
       } relative rounded-3xl bg-gray-300 hover:cursor-pointer  sm:max-h-full`}
     >
       <UploadFileImage
+        name={name}
         mode={mode}
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
@@ -107,12 +112,14 @@ export default function FileImageInput({
 
 function UploadFileImage({
   mode,
+  name,
   setFileImg,
   setImgUrl,
   isDisabled
 }: {
   mode: string
-  setFileImg: (file: File) => void
+  name: string
+  setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
   isDisabled: boolean
 }) {
@@ -125,7 +132,7 @@ function UploadFileImage({
         className="hidden"
         accept="image/*"
         onChange={(event: any) => {
-          setFileImg(event.target.files[0])
+          setFileImg(name, event.target.files[0])
           setImgUrl(URL.createObjectURL(event.target.files[0]))
         }}
       />
@@ -152,6 +159,7 @@ function FileImageUploaded({
   imgUrl,
   isMouseHover,
   isDisabled,
+  name,
   setFileImg,
   setImgUrl,
   setMouseHover
@@ -159,7 +167,8 @@ function FileImageUploaded({
   mode: string
   imgUrl: string
   isMouseHover: boolean
-  setFileImg: (file: File) => void
+  name: string
+  setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
   setMouseHover: (mouseHover: boolean) => void
   isDisabled: boolean
@@ -187,7 +196,7 @@ function FileImageUploaded({
         className="hidden"
         accept="image/*"
         onChange={(event: any) => {
-          setFileImg(event.target.files[0])
+          setFileImg(name, event.target.files[0])
           setImgUrl(URL.createObjectURL(event.target.files[0]))
           setMouseHover(false)
         }}
@@ -200,6 +209,7 @@ function DisplayPredefinedImage({
   imgUrlTemplate,
   isMouseHover,
   isDisabled,
+  name,
   setFileImg,
   setImgUrl,
   setMouseHover
@@ -207,10 +217,11 @@ function DisplayPredefinedImage({
   mode: string
   imgUrlTemplate: string
   isMouseHover: boolean
-  setFileImg: (file: File) => void
+  isDisabled: boolean
+  name: string
+  setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
   setMouseHover: (mouseHover: boolean) => void
-  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
@@ -235,7 +246,7 @@ function DisplayPredefinedImage({
         className="hidden"
         accept="image/*"
         onChange={(event: any) => {
-          setFileImg(event.target.files[0])
+          setFileImg(name, event.target.files[0])
           setImgUrl(URL.createObjectURL(event.target.files[0]))
           setMouseHover(false)
         }}

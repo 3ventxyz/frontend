@@ -34,11 +34,11 @@ export interface EventInterface {
 }
 
 export interface EventHostInterface {
-  title:string
-  uid:string
-  event_id:string
-  start_date:Date
-  end_date:Date
+  title: string
+  uid: string
+  event_id: string
+  start_date: Date
+  end_date: Date
 }
 
 export interface AllowlistUser {
@@ -88,20 +88,40 @@ export interface RegisteredAttendeeInterface {
   avatar: string
 }
 
-export interface UserInterface{
-  uid:string, 
-  username:string,
-  avatar:string,
-  address:string
-  qr_code?:string,
+export interface UserInterface {
+  uid: string
+  username: string
+  avatar: string
+  address: string
+  qr_code?: string
 }
 
-export interface PostInterface{
-  avatar: string,
-  date_posted: Date,
-  post_content: string,
-  uid: string,
-  username: string,
+export interface PostInterface {
+  avatar: string
+  date_posted: Date
+  post_content: string
+  uid: string
+  username: string
+}
+
+export interface createEventFormInterface {
+  title: string
+  start_date: Date
+  end_date: Date
+  event_location: LocationData
+  event_id: string
+  event_description: string
+  ticket_max: number
+  file_img: File | null
+  event_img_url: string
+  landing_file_img: File | null
+  landing_img_url: string
+}
+
+export interface createEventStatusInterface {
+  currentStep: number
+  isCreatingNewEvent: boolean
+  errorMsg: string
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}

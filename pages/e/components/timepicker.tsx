@@ -3,38 +3,30 @@ import { format, set } from 'date-fns'
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 export default function LocalTimePicker({
   selectedDate,
-  setSelectedDate,
-  isDropDownActive,
-  setIsDropDownActive
+  name,
+  setDate
 }: {
   selectedDate: Date
-  setSelectedDate: (date: Date) => void
-  isDropDownActive: boolean
-  setIsDropDownActive: (bool: boolean) => void
+  name: string
+  setDate: (name: string, date: Date) => void
 }) {
-  /**similar to the datepicker, this will display an input with a default time value.
-   * when the user clicks on it, a scrollable dropdown menu will appear. With the options
-   * to show from start to end.
-   */
+  // dropdown toggler
+  const [dropdown, setDropdown] = useState(false)
 
-  /**next step: define the setTime function that updates the date that the user has selected, and prop drill the
-   * start and end date from the create event page.
-   * lastly. update the ui of the page. */
-  // const [isActive, setIsActive] = useState(false)
   return (
     <div>
       <div
         onClick={() => {
-          setIsDropDownActive(!isDropDownActive)
+          setDropdown(!dropdown)
         }}
         className={` leading-0 z-0 flex w-[106px] max-w-[400px] items-center justify-between  rounded-lg border-[1.5px] bg-gray-50 py-2.5 px-1.5 text-sm text-gray-900 hover:cursor-pointer ${
-          isDropDownActive
+          dropdown
             ? 'shadow-outline border-blue-500 outline-none ring-blue-500 '
             : ''
         }`}
       >
         <div>{format(selectedDate, 'hh:mm a')}</div>
-        {isDropDownActive ? (
+        {dropdown ? (
           <RiArrowDropUpLine className="h-[20px] w-[20px]" />
         ) : (
           <RiArrowDropDownLine className="h-[20px] w-[20px]" />
@@ -43,7 +35,7 @@ export default function LocalTimePicker({
       <div
         id="timepicker-dropdown"
         className={`${
-          isDropDownActive ? 'absolute' : 'hidden'
+          dropdown ? 'absolute' : 'hidden'
         } z-10 flex  h-[250px] w-[106px] flex-col items-start  overflow-y-auto rounded-b-xl bg-white pt-1 shadow-lg`}
       >
         {[...Array(24).keys()].map((el, index) => {
@@ -55,8 +47,8 @@ export default function LocalTimePicker({
                 <div>
                   <button
                     onClick={() => {
-                      setSelectedDate(selectedTime)
-                      setIsDropDownActive(false)
+                      setDate(name, selectedTime)
+                      setDropdown(false)
                       console.log(format(selectedTime, 'MM/dd/yyyy, hh:mm a'))
                     }}
                   >
