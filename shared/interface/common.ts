@@ -132,7 +132,7 @@ export interface createEventFormInterface {
   event_id: string
   event_description: string
   ticket_max: number
-  file_img: File | null
+  event_file_img: File | null
   event_img_url: string
   landing_file_img: File | null
   landing_img_url: string
