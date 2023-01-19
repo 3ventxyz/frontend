@@ -5,6 +5,7 @@ interface useCreateEventStatus {
   nextPage: () => void
   prevPage: () => void
   setCreatingNewEvent: (bool: boolean) => void
+  setCurrentStep: (step: number) => void
   setErrorMsg: (msg: string) => void
 }
 
@@ -40,13 +41,18 @@ export default function useCreateEventStatus(
     })
   }
 
+  const setCurrentStep = (step: number) => {
+    setStatus({ ...currStatus, currentStep: step })
+  }
+
   return [
     currStatus,
     {
       nextPage,
       prevPage,
       setCreatingNewEvent,
-      setErrorMsg
+      setErrorMsg,
+      setCurrentStep
     }
   ]
 }

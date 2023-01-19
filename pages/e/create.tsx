@@ -72,7 +72,7 @@ export default function CreateEvent() {
   /**
    * UI page state setStates
    **/
-  const [status, { nextPage, prevPage, setCreatingNewEvent, setErrorMsg }] =
+  const [status, { nextPage, prevPage, setCreatingNewEvent, setErrorMsg, setCurrentStep }] =
     useCreateEventStatus(createEventStatus)
   const [ticketImgsMenuVisible, setTicketImgsMenuVisible] = useState(true)
   const [landingImgsMenuVisible, setLandingImgsMenuVisible] = useState(true)
