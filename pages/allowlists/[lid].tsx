@@ -227,24 +227,6 @@ export default function Allowlist() {
             <TableBody>
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
-                  <TableCell padding="checkbox">
-                  <div className="flex items-center">
-                            <input
-                              id="checkbox-table-search-1"
-                              type="checkbox"
-                              name={list.wallet}
-                              checked={addresses?.get(list.wallet) ?? false}
-                              onChange={handleCheck}
-                              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                            />
-                            <label
-                              htmlFor="checkbox-table-search-1"
-                              className="sr-only"
-                            >
-                              checkbox
-                            </label>
-                          </div>
-                  </TableCell>
                   <TableCell>
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.uid}</span>
                   </TableCell>

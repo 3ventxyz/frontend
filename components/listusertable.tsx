@@ -36,11 +36,6 @@ export default function AllowlistUsersTable(
         <TableRow
           className="bg-gray-50"
         >
-          <TableCell style={{ width: 50 }} padding="checkbox">
-            <Checkbox
-              color="primary"
-            />
-          </TableCell>
           {headCells.map((headCell) => (
             <TableCell style={{ width: 100 }} key={headCell.id}>
               <span className="text-xs font-bold uppercase text-gray-700">
