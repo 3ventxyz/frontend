@@ -16,6 +16,7 @@ import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
+import { BsFillTabletLandscapeFill } from 'react-icons/bs'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -226,32 +227,47 @@ export default function Allowlist() {
             <TableBody>
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
-                  <TableCell style={{ width: 50 }} padding="checkbox">
-                    <Checkbox style={{ width: 50 }} color="primary" />
+                  <TableCell padding="checkbox">
+                  <div className="flex items-center">
+                            <input
+                              id="checkbox-table-search-1"
+                              type="checkbox"
+                              name={list.wallet}
+                              checked={addresses?.get(list.wallet) ?? false}
+                              onChange={handleCheck}
+                              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                            />
+                            <label
+                              htmlFor="checkbox-table-search-1"
+                              className="sr-only"
+                            >
+                              checkbox
+                            </label>
+                          </div>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.uid}</span>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.email}</span>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.wallet}</span>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
                       <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.twitter_name}</span>
                     </a>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}> 
+                  <TableCell> 
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">
                       {list.discord_username}
                     </span>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <span className="text-gray-900 inline-block w-[100px] truncate ...">{`${list.discord_guild}`}</span>
                   </TableCell>
-                  <TableCell style={{ width: 100 }}>
+                  <TableCell>
                     <span className="text-gray-500">{list.status}</span>
                   </TableCell>
                 </TableRow>
