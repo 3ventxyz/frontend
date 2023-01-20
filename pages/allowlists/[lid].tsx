@@ -55,6 +55,7 @@ export default function Allowlist() {
             email: doc.data().email,
             wallet: doc.data().wallet,
             twitter_id: doc.data().twitter_id,
+            twitter_name: doc.data().twitter_name,
             discord_username: doc.data().discord_username,
             discord_guild: doc.data().discord_guild,
             status: doc.data().status
@@ -238,8 +239,8 @@ export default function Allowlist() {
                     <span className="text-gray-500">{list.wallet}</span>
                   </TableCell>
                   <TableCell>
-                    <a href={`https://twitter.com/i/user/${twitter_id}`}>
-                      <span className="text-gray-500">{list.twitter_id}</span>
+                    <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
+                      <span className="text-gray-500">{list.twitter_name}</span>
                     </a>
                   </TableCell>
                   <TableCell>

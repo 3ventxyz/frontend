@@ -160,6 +160,7 @@ export default function AllowlistApplication() {
   const saveProfile = async (
     uid: string,
     twitter_id: string[],
+    twitter_name: string[],
     discord_id: string,
     wallet: string,
     email: string,
@@ -174,6 +175,7 @@ export default function AllowlistApplication() {
         await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
           uid: uid,
           twitter_id: twitter_id,
+          twitter_name: twitter_name,
           discord_id: discord_id,
           wallet: wallet,
           email: email,
@@ -183,6 +185,7 @@ export default function AllowlistApplication() {
         await setDoc(doc(collection(docRef, 'registered_users'), uid), {
           uid: uid,
           twitter_id: twitter_id,
+          twitter_name: twitter_name,
           discord_id: discord_id,
           wallet: wallet,
           email: email,
@@ -274,7 +277,7 @@ export default function AllowlistApplication() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
-                  saveProfile(uid, twitterName, discord, wallet, email, status)
+                  saveProfile(uid, twitter, twitterName, discord, wallet, email, status)
                 }}
               >
                 Follow Account
@@ -304,7 +307,7 @@ export default function AllowlistApplication() {
               </p>
               <div
                 onClick={() => {
-                  saveProfile(uid, twitterName, discord, wallet, email, status)
+                  saveProfile(uid, twitter, twitterName, discord, wallet, email, status)
                 }}
               >
                 <VerifyGuild discordGuildID={guild} lid={lid} />
@@ -358,6 +361,7 @@ export default function AllowlistApplication() {
                 onClick={() => {
                   saveProfile(
                     uid,
+                    twitter[twitterValue],
                     twitterName[twitterValue],
                     discord,
                     wallet,
