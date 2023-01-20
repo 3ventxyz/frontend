@@ -16,7 +16,6 @@ import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
-import { BsFillTabletLandscapeFill } from 'react-icons/bs'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -227,27 +226,38 @@ export default function Allowlist() {
             <TableBody>
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
-                  <TableCell>
-                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.uid}</span>
+                  <TableCell padding="checkbox">
+                    <Checkbox color="primary" />
                   </TableCell>
                   <TableCell>
-                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.email}</span>
+                    <span className="... inline-block w-[100px] truncate text-gray-900">
+                      {list.uid}
+                    </span>
                   </TableCell>
                   <TableCell>
-                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.wallet}</span>
+                    <span className="... inline-block w-[100px] truncate text-gray-900">
+                      {list.email}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900">
+                      {list.wallet}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                      <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.twitter_name}</span>
+                      <span className="... inline-block w-[100px] truncate text-gray-900">
+                        {list.twitter_name}
+                      </span>
                     </a>
                   </TableCell>
-                  <TableCell> 
-                    <span className="text-gray-900 inline-block w-[100px] truncate ...">
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900">
                       {list.discord_username}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{`${list.discord_guild}`}</span>
+                    <span className="... inline-block w-[100px] truncate text-gray-900">{`${list.discord_guild}`}</span>
                   </TableCell>
                   <TableCell>
                     <span className="text-gray-500">{list.status}</span>
