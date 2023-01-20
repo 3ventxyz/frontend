@@ -191,7 +191,7 @@ export default function Allowlist() {
             <HiChevronLeft className="h-full w-full" />
           </button>
         </div>
-        <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative w-full max-w-fit overflow-x-auto shadow-md sm:rounded-lg">
           <div className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
             <div className="flex flex-row justify-between">
               <div className="my-auto flex flex-col">
@@ -238,7 +238,7 @@ export default function Allowlist() {
                     <span className="text-gray-500">{list.wallet}</span>
                   </TableCell>
                   <TableCell>
-                    <span className="text-gray-500">{list.twitter_id}</span>
+                    <a href={`https://twitter.com/i/user/${twitter_id}`}><span className="text-gray-500">{list.twitter_id}</span></a>
                   </TableCell>
                   <TableCell>
                     <span className="text-gray-500">
