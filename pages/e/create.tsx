@@ -182,9 +182,11 @@ export default function CreateEvent() {
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[300px] flex-col space-y-0 sm:max-w-[400px] md:max-w-[600px]">
+            {/* step 1 */}
             <CreateEventFormSection
               isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
+              childrenClassName='my-[10px]'
             >
               <CreateEventTextInput
                 id={'event_name'}
@@ -226,9 +228,11 @@ export default function CreateEvent() {
                 date={values.end_date}
               />
             </CreateEventFormSection>
+            {/* step 2 */}
             <CreateEventFormSection
               isExpanded={status.currentStep == 1}
               title={'2.- Description and max attendee cap'}
+              childrenClassName='my-[10px]'
             >
               <CreateEventTextInput
                 textArea={true}
@@ -246,11 +250,12 @@ export default function CreateEvent() {
                 disabled={status.isCreatingNewEvent}
               />
             </CreateEventFormSection>
+            {/* step 3 */}
             <CreateEventFormSection
               isExpanded={status.currentStep == 2}
               title={'3.- Landing portrait and ticket image'}
               fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
-              childrenClassName={'my-[10px] md:items-start'}
+              childrenClassName={'md:items-start items-center'}
             >
               <CreateEventImageInput
                 labelText={'TICKET EVENT IMAGE'}
