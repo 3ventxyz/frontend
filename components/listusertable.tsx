@@ -36,13 +36,13 @@ export default function AllowlistUsersTable(
         <TableRow
           className="bg-gray-50"
         >
-          <TableCell padding="checkbox">
+          <TableCell style={{ width: 50 }} padding="checkbox">
             <Checkbox
               color="primary"
             />
           </TableCell>
           {headCells.map((headCell) => (
-            <TableCell key={headCell.id}>
+            <TableCell style={{ width: 100 }} key={headCell.id}>
               <span className="text-xs font-bold uppercase text-gray-700">
                 {headCell.disableSorting ? (
                   headCell.label
