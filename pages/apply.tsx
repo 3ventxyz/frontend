@@ -133,8 +133,8 @@ export default function AllowlistApplication() {
     }
     getUserInfo()
 
-    setSubmit(discordGuild ? (guildMember ? true : false) : true)
-    setSubmit(walletVerification ? (wallet ? true : false) : true)
+    setSubmit(discordGuild ? (guildMember ? (guildMember === undefined ? false : true): false) : true)
+    
   }, [lid, uid, guildMember, discordGuild])
   /*Modal Visibility*/
   useEffect(() => {
@@ -151,17 +151,6 @@ export default function AllowlistApplication() {
         ? true
         : false
       const emailVar = !emailVerification ? true : emailVerif ? true : false
-
-      console.log(
-        'wallet: ' +
-          walletVar +
-          ' disc: ' +
-          discordVar +
-          ' twitter: ' +
-          twitterVar +
-          ' emailVar: ' +
-          emailVar
-      )
       setShowModal(
         walletVar && discordVar && twitterVar && emailVar ? false : true
       )
@@ -216,6 +205,7 @@ export default function AllowlistApplication() {
   const handleChange = (e: any) => {
     setTwitterValue(e.target.value)
   }
+  
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {lid !== '' ? (
@@ -260,7 +250,7 @@ export default function AllowlistApplication() {
                 {twitter.map((account, index) => {
                   return (
                     <>
-                      <option value={twitter[index]}>
+                      <option value={index}>
                         {twitterName[index]}
                       </option>
                     </>
