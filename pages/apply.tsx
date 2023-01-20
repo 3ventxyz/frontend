@@ -77,7 +77,7 @@ export default function AllowlistApplication() {
       } else {
         console.log('No such document!')
       }
-      console.log('fetching',twitterVerification)
+      console.log('fetching', twitterVerification)
     }
     if (lid !== '') {
       getListInfo()
@@ -133,23 +133,37 @@ export default function AllowlistApplication() {
     }
     getUserInfo()
 
-    if (discordGuild && guildMember) {
-        setSubmit(true)
-    }
+    setSubmit(discordGuild ? (guildMember ? true : false) : true)
+    setSubmit(walletVerification ? (wallet ? true : false) : true)
   }, [lid, uid, guildMember, discordGuild])
   /*Modal Visibility*/
   useEffect(() => {
     const ModalVisibility = () => {
-      const walletVar = !walletVerification ? true : (wallet ? true : false)
-      const discordVar = !discordVerification ? true : (discord !== '' ? true : false)
-      const twitterVar = !twitterVerification ? true : (twitter.length > 0 ? true : false)
-      const emailVar = !emailVerification ? true : (emailVerif ? true : false)
-      
-      console.log('wallet: ' + walletVar + ' disc: ' + discordVar + ' twitter: ' + twitterVar + ' emailVar: ' + emailVar)
+      const walletVar = !walletVerification ? true : wallet ? true : false
+      const discordVar = !discordVerification
+        ? true
+        : discord !== ''
+        ? true
+        : false
+      const twitterVar = !twitterVerification
+        ? true
+        : twitter.length > 0
+        ? true
+        : false
+      const emailVar = !emailVerification ? true : emailVerif ? true : false
+
+      console.log(
+        'wallet: ' +
+          walletVar +
+          ' disc: ' +
+          discordVar +
+          ' twitter: ' +
+          twitterVar +
+          ' emailVar: ' +
+          emailVar
+      )
       setShowModal(
-        walletVar && discordVar && twitterVar && emailVar
-          ? false
-          : true
+        walletVar && discordVar && twitterVar && emailVar ? false : true
       )
       console.log(showModal)
     }
@@ -159,8 +173,8 @@ export default function AllowlistApplication() {
   /*Save info */
   const saveProfile = async (
     uid: string,
-    twitter_id: string[],
-    twitter_name: string[],
+    twitter_id: string,
+    twitter_name: string,
     discord_id: string,
     wallet: string,
     email: string,
@@ -264,7 +278,7 @@ export default function AllowlistApplication() {
           )}
           {twitterFollowing ? (
             <>
-             <p className="border-b-2 border-primary font-medium">
+              <p className="border-b-2 border-primary font-medium">
                 FOLLOW CREATOR&apos;S TWITTER
               </p>
               <p>
@@ -277,7 +291,15 @@ export default function AllowlistApplication() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
-                  saveProfile(uid, twitter, twitterName, discord, wallet, email, status)
+                  saveProfile(
+                    uid,
+                    twitter[twitterValue],
+                    twitterName[twitterValue],
+                    discord,
+                    wallet,
+                    email,
+                    status
+                  )
                 }}
               >
                 Follow Account
@@ -307,7 +329,15 @@ export default function AllowlistApplication() {
               </p>
               <div
                 onClick={() => {
-                  saveProfile(uid, twitter, twitterName, discord, wallet, email, status)
+                  saveProfile(
+                    uid,
+                    twitter[twitterValue],
+                    twitterName[twitterValue],
+                    discord,
+                    wallet,
+                    email,
+                    status
+                  )
                 }}
               >
                 <VerifyGuild discordGuildID={guild} lid={lid} />
