@@ -238,7 +238,9 @@ export default function Allowlist() {
                     <span className="text-gray-500">{list.wallet}</span>
                   </TableCell>
                   <TableCell>
-                    <a href={`https://twitter.com/i/user/${twitter_id}`}><span className="text-gray-500">{list.twitter_id}</span></a>
+                    <a href={`https://twitter.com/i/user/${twitter_id}`}>
+                      <span className="text-gray-500">{list.twitter_id}</span>
+                    </a>
                   </TableCell>
                   <TableCell>
                     <span className="text-gray-500">
@@ -254,6 +256,7 @@ export default function Allowlist() {
                 </TableRow>
               ))}
             </TableBody>
+            <TblPagination />
           </TblContainer>
         </div>
       </div>

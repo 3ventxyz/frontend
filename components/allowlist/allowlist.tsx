@@ -49,7 +49,7 @@ export default function Allowlists() {
 
   const allowlistIndexHeader = [
     { id: 'AllowlistName', label: 'Name', disableSorting: false },
-    { id: 'AllowlistEntries', label: '# Entries', disableSorting: false },
+    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false },
     { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
   ]
 

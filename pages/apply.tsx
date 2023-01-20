@@ -274,7 +274,7 @@ export default function AllowlistApplication() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
-                  saveProfile(uid, twitter, discord, wallet, email, status)
+                  saveProfile(uid, twitterName, discord, wallet, email, status)
                 }}
               >
                 Follow Account
@@ -304,7 +304,7 @@ export default function AllowlistApplication() {
               </p>
               <div
                 onClick={() => {
-                  saveProfile(uid, twitter, discord, wallet, email, status)
+                  saveProfile(uid, twitterName, discord, wallet, email, status)
                 }}
               >
                 <VerifyGuild discordGuildID={guild} lid={lid} />
@@ -358,7 +358,7 @@ export default function AllowlistApplication() {
                 onClick={() => {
                   saveProfile(
                     uid,
-                    twitter[twitterValue],
+                    twitterName[twitterValue],
                     discord,
                     wallet,
                     email,
