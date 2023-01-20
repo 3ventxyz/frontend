@@ -16,7 +16,6 @@ import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -177,15 +176,6 @@ export default function Allowlist() {
     { id: 'status', label: 'Status', disableSorting: false }
   ]
 
-  const useStyles = makeStyles({
-    ellipsis: {
-      maxWidth: 150, // percentage also works
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis"
-    }
-  });
-  const classes = useStyles();
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
@@ -240,26 +230,26 @@ export default function Allowlist() {
                     <Checkbox color="primary" />
                   </TableCell>
                   <TableCell>
-                    <span className={`text-gray-900 ${classes.ellipsis}`}>{list.uid}</span>
+                    <span className="text-gray-900 truncate ...">{list.uid}</span>
                   </TableCell>
                   <TableCell>
-                    <span className={`text-gray-500 ${classes.ellipsis}`}>{list.email}</span>
+                    <span className="text-gray-500 truncate ...">{list.email}</span>
                   </TableCell>
                   <TableCell>
-                    <span className={`text-gray-500 ${classes.ellipsis}`}>{list.wallet}</span>
+                    <span className="text-gray-500 truncate ...">{list.wallet}</span>
                   </TableCell>
                   <TableCell>
                     <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                      <span className={`text-gray-500 ${classes.ellipsis}`}>{list.twitter_name}</span>
+                      <span className="text-gray-500 truncate ...">{list.twitter_name}</span>
                     </a>
                   </TableCell>
                   <TableCell>
-                    <span className={`text-gray-500 ${classes.ellipsis}`}>
+                    <span className="text-gray-500 truncate ...">
                       {list.discord_username}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className={`text-gray-500 ${classes.ellipsis}`}>{`${list.discord_guild}`}</span>
+                    <span className="text-gray-500 truncate ...">{`${list.discord_guild}`}</span>
                   </TableCell>
                   <TableCell>
                     <span className="text-gray-500">{list.status}</span>
