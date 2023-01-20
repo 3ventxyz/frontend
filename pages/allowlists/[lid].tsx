@@ -230,7 +230,7 @@ export default function Allowlist() {
                     <Checkbox color="primary" />
                   </TableCell>
                   <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900">
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:text-clip">
                       {list.uid}
                     </span>
                   </TableCell>
