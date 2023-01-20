@@ -66,6 +66,7 @@ export default function CreateEvent() {
   /**
    * UI page state setStates
    **/
+  /**TODO (1/20/23) Marthel: use the setErrorMsg to handle any errors from the form validator */
   const [
     status,
     { nextPage, prevPage, setCreatingNewEvent, setErrorMsg, setCurrentStep }
@@ -166,7 +167,11 @@ export default function CreateEvent() {
   }
 
   const formValidator = () => {
-    /**TODO: migrate the form validator logic from the previous create event page to this function. */
+    /**TODO (1/20/23) Marthel: migrate the form validator logic from the previous create event page to this function. 
+     * and move the formValidator to the useCreateEventFormValues hook, as a helper function to check that all values are approved.
+     * 
+     * also, it needs to pass a validator for checking the fileImg type, its pixel resolution and its size.
+    */
     return true
   }
 
@@ -285,12 +290,20 @@ export default function CreateEvent() {
               />
             </CreateEventFormSection>
           </div>
+          {/* TODO (1/20/23) Marthel, CreateEventStepsDisplay: create a new param that disables the buttons, when
+          a new event is being created.*/}
           <CreateEventStepsDisplay
             currentStep={status.currentStep}
             setCurrentStep={setCurrentStep}
           />
         </div>
       </div>
+      {/* TODO (1/20/23) Marthel, CreateEventFooter: Add new parameters to the CreateEventFooter 
+      that it gets error message and place of the error when those 2 params are updated.
+      The UI should look good for it. Also, create a new button called, review. Once clicked on
+      review, the whole form will be expanded and the webpage will scroll back to the top, allowing
+      the user to review and make any edits one more if necessary. Then the button 'create event' should
+      appear, that when the user clicks on it, it will start to create a new event. */}
       <CreateEventFooter
         currentStep={status.currentStep}
         isCreatingNewEvent={status.isCreatingNewEvent}
