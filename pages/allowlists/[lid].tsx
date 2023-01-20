@@ -227,29 +227,29 @@ export default function Allowlist() {
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
                   <TableCell style={{ width: 50 }} padding="checkbox">
-                    <Checkbox color="primary" />
+                    <Checkbox style={{ width: 50 }} color="primary" />
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
-                    <span className="text-gray-900 inline-block w-[150px] truncate ...">{list.uid}</span>
+                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.uid}</span>
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
-                    <span className="text-gray-900 inline-block w-[150px] truncate ...">{list.email}</span>
+                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.email}</span>
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
-                    <span className="text-gray-900 inline-block w-[150px] truncate ...">{list.wallet}</span>
+                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.wallet}</span>
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
                     <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                      <span className="text-gray-900 inline-block w-[150px] truncate ...">{list.twitter_name}</span>
+                      <span className="text-gray-900 inline-block w-[100px] truncate ...">{list.twitter_name}</span>
                     </a>
                   </TableCell>
                   <TableCell style={{ width: 100 }}> 
-                    <span className="text-gray-900 inline-block w-[150px] truncate ...">
+                    <span className="text-gray-900 inline-block w-[100px] truncate ...">
                       {list.discord_username}
                     </span>
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
-                    <span className="text-gray-900 inline-block w-[150px] truncate ...">{`${list.discord_guild}`}</span>
+                    <span className="text-gray-900 inline-block w-[100px] truncate ...">{`${list.discord_guild}`}</span>
                   </TableCell>
                   <TableCell style={{ width: 100 }}>
                     <span className="text-gray-500">{list.status}</span>
