@@ -4,11 +4,10 @@ import {
   TableHead,
   TableRow,
   TableCell,
-
   TablePagination,
   TableSortLabel
 } from '@material-ui/core'
-import { AllowlistTableHeader, AllowlistsInterface, AllowlistInterface } from '../shared/interface/common'
+import { AllowlistTableHeader, AllowlistInterface } from '../shared/interface/common'
 
 export default function TventTable(
   list: Array<AllowlistInterface>,

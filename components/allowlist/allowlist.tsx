@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
-import { AllowlistsInterface, AllowlistInterface } from '../../shared/interface/common'
+import {
+  AllowlistsInterface,
+  AllowlistInterface
+} from '../../shared/interface/common'
 import Modal from '../utils/modal'
 import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
@@ -9,15 +12,7 @@ import Button from '../buttons/button'
 import AllowlistService from '../../services/allowlists'
 import Image from 'next/image'
 import absoluteUrl from 'next-absolute-url'
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper
-} from '@mui/material'
+import { TableBody, TableRow, TableCell } from '@mui/material'
 import TventTable from '../table'
 
 export default function Allowlists() {
@@ -58,7 +53,8 @@ export default function Allowlists() {
     { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
   ]
 
-  const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } = TventTable(allowlists, allowlistIndexHeader)
+  const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
+    TventTable(allowlists, allowlistIndexHeader)
 
   return (
     <>
@@ -77,34 +73,40 @@ export default function Allowlists() {
           <TblContainer>
             <TblHead />
             <TableBody>
-              {listAfterPagingAndSorting().map((list: AllowlistInterface, i) => (
-                <TableRow key={i} className="bg-white">
-                  <TableCell>
-                    <span className="text-gray-900">{list.title}</span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-gray-500">
-                      {list.allowlist.length}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
-                    <Image
-                      className="hover:cursor-pointer"
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `${origin}/apply?id=${list.allowlist_id}`
-                        )
-                        alert('Text copied')
-                      }}
-                      alt="copy"
-                      src="/assets/copy.svg"
-                      height="20"
-                      width="20"
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {listAfterPagingAndSorting().map(
+                (list: AllowlistInterface, i) => (
+                  <TableRow key={i} className="bg-white">
+                    <TableCell>
+                      <a href={`/allowlists/${list.allowlist_id}`}>
+                        <span className="text-gray-900">{list.title}</span>
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-gray-500">
+                        {list.allowlist.length}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
+                      <Image
+                        className="hover:cursor-pointer"
+                        onClick={async () => {
+                          navigator.clipboard.writeText(
+                            `${origin}/apply?id=${list.allowlist_id}`
+                          )
+                          let text = await navigator.clipboard.readText()
+                          console.log(text)
+                          alert('Text copied')
+                        }}
+                        alt="copy"
+                        src="/assets/copy.svg"
+                        height="20"
+                        width="20"
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
             <TblPagination />
           </TblContainer>
