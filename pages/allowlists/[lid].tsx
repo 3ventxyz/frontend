@@ -179,6 +179,7 @@ export default function Allowlist() {
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
+    
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
@@ -227,7 +228,7 @@ export default function Allowlist() {
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
                   <TableCell padding="checkbox">
-                    <Checkbox color="primary" />
+                    <Checkbox color="primary" onClick={() => handleCheck} />
                   </TableCell>
                   <TableCell>
                     <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
