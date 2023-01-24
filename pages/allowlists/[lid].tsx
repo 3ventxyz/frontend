@@ -227,9 +227,6 @@ export default function Allowlist() {
             <TableBody>
               {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                 <TableRow key={i} className="bg-white">
-                  <TableCell padding="checkbox">
-                    <Checkbox color="primary" onClick={() => handleCheck} />
-                  </TableCell>
                   <TableCell>
                     <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
                       {list.uid}
