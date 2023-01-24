@@ -59,7 +59,10 @@ export default class AllowlistService {
     discordGuild: boolean,
     discordGuildId: string,
     email: boolean,
-    permalink: string
+    permalink: string,
+    tokenOwnership: boolean,
+    contractAddress: string,
+    numberOfTokens: number
   ) => {
     try {
       var authVerification = await this.checkAuth(null, uid)
@@ -85,7 +88,10 @@ export default class AllowlistService {
             discordGuild: discordGuild,
             discordGuildId: discordGuildId,
             emailVerif: email,
-            permalink: permalink
+            permalink: permalink,
+            tokenOwnership: tokenOwnership,
+            contractAddress: contractAddress,
+            numberOfTokens: numberOfTokens
           })
           return { success: true, message: 'List created successfully' }
         } else {

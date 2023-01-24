@@ -28,6 +28,10 @@ export default function CreateAllowlist() {
   const [guild, setGuild] = useState('')
   const [permalink, setPermalink] = useState('')
   const emailVerification = useRef(false)
+  const [tokenOwnership, setTokenOwnership] = useState(false)
+  const [contractAddress, setContractAddress] = useState('')
+  const [checkNumberOfTokens, setCheckNumberOfTokens] = useState(false)
+  const [numberOfTokens, setNumberOfTokens] = useState('')
 
   const changeValue = (ref: any) => {
     ref.current = !ref.current
@@ -50,7 +54,10 @@ export default function CreateAllowlist() {
         discordGuild,
         guild,
         emailVerification.current,
-        permalink
+        permalink,
+        tokenOwnership,
+        contractAddress,
+        numberOfTokens
       )
 
       if (!response?.success) {
@@ -205,6 +212,54 @@ export default function CreateAllowlist() {
               onClick={() => changeValue(emailVerification)}
             />
           </div>
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
+            <span className="text-sm font-medium text-gray-900">
+              TOKEN OWNERSHIP VERIFICATION
+            </span>
+            <ToggleSwitch
+              label="tokenVerification"
+              onClick={() => setTokenOwnership(!tokenOwnership)}
+            />
+          </div>
+          {tokenOwnership ? (
+            <>
+              <div className="mb-6 flex max-w-[400px] items-center justify-between">
+                <TextInput
+                  id="contractAddress"
+                  labelText="CONTRACT ADDRESS"
+                  placeholder="Contract address"
+                  setValue={setContractAddress}
+                  xMargin="mx-0"
+                />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
+            <span className="text-sm font-medium text-gray-900">
+              CHECK NUMBER OF TOKENS
+            </span>
+            <ToggleSwitch
+              label="CheckNumberOfTokens"
+              onClick={() => setCheckNumberOfTokens(!checkNumberOfTokens)}
+            />
+          </div>
+          {checkNumberOfTokens ? (
+            <>
+              <div className="mb-6 flex max-w-[400px] items-center justify-between">
+                <TextInput
+                  id="numberOfTokens"
+                  labelText="NUMBER OF TOKENS"
+                  placeholder="Number of tokens"
+                  setValue={setNumberOfTokens}
+                  xMargin="mx-0"
+                />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
           <Button
             type="submit"
             text="Create"
