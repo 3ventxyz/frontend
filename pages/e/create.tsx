@@ -11,7 +11,6 @@ import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
-import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import CreateEventTextInput from './components/createEventTextInput'
@@ -22,6 +21,7 @@ import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
+import { CreateEventErrors } from './utils/enums'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -38,7 +38,7 @@ const inputValues: createEventFormInterface = {
   event_file_img: null,
   landing_file_img: null,
   event_img_url: '',
-  landing_img_url: '',
+  landing_img_url: ''
 }
 
 const createEventStatus: createEventStatusInterface = {
@@ -59,7 +59,8 @@ export default function CreateEvent() {
       setDate,
       setLocation,
       setFileImg,
-      setPredefinedImgUrl
+      setPredefinedImgUrl,
+      formValidator
     }
   ] = useCreateEventValues(inputValues)
 
@@ -67,29 +68,18 @@ export default function CreateEvent() {
    * UI page state setStates
    **/
   /**TODO (1/20/23) Marthel: use the setErrorMsg to handle any errors from the form validator */
-  const [
-    status,
-    { nextPage, prevPage, setCreatingNewEvent, setErrorMsg, setCurrentStep }
-  ] = useCreateEventStatus(createEventStatus)
+  const [status, { nextPage, prevPage, setCreatingNewEvent, setCurrentStep }] =
+    useCreateEventStatus(createEventStatus)
 
   /**
    * logic functions
    **/
   const createEvent = async () => {
-    let isFormValid
+    let formError: CreateEventErrors
     setCreatingNewEvent(true)
-    setErrorMsg('')
-    isFormValid = formValidator()
-    if (!isFormValid) {
+    formError = await formValidator()
+    if (formError !== CreateEventErrors.noError) {
       setCreatingNewEvent(false)
-      return
-    }
-    let isEventIdTaken = await CheckEventId(values.event_id)
-    if (isEventIdTaken) {
-      setCreatingNewEvent(false)
-      setErrorMsg(
-        'Event ID: event id has been taken, please enter a different id'
-      )
       return
     }
     try {
@@ -166,15 +156,6 @@ export default function CreateEvent() {
     }
   }
 
-  const formValidator = () => {
-    /**TODO (1/20/23) Marthel: migrate the form validator logic from the previous create event page to this function. 
-     * and move the formValidator to the useCreateEventFormValues hook, as a helper function to check that all values are approved.
-     * 
-     * also, it needs to pass a validator for checking the fileImg type, its pixel resolution and its size.
-    */
-    return true
-  }
-
   /**
    * HTML code
    **/
@@ -191,7 +172,7 @@ export default function CreateEvent() {
             <CreateEventFormSection
               isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
-              childrenClassName='my-[10px]'
+              childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
                 id={'event_name'}
@@ -237,7 +218,7 @@ export default function CreateEvent() {
             <CreateEventFormSection
               isExpanded={status.currentStep == 1}
               title={'2.- Description and max attendee cap'}
-              childrenClassName='my-[10px]'
+              childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
                 textArea={true}

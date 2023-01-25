@@ -6,9 +6,10 @@ export enum CreateEventErrors {
   invalidFileType,
   emptyImage,
   emptyEventLocation,
-  startDateError,
+  startDateBehind,
   sameDatePeriod,
   endDateBehind,
   invalidNumber,
-  lowCapNumber
+  lowCapNumber,
+  eventIdTaken
 }
