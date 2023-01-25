@@ -1,13 +1,23 @@
 import Button from '../../../components/buttons/button'
 import Spinner from '../../../components/utils/spinner'
 
+{
+  /* TODO (1/20/23) Marthel, CreateEventFooter: Add new parameters to the CreateEventFooter 
+    that it gets error message and place of the error when those 2 params are updated.
+    The UI should look good for it. Also, create a new button called, review. Once clicked on
+    review, the whole form will be expanded and the webpage will scroll back to the top, allowing
+    the user to review and make any edits one more if necessary. Then the button 'create event' should
+    appear, that when the user clicks on it, it will start to create a new event. */
+}
+
 export default function CreateEventFooter({
   currentStep,
   isCreatingNewEvent,
   prevPage,
   nextPage,
   createEvent
-}: {
+}: //add 2 params for error message.
+{
   currentStep: number
   isCreatingNewEvent: boolean
   prevPage: () => void
@@ -65,6 +75,7 @@ export default function CreateEventFooter({
             )}
           </div>
         )}
+        {/* show an additional space below the main displays, in red, the error message, and which field is located at. */}
       </div>
     </div>
   )

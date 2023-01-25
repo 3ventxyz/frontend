@@ -1,15 +1,20 @@
-import { useState } from 'react'
-
+{
+  /* TODO (1/20/23) Marthel, CreateEventStepsDisplay: create a new param that disables the buttons, when
+  a new event is being created.*/
+}
 export default function CreateEventStepsDisplay({
   currentStep,
   setCurrentStep
-}: {
+}: // add a disabled variable
+{
   currentStep: number
   setCurrentStep: (step: number) => void
 }) {
   return (
     <div className="sticky bottom-[0px] z-0 hidden md:block">
       <div id="create-event-steps" className="flex flex-col space-y-[10px] ">
+        {/*each step update the onClick with an empty function and update 
+        the isComplete boolean with the disabled variable.*/}
         <Step
           num={1}
           stepInstruction={'Event title, location and date'}
