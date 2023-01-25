@@ -1,22 +1,6 @@
 import { useState } from 'react'
 import { createEventStatusInterface } from '../../../../shared/interface/common'
-import {
-  dateErrorField,
-  emptyEventLocationErrorMsg,
-  emptyImageErrorMsg,
-  emptyTitleErrorMsg,
-  endDateBehindErrorMsg,
-  eventIDErrorField,
-  eventIdTakenErrorMsg,
-  eventImageErrorField,
-  eventTitleErrorField,
-  invalidFileTypeErrorMsg,
-  invalidNumberErrorMsg,
-  lowCapNumberErrorMsg,
-  sameDatePeriodErrorMsg,
-  startDateBehindErrorMsg,
-  ticketErrorField
-} from '../../utils/consts'
+import { ERROR_MESSAGE, ERROR_FIELD } from '../../utils/consts'
 import { CreateEventErrors } from '../../utils/enums'
 
 interface useCreateEventStatus {
@@ -57,71 +41,71 @@ export default function useCreateEventStatus(
       case CreateEventErrors.emptyTitle:
         setStatus({
           ...currStatus,
-          errorMsg: emptyTitleErrorMsg,
-          errorField: ''
+          errorMsg: ERROR_MESSAGE.emptyTitle,
+          errorField: ERROR_FIELD.eventTitle
         })
         break
       case CreateEventErrors.invalidFileType:
         setStatus({
           ...currStatus,
-          errorMsg: invalidFileTypeErrorMsg,
-          errorField: eventTitleErrorField
+          errorMsg: ERROR_MESSAGE.invalidFileType,
+          errorField: ERROR_FIELD.eventImage
         })
         break
       case CreateEventErrors.emptyImage:
         setStatus({
           ...currStatus,
-          errorMsg: emptyImageErrorMsg,
-          errorField: eventImageErrorField
+          errorMsg: ERROR_MESSAGE.emptyImage,
+          errorField: ERROR_FIELD.eventImage
         })
         break
       case CreateEventErrors.emptyEventLocation:
         setStatus({
           ...currStatus,
-          errorMsg: emptyEventLocationErrorMsg,
-          errorField: eventImageErrorField
+          errorMsg: ERROR_MESSAGE.emptyEventLocation,
+          errorField: ERROR_FIELD.eventLocation
         })
         break
       case CreateEventErrors.startDateBehind:
         setStatus({
           ...currStatus,
-          errorMsg: startDateBehindErrorMsg,
-          errorField: dateErrorField
+          errorMsg: ERROR_MESSAGE.startDateBehind,
+          errorField: ERROR_FIELD.date
         })
         break
       case CreateEventErrors.sameDatePeriod:
         setStatus({
           ...currStatus,
-          errorMsg: sameDatePeriodErrorMsg,
-          errorField: dateErrorField
+          errorMsg: ERROR_MESSAGE.sameDatePeriod,
+          errorField: ERROR_FIELD.date
         })
         break
       case CreateEventErrors.endDateBehind:
         setStatus({
           ...currStatus,
-          errorMsg: endDateBehindErrorMsg,
-          errorField: dateErrorField
+          errorMsg: ERROR_MESSAGE.endDateBehind,
+          errorField: ERROR_FIELD.date
         })
         break
       case CreateEventErrors.invalidNumber:
         setStatus({
           ...currStatus,
-          errorMsg: invalidNumberErrorMsg,
-          errorField: ticketErrorField
+          errorMsg: ERROR_MESSAGE.invalidNumber,
+          errorField: ERROR_FIELD.ticket
         })
         break
       case CreateEventErrors.lowCapNumber:
         setStatus({
           ...currStatus,
-          errorMsg: lowCapNumberErrorMsg,
-          errorField: ticketErrorField
+          errorMsg: ERROR_MESSAGE.lowCapNumber,
+          errorField: ERROR_FIELD.ticket
         })
         break
       case CreateEventErrors.eventIdTaken:
         setStatus({
           ...currStatus,
-          errorMsg: eventIdTakenErrorMsg,
-          errorField: eventIDErrorField
+          errorMsg: ERROR_MESSAGE.eventIdTaken,
+          errorField: ERROR_FIELD.eventID
         })
         break
       default:
