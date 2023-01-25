@@ -57,10 +57,16 @@ export default function useCreateEventValues(
     if (values.title === '') {
       return CreateEventErrors.emptyTitle
     }
-    if (!fileTypeValidator(values.file_img)) {
+    if (
+      !fileTypeValidator(values.event_file_img) ||
+      !fileTypeValidator(values.landing_file_img)
+    ) {
       return CreateEventErrors.invalidFileType
     }
-    if (!values.file_img && values.event_img_url == '') {
+    if (
+      (!values.event_file_img || values.event_img_url == '') &&
+      (!values.landing_file_img || values.landing_img_url == '')
+    ) {
       return CreateEventErrors.emptyImage
     }
     if (
