@@ -44,7 +44,8 @@ const inputValues: createEventFormInterface = {
 const createEventStatus: createEventStatusInterface = {
   currentStep: 0,
   isCreatingNewEvent: false,
-  errorMsg: ''
+  errorMsg: '',
+  errorField: ''
 }
 
 export default function CreateEvent() {
