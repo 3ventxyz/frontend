@@ -245,3 +245,7 @@
 .checkbox:checked + .label .switch {
   right: 0px;
 }
+
+.MuiTablePagination-root {
+  display: flex;
+}

@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useState, useRef } from 'react'
-import { AllowlistInterface } from '../../shared/interface/common'
+import {
+  AllowlistInterface,
+  AllowlistUser
+} from '../../shared/interface/common'
 import Image from 'next/image'
 import { HiChevronLeft } from 'react-icons/hi'
 import Modal from '../../components/utils/modal'
@@ -8,8 +11,11 @@ import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/allowlist/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
 import DeleteConfirmation from '../../components/allowlist/deleteConfirmation'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
+import AllowlistUsersTable from '../../components/listusertable'
+import { TableBody, TableRow, TableCell } from '@mui/material'
+import Checkbox from '@mui/material/Checkbox'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -32,6 +38,39 @@ export default function Allowlist() {
   const [permalink, setPermalink] = useState('')
   const emailVerification = useRef(false)
   const [listUid, setListUid] = useState('')
+  const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
+  const [gotInfo, setGotInfo] = useState(false)
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        let arr: Array<AllowlistUser> = []
+        setGotInfo(true)
+        const docRef = doc(db, 'lists', `${lid}`)
+        /*loop through every user*/
+        const userRef = await getDocs(collection(docRef, 'registered_users'))
+        userRef.forEach((doc) => {
+          arr.push({
+            uid: doc.data().uid,
+            email: doc.data().email,
+            wallet: doc.data().wallet,
+            twitter_id: doc.data().twitter_id,
+            twitter_name: doc.data().twitter_name,
+            discord_username: doc.data().discord_username,
+            discord_guild: doc.data().discord_guild,
+            status: doc.data().status
+          })
+        })
+        setUserDocs(arr)
+      } catch (e) {
+        console.error('Error adding data: ', e)
+      }
+    }
+    if (!gotInfo) {
+      getUserInfo()
+    }
+  }, [])
+
   useEffect(() => {
     const getListUid = async () => {
       const docRef = doc(db, 'lists', lid?.toString() ?? '')
@@ -127,131 +166,106 @@ export default function Allowlist() {
     setAddresses(new Map())
   }
 
+  const allowlistUserHeader = [
+    { id: 'uid', label: 'User ID', disableSorting: true },
+    { id: 'email', label: 'Email', disableSorting: true },
+    { id: 'wallet', label: 'Wallet', disableSorting: true },
+    { id: 'twitter_id', label: 'Twitter', disableSorting: true },
+    { id: 'discord_user', label: 'Discord', disableSorting: true },
+    { id: 'discord_guild', label: 'Guild Membership', disableSorting: true },
+    { id: 'status', label: 'Status', disableSorting: false }
+  ]
+
+  const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
+    AllowlistUsersTable(userDocs, allowlistUserHeader)
+
+    
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
-        {(auth.currentUser?.uid ?? '') === listUid ? (
-          <>
-            {' '}
-            <div className="mx-auto flex w-full  flex-row items-end justify-between border-b border-disabled">
-              <button
-                className="h-[40px] w-[40px]"
-                onClick={() => {
-                  router.back()
-                }}
-              >
-                <HiChevronLeft className="h-full w-full" />
-              </button>
+        <div className="mx-auto flex w-full flex-row items-end justify-between border-b border-disabled">
+          <button
+            className="h-[40px] w-[40px]"
+            onClick={() => {
+              router.back()
+            }}
+          >
+            <HiChevronLeft className="h-full w-full" />
+          </button>
+        </div>
+        <div className="relative w-full max-w-fit overflow-x-auto shadow-md sm:rounded-lg">
+          <div className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
+            <div className="flex flex-row justify-between">
+              <div className="my-auto flex flex-col">
+                {allowlist?.title}
+                <p className="mt-1 text-sm font-normal text-gray-500 ">
+                  {allowlist?.description}
+                </p>
+              </div>
+              <div className="my-auto flex w-[50px] flex-row justify-between">
+                <Image
+                  className="hover:cursor-pointer"
+                  onClick={() => setShowEditModal(true)}
+                  alt="add"
+                  src="/assets/edit.svg"
+                  height="20"
+                  width="20"
+                />
+                <Image
+                  className="hover:cursor-pointer"
+                  onClick={() => setShowDeleteModal(true)}
+                  alt="add"
+                  src="/assets/trash.svg"
+                  height="20"
+                  width="20"
+                />
+              </div>
             </div>
-            <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-left text-sm text-gray-500 ">
-                <caption className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
-                  <div className="flex flex-row justify-between">
-                    <div className="my-auto flex flex-col">
-                      {allowlist?.title}
-                      <p className="mt-1 text-sm font-normal text-gray-500 ">
-                        {allowlist?.description}
-                      </p>
-                    </div>
-                    <div className="my-auto flex w-[50px] flex-row justify-between">
-                      <Image
-                        className="hover:cursor-pointer"
-                        onClick={() => setShowEditModal(true)}
-                        alt="add"
-                        src="/assets/edit.svg"
-                        height="20"
-                        width="20"
-                      />
-                      <Image
-                        className="hover:cursor-pointer"
-                        onClick={() => setShowDeleteModal(true)}
-                        alt="add"
-                        src="/assets/trash.svg"
-                        height="20"
-                        width="20"
-                      />
-                    </div>
-                  </div>
-                </caption>
-                <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
-                  <tr>
-                    <th scope="col" className="p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-all-search"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                          onChange={handleCheckAll}
-                        />
-                        <label
-                          htmlFor="checkbox-all-search"
-                          className="sr-only"
-                        >
-                          checkbox
-                        </label>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className=" flex flex-row justify-between py-4 px-6"
-                    >
-                      <p>Addresses</p>
-                      {selected.length > 0 && (
-                        <p
-                          className="hover:cursor-pointer hover:underline"
-                          onClick={() => setShowDeleteAddressModal(true)}
-                        >
-                          Delete {selected.length} selected
-                        </p>
-                      )}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {allowlist?.allowlist.map((e, i, array) => {
-                    return (
-                      <tr
-                        key={i}
-                        className="border-b bg-white hover:bg-gray-50 "
-                      >
-                        <td className="w-4 p-4">
-                          <div className="flex items-center">
-                            <input
-                              id="checkbox-table-search-1"
-                              type="checkbox"
-                              name={e}
-                              checked={addresses?.get(e) ?? false}
-                              onChange={handleCheck}
-                              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                            />
-                            <label
-                              htmlFor="checkbox-table-search-1"
-                              className="sr-only"
-                            >
-                              checkbox
-                            </label>
-                          </div>
-                        </td>
-                        <th
-                          scope="row"
-                          className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
-                        >
-                          {e}
-                        </th>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </>
-        ) : (
-          <>
-            <h2>
-              You don&apos;t have the permissions to view this information
-            </h2>
-          </>
-        )}
+          </div>
+          <TblContainer>
+            <TblHead />
+            <TableBody>
+              {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
+                <TableRow key={i} className="bg-white">
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                      {list.uid}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                      {list.email}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                      {list.wallet}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
+                      <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                        {list.twitter_name}
+                      </span>
+                    </a>
+                  </TableCell>
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                      {list.discord_username}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-gray-500">{list.status}</span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TblPagination />
+          </TblContainer>
+        </div>
       </div>
       <Modal
         visible={showDeleteModal}
@@ -285,7 +299,7 @@ export default function Allowlist() {
         visible={showEditModal}
         onClose={() => setShowEditModal(false)}
         width="w-3/4"
-        height="max-h-96"
+        height=""
       >
         <EditAllowlistForm
           onSuccess={() => {

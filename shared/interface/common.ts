@@ -46,9 +46,16 @@ export interface AllowlistUser {
   email: string
   wallet: string
   twitter_id: string
+  twitter_name: string
   discord_username: string
   discord_guild: boolean
   status: string
+}
+
+export interface AllowlistTableHeader {
+  id: string
+  label: string
+  disableSorting: boolean
 }
 
 export interface UserProfileEvents {

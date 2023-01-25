@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
-import { AllowlistsInterface } from '../../shared/interface/common'
+import {
+  AllowlistsInterface,
+  AllowlistInterface
+} from '../../shared/interface/common'
 import Modal from '../utils/modal'
 import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
 import Button from '../buttons/button'
 import AllowlistService from '../../services/allowlists'
-import Link from 'next/link'
 import Image from 'next/image'
 import absoluteUrl from 'next-absolute-url'
+import { TableBody, TableRow, TableCell } from '@mui/material'
+import TventTable from '../table'
 
 export default function Allowlists() {
   const auth = useAuth()
@@ -43,6 +47,15 @@ export default function Allowlists() {
     router.push('/allowlists')
   }
 
+  const allowlistIndexHeader = [
+    { id: 'AllowlistName', label: 'Name', disableSorting: false },
+    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false },
+    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
+  ]
+
+  const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
+    TventTable(allowlists, allowlistIndexHeader)
+
   return (
     <>
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center space-y-[20px] bg-secondaryBg">
@@ -57,54 +70,46 @@ export default function Allowlists() {
           />
         </div>
         <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 ">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
-              <tr>
-                <th scope="col" className="py-3 px-6">
-                  NAME
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  # ENTRIES
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  APPLICATION LINK
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {allowlists.map((e, i) => (
-                <tr
-                  key={i}
-                  className="cursor-pointer border-b bg-white hover:bg-gray-50"
-                >
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap py-4 px-6 font-medium text-gray-900 "
-                    onClick={() => router.push(`allowlists/${e.allowlist_id}`)}
-                  >
-                    {e.title}
-                  </th>
-                  <td className="py-4 px-6">{e.allowlist.length}</td>
-                  <td className="flex py-4 px-6">
-                    <p className="hover:cursor-default">{`${origin}/apply?id=${e.allowlist_id}`}</p>
-                    <Image
-                      className="hover:cursor-pointer"
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `${origin}/apply?id=${e.allowlist_id}`
-                        )
-                        alert('Text copied')
-                      }}
-                      alt="copy"
-                      src="/assets/copy.svg"
-                      height="20"
-                      width="20"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TblContainer>
+            <TblHead />
+            <TableBody>
+              {listAfterPagingAndSorting().map(
+                (list: AllowlistInterface, i) => (
+                  <TableRow key={i} className="bg-white">
+                    <TableCell>
+                      <a href={`/allowlists/${list.allowlist_id}`}>
+                        <span className="text-gray-900">{list.title}</span>
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-gray-500">
+                        {list.allowlist.length}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
+                      <Image
+                        className="hover:cursor-pointer"
+                        onClick={async () => {
+                          navigator.clipboard.writeText(
+                            `${origin}/apply?id=${list.allowlist_id}`
+                          )
+                          let text = await navigator.clipboard.readText()
+                          console.log(text)
+                          alert('Text copied')
+                        }}
+                        alt="copy"
+                        src="/assets/copy.svg"
+                        height="20"
+                        width="20"
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
+            </TableBody>
+            <TblPagination />
+          </TblContainer>
         </div>
       </div>
       <Modal
