@@ -8,6 +8,7 @@ import ErrorAlert from '../components/alerts/errorAlert'
 import VerifyGuild from '../components/auth/verifyGuild'
 import Link from 'next/link'
 import Modal from '../components/utils/modal'
+import TokenOwnership from '../components/token_ownership'
 
 export default function AllowlistApplication() {
   const auth = useAuth()
@@ -39,6 +40,11 @@ export default function AllowlistApplication() {
   const [twitterValue, setTwitterValue] = useState(0)
   const [guildMember, setGuildMember] = useState(undefined)
   const [lid, setLid] = useState('')
+  const [checkTokens, setCheckTokens] = useState(false)
+  const [contractAddress, setContractAddress] = useState('')
+  const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
+  const [numberOfTokens, setNumberOfTokens] = useState(0)
+  const [userTokens, setUserTokens] = useState(undefined)
 
   useEffect(() => {
     if (asPath.includes('state')) {
@@ -74,10 +80,13 @@ export default function AllowlistApplication() {
         setGuild(docSnap.data().discordGuildId)
         setEmailVerification(docSnap.data().emailVerif)
         setPermalink(docSnap.data().permalink)
+        setCheckTokens(docSnap.data().checkTokens)
+        setContractAddress(docSnap.data().contractAddress)
+        setCheckNumOfTokens(docSnap.data().checkNumOfTokens)
+        setNumberOfTokens(docSnap.data().numberOfTokens)
       } else {
         console.log('No such document!')
       }
-      console.log('fetching', twitterVerification)
     }
     if (lid !== '') {
       getListInfo()
@@ -93,7 +102,11 @@ export default function AllowlistApplication() {
     guild,
     emailVerification,
     lid,
-    permalink
+    permalink,
+    checkTokens,
+    contractAddress,
+    checkNumOfTokens,
+    numberOfTokens
   ])
 
   /*User Info*/
@@ -115,7 +128,7 @@ export default function AllowlistApplication() {
     getUserInfo()
   }, [email, wallet, twitter, discord, emailVerif, twitterName, uid])
 
-  /*Get user info on list only after you come back from the oauth*/
+  /*Get user info on list only after you come back from the oauth and submit button activation*/
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -125,17 +138,35 @@ export default function AllowlistApplication() {
         )
         if (userRef.exists()) {
           setGuildMember(userRef.data().discord_guild)
+          setUserTokens(userRef.data().userTokens)
         }
         return true
       } catch (e) {
         console.error('Error adding data: ', e)
       }
     }
+    const submitButton = () => {
+      const discordGuildRequired = discordGuild
+        ? guildMember
+          ? guildMember === undefined
+            ? false
+            : true
+          : false
+        : true
+        const tokenRequired = checkTokens
+        ? userTokens
+          ? userTokens === undefined
+            ? false
+            : true
+          : true
+        : true
+      setSubmit(discordGuildRequired && tokenRequired ? true : false)
+    }
     getUserInfo()
 
-    setSubmit(discordGuild ? (guildMember ? (guildMember === undefined ? false : true): false) : true)
-    
-  }, [lid, uid, guildMember, discordGuild])
+    submitButton()
+  }, [lid, uid, guildMember, discordGuild, checkTokens, userTokens])
+
   /*Modal Visibility*/
   useEffect(() => {
     const ModalVisibility = () => {
@@ -154,10 +185,19 @@ export default function AllowlistApplication() {
       setShowModal(
         walletVar && discordVar && twitterVar && emailVar ? false : true
       )
-      console.log(showModal)
     }
     ModalVisibility()
-  }, [twitterVerification])
+  }, [
+    twitterVerification,
+    walletVerification,
+    discordVerification,
+    emailVerification,
+    discord,
+    emailVerif,
+    showModal,
+    twitter,
+    wallet
+  ])
 
   /*Save info */
   const saveProfile = async (
@@ -167,6 +207,7 @@ export default function AllowlistApplication() {
     discord_id: string,
     wallet: string,
     email: string,
+    userTokens: boolean,
     status: string
   ) => {
     try {
@@ -182,6 +223,7 @@ export default function AllowlistApplication() {
           discord_id: discord_id,
           wallet: wallet,
           email: email,
+          userTokens: userTokens,
           status: status
         })
       } else {
@@ -192,6 +234,7 @@ export default function AllowlistApplication() {
           discord_id: discord_id,
           wallet: wallet,
           email: email,
+          userTokens: userTokens,
           status: status
         })
       }
@@ -205,7 +248,7 @@ export default function AllowlistApplication() {
   const handleChange = (e: any) => {
     setTwitterValue(e.target.value)
   }
-  
+
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {lid !== '' ? (
@@ -250,9 +293,7 @@ export default function AllowlistApplication() {
                 {twitter.map((account, index) => {
                   return (
                     <>
-                      <option value={index}>
-                        {twitterName[index]}
-                      </option>
+                      <option value={index}>{twitterName[index]}</option>
                     </>
                   )
                 })}
@@ -317,21 +358,30 @@ export default function AllowlistApplication() {
               <p className="border-b-2 border-primary font-medium">
                 VERIFY YOU&apos;RE A PART OF THE CREATOR&apos;S GUILD
               </p>
-              <div
-                onClick={() => {
-                  saveProfile(
-                    uid,
-                    twitter[twitterValue],
-                    twitterName[twitterValue],
-                    discord,
-                    wallet,
-                    email,
-                    status
-                  )
-                }}
-              >
-                <VerifyGuild discordGuildID={guild} lid={lid} />
-              </div>
+              {guildMember ? (
+                <div className="flex w-full flex-row items-center justify-start space-x-2 text-center">
+                  <p className="inline-flex h-[40px] w-1/2 items-center justify-center rounded-[10px] border border-[#5865f2] bg-white text-[14px] font-semibold text-[#5865f2]">
+                    Guild Membership Verified
+                  </p>
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    saveProfile(
+                      uid,
+                      twitter[twitterValue],
+                      twitterName[twitterValue],
+                      discord,
+                      wallet,
+                      email,
+                      userTokens,
+                      status
+                    )
+                  }}
+                >
+                  <VerifyGuild discordGuildID={guild} lid={lid} />
+                </div>
+              )}
               <div className="w-1/2">
                 {!guildMember && guildMember !== undefined ? (
                   <>
@@ -372,6 +422,35 @@ export default function AllowlistApplication() {
             <></>
           )}
 
+          {checkTokens ? (
+            <>
+              <p className="border-b-2 border-primary font-medium">
+                VERIFY TOKENS
+              </p>
+              <div
+                className="w-1/2"
+                onClick={() => {
+                  saveProfile(
+                    uid,
+                    twitter[twitterValue],
+                    twitterName[twitterValue],
+                    discord,
+                    wallet,
+                    email,
+                    userTokens,
+                    status
+                  )
+                }}
+              >
+                <TokenOwnership
+                  numberOfTokens={numberOfTokens} contractAddress={contractAddress} lid={lid}
+                />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+
           <form className="m-4 w-full" onSubmit={() => {}}>
             <Link href="/allowlists/success">
               <Button
@@ -386,6 +465,7 @@ export default function AllowlistApplication() {
                     discord,
                     wallet,
                     email,
+                    userTokens,
                     'submitted'
                   )
                 }}

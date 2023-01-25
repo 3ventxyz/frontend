@@ -59,7 +59,11 @@ export default class AllowlistService {
     discordGuild: boolean,
     discordGuildId: string,
     email: boolean,
-    permalink: string
+    permalink: string,
+    checkTokens: boolean,
+    contractAddress: string,
+    checkNumOfTokens: boolean,
+    numberOfTokens: number
   ) => {
     try {
       var authVerification = await this.checkAuth(null, uid)
@@ -85,7 +89,11 @@ export default class AllowlistService {
             discordGuild: discordGuild,
             discordGuildId: discordGuildId,
             emailVerif: email,
-            permalink: permalink
+            permalink: permalink,
+            checkTokens: checkTokens,
+            contractAddress: contractAddress,
+            checkNumOfTokens: checkNumOfTokens,
+            numberOfTokens: numberOfTokens
           })
           return { success: true, message: 'List created successfully' }
         } else {
@@ -149,7 +157,11 @@ export default class AllowlistService {
     discordGuild: boolean,
     discordGuildId: string,
     email: boolean,
-    permalink: string
+    permalink: string,
+    checkTokens: boolean,
+    contractAddress: string,
+    checkNumOfTokens: boolean,
+    numberOfTokens: number
   ) => {
     try {
       if (id) {
@@ -167,7 +179,11 @@ export default class AllowlistService {
           discordGuild: discordGuild,
           discordGuildId: discordGuildId,
           emailVerif: email,
-          permalink: permalink
+          permalink: permalink,
+          checkTokens: checkTokens,
+          contractAddress: contractAddress,
+          checkNumOfTokens: checkNumOfTokens,
+          numberOfTokens: numberOfTokens
         })
         return { success: true, message: 'Allowlist updated successfully' }
       }

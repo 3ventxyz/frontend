@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import {
   AllowlistInterface,
+  AllowlistTableHeader,
   AllowlistUser
 } from '../../shared/interface/common'
 import Image from 'next/image'
@@ -28,19 +29,24 @@ export default function Allowlist() {
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
   const auth = useAuth()
-  const walletVerification = useRef(false)
-  const twitterVerification = useRef(false)
-  const [twitterFollowing, setTwitterFollowing] = useState(false)
-  const discordVerification = useRef(false)
-  const [discordGuild, setDiscordGuild] = useState(false)
-  const [twitterAccount, setTwitterAccount] = useState('')
-  const [guild, setGuild] = useState('')
-  const [permalink, setPermalink] = useState('')
-  const emailVerification = useRef(false)
   const [listUid, setListUid] = useState('')
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
-
+  /*New variables - token */
+  const [checkTokens, setCheckTokens] = useState(false)
+  const [contractAddress, setContractAddress] = useState('')
+  const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
+  const [numberOfTokens, setNumberOfTokens] = useState(0)
+  const [title, setTitle] = useState('')
+  const [walletVerification, setWalletVerification] = useState(false)
+  const [twitterVerification, setTwitterVerification] = useState(false)
+  const [twitterFollowing, setTwitterFollowing] = useState(false)
+  const [twitterAccount, setTwitterAccount] = useState('')
+  const [discordVerification, setDiscordVerification] = useState(false)
+  const [discordGuild, setDiscordGuild] = useState(false)
+  const [guild, setGuild] = useState('')
+  const [emailVerification, setEmailVerification] = useState(false)
+  const [permalink, setPermalink] = useState('')
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -58,6 +64,7 @@ export default function Allowlist() {
             twitter_name: doc.data().twitter_name,
             discord_username: doc.data().discord_username,
             discord_guild: doc.data().discord_guild,
+            userTokens: doc.data().userTokens,
             status: doc.data().status
           })
         })
@@ -85,6 +92,7 @@ export default function Allowlist() {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listUid])
+
   useEffect(() => {
     var tmp: Array<string> = []
     addresses?.forEach((value, key) => {
@@ -110,6 +118,50 @@ export default function Allowlist() {
       router.push('/allowlists')
     }
   }
+  /*Allowlist Info */
+  useEffect(() => {
+    const getListInfo = async () => {
+      const docRef = doc(db, 'lists', lid?.toString() ?? '')
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        setTitle(docSnap.data().title)
+        setWalletVerification(docSnap.data().walletVerif)
+        setTwitterVerification(docSnap.data().twitterVerif)
+        setTwitterFollowing(docSnap.data().twitterFollowing)
+        setTwitterAccount(docSnap.data().twitterAccountId)
+        setDiscordVerification(docSnap.data().discordVerif)
+        setDiscordGuild(docSnap.data().discordGuild)
+        setGuild(docSnap.data().discordGuildId)
+        setEmailVerification(docSnap.data().emailVerif)
+        setPermalink(docSnap.data().permalink)
+        setCheckTokens(docSnap.data().checkTokens)
+        setContractAddress(docSnap.data().contractAddress)
+        setCheckNumOfTokens(docSnap.data().checkNumOfTokens)
+        setNumberOfTokens(docSnap.data().numberOfTokens)
+      } else {
+        console.log('No such document!')
+      }
+    }
+    if (lid !== '') {
+      getListInfo()
+    }
+  }, [
+    title,
+    walletVerification,
+    twitterVerification,
+    twitterFollowing,
+    twitterAccount,
+    discordVerification,
+    discordGuild,
+    guild,
+    emailVerification,
+    lid,
+    permalink,
+    checkTokens,
+    contractAddress,
+    checkNumOfTokens,
+    numberOfTokens
+  ])
 
   const deleteAllowlist = async (id: string | undefined) => {
     var response = await allowlistService.delete(
@@ -160,26 +212,60 @@ export default function Allowlist() {
       discordGuild,
       guild,
       emailVerification.current,
-      permalink
+      permalink,
+      checkTokens,
+      contractAddress,
+      checkNumOfTokens,
+      numberOfTokens
     )
     await fetchData()
     setAddresses(new Map())
   }
 
-  const allowlistUserHeader = [
-    { id: 'uid', label: 'User ID', disableSorting: true },
-    { id: 'email', label: 'Email', disableSorting: true },
-    { id: 'wallet', label: 'Wallet', disableSorting: true },
-    { id: 'twitter_id', label: 'Twitter', disableSorting: true },
-    { id: 'discord_user', label: 'Discord', disableSorting: true },
-    { id: 'discord_guild', label: 'Guild Membership', disableSorting: true },
-    { id: 'status', label: 'Status', disableSorting: false }
+  const allowlistUserHeader: Array<AllowlistTableHeader> = [
+    { id: 'uid', label: 'User ID', disableSorting: true, display: true },
+    {
+      id: 'email',
+      label: 'Email',
+      disableSorting: true,
+      display: emailVerification
+    },
+    {
+      id: 'wallet',
+      label: 'Wallet',
+      disableSorting: true,
+      display: walletVerification
+    },
+    {
+      id: 'twitter_id',
+      label: 'Twitter',
+      disableSorting: true,
+      display: twitterVerification
+    },
+    {
+      id: 'discord_user',
+      label: 'Discord',
+      disableSorting: true,
+      display: discordVerification
+    },
+    {
+      id: 'discord_guild',
+      label: 'Guild Membership',
+      disableSorting: true,
+      display: discordGuild
+    },
+    {
+      id: 'token_ownership',
+      label: 'Tokens Owned',
+      disableSorting: false,
+      display: checkTokens
+    },
+    { id: 'status', label: 'Status', disableSorting: false, display: true }
   ]
 
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
-    
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
@@ -232,31 +318,72 @@ export default function Allowlist() {
                       {list.uid}
                     </span>
                   </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.email}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.wallet}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                      <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                        {list.twitter_name}
-                      </span>
-                    </a>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.discord_username}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
-                  </TableCell>
+                  <>
+                    {emailVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.email}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {walletVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.wallet}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {twitterVerification ? (
+                      <TableCell>
+                        <a
+                          href={`https://twitter.com/i/user/${list.twitter_id}`}
+                        >
+                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                            {list.twitter_name}
+                          </span>
+                        </a>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {discordVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.discord_username}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {discordGuild ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {checkTokens ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.userTokens}`}</span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
                   <TableCell>
                     <span className="text-gray-500">{list.status}</span>
                   </TableCell>
