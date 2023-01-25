@@ -48,9 +48,9 @@ export default function Allowlists() {
   }
 
   const allowlistIndexHeader = [
-    { id: 'AllowlistName', label: 'Name', disableSorting: false },
-    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false },
-    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
+    { id: 'AllowlistName', label: 'Name', disableSorting: false, display: true },
+    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false, display: true },
+    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true, display: true }
   ]
 
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =

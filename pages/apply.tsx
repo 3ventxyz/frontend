@@ -44,7 +44,7 @@ export default function AllowlistApplication() {
   const [contractAddress, setContractAddress] = useState('')
   const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
   const [numberOfTokens, setNumberOfTokens] = useState(0)
-  const [userTokens, setUserTokens] = useState(undefined)
+  const [userTokens, setUserTokens] = useState(false)
 
   useEffect(() => {
     if (asPath.includes('state')) {
@@ -153,14 +153,7 @@ export default function AllowlistApplication() {
             : true
           : false
         : true
-        const tokenRequired = checkTokens
-        ? userTokens
-          ? userTokens === undefined
-            ? false
-            : true
-          : true
-        : true
-      setSubmit(discordGuildRequired && tokenRequired ? true : false)
+      setSubmit(discordGuildRequired ? true : false)
     }
     getUserInfo()
 
@@ -329,6 +322,7 @@ export default function AllowlistApplication() {
                     discord,
                     wallet,
                     email,
+                    userTokens,
                     status
                   )
                 }}
