@@ -5,7 +5,7 @@ import {
   createEventFormInterface,
   LocationData
 } from '../../../../shared/interface/common'
-import { CreateEventErrors } from '../../utils/enums'
+import { CreateEventErrors } from '../../../../shared/enums/enums'
 interface useCreateEventValuesInterface {
   setTextValue: (name: string, value: string) => void
   setNumberValue: (name: string, num: number) => void

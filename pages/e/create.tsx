@@ -21,7 +21,7 @@ import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
-import { CreateEventErrors } from './utils/enums'
+import { CreateEventErrors } from '../../shared/enums/enums'
 
 const inputValues: createEventFormInterface = {
   title: '',

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createEventStatusInterface } from '../../../../shared/interface/common'
-import { ERROR_MESSAGE, ERROR_FIELD } from '../../utils/consts'
-import { CreateEventErrors } from '../../utils/enums'
+import { ERROR_MESSAGE, ERROR_FIELD } from '../../../../shared/consts/consts'
+import { CreateEventErrors } from '../../../../shared/enums/enums'
 
 interface useCreateEventStatus {
   nextPage: () => void
