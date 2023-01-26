@@ -49,6 +49,7 @@ export interface AllowlistUser {
   twitter_name: string
   discord_username: string
   discord_guild: boolean
+  userTokens: boolean
   status: string
 }
 
@@ -56,6 +57,7 @@ export interface AllowlistTableHeader {
   id: string
   label: string
   disableSorting: boolean
+  display: boolean
 }
 
 export interface UserProfileEvents {

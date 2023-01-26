@@ -6,7 +6,6 @@ import {
   AllowlistInterface
 } from '../../shared/interface/common'
 import Modal from '../utils/modal'
-import CreateAllowlistForm from './createAllowlistForm'
 import DeleteConfirmation from './deleteConfirmation'
 import Button from '../buttons/button'
 import AllowlistService from '../../services/allowlists'
@@ -18,7 +17,6 @@ import TventTable from '../table'
 export default function Allowlists() {
   const auth = useAuth()
   const router = useRouter()
-  const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [allowlists, setAllowlists] = useState<AllowlistsInterface>([])
   const [currentAllowlist, setCurrentAllowlist] = useState<string | undefined>()
@@ -27,7 +25,6 @@ export default function Allowlists() {
 
   useEffect(() => {
     getAllowlists()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -48,9 +45,9 @@ export default function Allowlists() {
   }
 
   const allowlistIndexHeader = [
-    { id: 'AllowlistName', label: 'Name', disableSorting: false },
-    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false },
-    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true }
+    { id: 'AllowlistName', label: 'Name', disableSorting: false, display: true },
+    { id: 'AllowlistEntries', label: 'Entries', disableSorting: false, display: true },
+    { id: 'AllowlistLink', label: 'Application Link', disableSorting: true, display: true }
   ]
 
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
@@ -87,7 +84,6 @@ export default function Allowlists() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
                       <Image
                         className="hover:cursor-pointer"
                         onClick={async () => {
@@ -112,19 +108,6 @@ export default function Allowlists() {
           </TblContainer>
         </div>
       </div>
-      <Modal
-        visible={showModal}
-        onClose={() => setShowModal(false)}
-        width="w-3/4"
-        height=""
-      >
-        <CreateAllowlistForm
-          onSuccess={() => {
-            getAllowlists()
-            setShowModal(false)
-          }}
-        />
-      </Modal>
       <Modal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import {
   AllowlistInterface,
+  AllowlistTableHeader,
   AllowlistUser
 } from '../../shared/interface/common'
 import Image from 'next/image'
@@ -28,18 +29,25 @@ export default function Allowlist() {
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
   const auth = useAuth()
-  const walletVerification = useRef(false)
-  const twitterVerification = useRef(false)
-  const [twitterFollowing, setTwitterFollowing] = useState(false)
-  const discordVerification = useRef(false)
-  const [discordGuild, setDiscordGuild] = useState(false)
-  const [twitterAccount, setTwitterAccount] = useState('')
-  const [guild, setGuild] = useState('')
-  const [permalink, setPermalink] = useState('')
-  const emailVerification = useRef(false)
-  const [listUid, setListUid] = useState('')
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
+  const [listMetaData, setListMetaData] = useState({
+    listUid: '',
+    checkTokens: false,
+    contractAddress: '',
+    checkNumOfTokens: false,
+    numberOfTokens: 0,
+    title: '',
+    walletVerification: false,
+    twitterVerification: false,
+    twitterFollowing: false,
+    twitterAccount: '',
+    discordVerification: false,
+    discordGuild: false,
+    guild: '',
+    emailVerification: false,
+    permalink: ''
+  })
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -58,6 +66,7 @@ export default function Allowlist() {
             twitter_name: doc.data().twitter_name,
             discord_username: doc.data().discord_username,
             discord_guild: doc.data().discord_guild,
+            userTokens: doc.data().userTokens,
             status: doc.data().status
           })
         })
@@ -76,7 +85,10 @@ export default function Allowlist() {
       const docRef = doc(db, 'lists', lid?.toString() ?? '')
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
-        setListUid(docSnap.data().uid.path.split('/')[1])
+        setListMetaData({
+          ...listMetaData,
+          listUid: docSnap.data().uid.path.split('/')[1]
+        })
       } else {
         console.log('No such document!')
       }
@@ -84,7 +96,8 @@ export default function Allowlist() {
     getListUid()
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listUid])
+  }, [listMetaData])
+
   useEffect(() => {
     var tmp: Array<string> = []
     addresses?.forEach((value, key) => {
@@ -110,6 +123,39 @@ export default function Allowlist() {
       router.push('/allowlists')
     }
   }
+  /*Allowlist Info */
+  useEffect(() => {
+    const getListInfo = async () => {
+      const docRef = doc(db, 'lists', lid?.toString() ?? '')
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        setListMetaData({
+          ...listMetaData,
+          title: docSnap.data().title,
+          checkTokens: docSnap.data().checkTokens,
+          contractAddress: docSnap.data().contractAddress,
+          checkNumOfTokens: docSnap.data().checkNumOfTokens,
+          numberOfTokens: docSnap.data().numberOfTokens,
+          walletVerification: docSnap.data().walletVerif,
+          twitterVerification: docSnap.data().twitterVerif,
+          twitterFollowing: docSnap.data().twitterFollowing,
+          twitterAccount: docSnap.data().twitterAccountId,
+          discordVerification: docSnap.data().discordVerif,
+          discordGuild: docSnap.data().discordGuild,
+          guild: docSnap.data().discordGuildId,
+          emailVerification: docSnap.data().emailVerif,
+          permalink: docSnap.data().permalink
+        })
+      } else {
+        console.log('No such document!')
+      }
+    }
+    if (lid !== '') {
+      getListInfo()
+    }
+  }, [
+    listMetaData, lid
+  ])
 
   const deleteAllowlist = async (id: string | undefined) => {
     var response = await allowlistService.delete(
@@ -152,34 +198,68 @@ export default function Allowlist() {
         allowlist_id: lid?.toString()
       },
       auth.currentUser?.uid ?? '',
-      walletVerification.current,
-      twitterVerification.current,
-      twitterFollowing,
-      twitterAccount,
-      discordVerification.current,
-      discordGuild,
-      guild,
-      emailVerification.current,
-      permalink
+      listMetaData.walletVerification,
+      listMetaData.twitterVerification,
+      listMetaData.twitterFollowing,
+      listMetaData.twitterAccount,
+      listMetaData.discordVerification,
+      listMetaData.discordGuild,
+      listMetaData.guild,
+      listMetaData.emailVerification,
+      listMetaData.permalink,
+      listMetaData.checkTokens,
+      listMetaData.contractAddress,
+      listMetaData.checkNumOfTokens,
+      listMetaData.numberOfTokens
     )
     await fetchData()
     setAddresses(new Map())
   }
 
-  const allowlistUserHeader = [
-    { id: 'uid', label: 'User ID', disableSorting: true },
-    { id: 'email', label: 'Email', disableSorting: true },
-    { id: 'wallet', label: 'Wallet', disableSorting: true },
-    { id: 'twitter_id', label: 'Twitter', disableSorting: true },
-    { id: 'discord_user', label: 'Discord', disableSorting: true },
-    { id: 'discord_guild', label: 'Guild Membership', disableSorting: true },
-    { id: 'status', label: 'Status', disableSorting: false }
+  const allowlistUserHeader: Array<AllowlistTableHeader> = [
+    { id: 'uid', label: 'User ID', disableSorting: true, display: true },
+    {
+      id: 'email',
+      label: 'Email',
+      disableSorting: true,
+      display: listMetaData.emailVerification
+    },
+    {
+      id: 'wallet',
+      label: 'Wallet',
+      disableSorting: true,
+      display: listMetaData.walletVerification
+    },
+    {
+      id: 'twitter_id',
+      label: 'Twitter',
+      disableSorting: true,
+      display: listMetaData.twitterVerification
+    },
+    {
+      id: 'discord_user',
+      label: 'Discord',
+      disableSorting: true,
+      display: listMetaData.discordVerification
+    },
+    {
+      id: 'discord_guild',
+      label: 'Guild Membership',
+      disableSorting: true,
+      display: listMetaData.discordGuild
+    },
+    {
+      id: 'token_ownership',
+      label: 'Tokens Owned',
+      disableSorting: false,
+      display: listMetaData.checkTokens
+    },
+    { id: 'status', label: 'Status', disableSorting: false, display: true }
   ]
 
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
-    
   return (
     <>
       <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
@@ -232,31 +312,72 @@ export default function Allowlist() {
                       {list.uid}
                     </span>
                   </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.email}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.wallet}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                      <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                        {list.twitter_name}
-                      </span>
-                    </a>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.discord_username}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
-                  </TableCell>
+                  <>
+                    {listMetaData.emailVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.email}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {listMetaData.walletVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.wallet}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {listMetaData.twitterVerification ? (
+                      <TableCell>
+                        <a
+                          href={`https://twitter.com/i/user/${list.twitter_id}`}
+                        >
+                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                            {list.twitter_name}
+                          </span>
+                        </a>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {listMetaData.discordVerification ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.discord_username}
+                        </span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {listMetaData.discordGuild ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                  <>
+                    {listMetaData.checkTokens ? (
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.userTokens}`}</span>
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
+                  </>
                   <TableCell>
                     <span className="text-gray-500">{list.status}</span>
                   </TableCell>

@@ -12,7 +12,7 @@ import { AllowlistTableHeader, AllowlistUser } from '../shared/interface/common'
 
 export default function AllowlistUsersTable(
   list: Array<AllowlistUser>,
-  headCells: Array<AllowlistTableHeader>,
+  headCells: Array<AllowlistTableHeader>
 ) {
   type Order = 'asc' | 'desc' | undefined
   const pages = [5, 10, 25]
@@ -33,27 +33,31 @@ export default function AllowlistUsersTable(
     }
     return (
       <TableHead>
-        <TableRow
-          className="bg-gray-50"
-        >
+        <TableRow className="bg-gray-50">
           {headCells.map((headCell) => (
-            <TableCell style={{ width: 100 }} key={headCell.id}>
-              <span className="text-xs font-bold uppercase text-gray-700">
-                {headCell.disableSorting ? (
-                  headCell.label
-                ) : (
-                  <TableSortLabel
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={() => {
-                      handleSortRequest(headCell.id)
-                    }}
-                  >
-                    {headCell.label}
-                  </TableSortLabel>
-                )}
-              </span>
-            </TableCell>
+            <>
+              {headCell.display ? (
+                <TableCell style={{ width: 100 }} key={headCell.id}>
+                  <span className="text-xs font-bold uppercase text-gray-700">
+                    {headCell.disableSorting ? (
+                      headCell.label
+                    ) : (
+                      <TableSortLabel
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : 'asc'}
+                        onClick={() => {
+                          handleSortRequest(headCell.id)
+                        }}
+                      >
+                        {headCell.label}
+                      </TableSortLabel>
+                    )}
+                  </span>
+                </TableCell>
+              ) : (
+                <></>
+              )}
+            </>
           ))}
         </TableRow>
       </TableHead>
