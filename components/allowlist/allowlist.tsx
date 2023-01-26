@@ -25,7 +25,6 @@ export default function Allowlists() {
 
   useEffect(() => {
     getAllowlists()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

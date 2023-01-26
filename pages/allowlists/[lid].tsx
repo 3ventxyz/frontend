@@ -29,23 +29,26 @@ export default function Allowlist() {
   const [addresses, setAddresses] = useState<Map<string, boolean>>()
   const [selected, setSelected] = useState<Array<string>>(Array())
   const auth = useAuth()
-  const [listUid, setListUid] = useState('')
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
-  const [checkTokens, setCheckTokens] = useState(false)
-  const [contractAddress, setContractAddress] = useState('')
-  const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
-  const [numberOfTokens, setNumberOfTokens] = useState(0)
-  const [title, setTitle] = useState('')
-  const [walletVerification, setWalletVerification] = useState(false)
-  const [twitterVerification, setTwitterVerification] = useState(false)
-  const [twitterFollowing, setTwitterFollowing] = useState(false)
-  const [twitterAccount, setTwitterAccount] = useState('')
-  const [discordVerification, setDiscordVerification] = useState(false)
-  const [discordGuild, setDiscordGuild] = useState(false)
-  const [guild, setGuild] = useState('')
-  const [emailVerification, setEmailVerification] = useState(false)
-  const [permalink, setPermalink] = useState('')
+  const [listMetaData, setListMetaData] = useState({
+    listUid: '',
+    checkTokens: false,
+    contractAddress: '',
+    checkNumOfTokens: false,
+    numberOfTokens: 0,
+    title: '',
+    walletVerification: false,
+    twitterVerification: false,
+    twitterFollowing: false,
+    twitterAccount: '',
+    discordVerification: false,
+    discordGuild: false,
+    guild: '',
+    emailVerification: false,
+    permalink: ''
+  })
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -82,7 +85,10 @@ export default function Allowlist() {
       const docRef = doc(db, 'lists', lid?.toString() ?? '')
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
-        setListUid(docSnap.data().uid.path.split('/')[1])
+        setListMetaData({
+          ...listMetaData,
+          listUid: docSnap.data().uid.path.split('/')[1]
+        })
       } else {
         console.log('No such document!')
       }
@@ -90,7 +96,7 @@ export default function Allowlist() {
     getListUid()
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listUid])
+  }, [listMetaData])
 
   useEffect(() => {
     var tmp: Array<string> = []
@@ -123,20 +129,23 @@ export default function Allowlist() {
       const docRef = doc(db, 'lists', lid?.toString() ?? '')
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
-        setTitle(docSnap.data().title)
-        setWalletVerification(docSnap.data().walletVerif)
-        setTwitterVerification(docSnap.data().twitterVerif)
-        setTwitterFollowing(docSnap.data().twitterFollowing)
-        setTwitterAccount(docSnap.data().twitterAccountId)
-        setDiscordVerification(docSnap.data().discordVerif)
-        setDiscordGuild(docSnap.data().discordGuild)
-        setGuild(docSnap.data().discordGuildId)
-        setEmailVerification(docSnap.data().emailVerif)
-        setPermalink(docSnap.data().permalink)
-        setCheckTokens(docSnap.data().checkTokens)
-        setContractAddress(docSnap.data().contractAddress)
-        setCheckNumOfTokens(docSnap.data().checkNumOfTokens)
-        setNumberOfTokens(docSnap.data().numberOfTokens)
+        setListMetaData({
+          ...listMetaData,
+          title: docSnap.data().title,
+          checkTokens: docSnap.data().checkTokens,
+          contractAddress: docSnap.data().contractAddress,
+          checkNumOfTokens: docSnap.data().checkNumOfTokens,
+          numberOfTokens: docSnap.data().numberOfTokens,
+          walletVerification: docSnap.data().walletVerif,
+          twitterVerification: docSnap.data().twitterVerif,
+          twitterFollowing: docSnap.data().twitterFollowing,
+          twitterAccount: docSnap.data().twitterAccountId,
+          discordVerification: docSnap.data().discordVerif,
+          discordGuild: docSnap.data().discordGuild,
+          guild: docSnap.data().discordGuildId,
+          emailVerification: docSnap.data().emailVerif,
+          permalink: docSnap.data().permalink
+        })
       } else {
         console.log('No such document!')
       }
@@ -145,21 +154,7 @@ export default function Allowlist() {
       getListInfo()
     }
   }, [
-    title,
-    walletVerification,
-    twitterVerification,
-    twitterFollowing,
-    twitterAccount,
-    discordVerification,
-    discordGuild,
-    guild,
-    emailVerification,
-    lid,
-    permalink,
-    checkTokens,
-    contractAddress,
-    checkNumOfTokens,
-    numberOfTokens
+    listMetaData, lid
   ])
 
   const deleteAllowlist = async (id: string | undefined) => {
@@ -203,19 +198,19 @@ export default function Allowlist() {
         allowlist_id: lid?.toString()
       },
       auth.currentUser?.uid ?? '',
-      walletVerification,
-      twitterVerification,
-      twitterFollowing,
-      twitterAccount,
-      discordVerification,
-      discordGuild,
-      guild,
-      emailVerification,
-      permalink,
-      checkTokens,
-      contractAddress,
-      checkNumOfTokens,
-      numberOfTokens
+      listMetaData.walletVerification,
+      listMetaData.twitterVerification,
+      listMetaData.twitterFollowing,
+      listMetaData.twitterAccount,
+      listMetaData.discordVerification,
+      listMetaData.discordGuild,
+      listMetaData.guild,
+      listMetaData.emailVerification,
+      listMetaData.permalink,
+      listMetaData.checkTokens,
+      listMetaData.contractAddress,
+      listMetaData.checkNumOfTokens,
+      listMetaData.numberOfTokens
     )
     await fetchData()
     setAddresses(new Map())
@@ -227,37 +222,37 @@ export default function Allowlist() {
       id: 'email',
       label: 'Email',
       disableSorting: true,
-      display: emailVerification
+      display: listMetaData.emailVerification
     },
     {
       id: 'wallet',
       label: 'Wallet',
       disableSorting: true,
-      display: walletVerification
+      display: listMetaData.walletVerification
     },
     {
       id: 'twitter_id',
       label: 'Twitter',
       disableSorting: true,
-      display: twitterVerification
+      display: listMetaData.twitterVerification
     },
     {
       id: 'discord_user',
       label: 'Discord',
       disableSorting: true,
-      display: discordVerification
+      display: listMetaData.discordVerification
     },
     {
       id: 'discord_guild',
       label: 'Guild Membership',
       disableSorting: true,
-      display: discordGuild
+      display: listMetaData.discordGuild
     },
     {
       id: 'token_ownership',
       label: 'Tokens Owned',
       disableSorting: false,
-      display: checkTokens
+      display: listMetaData.checkTokens
     },
     { id: 'status', label: 'Status', disableSorting: false, display: true }
   ]
@@ -318,7 +313,7 @@ export default function Allowlist() {
                     </span>
                   </TableCell>
                   <>
-                    {emailVerification ? (
+                    {listMetaData.emailVerification ? (
                       <TableCell>
                         <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
                           {list.email}
@@ -329,7 +324,7 @@ export default function Allowlist() {
                     )}
                   </>
                   <>
-                    {walletVerification ? (
+                    {listMetaData.walletVerification ? (
                       <TableCell>
                         <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
                           {list.wallet}
@@ -340,7 +335,7 @@ export default function Allowlist() {
                     )}
                   </>
                   <>
-                    {twitterVerification ? (
+                    {listMetaData.twitterVerification ? (
                       <TableCell>
                         <a
                           href={`https://twitter.com/i/user/${list.twitter_id}`}
@@ -355,7 +350,7 @@ export default function Allowlist() {
                     )}
                   </>
                   <>
-                    {discordVerification ? (
+                    {listMetaData.discordVerification ? (
                       <TableCell>
                         <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
                           {list.discord_username}
@@ -366,7 +361,7 @@ export default function Allowlist() {
                     )}
                   </>
                   <>
-                    {discordGuild ? (
+                    {listMetaData.discordGuild ? (
                       <TableCell>
                         <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
                       </TableCell>
@@ -375,7 +370,7 @@ export default function Allowlist() {
                     )}
                   </>
                   <>
-                    {checkTokens ? (
+                    {listMetaData.checkTokens ? (
                       <TableCell>
                         <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.userTokens}`}</span>
                       </TableCell>

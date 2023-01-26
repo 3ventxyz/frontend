@@ -2,7 +2,7 @@
 import { useContractRead } from 'wagmi'
 import { useAuth } from '../contexts/auth'
 import abi from '../services/abi.json'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 
@@ -16,7 +16,7 @@ export default function TokenOwnership({
   numberOfTokens: number
   contractAddress: string
   lid: string
-  setNumberOfUserTokens: Dispatch<SetStateAction<number>>
+  setNumberOfUserTokens: (num: number) => void
   numberOfUserTokens: number
 }) {
   const auth = useAuth()
