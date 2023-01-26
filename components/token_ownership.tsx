@@ -2,23 +2,26 @@
 import { useContractRead } from 'wagmi'
 import { useAuth } from '../contexts/auth'
 import abi from '../services/abi.json'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { doc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../services/firebase_config'
 
 export default function TokenOwnership({
   numberOfTokens,
   contractAddress,
-  lid
+  lid,
+  setNumberOfUserTokens,
+  numberOfUserTokens
 }: {
   numberOfTokens: number
   contractAddress: string
   lid: string
+  setNumberOfUserTokens: Dispatch<SetStateAction<number>>
+  numberOfUserTokens: number
 }) {
   const auth = useAuth()
   const [userTokens, setUserTokens] = useState(false)
   const [checkedTokens, setCheckedTokens] = useState(false)
-  const [numberOfUserTokens, setNumberOfUserTokens] = useState(0)
   const uid = auth?.uid
   /*Check if wallet is connected*/
   if (auth.userModel?.wallet) {
@@ -34,6 +37,7 @@ export default function TokenOwnership({
           /*Function to do something if token is owned or not*/
           setUserTokens(parseInt(data._hex) >= numberOfTokens)
           setNumberOfUserTokens(parseInt(data._hex))
+          saveTokens(parseInt(data._hex) >= numberOfTokens, parseInt(data._hex))
         },
         onError(error) {
           console.log('Error', error)

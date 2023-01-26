@@ -148,7 +148,7 @@ export default function AllowlistApplication() {
         console.error('Error adding data: ', e)
       }
     }
-    const submitButton = () => {
+    const canUserSubmit = () => {
       const discordGuildRequired = discordGuild
         ? guildMember
           ? guildMember === undefined
@@ -160,16 +160,17 @@ export default function AllowlistApplication() {
         ? checkNumOfTokens
           ? numberOfTokens >= numberOfUserTokens
             ? true
-            : fabClasses
+            : false
           : true
         : true
 
-      setSubmit(discordGuildRequired && tokenOwnershipRequired ? true : false)
+      setSubmit(discordGuildRequired && tokenOwnershipRequired)
     }
+
     getUserInfo()
 
-    submitButton()
-  }, [lid, uid, guildMember, discordGuild, checkTokens, userTokens])
+    canUserSubmit()
+  }, [lid, uid, guildMember, discordGuild, checkTokens, userTokens, checkNumOfTokens, numberOfTokens, numberOfUserTokens])
 
   /*Modal Visibility*/
   useEffect(() => {
@@ -451,6 +452,8 @@ export default function AllowlistApplication() {
                   numberOfTokens={numberOfTokens}
                   contractAddress={contractAddress}
                   lid={lid}
+                  setNumberOfUserTokens={setNumberOfUserTokens}
+                  numberOfUserTokens={numberOfUserTokens}
                 />
               </div>
             </>
