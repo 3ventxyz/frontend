@@ -1,4 +1,5 @@
 import Button from '../../../components/buttons/button'
+import ErrorFormMsg from '../../../components/utils/errorMsg'
 import Spinner from '../../../components/utils/spinner'
 
 {
@@ -48,34 +49,41 @@ export default function CreateEventFooter({
             <div className="ml-[10px]">Creating event, please wait...</div>
           </div>
         ) : (
-          <div className="  flex space-x-2">
-            <Button
-              text={'Prev'}
-              active={currentStep > 0 ? true : false}
-              onClick={() => {
-                prevPage()
-              }}
-            />
-            {currentStep < 2 ? (
+          <div className="">
+            <div className="  flex space-x-2">
               <Button
-                text={'Next'}
-                active={currentStep < 2 ? true : false}
+                text={'Prev'}
+                active={currentStep > 0 ? true : false}
                 onClick={() => {
-                  nextPage()
+                  prevPage()
                 }}
               />
-            ) : (
-              <Button
-                text={'Create Event'}
-                active={true}
-                onClick={() => {
-                  createEvent()
-                }}
+              {currentStep < 2 ? (
+                <Button
+                  text={'Next'}
+                  active={currentStep < 2 ? true : false}
+                  onClick={() => {
+                    nextPage()
+                  }}
+                />
+              ) : (
+                <Button
+                  text={'Create Event'}
+                  active={true}
+                  onClick={() => {
+                    createEvent()
+                  }}
+                />
+              )}
+            </div>
+            <div className="absolute right-[420px]">
+              <ErrorFormMsg
+                errorField={'image field'}
+                errorMsg={'end date cannot be behind the start date schedule'}
               />
-            )}
+            </div>
           </div>
         )}
-        {/* show an additional space below the main displays, in red, the error message, and which field is located at. */}
       </div>
     </div>
   )
