@@ -158,8 +158,10 @@ export default function AllowlistApplication() {
         : true
       const tokenOwnershipRequired = checkTokens
         ? checkNumOfTokens
-          ? numberOfTokens >= numberOfUserTokens
-            ? true
+          ? numberOfTokens > 0
+            ? numberOfTokens >= numberOfUserTokens
+              ? true
+              : false
             : false
           : true
         : true
@@ -170,7 +172,17 @@ export default function AllowlistApplication() {
     getUserInfo()
 
     canUserSubmit()
-  }, [lid, uid, guildMember, discordGuild, checkTokens, userTokens, checkNumOfTokens, numberOfTokens, numberOfUserTokens])
+  }, [
+    lid,
+    uid,
+    guildMember,
+    discordGuild,
+    checkTokens,
+    userTokens,
+    checkNumOfTokens,
+    numberOfTokens,
+    numberOfUserTokens
+  ])
 
   /*Modal Visibility*/
   useEffect(() => {

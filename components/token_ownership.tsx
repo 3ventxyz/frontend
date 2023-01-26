@@ -65,8 +65,13 @@ export default function TokenOwnership({
       {checkedTokens ? (
         <div>
           <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-secondary bg-secondary text-[14px] font-semibold text-white">
-            Checked Tokens
-          </p>
+              Checked Tokens
+            </p>
+          {numberOfTokens > numberOfUserTokens ? (
+            <p>You don&apos;t own enough tokens to apply to this list</p>
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <div onClick={() => saveTokens(userTokens, numberOfUserTokens)}>
