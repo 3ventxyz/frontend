@@ -1,40 +1,35 @@
-{
-  /* TODO (1/20/23) Marthel, CreateEventStepsDisplay: create a new param that disables the buttons, when
-  a new event is being created.*/
-}
 export default function CreateEventStepsDisplay({
   currentStep,
-  setCurrentStep
-}: // add a disabled variable
-{
+  setCurrentStep,
+  isCreatingEvent
+}: {
   currentStep: number
   setCurrentStep: (step: number) => void
+  isCreatingEvent: boolean
 }) {
   return (
     <div className="sticky bottom-[0px] z-0 hidden md:block">
       <div id="create-event-steps" className="flex flex-col space-y-[10px] ">
-        {/*each step update the onClick with an empty function and update 
-        the isComplete boolean with the disabled variable.*/}
         <Step
           num={1}
           stepInstruction={'Event title, location and date'}
           currentStep={currentStep == 0}
-          isComplete={currentStep > 0}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 0 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
         <Step
           num={2}
           stepInstruction={'Event description and ticket supply'}
           currentStep={currentStep == 1}
-          isComplete={currentStep > 1}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 1 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
         <Step
           num={3}
           stepInstruction={'Event Images'}
           currentStep={currentStep == 2}
-          isComplete={currentStep > 2}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 2 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
       </div>
     </div>

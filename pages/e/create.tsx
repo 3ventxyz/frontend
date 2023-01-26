@@ -68,7 +68,6 @@ export default function CreateEvent() {
   /**
    * UI page state setStates
    **/
-  /**TODO (1/20/23) Marthel: use the setErrorMsg to handle any errors from the form validator */
   const [
     status,
     { nextPage, prevPage, setCreatingNewEvent, setCurrentStep, setErrorMsg }
@@ -278,6 +277,7 @@ export default function CreateEvent() {
           <CreateEventStepsDisplay
             currentStep={status.currentStep}
             setCurrentStep={setCurrentStep}
+            isCreatingEvent={status.isCreatingNewEvent}
           />
         </div>
       </div>

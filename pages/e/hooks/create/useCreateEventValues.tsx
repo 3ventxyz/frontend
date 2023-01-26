@@ -63,10 +63,7 @@ export default function useCreateEventValues(
     ) {
       return CreateEventErrors.invalidFileType
     }
-    if (
-      (!values.event_file_img || values.event_img_url == '') &&
-      (!values.landing_file_img || values.landing_img_url == '')
-    ) {
+    if (values.event_img_url == '' && values.landing_img_url == '') {
       return CreateEventErrors.emptyImage
     }
     if (
