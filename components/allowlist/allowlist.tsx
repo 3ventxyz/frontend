@@ -85,7 +85,6 @@ export default function Allowlists() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className="text-gray-500">{`${origin}/apply?id=${list.allowlist_id} `}</span>
                       <Image
                         className="hover:cursor-pointer"
                         onClick={async () => {
