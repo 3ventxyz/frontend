@@ -32,7 +32,6 @@ export default function Allowlist() {
   const [listUid, setListUid] = useState('')
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
-  /*New variables - token */
   const [checkTokens, setCheckTokens] = useState(false)
   const [contractAddress, setContractAddress] = useState('')
   const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
