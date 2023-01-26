@@ -18,6 +18,7 @@ export default function TokenOwnership({
   const auth = useAuth()
   const [userTokens, setUserTokens] = useState(false)
   const [checkedTokens, setCheckedTokens] = useState(false)
+  const [numberOfUserTokens, setNumberOfUserTokens] = useState(0)
   const uid = auth?.uid
   /*Check if wallet is connected*/
   if (auth.userModel?.wallet) {
@@ -31,11 +32,8 @@ export default function TokenOwnership({
         args: [auth.userModel?.wallet],
         onSuccess(data) {
           /*Function to do something if token is owned or not*/
-          if (parseInt(data._hex) >= numberOfTokens) {
-            setUserTokens(true)
-          } else {
-            setUserTokens(false)
-          }
+          setUserTokens(parseInt(data._hex) >= numberOfTokens)
+          setNumberOfUserTokens(parseInt(data._hex))
         },
         onError(error) {
           console.log('Error', error)
@@ -44,12 +42,13 @@ export default function TokenOwnership({
     }
   }
 
-  const saveTokens = async (userTokens: boolean) => {
+  const saveTokens = async (userTokens: boolean, userTokenBalance: number) => {
     setCheckedTokens(true)
     try {
       const docRef = doc(db, 'lists', `${lid}`)
       await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-        userTokens: userTokens
+        userTokens: userTokens,
+        userTokenBalance: userTokenBalance
       })
       console.log('Data written into doc ID: ', docRef.id)
       return true
@@ -66,7 +65,7 @@ export default function TokenOwnership({
           </p>
         </div>
       ) : (
-        <div onClick={() => saveTokens(userTokens)}>
+        <div onClick={() => saveTokens(userTokens, numberOfUserTokens)}>
           <p className="inline-flex h-[40px] w-full items-center justify-center rounded-[10px] border border-primary bg-primary text-[14px] font-semibold text-white hover:cursor-pointer">
             Check token balance
           </p>

@@ -9,6 +9,7 @@ import VerifyGuild from '../components/auth/verifyGuild'
 import Link from 'next/link'
 import Modal from '../components/utils/modal'
 import TokenOwnership from '../components/token_ownership'
+import { fabClasses } from '@mui/material'
 
 export default function AllowlistApplication() {
   const auth = useAuth()
@@ -45,6 +46,7 @@ export default function AllowlistApplication() {
   const [checkNumOfTokens, setCheckNumOfTokens] = useState(false)
   const [numberOfTokens, setNumberOfTokens] = useState(0)
   const [userTokens, setUserTokens] = useState(false)
+  const [numberOfUserTokens, setNumberOfUserTokens] = useState(0)
 
   useEffect(() => {
     if (asPath.includes('state')) {
@@ -139,6 +141,7 @@ export default function AllowlistApplication() {
         if (userRef.exists()) {
           setGuildMember(userRef.data().discord_guild)
           setUserTokens(userRef.data().userTokens)
+          setNumberOfUserTokens(userRef.data().userTokenBalance)
         }
         return true
       } catch (e) {
@@ -153,7 +156,15 @@ export default function AllowlistApplication() {
             : true
           : false
         : true
-      setSubmit(discordGuildRequired ? true : false)
+      const tokenOwnershipRequired = checkTokens
+        ? checkNumOfTokens
+          ? numberOfTokens >= numberOfUserTokens
+            ? true
+            : fabClasses
+          : true
+        : true
+
+      setSubmit(discordGuildRequired && tokenOwnershipRequired ? true : false)
     }
     getUserInfo()
 
@@ -437,7 +448,9 @@ export default function AllowlistApplication() {
                 }}
               >
                 <TokenOwnership
-                  numberOfTokens={numberOfTokens} contractAddress={contractAddress} lid={lid}
+                  numberOfTokens={numberOfTokens}
+                  contractAddress={contractAddress}
+                  lid={lid}
                 />
               </div>
             </>
