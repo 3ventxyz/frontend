@@ -342,7 +342,7 @@ export default function EditEvent() {
             />
           )}
         </div>
-        <div className="mx-auto text-[13px] ">
+        <div className="mx-auto text-[13px]">
           {errorMsg === '' ? (
             <></>
           ) : (

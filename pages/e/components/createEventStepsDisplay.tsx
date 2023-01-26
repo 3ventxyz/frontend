@@ -1,11 +1,11 @@
-import { useState } from 'react'
-
 export default function CreateEventStepsDisplay({
   currentStep,
-  setCurrentStep
+  setCurrentStep,
+  isCreatingEvent
 }: {
   currentStep: number
   setCurrentStep: (step: number) => void
+  isCreatingEvent: boolean
 }) {
   return (
     <div className="sticky bottom-[0px] z-0 hidden md:block">
@@ -14,22 +14,22 @@ export default function CreateEventStepsDisplay({
           num={1}
           stepInstruction={'Event title, location and date'}
           currentStep={currentStep == 0}
-          isComplete={currentStep > 0}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 0 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
         <Step
           num={2}
           stepInstruction={'Event description and ticket supply'}
           currentStep={currentStep == 1}
-          isComplete={currentStep > 1}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 1 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
         <Step
           num={3}
           stepInstruction={'Event Images'}
           currentStep={currentStep == 2}
-          isComplete={currentStep > 2}
-          onClick={setCurrentStep}
+          isComplete={currentStep > 2 || isCreatingEvent}
+          onClick={isCreatingEvent ? () => {} : setCurrentStep}
         />
       </div>
     </div>

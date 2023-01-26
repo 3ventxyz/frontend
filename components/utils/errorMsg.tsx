@@ -7,15 +7,14 @@ export default function ErrorFormMsg({
   errorMsg: string
 }) {
   return (
-    <div className="flex items-end justify-end space-x-2">
+    <div className="flex items-center justify-end space-x-2">
       <div className="">
-        <BsFillExclamationTriangleFill className="h-[35px] w-[30px]" />
+        <BsFillExclamationTriangleFill className="h-[15px] w-[15px]" />
       </div>
       <div>
-        <div>Entered info not valid, please check the following field.</div>
-        <div className="text-red-500">
+        <div className=" text-[12px]">
           <p>
-            <b>{errorField}</b>: {errorMsg}{' '}
+            <b className="text-red-500">{errorField}</b>: {errorMsg}{' '}
           </p>
         </div>
       </div>

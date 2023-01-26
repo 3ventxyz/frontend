@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { createEventStatusInterface } from '../../../../shared/interface/common'
+import { ERROR_MESSAGE, ERROR_FIELD } from '../../../../shared/consts/consts'
+import { CreateEventErrors } from '../../../../shared/enums/enums'
 
 interface useCreateEventStatus {
   nextPage: () => void
   prevPage: () => void
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
-  setErrorMsg: (msg: string) => void
+  setErrorMsg: (errorStatus: CreateEventErrors) => void
 }
 
 export default function useCreateEventStatus(
@@ -34,11 +36,85 @@ export default function useCreateEventStatus(
     })
   }
 
-  const setErrorMsg = (errorMsg: string) => {
-    setStatus({
-      ...currStatus,
-      errorMsg: errorMsg
-    })
+  const setErrorMsg = (errorStatus: CreateEventErrors) => {
+    switch (errorStatus) {
+      case CreateEventErrors.emptyTitle:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.emptyField,
+          errorField: ERROR_FIELD.eventTitle
+        })
+        break
+      case CreateEventErrors.invalidFileType:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.invalidFileType,
+          errorField: ERROR_FIELD.eventImage
+        })
+        break
+      case CreateEventErrors.emptyImage:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.emptyImage,
+          errorField: ERROR_FIELD.eventImage
+        })
+        break
+      case CreateEventErrors.emptyEventLocation:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.emptyEventLocation,
+          errorField: ERROR_FIELD.eventLocation
+        })
+        break
+      case CreateEventErrors.startDateBehind:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.startDateBehind,
+          errorField: ERROR_FIELD.date
+        })
+        break
+      case CreateEventErrors.sameDatePeriod:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.sameDatePeriod,
+          errorField: ERROR_FIELD.date
+        })
+        break
+      case CreateEventErrors.endDateBehind:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.endDateBehind,
+          errorField: ERROR_FIELD.date
+        })
+        break
+      case CreateEventErrors.invalidNumber:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.invalidNumber,
+          errorField: ERROR_FIELD.ticket
+        })
+        break
+      case CreateEventErrors.lowCapNumber:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.lowCapNumber,
+          errorField: ERROR_FIELD.ticket
+        })
+        break
+      case CreateEventErrors.eventIdTaken:
+        setStatus({
+          ...currStatus,
+          errorMsg: ERROR_MESSAGE.eventIdTaken,
+          errorField: ERROR_FIELD.eventID
+        })
+        break
+      default:
+        setStatus({
+          ...currStatus,
+          errorMsg: '',
+          errorField: ''
+        })
+    }
   }
 
   const setCurrentStep = (step: number) => {

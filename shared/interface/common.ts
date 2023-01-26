@@ -149,6 +149,7 @@ export interface createEventStatusInterface {
   currentStep: number
   isCreatingNewEvent: boolean
   errorMsg: string
+  errorField:string
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}

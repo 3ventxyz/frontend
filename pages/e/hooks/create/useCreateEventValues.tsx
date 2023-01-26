@@ -1,9 +1,11 @@
+import { startOfToday } from 'date-fns'
 import { useState } from 'react'
+import CheckEventId from '../../../../services/check_event_id'
 import {
   createEventFormInterface,
   LocationData
 } from '../../../../shared/interface/common'
-
+import { CreateEventErrors } from '../../../../shared/enums/enums'
 interface useCreateEventValuesInterface {
   setTextValue: (name: string, value: string) => void
   setNumberValue: (name: string, num: number) => void
@@ -11,6 +13,7 @@ interface useCreateEventValuesInterface {
   setLocation: (name: string, location: LocationData) => void
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, fileImgUrl: string) => void
+  formValidator: () => Promise<CreateEventErrors>
 }
 
 export default function useCreateEventValues(
@@ -37,6 +40,62 @@ export default function useCreateEventValues(
   const setPredefinedImgUrl = (name: string, predefinedImgUrl: string) => {
     setValues({ ...values, [name]: predefinedImgUrl })
   }
+
+  const fileTypeValidator = (file: File | null) => {
+    if (!file) {
+      return true
+    }
+    if (file.type === 'image/jpeg' || file.type === 'image/png') {
+      console.log('valid image type', file.type)
+      return true
+    }
+    console.error('invalid image type', file.type)
+    return false
+  }
+
+  const formValidator = async () => {
+    if (values.title === '') {
+      return CreateEventErrors.emptyTitle
+    }
+    if (
+      !fileTypeValidator(values.event_file_img) ||
+      !fileTypeValidator(values.landing_file_img)
+    ) {
+      return CreateEventErrors.invalidFileType
+    }
+    if (values.event_img_url == '' && values.landing_img_url == '') {
+      return CreateEventErrors.emptyImage
+    }
+    if (
+      values.event_location.address === '' ||
+      values.event_location.lat === 0 ||
+      values.event_location.long === 0
+    ) {
+      return CreateEventErrors.emptyEventLocation
+    }
+
+    if (values.start_date.getTime() < startOfToday().getTime()) {
+      return CreateEventErrors.startDateBehind
+    }
+
+    if (values.start_date.getTime() === values.end_date.getTime()) {
+      return CreateEventErrors.sameDatePeriod
+    }
+    if (values.start_date.getTime() > values.end_date.getTime()) {
+      return CreateEventErrors.endDateBehind
+    }
+    if (isNaN(values.ticket_max)) {
+      return CreateEventErrors.invalidNumber
+    }
+    if (values.ticket_max < 0) {
+      return CreateEventErrors.lowCapNumber
+    }
+    if (await CheckEventId(values.event_id)) {
+      return CreateEventErrors.eventIdTaken
+    }
+    return CreateEventErrors.noError
+  }
+
   return [
     values,
     {
@@ -45,7 +104,8 @@ export default function useCreateEventValues(
       setDate,
       setLocation,
       setFileImg,
-      setPredefinedImgUrl
+      setPredefinedImgUrl,
+      formValidator
     }
   ]
 }

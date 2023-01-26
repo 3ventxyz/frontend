@@ -11,7 +11,6 @@ import EventLocationMap from './components/eventLocationMap'
 import CreateEventStepsDisplay from './components/createEventStepsDisplay'
 import { useEvents } from '../../contexts/events'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
-import CheckEventId from '../../services/check_event_id'
 import setFiletype from '../../shared/utils/setFileType'
 import NumberInput from '../../components/inputs/numberInput'
 import CreateEventTextInput from './components/createEventTextInput'
@@ -22,6 +21,7 @@ import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
+import { CreateEventErrors } from '../../shared/enums/enums'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -38,13 +38,14 @@ const inputValues: createEventFormInterface = {
   event_file_img: null,
   landing_file_img: null,
   event_img_url: '',
-  landing_img_url: '',
+  landing_img_url: ''
 }
 
 const createEventStatus: createEventStatusInterface = {
   currentStep: 0,
   isCreatingNewEvent: false,
-  errorMsg: ''
+  errorMsg: '',
+  errorField: ''
 }
 
 export default function CreateEvent() {
@@ -59,7 +60,8 @@ export default function CreateEvent() {
       setDate,
       setLocation,
       setFileImg,
-      setPredefinedImgUrl
+      setPredefinedImgUrl,
+      formValidator
     }
   ] = useCreateEventValues(inputValues)
 
@@ -68,27 +70,19 @@ export default function CreateEvent() {
    **/
   const [
     status,
-    { nextPage, prevPage, setCreatingNewEvent, setErrorMsg, setCurrentStep }
+    { nextPage, prevPage, setCreatingNewEvent, setCurrentStep, setErrorMsg }
   ] = useCreateEventStatus(createEventStatus)
 
   /**
    * logic functions
    **/
   const createEvent = async () => {
-    let isFormValid
+    let formError: CreateEventErrors
     setCreatingNewEvent(true)
-    setErrorMsg('')
-    isFormValid = formValidator()
-    if (!isFormValid) {
+    formError = await formValidator()
+    if (formError !== CreateEventErrors.noError) {
       setCreatingNewEvent(false)
-      return
-    }
-    let isEventIdTaken = await CheckEventId(values.event_id)
-    if (isEventIdTaken) {
-      setCreatingNewEvent(false)
-      setErrorMsg(
-        'Event ID: event id has been taken, please enter a different id'
-      )
+      setErrorMsg(formError)
       return
     }
     try {
@@ -165,11 +159,6 @@ export default function CreateEvent() {
     }
   }
 
-  const formValidator = () => {
-    /**TODO: migrate the form validator logic from the previous create event page to this function. */
-    return true
-  }
-
   /**
    * HTML code
    **/
@@ -186,7 +175,7 @@ export default function CreateEvent() {
             <CreateEventFormSection
               isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
-              childrenClassName='my-[10px]'
+              childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
                 id={'event_name'}
@@ -232,7 +221,7 @@ export default function CreateEvent() {
             <CreateEventFormSection
               isExpanded={status.currentStep == 1}
               title={'2.- Description and max attendee cap'}
-              childrenClassName='my-[10px]'
+              childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
                 textArea={true}
@@ -288,6 +277,7 @@ export default function CreateEvent() {
           <CreateEventStepsDisplay
             currentStep={status.currentStep}
             setCurrentStep={setCurrentStep}
+            isCreatingEvent={status.isCreatingNewEvent}
           />
         </div>
       </div>
@@ -297,6 +287,8 @@ export default function CreateEvent() {
         prevPage={prevPage}
         nextPage={nextPage}
         createEvent={createEvent}
+        errorMsg={status.errorMsg}
+        errorField={status.errorField}
       />
     </div>
   )
