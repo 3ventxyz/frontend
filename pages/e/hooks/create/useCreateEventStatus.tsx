@@ -41,7 +41,7 @@ export default function useCreateEventStatus(
       case CreateEventErrors.emptyTitle:
         setStatus({
           ...currStatus,
-          errorMsg: ERROR_MESSAGE.emptyTitle,
+          errorMsg: ERROR_MESSAGE.emptyField,
           errorField: ERROR_FIELD.eventTitle
         })
         break

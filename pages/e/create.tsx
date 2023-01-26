@@ -69,8 +69,10 @@ export default function CreateEvent() {
    * UI page state setStates
    **/
   /**TODO (1/20/23) Marthel: use the setErrorMsg to handle any errors from the form validator */
-  const [status, { nextPage, prevPage, setCreatingNewEvent, setCurrentStep }] =
-    useCreateEventStatus(createEventStatus)
+  const [
+    status,
+    { nextPage, prevPage, setCreatingNewEvent, setCurrentStep, setErrorMsg }
+  ] = useCreateEventStatus(createEventStatus)
 
   /**
    * logic functions
@@ -81,6 +83,7 @@ export default function CreateEvent() {
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
       setCreatingNewEvent(false)
+      setErrorMsg(formError)
       return
     }
     try {
@@ -284,6 +287,8 @@ export default function CreateEvent() {
         prevPage={prevPage}
         nextPage={nextPage}
         createEvent={createEvent}
+        errorMsg={status.errorMsg}
+        errorField={status.errorField}
       />
     </div>
   )
