@@ -24,7 +24,7 @@ export default function LandingPortrait({
     <div className="h-[500px]  w-[1050px] rounded-3xl bg-gray-400 ">
       <div className="absolute z-10">
         <Image
-          src={event ? event.landing_portrait_url : ''}
+          src={event?.landing_portrait_url ? event.landing_portrait_url : ''}
           layout="fixed"
           width="1050px"
           height="500px"
