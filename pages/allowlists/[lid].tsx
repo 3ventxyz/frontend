@@ -260,186 +260,193 @@ export default function Allowlist() {
 
   return (
     <>
-      <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
-        <div className="mx-auto flex w-full flex-row items-end justify-between border-b border-disabled">
-          <button
-            className="h-[40px] w-[40px]"
-            onClick={() => {
-              router.back()
-            }}
-          >
-            <HiChevronLeft className="h-full w-full" />
-          </button>
-        </div>
-        <div className="relative w-full max-w-fit overflow-x-auto shadow-md sm:rounded-lg">
-          <div className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
-            <div className="flex flex-row justify-between">
-              <div className="my-auto flex flex-col">
-                {allowlist?.title}
-                <p className="mt-1 text-sm font-normal text-gray-500 ">
-                  {allowlist?.description}
-                </p>
+      {listMetaData.listUid !== auth.uid ? (
+        <>
+          <h4>You do not have the permissions to see this information</h4>
+        </>
+      ) : (
+        <>
+          {' '}
+          <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
+            <div className="mx-auto flex w-full flex-row items-end justify-between border-b border-disabled">
+              <button
+                className="h-[40px] w-[40px]"
+                onClick={() => {
+                  router.back()
+                }}
+              >
+                <HiChevronLeft className="h-full w-full" />
+              </button>
+            </div>
+            <div className="relative w-full max-w-fit overflow-x-auto shadow-md sm:rounded-lg">
+              <div className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
+                <div className="flex flex-row justify-between">
+                  <div className="my-auto flex flex-col">
+                    {allowlist?.title}
+                    <p className="mt-1 text-sm font-normal text-gray-500 ">
+                      {allowlist?.description}
+                    </p>
+                  </div>
+                  <div className="my-auto flex w-[50px] flex-row justify-between">
+                    <Image
+                      className="hover:cursor-pointer"
+                      onClick={() => setShowEditModal(true)}
+                      alt="add"
+                      src="/assets/edit.svg"
+                      height="20"
+                      width="20"
+                    />
+                    <Image
+                      className="hover:cursor-pointer"
+                      onClick={() => setShowDeleteModal(true)}
+                      alt="add"
+                      src="/assets/trash.svg"
+                      height="20"
+                      width="20"
+                    />
+                    <CSVLink data={listAfterPagingAndSorting()}>
+                      <Image
+                        className="hover:cursor-pointer"
+                        alt="download"
+                        src="/assets/csv-download.svg"
+                        height="20"
+                        width="20"
+                      />
+                    </CSVLink>
+                  </div>
+                </div>
               </div>
-              <div className="my-auto flex w-[50px] flex-row justify-between">
-                <Image
-                  className="hover:cursor-pointer"
-                  onClick={() => setShowEditModal(true)}
-                  alt="add"
-                  src="/assets/edit.svg"
-                  height="20"
-                  width="20"
-                />
-                <Image
-                  className="hover:cursor-pointer"
-                  onClick={() => setShowDeleteModal(true)}
-                  alt="add"
-                  src="/assets/trash.svg"
-                  height="20"
-                  width="20"
-                />
-                <CSVLink
-                  data={listAfterPagingAndSorting()}
-                >
-                  <Image
-                    className="hover:cursor-pointer"
-                    alt="download"
-                    src="/assets/csv-download.svg"
-                    height="20"
-                    width="20"
-                  />
-                </CSVLink>
-              </div>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
+                    <TableRow key={i} className="bg-white">
+                      <TableCell>
+                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                          {list.uid}
+                        </span>
+                      </TableCell>
+                      <>
+                        {listMetaData.emailVerification ? (
+                          <TableCell>
+                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                              {list.email}
+                            </span>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <>
+                        {listMetaData.walletVerification ? (
+                          <TableCell>
+                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                              {list.wallet}
+                            </span>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <>
+                        {listMetaData.twitterVerification ? (
+                          <TableCell>
+                            <a
+                              href={`https://twitter.com/i/user/${list.twitter_id}`}
+                            >
+                              <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                {list.twitter_name}
+                              </span>
+                            </a>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <>
+                        {listMetaData.discordVerification ? (
+                          <TableCell>
+                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                              {list.discord_username}
+                            </span>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <>
+                        {listMetaData.discordGuild ? (
+                          <TableCell>
+                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <>
+                        {listMetaData.checkTokens ? (
+                          <TableCell>
+                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.userTokens}`}</span>
+                          </TableCell>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                      <TableCell>
+                        <span className="text-gray-500">{list.status}</span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TblPagination />
+              </TblContainer>
             </div>
           </div>
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
-                <TableRow key={i} className="bg-white">
-                  <TableCell>
-                    <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                      {list.uid}
-                    </span>
-                  </TableCell>
-                  <>
-                    {listMetaData.emailVerification ? (
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                          {list.email}
-                        </span>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <>
-                    {listMetaData.walletVerification ? (
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                          {list.wallet}
-                        </span>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <>
-                    {listMetaData.twitterVerification ? (
-                      <TableCell>
-                        <a
-                          href={`https://twitter.com/i/user/${list.twitter_id}`}
-                        >
-                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                            {list.twitter_name}
-                          </span>
-                        </a>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <>
-                    {listMetaData.discordVerification ? (
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                          {list.discord_username}
-                        </span>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <>
-                    {listMetaData.discordGuild ? (
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <>
-                    {listMetaData.checkTokens ? (
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.userTokens}`}</span>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                  <TableCell>
-                    <span className="text-gray-500">{list.status}</span>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            <TblPagination />
-          </TblContainer>
-        </div>
-      </div>
-      <Modal
-        visible={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        width=""
-        height=""
-      >
-        <DeleteConfirmation
-          onConfirm={() => deleteAllowlist(lid?.toString())}
-          onClose={() => setShowDeleteModal(false)}
-          text="Are you sure you want to delete the Allowlist?"
-        />
-      </Modal>
-      <Modal
-        visible={showDeleteAddressModal}
-        onClose={() => setShowDeleteAddressModal(false)}
-        width=""
-        height=""
-      >
-        <DeleteConfirmation
-          onConfirm={() => handleDeleteSelectedAddresses()}
-          onClose={() => setShowDeleteAddressModal(false)}
-          text={`Are you sure you want to delete ${
-            selected.length === 1
-              ? 'this address?'
-              : `theses ${selected.length} addresses`
-          }`}
-        />
-      </Modal>
-      <Modal
-        visible={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        width="w-3/4"
-        height=""
-      >
-        <EditAllowlistForm
-          onSuccess={() => {
-            fetchData()
-            setShowEditModal(false)
-          }}
-          allowlist={allowlist}
-          id={lid?.toString() ?? ''}
-        />
-      </Modal>
+          <Modal
+            visible={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            width=""
+            height=""
+          >
+            <DeleteConfirmation
+              onConfirm={() => deleteAllowlist(lid?.toString())}
+              onClose={() => setShowDeleteModal(false)}
+              text="Are you sure you want to delete the Allowlist?"
+            />
+          </Modal>
+          <Modal
+            visible={showDeleteAddressModal}
+            onClose={() => setShowDeleteAddressModal(false)}
+            width=""
+            height=""
+          >
+            <DeleteConfirmation
+              onConfirm={() => handleDeleteSelectedAddresses()}
+              onClose={() => setShowDeleteAddressModal(false)}
+              text={`Are you sure you want to delete ${
+                selected.length === 1
+                  ? 'this address?'
+                  : `theses ${selected.length} addresses`
+              }`}
+            />
+          </Modal>
+          <Modal
+            visible={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            width="w-3/4"
+            height=""
+          >
+            <EditAllowlistForm
+              onSuccess={() => {
+                fetchData()
+                setShowEditModal(false)
+              }}
+              allowlist={allowlist}
+              id={lid?.toString() ?? ''}
+            />
+          </Modal>
+        </>
+      )}
     </>
   )
 }
