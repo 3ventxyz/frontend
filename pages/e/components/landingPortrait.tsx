@@ -2,7 +2,7 @@ import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import Link from 'next/link'
 import Image from 'next/image'
 import EventTile from '../../../components/events/eventTile'
-import Tilt from 'react-parallax-tilt';
+import Tilt from 'react-parallax-tilt'
 export default function LandingPortrait({
   event,
   host
@@ -21,20 +21,31 @@ export default function LandingPortrait({
       </div>
     </div>
   ) : (
-    <div className="flex h-[500px]  w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
-      <div className="flex w-full flex-col  text-shadow-sm items-start justify-start">
-        <div className="text-[50px] font-bold">{event?.title}</div>
-        <DisplayHost
-          event={event}
-          profileUrlImg={host?.avatar !== undefined ? host?.avatar : ''}
-          hostName={host?.username !== undefined ? host?.username : ''}
+    <div className="h-[500px]  w-[1050px] rounded-3xl bg-gray-400 ">
+      <div className="absolute z-10">
+        <Image
+          src={event ? event.landing_portrait_url : ''}
+          layout="fixed"
+          width="1050px"
+          height="500px"
+          loading="lazy"
+          className="rounded-3xl"
         />
       </div>
-      <div>
-        <Tilt>
-
-        <EventTile eventData={event} eventPageMode={true} />
-        </Tilt>
+      <div className="flex h-full  w-full space-x-[60px] px-[40px] py-[20px]">
+        <div className="text-shadow-sm z-20 flex w-full flex-col items-start justify-start">
+          <div className="text-[50px] font-bold">{event?.title}</div>
+          <DisplayHost
+            event={event}
+            profileUrlImg={host?.avatar !== undefined ? host?.avatar : ''}
+            hostName={host?.username !== undefined ? host?.username : ''}
+          />
+        </div>
+        <div className="z-20">
+          <Tilt>
+            <EventTile eventData={event} eventPageMode={true} />
+          </Tilt>
+        </div>
       </div>
     </div>
   )
