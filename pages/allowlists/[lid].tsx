@@ -17,6 +17,7 @@ import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
+import { CSVLink } from 'react-csv'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -153,9 +154,7 @@ export default function Allowlist() {
     if (lid !== '') {
       getListInfo()
     }
-  }, [
-    listMetaData, lid
-  ])
+  }, [listMetaData, lid])
 
   const deleteAllowlist = async (id: string | undefined) => {
     var response = await allowlistService.delete(
@@ -256,7 +255,6 @@ export default function Allowlist() {
     },
     { id: 'status', label: 'Status', disableSorting: false, display: true }
   ]
-
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
@@ -299,6 +297,17 @@ export default function Allowlist() {
                   height="20"
                   width="20"
                 />
+                <CSVLink
+                  data={listAfterPagingAndSorting()}
+                >
+                  <Image
+                    className="hover:cursor-pointer"
+                    alt="download"
+                    src="/assets/csv-download.svg"
+                    height="20"
+                    width="20"
+                  />
+                </CSVLink>
               </div>
             </div>
           </div>
