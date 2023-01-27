@@ -47,8 +47,8 @@ export const Button = ({
     //   yest
       <button
         type="button"
-        className={`bg-red-100 font-bold ${classes}`}
-        // className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
+        // className={`bg-red-500 font-bold ${classes}`}
+        className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
         style={{ backgroundColor }}
         {...props}
       >
