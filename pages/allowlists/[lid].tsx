@@ -82,22 +82,9 @@ export default function Allowlist() {
   }, [])
 
   useEffect(() => {
-    const getListUid = async () => {
-      const docRef = doc(db, 'lists', lid?.toString() ?? '')
-      const docSnap = await getDoc(docRef)
-      if (docSnap.exists()) {
-        setListMetaData({
-          ...listMetaData,
-          listUid: docSnap.data().uid.path.split('/')[1]
-        })
-      } else {
-        console.log('No such document!')
-      }
-    }
-    getListUid()
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listMetaData])
+  }, [])
 
   useEffect(() => {
     var tmp: Array<string> = []
@@ -145,7 +132,8 @@ export default function Allowlist() {
           discordGuild: docSnap.data().discordGuild,
           guild: docSnap.data().discordGuildId,
           emailVerification: docSnap.data().emailVerif,
-          permalink: docSnap.data().permalink
+          permalink: docSnap.data().permalink,
+          listUid: docSnap.data().uid.path.split('/')[1]
         })
       } else {
         console.log('No such document!')
@@ -262,7 +250,9 @@ export default function Allowlist() {
     <>
       {listMetaData.listUid !== auth.uid ? (
         <>
-          <h4>You do not have the permissions to see this information</h4>
+          <div className="mx-5 flex w-full flex-col items-center space-y-[20px] md:mx-[110px]">
+            <h4>You do not have the permissions to see this information</h4>
+          </div>
         </>
       ) : (
         <>
@@ -304,7 +294,10 @@ export default function Allowlist() {
                       height="20"
                       width="20"
                     />
-                    <CSVLink data={listAfterPagingAndSorting()}>
+                    <CSVLink
+                      data={listAfterPagingAndSorting()}
+                      filename={`${listMetaData.title}.csv`}
+                    >
                       <Image
                         className="hover:cursor-pointer"
                         alt="download"
