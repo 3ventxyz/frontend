@@ -21,8 +21,8 @@ export default function LandingPortrait({
       </div>
     </div>
   ) : (
-    <div className="flex h-[500px] w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
-      <div className="flex w-full flex-col items-start justify-start">
+    <div className="flex h-[500px]  w-[1050px] space-x-[60px] rounded-3xl bg-gray-400 px-[40px] py-[20px]">
+      <div className="flex w-full flex-col  text-shadow-sm items-start justify-start">
         <div className="text-[50px] font-bold">{event?.title}</div>
         <DisplayHost
           event={event}

@@ -164,7 +164,7 @@ module.exports = class DataSeeder {
             end_date: endDate,
             start_date: startDate,
             img_url: faker.image.abstract(640, 640, true),
-            landing_url: faker.image.image(1050, 500, false),
+            landing_portrait_url: faker.image.image(1050, 500, false),
             title: eventTitle,
             uid: index % 2 === 0 ? this.user1UID : this.user2UID,
             ticket_max: randomCapTickets,
