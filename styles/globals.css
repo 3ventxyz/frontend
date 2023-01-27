@@ -27,6 +27,8 @@
     border: 2px solid #ffffff;
   }
 
+  .text-shadow-sm{text-shadow: 2px 2px 2px black;color:white;}
+
 
 }
 

@@ -28,6 +28,7 @@ export interface EventInterface {
   start_date: Date
   end_date: Date
   img_url: string
+  landing_portrait_url?:string
   ticket_max: number
   event_id: string
   registered_attendees: number

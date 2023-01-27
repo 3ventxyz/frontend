@@ -97,29 +97,25 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     newEventData: EventInterface,
     eventHost: EventHostInterface
   ) => {
-    try
-    {
-
-    
-
-    await uploadEventInfo(newEventData)
-    // {
-    //   title: title,
-    //   end_date: endDate,
-    //   start_date: startDate,
-    //   uid: auth.uid,
-    //   description: eventDescription,
-    //   location: eventLocation,
-    //   img_url: url,
-    //   ticket_max: ticketMax,
-    //   event_id: eventId,
-    //   registered_attendees: registeredAttendees
-    // }
-    await updateCreatedEventToUser(eventHost)
-  }catch(e){
-    console.log('error at events context');
-    console.error(e);
-  }
+    try {
+      await uploadEventInfo(newEventData)
+      // {
+      //   title: title,
+      //   end_date: endDate,
+      //   start_date: startDate,
+      //   uid: auth.uid,
+      //   description: eventDescription,
+      //   location: eventLocation,
+      //   img_url: url,
+      //   ticket_max: ticketMax,
+      //   event_id: eventId,
+      //   registered_attendees: registeredAttendees
+      // }
+      await updateCreatedEventToUser(eventHost)
+    } catch (e) {
+      console.log('error at events context')
+      console.error(e)
+    }
     //   {
     //   eventTitle: title,
     //   uid: auth.uid,
@@ -127,7 +123,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
     //   startDate: startDate,
     //   endDate: endDate
     // }
-
   }
 
   // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
@@ -141,6 +136,7 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       title: eventDoc.data()?.title,
       location: eventDoc.data()?.location,
       img_url: eventDoc.data()?.img_url,
+      landing_portrait_url: eventDoc.data()?.landing_portrait_url,
       end_date: eventDoc.data()?.end_date?.toDate(),
       ticket_max: eventDoc.data()?.ticket_max,
       registered_attendees: eventDoc.data()?.registered_attendees
