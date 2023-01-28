@@ -7,7 +7,7 @@ import { db } from '../../services/firebase_config'
 import { EventInterface } from '../../shared/interface/common'
 import EventsDisplay from '../../components/events/eventsDisplay'
 import { HiChevronLeft } from 'react-icons/hi'
-import Button from '../../components/buttons/button'
+import { Button } from '../../components/buttons/button'
 import { useAuth } from '../../contexts/auth'
 
 export default function SeeAll() {

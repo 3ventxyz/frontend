@@ -1,4 +1,4 @@
-export default function ButtonOutlined({
+export function ButtonOutlined({
   text,
   onClick,
   active,

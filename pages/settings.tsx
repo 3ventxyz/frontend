@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/auth'
 import TextInputDisplay from '../components/inputs/textInputDisplay'
 import SignInButton from '../components/siwe'
 import Verify from '../components/auth/verify'
-import Button from '../components/buttons/button'
+import { Button } from '../components/buttons/button'
 import EmailVerification from './u/components/emailVerification'
 import { useState } from 'react'
 

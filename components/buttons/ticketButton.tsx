@@ -1,6 +1,6 @@
 import { TicketInterface } from '../../shared/interface/common'
 
-export default function TicketButton({
+export function TicketButton({
   ticket,
   selected,
   isDisabled

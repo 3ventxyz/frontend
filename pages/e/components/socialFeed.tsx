@@ -5,7 +5,7 @@ import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import { PostInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
-import Button from '../../../components/buttons/button'
+import { Button } from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
 export default function SocialFeed({
   isMobile,

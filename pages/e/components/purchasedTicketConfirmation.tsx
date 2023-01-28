@@ -1,5 +1,5 @@
 // author: marthel
-import TicketButton from '../../../components/buttons/ticketButton'
+import { TicketButton } from '../../../components/buttons/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 
