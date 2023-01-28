@@ -1,15 +1,37 @@
 import { TicketInterface } from '../../shared/interface/common'
 
+
+interface TicketButtonProps{
+  /**
+   * Ticket data interface:
+   * 
+   * -ticketTitle: title of the ticket 
+   * 
+   * -registeredUsers: number of registered attendees
+   * 
+   * -capLimit: maximum capacity of registered attendees
+   * 
+   * -tokenId: token id for wallet.
+   * 
+   * -price: price of the ticket.
+   */
+  ticket: TicketInterface | null
+  /**
+   * displays the selected palette color.
+   */
+  selected: boolean
+  /**
+   * displays the disabled palette color.
+   */
+  isDisabled: boolean
+}
+
 export function TicketButton({
   ticket,
   selected,
   isDisabled
 }:
-{
-  ticket: TicketInterface | null
-  selected: boolean
-  isDisabled: boolean
-}) {
+TicketButtonProps) {
   return !isDisabled ? (
     <div
       className={`${

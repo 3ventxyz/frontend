@@ -1,3 +1,34 @@
+interface ButtonOutlinedProps {
+  /**
+   * text that will be displayed on the button.
+   */
+  text: string
+  /**
+   * function that will be executed.
+   */
+  onClick: () => void
+  /**
+   * sets is active or not.
+   */
+  active: boolean
+  /**
+   * defines the type of button usage.
+   */
+  type?: 'button' | 'submit' | 'reset' | undefined
+  /**
+   * expands the width of the button.
+   */
+  isExpanded?: boolean
+  /**
+   * path to icon.
+   */
+  icon?: string
+  /**
+   * text description of the icon.
+   */
+  iconAlt?: string
+}
+
 export function ButtonOutlined({
   text,
   onClick,
@@ -6,15 +37,7 @@ export function ButtonOutlined({
   isExpanded = false,
   icon,
   iconAlt
-}: {
-  text: string
-  onClick: () => void
-  active: boolean
-  type?: 'button' | 'submit' | 'reset' | undefined
-  isExpanded?: boolean
-  icon?: string
-  iconAlt?: string
-}) {
+}: ButtonOutlinedProps) {
   return (
     <button
       type={type}
