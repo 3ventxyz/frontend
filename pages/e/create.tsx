@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../contexts/auth'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -73,15 +73,6 @@ export default function CreateEvent() {
     { nextPage, prevPage, setCreatingNewEvent, setCurrentStep, setErrorMsg }
   ] = useCreateEventStatus(createEventStatus)
 
-  /**Listeners */
-  /**
-   * refactoring the create event, the useEffect will be a listener for the
-   * 2 img_urls, once both storage urls are retrieved, then upload the new event.
-   * and then push it to the new event screen.
-   *  await events.submitEventToFirebase() will be used here.
-   * */
-  useEffect(() => {}, [])
-
   /**
    * logic functions
    **/
@@ -99,45 +90,51 @@ export default function CreateEvent() {
         //this part can be moved to a function for creating storage urls.
         console.log('fileImg: ', values.event_file_img?.type)
         console.log('uploading image: ', values.landing_file_img?.name)
-        const fileType = setFiletype(values.event_file_img)
-        const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
-        //part 1, image is being uploaded.
-        const event_img_url_strg: string = await uploadImageToStorage(
-          values.event_file_img,
-          storagePath,
+        const eventImgfileType = setFiletype(values.event_file_img)
+        const landingPortraitfileType = setFiletype(values.landing_file_img)
+
+        const eventImgStoragePath: string = `${auth.uid}/${
+          values.event_id + '_event' + eventImgfileType
+        }`
+        const landingPortraitStoragePath: string = `${auth.uid}/${
+          values.event_id + '_portrait' + landingPortraitfileType
+        }`
+        const imgFiles = [eventImgfileType, landingPortraitfileType]
+        const storagePaths = [eventImgStoragePath, landingPortraitStoragePath]
+        // TODO(1/31/2022): change the uploadImageToStore, to uploadImagesToStorage
+        //and update the logic inside.
+        await uploadImageToStorage(
+          values.landing_file_img,
+          landingPortraitStoragePath,
           async (url: string) => {
-            // console.log(url)
+            await events.submitEventToFirebase(
+              {
+                title: values.title,
+                end_date: values.end_date,
+                start_date: values.start_date,
+                uid: auth.uid,
+                description: values.event_description,
+                location: values.event_location,
+                img_url: url,
+                // TODO(1/31/2023): add the landing portrait.
+                landing_portrait_url: '',
+                ticket_max: values.ticket_max,
+                event_id: values.event_id,
+                registered_attendees: 0
+              },
+              {
+                title: values.title,
+                uid: auth.uid,
+                event_id: values.event_id,
+                start_date: values.start_date,
+                end_date: values.end_date
+              }
+            )
+            console.log('pushing to event page')
+            router.push(`/e/${values.event_id}`)
           }
         )
         //part2, landing portrait is being uploaded.
-
-        //part3, images uploaded to storage, now put their urls to firebase.
-        await events.submitEventToFirebase(
-          {
-            title: values.title,
-            end_date: values.end_date,
-            start_date: values.start_date,
-            uid: auth.uid,
-            description: values.event_description,
-            location: values.event_location,
-            img_url: event_img_url_strg,
-            //NOTE: this will be blank until the
-            // the bug is fixed, so we can start to change this function.
-            landing_portrait_url: '',
-            ticket_max: values.ticket_max,
-            event_id: values.event_id,
-            registered_attendees: 0
-          },
-          {
-            title: values.title,
-            uid: auth.uid,
-            event_id: values.event_id,
-            start_date: values.start_date,
-            end_date: values.end_date
-          }
-        )
-        console.log('pushing to event page')
-        router.push(`/e/${values.event_id}`)
       } else if (
         values.event_img_url !== null &&
         values.landing_img_url !== null

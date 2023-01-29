@@ -4,8 +4,9 @@ import { storage } from './firebase_config'
 export async function uploadImageToStorage(
   fileImg: File | null,
   path: string,
-  onSuccess: (url: string) => Promise<void>
+  onSuccess: (url: string) => void
 ) {
+  var fetchedUrl = ''
   if (!fileImg) {
     alert('Please upload an image first!')
     throw 'Please upload an image first!'
@@ -33,7 +34,8 @@ export async function uploadImageToStorage(
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          onSuccess(url)
+          await onSuccess(url)
+          // fetchedUrl = String(url)
           return url
         })
       }
