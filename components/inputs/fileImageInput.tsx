@@ -18,7 +18,7 @@ export default function FileImageInput({
   imgUrlTemplate = '',
   mode = 'event',
   name,
-  isDisabled = true
+  isDisabled = false
 }: {
   fileImg: File | null
   setFileImg: (name: string, value: File) => void

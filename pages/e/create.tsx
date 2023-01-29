@@ -91,10 +91,13 @@ export default function CreateEvent() {
         console.log('uploading image: ', values.landing_file_img?.name)
         const fileType = setFiletype(values.event_file_img)
         const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
+        //part 1, image is being uploaded
         await uploadImageToStorage(
           values.event_file_img,
           storagePath,
           async (url: string) => {
+            //part 2, url obtained from uploaded image to storage
+            //and passed for upload.
             await events.submitEventToFirebase(
               {
                 title: values.title,
@@ -104,8 +107,9 @@ export default function CreateEvent() {
                 description: values.event_description,
                 location: values.event_location,
                 img_url: url,
-                //this should be removed.
-                landing_portrait_url: values.landing_img_url,
+                //NOTE: this will be blank until the
+                // the bug is fixed, so we can start to change this function.
+                landing_portrait_url: '',
                 ticket_max: values.ticket_max,
                 event_id: values.event_id,
                 registered_attendees: 0
