@@ -86,11 +86,11 @@ export default function CreateEvent() {
       return
     }
     try {
-      if (values.event_file_img !== null) {
+      if (values.event_file_img !== null && values.landing_file_img !== null) {
         console.log('fileImg: ', values.event_file_img?.type)
+        console.log('uploading image: ', values.landing_file_img?.name)
         const fileType = setFiletype(values.event_file_img)
         const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
-        console.log('uploading image: ', values.event_file_img?.name)
         await uploadImageToStorage(
           values.event_file_img,
           storagePath,
@@ -104,6 +104,8 @@ export default function CreateEvent() {
                 description: values.event_description,
                 location: values.event_location,
                 img_url: url,
+                //this should be removed.
+                landing_portrait_url: values.landing_img_url,
                 ticket_max: values.ticket_max,
                 event_id: values.event_id,
                 registered_attendees: 0
@@ -133,6 +135,7 @@ export default function CreateEvent() {
             description: values.event_description,
             location: values.event_location,
             img_url: values.event_img_url,
+            landing_portrait_url: values.landing_img_url,
             ticket_max: values.ticket_max,
             event_id: values.event_id,
             registered_attendees: 0
