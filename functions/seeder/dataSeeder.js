@@ -337,7 +337,7 @@ module.exports = class DataSeeder {
     try {
       ;[...Array(listSize).keys()].map(async () => {
         const dummyAllowlistData = {
-          allowlist: faker.finance.ethereumAddress(),
+          length: faker.datatype.number({max: 20}),
           description: faker.commerce.productDescription(),
           discordGuild: faker.datatype.boolean(),
           discordGuildId: '605866305094156333',

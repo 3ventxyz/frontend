@@ -82,7 +82,7 @@ export interface AllowlistInterface {
   title: string
   description?: string
   allowlist_id?: string
-  allowlist: Array<string>
+  length: number
 }
 
 export interface PostInterface {
