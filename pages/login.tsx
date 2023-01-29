@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   UserCredential
 } from '@firebase/auth'
-import Spinner from '../components/utils/spinner'
+import { Spinner } from '../components/utils/spinner'
 import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'

@@ -1,6 +1,6 @@
 import { Button } from '../../../components/buttons/button'
-import ErrorFormMsg from '../../../components/utils/errorMsg'
-import Spinner from '../../../components/utils/spinner'
+import  ErrorFormMsg  from '../../../components/utils/errorMsg'
+import { Spinner } from '../../../components/utils/spinner'
 
 export default function CreateEventFooter({
   currentStep,

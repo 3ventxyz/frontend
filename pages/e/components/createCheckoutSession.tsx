@@ -1,7 +1,7 @@
 // author: marthel
 import { useState, FormEvent } from 'react'
 import { Button } from '../../../components/buttons/button'
-import Spinner from '../../../components/utils/spinner'
+import { Spinner } from '../../../components/utils/spinner'
 import { TicketButton } from '../../../components/buttons/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
 import TicketRegTextInput from '../../../components/inputs/ticketRegTextInput'

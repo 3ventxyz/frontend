@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 // author: marthel
-export default function Modal({
+export function Modal({
   visible,
   onClose,
   children,
