@@ -87,45 +87,45 @@ export default function CreateEvent() {
     }
     try {
       if (values.event_file_img !== null && values.landing_file_img !== null) {
-        console.log('fileImg: ', values.event_file_img?.type)
-        console.log('uploading image: ', values.landing_file_img?.name)
-        const fileType = setFiletype(values.event_file_img)
-        const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
-        //part 1, image is being uploaded
-        await uploadImageToStorage(
-          values.event_file_img,
-          storagePath,
-          async (url: string) => {
-            //part 2, url obtained from uploaded image to storage
-            //and passed for upload.
-            await events.submitEventToFirebase(
-              {
-                title: values.title,
-                end_date: values.end_date,
-                start_date: values.start_date,
-                uid: auth.uid,
-                description: values.event_description,
-                location: values.event_location,
-                img_url: url,
-                //NOTE: this will be blank until the
-                // the bug is fixed, so we can start to change this function.
-                landing_portrait_url: '',
-                ticket_max: values.ticket_max,
-                event_id: values.event_id,
-                registered_attendees: 0
-              },
-              {
-                title: values.title,
-                uid: auth.uid,
-                event_id: values.event_id,
-                start_date: values.start_date,
-                end_date: values.end_date
-              }
-            )
-            console.log('pushing to event page')
-            router.push(`/e/${values.event_id}`)
-          }
-        )
+      console.log('fileImg: ', values.event_file_img?.type)
+      console.log('uploading image: ', values.landing_file_img?.name)
+      const fileType = setFiletype(values.event_file_img)
+      const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
+      //part 1, image is being uploaded
+      await uploadImageToStorage(
+        values.event_file_img,
+        storagePath,
+        async (url: string) => {
+          //part 2, url obtained from uploaded image to storage
+          //and passed for upload.
+          await events.submitEventToFirebase(
+            {
+              title: values.title,
+              end_date: values.end_date,
+              start_date: values.start_date,
+              uid: auth.uid,
+              description: values.event_description,
+              location: values.event_location,
+              img_url: url,
+              //NOTE: this will be blank until the
+              // the bug is fixed, so we can start to change this function.
+              landing_portrait_url: '',
+              ticket_max: values.ticket_max,
+              event_id: values.event_id,
+              registered_attendees: 0
+            },
+            {
+              title: values.title,
+              uid: auth.uid,
+              event_id: values.event_id,
+              start_date: values.start_date,
+              end_date: values.end_date
+            }
+          )
+          console.log('pushing to event page')
+          router.push(`/e/${values.event_id}`)
+        }
+      )
       } else if (
         values.event_img_url !== null &&
         values.landing_img_url !== null

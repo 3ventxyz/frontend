@@ -10,7 +10,10 @@ export async function uploadImageToStorage(
     alert('Please upload an image first!')
     return
   }
-  if(storage !== null) return
+  if (storage === null) {
+    throw 'firebase storage is not properly initialized.'
+    return
+  }
   const storageRef = ref(storage, `/files/${path}`)
   const fileBuffer = await fileImg?.arrayBuffer()
 
