@@ -16,6 +16,9 @@ import { AllowlistInterface } from '../shared/interface/common'
 import { db } from './firebase_config'
 
 export default class AllowlistService {
+  getAllowlistFromString(arg0: string) {
+    throw new Error('Method not implemented.')
+  }
   listsCollectionRef: CollectionReference
 
   constructor() {
@@ -125,7 +128,8 @@ export default class AllowlistService {
 
   update = async (
     id: string,
-    allowlist: AllowlistInterface,
+    title: string,   
+    description: string, 
     uid: string,
     wallet: boolean,
     twitter: boolean,
@@ -145,8 +149,8 @@ export default class AllowlistService {
       if (id) {
         const authVerification = await this.checkAuth(id, uid)
         await updateDoc(doc(db, 'lists', id), {
-          title: allowlist.title,
-          description: allowlist.description,
+          title: title,
+          description: description,
           uid: doc(db, 'users', uid),
           walletVerif: wallet,
           twitterVerif: twitter,

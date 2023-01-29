@@ -33,7 +33,9 @@ export default function Allowlist() {
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
   const [listMetaData, setListMetaData] = useState({
+    id: '',
     listUid: '',
+    description: '',
     checkTokens: false,
     contractAddress: '',
     checkNumOfTokens: false,
@@ -104,7 +106,7 @@ export default function Allowlist() {
         title: response.data.title,
         description: response.data.description,
         allowlist_id: response.data.id,
-        allowlist: response.data.allowlist
+        length: response.data.length
       })
     } else {
       console.log(response.message)
@@ -119,6 +121,8 @@ export default function Allowlist() {
       if (docSnap.exists()) {
         setListMetaData({
           ...listMetaData,
+          id: docSnap.data().id,
+          description: docSnap.data().description,
           title: docSnap.data().title,
           checkTokens: docSnap.data().checkTokens,
           contractAddress: docSnap.data().contractAddress,
@@ -164,26 +168,15 @@ export default function Allowlist() {
   const handleCheckAll = (e: ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target
     const tmp = new Map(addresses)
-    allowlist?.allowlist.map((e, i) => {
-      tmp.set(e, checked)
-    })
-
     setAddresses(tmp)
     console.log(tmp)
   }
 
   const handleDeleteSelectedAddresses = async () => {
-    var response = await allowlistService.update(
-      lid?.toString() ?? '',
-      {
-        allowlist: (allowlist?.allowlist ?? []).filter(
-          (address) => selected.indexOf(address) < 0
-        ),
-        uid: allowlist?.uid ?? '',
-        title: allowlist?.title ?? '',
-        description: allowlist?.description ?? '',
-        allowlist_id: lid?.toString()
-      },
+    const response = await allowlistService.update(
+      listMetaData.id,
+      listMetaData.title,
+      listMetaData.description,
       auth.currentUser?.uid ?? '',
       listMetaData.walletVerification,
       listMetaData.twitterVerification,
