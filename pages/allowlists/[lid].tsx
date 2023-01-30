@@ -12,7 +12,7 @@ import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/allowlist/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
 import DeleteConfirmation from '../../components/allowlist/deleteConfirmation'
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
+import { doc, getDoc, collection, getDocs, updateDoc, setDoc } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell } from '@mui/material'
@@ -58,9 +58,9 @@ export default function Allowlist() {
         let arr: Array<AllowlistUser> = []
         setGotInfo(true)
         const docRef = doc(db, 'lists', `${lid}`)
-        /*loop through every user*/
         const userRef = await getDocs(collection(docRef, 'registered_users'))
-        userRef.forEach((doc) => {
+        userRef.forEach((doc) =>{
+          /*Check if email, wallet, phone number, twitterID or discordID exists in the list*/
           arr.push({
             uid: doc.data().uid,
             email: doc.data().email,
@@ -81,11 +81,7 @@ export default function Allowlist() {
     if (!gotInfo) {
       getUserInfo()
     }
-  }, [])
-
-  useEffect(() => {
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -148,6 +144,64 @@ export default function Allowlist() {
     }
   }, [listMetaData, lid])
 
+
+  /*Populate a new line with info given by the creatosr*/
+  const populateNewUser = () => {
+
+      /*Save info */
+  const saveProfile = async (
+    uid: string,
+    twitter_id: string,
+    twitter_name: string,
+    discord_id: string,
+    wallet: string,
+    email: string,
+    userTokens: boolean,
+    status: string
+  ) => {
+    try {
+      const docRef = doc(db, 'lists', `${lid}`)
+      const userRef = await getDoc(
+        doc(collection(docRef, 'registered_users'), `${length}`)
+      )
+      if (userRef.exists()) {
+        await updateDoc(doc(collection(docRef, 'registered_users'), `${length}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          twitter_name: twitter_name,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          userTokens: userTokens,
+          status: status
+        })
+      } else {
+        await setDoc(doc(collection(docRef, 'registered_users'), `${length}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          twitter_name: twitter_name,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          userTokens: userTokens,
+          status: status
+        })
+      }
+      console.log('Data written into doc ID: ', docRef.id)
+      return true
+    } catch (e) {
+      console.error('Error adding data: ', e)
+    }
+  }
+
+  /*Submit profile*/
+  const submitUser = async () => {
+      const docRef = doc(db, 'lists', lid?.toString() ?? '')
+      await updateDoc(docRef, {
+        length: length + 1
+      })
+  }
+  }
   const deleteAllowlist = async (id: string | undefined) => {
     var response = await allowlistService.delete(
       id,
@@ -197,7 +251,6 @@ export default function Allowlist() {
   }
 
   const allowlistUserHeader: Array<AllowlistTableHeader> = [
-    { id: 'uid', label: 'User ID', disableSorting: true, display: true },
     {
       id: 'email',
       label: 'Email',
@@ -236,6 +289,7 @@ export default function Allowlist() {
     },
     { id: 'status', label: 'Status', disableSorting: false, display: true }
   ]
+  
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
@@ -307,11 +361,6 @@ export default function Allowlist() {
                 <TableBody>
                   {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
                     <TableRow key={i} className="bg-white">
-                      <TableCell>
-                        <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                          {list.uid}
-                        </span>
-                      </TableCell>
                       <>
                         {listMetaData.emailVerification ? (
                           <TableCell>
