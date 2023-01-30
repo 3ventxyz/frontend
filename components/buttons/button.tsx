@@ -36,7 +36,7 @@ interface ButtonProps {
 }
 
 /**
- * Primary UI component for user interaction
+ * Primary UI Button. It will execute the passed function when pressed.
  */
 export function Button({
   text,

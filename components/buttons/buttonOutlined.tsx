@@ -29,6 +29,9 @@ interface ButtonOutlinedProps {
   iconAlt?: string
 }
 
+/**
+ *  Outlined UI Button. It will execute the passed function when pressed.
+ */
 export function ButtonOutlined({
   text,
   onClick,

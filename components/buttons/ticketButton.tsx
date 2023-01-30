@@ -26,6 +26,9 @@ interface TicketButtonProps{
   isDisabled: boolean
 }
 
+/**
+ * Ticket Button. It will display and indicate the user the ticket available.
+ */
 export function TicketButton({
   ticket,
   selected,
