@@ -10,7 +10,6 @@ import {
   setDoc
 } from '@firebase/firestore'
 import { ethers } from 'ethers'
-import { UnknownObject } from 'qr-code-styling'
 import { useAuth } from '../contexts/auth'
 import { AllowlistInterface } from '../shared/interface/common'
 import { db } from './firebase_config'
