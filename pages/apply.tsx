@@ -45,7 +45,8 @@ export default function AllowlistApplication() {
     discordGuild: false,
     guild: '',
     emailVerification: false,
-    permalink: ''
+    permalink: '',
+    length: 0
   })
 
   useEffect(() => {
@@ -93,7 +94,8 @@ export default function AllowlistApplication() {
           discordGuild: docSnap.data().discordGuild,
           guild: docSnap.data().discordGuildId,
           emailVerification: docSnap.data().emailVerif,
-          permalink: docSnap.data().permalink
+          permalink: docSnap.data().permalink,
+          length: docSnap.data().length
         })
       } else {
         console.log('No such document!')
@@ -132,7 +134,7 @@ export default function AllowlistApplication() {
       try {
         const docRef = doc(db, 'lists', listMetaData.lid)
         const userRef = await getDoc(
-          doc(collection(docRef, 'registered_users'), userMetaData.uid)
+          doc(collection(docRef, 'registered_users'), `${listMetaData.length + 1}`)
         )
         if (userRef.exists()) {
           setUserMetaData({
@@ -179,23 +181,23 @@ export default function AllowlistApplication() {
       const walletVar = !listMetaData.walletVerification
         ? true
         : userMetaData.wallet
-        ? true
-        : false
+          ? true
+          : false
       const discordVar = !listMetaData.discordVerification
         ? true
         : userMetaData.discord !== ''
-        ? true
-        : false
+          ? true
+          : false
       const twitterVar = !listMetaData.twitterVerification
         ? true
         : userMetaData.twitter.length > 0
-        ? true
-        : false
+          ? true
+          : false
       const emailVar = !listMetaData.emailVerification
         ? true
         : userMetaData.emailVerif
-        ? true
-        : false
+          ? true
+          : false
       setShowModal(
         walletVar && discordVar && twitterVar && emailVar ? false : true
       )
@@ -217,18 +219,31 @@ export default function AllowlistApplication() {
     try {
       const docRef = doc(db, 'lists', listMetaData.lid)
       const userRef = await getDoc(
-        doc(collection(docRef, 'registered_users'), uid)
+        doc(collection(docRef, 'registered_users'), `${listMetaData.length}`)
       )
-      await updateDoc(doc(collection(docRef, 'registered_users'), `${uid}`), {
-        uid: uid,
-        twitter_id: twitter_id,
-        twitter_name: twitter_name,
-        discord_id: discord_id,
-        wallet: wallet,
-        email: email,
-        userTokens: userTokens,
-        status: status
-      })
+      if (userRef.exists()) {
+        await updateDoc(doc(collection(docRef, 'registered_users'), `${listMetaData.length}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          twitter_name: twitter_name,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          userTokens: userTokens,
+          status: status
+        })
+      } else {
+        await setDoc(doc(collection(docRef, 'registered_users'), `${listMetaData.length}`), {
+          uid: uid,
+          twitter_id: twitter_id,
+          twitter_name: twitter_name,
+          discord_id: discord_id,
+          wallet: wallet,
+          email: email,
+          userTokens: userTokens,
+          status: status
+        })
+      }
       console.log('Data written into doc ID: ', docRef.id)
       return true
     } catch (e) {
@@ -236,6 +251,22 @@ export default function AllowlistApplication() {
     }
   }
 
+  /*Submit profile*/
+  const submitProfile = async () => {
+      const docRef = doc(db, 'lists', listMetaData.lid?.toString() ?? '')
+      await updateDoc(docRef, {
+        length: listMetaData.length + 1
+      })
+    saveProfile(userMetaData.uid,
+      userMetaData.twitter[userMetaData.twitterValue],
+      userMetaData.twitterName[userMetaData.twitterValue],
+      userMetaData.discord,
+      userMetaData.wallet,
+      userMetaData.email,
+      userMetaData.userTokens,
+      'submitted')
+
+  }
   const handleChange = (e: any) => {
     setUserMetaData({
       ...userMetaData,
@@ -247,7 +278,7 @@ export default function AllowlistApplication() {
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {listMetaData.lid !== '' ? (
         <div className="mx-auto flex w-full max-w-[600px] flex-col items-start justify-start space-y-4">
-          <Modal visible={showModal} onClose={() => {}} width="w-1/2" height="">
+          <Modal visible={showModal} onClose={() => { }} width="w-1/2" height="">
             <div className="flex flex-col space-y-4 p-4">
               <h3>Please finish setting up your profile</h3>
               <p>
@@ -384,7 +415,7 @@ export default function AllowlistApplication() {
               )}
               <div className="w-1/2">
                 {!userMetaData.guildMember &&
-                userMetaData.guildMember !== undefined ? (
+                  userMetaData.guildMember !== undefined ? (
                   <>
                     <p>
                       You are not a part of the creator&apos;s guild yet, you
@@ -461,22 +492,15 @@ export default function AllowlistApplication() {
             <></>
           )}
 
-          <form className="m-4 w-full" onSubmit={() => {}}>
+          <form className="m-4 w-full" onSubmit={() => { }}>
             <Link href="/allowlists/success">
               <Button
                 type="submit"
                 text="Apply"
                 active={submit}
                 onClick={() => {
-                  saveProfile(
-                    userMetaData.uid,
-                    userMetaData.twitter[userMetaData.twitterValue],
-                    userMetaData.twitterName[userMetaData.twitterValue],
-                    userMetaData.discord,
-                    userMetaData.wallet,
-                    userMetaData.email,
-                    userMetaData.userTokens,
-                    'submitted'
+                  submitProfile(
+                    
                   )
                 }}
               ></Button>
