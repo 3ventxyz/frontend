@@ -105,7 +105,7 @@ export default function CreateEvent() {
         //and update the logic inside.
         await uploadImageToStorage(
           values.event_file_img,
-          eventImgStoragePath,
+          [eventImgStoragePath],
           async (url: string) => {
             await events.submitEventToFirebase(
               {

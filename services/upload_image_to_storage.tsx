@@ -3,7 +3,7 @@ import { storage } from './firebase_config'
 
 export async function uploadImageToStorage(
   fileImgData: File | File[] | null,
-  path: string,
+  path: string[],
   onSuccess: (url: string) => void
 ) {
   var fetchedUrl = ''
@@ -18,7 +18,7 @@ export async function uploadImageToStorage(
   if (Array.isArray(fileImgData)) {
     onHandleMultipleImagesUpload(fileImgData, path, onSuccess)
   } else {
-    await onHandleSingleImageUpload(fileImgData, path, onSuccess)
+    await onHandleSingleImageUpload(fileImgData, path[0], onSuccess)
   }
 }
 
@@ -55,10 +55,44 @@ const onHandleSingleImageUpload = async (
   }
   return ''
 }
-const onHandleMultipleImagesUpload = (
-  fileImg: File[] | null,
-  path: string,
+const onHandleMultipleImagesUpload = async (
+  fileImgData: File[] | null,
+  path: string[],
   onSuccess: (url: string) => void
 ) => {
   // TODO (1/31/2023) define the logic for handling multiple files to be uploaded.
+
+  const promises: any = []
+  fileImgData?.forEach(async (fileImg: File) => {
+    const storageRef = ref(storage, `/files/${path}`)
+    const fileBuffer = await fileImg?.arrayBuffer()
+
+    if (fileBuffer) {
+      const uploadTask = uploadBytesResumable(storageRef, fileBuffer, {
+        contentType: 'image/jpeg'
+      })
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+        },
+        (err) => {
+          console.log(err)
+          return ''
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+            onSuccess(url)
+            // return url
+          })
+        }
+      )
+    }
+  })
+
+  await Promise.all(promises) //this will await for all promises to be finished
+  //before entering return.
+  return ''
 }
