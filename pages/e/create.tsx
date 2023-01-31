@@ -104,8 +104,8 @@ export default function CreateEvent() {
         // TODO(1/31/2022): change the uploadImageToStore, to uploadImagesToStorage
         //and update the logic inside.
         await uploadImageToStorage(
-          values.landing_file_img,
-          landingPortraitStoragePath,
+          values.event_file_img,
+          eventImgStoragePath,
           async (url: string) => {
             await events.submitEventToFirebase(
               {

@@ -2,18 +2,31 @@ import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { storage } from './firebase_config'
 
 export async function uploadImageToStorage(
-  fileImg: File | null,
+  fileImgData: File | File[] | null,
   path: string,
   onSuccess: (url: string) => void
 ) {
   var fetchedUrl = ''
-  if (!fileImg) {
+  if (!fileImgData) {
     alert('Please upload an image first!')
     throw 'Please upload an image first!'
   }
   if (storage === null) {
     throw 'firebase storage is not properly initialized.'
   }
+
+  if (Array.isArray(fileImgData)) {
+    onHandleMultipleImagesUpload(fileImgData, path, onSuccess)
+  } else {
+    await onHandleSingleImageUpload(fileImgData, path, onSuccess)
+  }
+}
+
+const onHandleSingleImageUpload = async (
+  fileImg: File | null,
+  path: string,
+  onSuccess: (url: string) => void
+) => {
   const storageRef = ref(storage, `/files/${path}`)
   const fileBuffer = await fileImg?.arrayBuffer()
 
@@ -34,12 +47,18 @@ export async function uploadImageToStorage(
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          await onSuccess(url)
-          // fetchedUrl = String(url)
+          onSuccess(url)
           return url
         })
       }
     )
   }
   return ''
+}
+const onHandleMultipleImagesUpload = (
+  fileImg: File[] | null,
+  path: string,
+  onSuccess: (url: string) => void
+) => {
+  // TODO (1/31/2023) define the logic for handling multiple files to be uploaded.
 }
