@@ -104,9 +104,13 @@ export default function CreateEvent() {
         // TODO(1/31/2022): change the uploadImageToStore, to uploadImagesToStorage
         //and update the logic inside.
         await uploadImageToStorage(
-          values.event_file_img,
-          [eventImgStoragePath],
-          async (url: string) => {
+          [values.event_file_img, values.landing_file_img],
+          [eventImgStoragePath, landingPortraitStoragePath],
+          async (event_url: string[]) => {
+            console.log('upload success STORAGE URLS:');
+            console.log('event_image:',event_url[0]);
+            console.log('landing_portrait:',event_url[1]);
+            console.log('=============');
             await events.submitEventToFirebase(
               {
                 title: values.title,
@@ -115,9 +119,9 @@ export default function CreateEvent() {
                 uid: auth.uid,
                 description: values.event_description,
                 location: values.event_location,
-                img_url: url,
+                img_url: event_url[0],
                 // TODO(1/31/2023): add the landing portrait.
-                landing_portrait_url: '',
+                landing_portrait_url: event_url[1],
                 ticket_max: values.ticket_max,
                 event_id: values.event_id,
                 registered_attendees: 0

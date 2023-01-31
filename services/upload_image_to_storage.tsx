@@ -4,7 +4,7 @@ import { storage } from './firebase_config'
 export async function uploadImageToStorage(
   fileImgData: File | File[] | null,
   path: string[],
-  onSuccess: (url: string) => void
+  onSuccess: (url: string[]) => void
 ) {
   var fetchedUrl = ''
   if (!fileImgData) {
@@ -16,7 +16,7 @@ export async function uploadImageToStorage(
   }
 
   if (Array.isArray(fileImgData)) {
-    onHandleMultipleImagesUpload(fileImgData, path, onSuccess)
+    await onHandleMultipleImagesUpload(fileImgData, path, onSuccess)
   } else {
     await onHandleSingleImageUpload(fileImgData, path[0], onSuccess)
   }
@@ -25,7 +25,7 @@ export async function uploadImageToStorage(
 const onHandleSingleImageUpload = async (
   fileImg: File | null,
   path: string,
-  onSuccess: (url: string) => void
+  onSuccess: (url: string[]) => void
 ) => {
   const storageRef = ref(storage, `/files/${path}`)
   const fileBuffer = await fileImg?.arrayBuffer()
@@ -47,7 +47,7 @@ const onHandleSingleImageUpload = async (
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          onSuccess(url)
+          onSuccess([url])
           return url
         })
       }
@@ -56,15 +56,13 @@ const onHandleSingleImageUpload = async (
   return ''
 }
 const onHandleMultipleImagesUpload = async (
-  fileImgData: File[] | null,
-  path: string[],
-  onSuccess: (url: string) => void
+  fileImgs: File[] | null,
+  paths: string[],
+  onSuccess: (url: string[]) => void
 ) => {
-  // TODO (1/31/2023) define the logic for handling multiple files to be uploaded.
-
-  const promises: any = []
-  fileImgData?.forEach(async (fileImg: File) => {
-    const storageRef = ref(storage, `/files/${path}`)
+  const promises: Promise<string>[] = []
+  fileImgs?.forEach(async (fileImg: File, index: number) => {
+    const storageRef = ref(storage, `/files/${paths[index]}`)
     const fileBuffer = await fileImg?.arrayBuffer()
 
     if (fileBuffer) {
@@ -83,16 +81,17 @@ const onHandleMultipleImagesUpload = async (
           return ''
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-            onSuccess(url)
-            // return url
-          })
+          const downloadURL = getDownloadURL(uploadTask.snapshot.ref)
+          promises.push(downloadURL)
         }
       )
     }
   })
 
-  await Promise.all(promises) //this will await for all promises to be finished
+  const [eventImgUrl, landingPortraitUrl]: string[] = await Promise.all(
+    promises
+  ) //this will await for all promises to be finished
   //before entering return.
+  onSuccess([eventImgUrl, landingPortraitUrl])
   return ''
 }
