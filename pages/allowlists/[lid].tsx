@@ -249,9 +249,9 @@ export default function Allowlist() {
                 <div className=" bg-white p-5 text-left text-lg font-semibold text-gray-900">
                   <div className="flex flex-row justify-between">
                     <div className="my-auto flex flex-col">
-                      {allowlist?.title}
+                      {listMetaData.title}
                       <p className="mt-1 text-sm font-normal text-gray-500 ">
-                        {allowlist?.description}
+                        {listMetaData.description}
                       </p>
                     </div>
                     <div className="my-auto flex w-[150px] flex-row justify-between">
