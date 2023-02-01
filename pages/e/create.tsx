@@ -78,6 +78,8 @@ export default function CreateEvent() {
    **/
   const createEvent = async () => {
     let formError: CreateEventErrors
+    let eventImgUrl:string
+    let landingPortraitUrl:string
     setCreatingNewEvent(true)
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
@@ -86,12 +88,14 @@ export default function CreateEvent() {
       return
     }
     try {
+      //if both images are selected to be uploaded.
       if (values.event_file_img !== null && values.landing_file_img !== null) {
         //this part can be moved to a function for creating storage urls.
         console.log('fileImg: ', values.event_file_img?.type)
         console.log('uploading image: ', values.landing_file_img?.name)
         const eventImgfileType = setFiletype(values.event_file_img)
         const landingPortraitfileType = setFiletype(values.landing_file_img)
+        //move to a higher level these paths concatenators.
         const eventImgStoragePath: string = `${auth.uid}/${
           values.event_id + '_event' + eventImgfileType
         }`
@@ -106,62 +110,65 @@ export default function CreateEvent() {
           values.landing_file_img,
           landingPortraitStoragePath
         )
-        await events.submitEventToFirebase(
-          {
-            title: values.title,
-            end_date: values.end_date,
-            start_date: values.start_date,
-            uid: auth.uid,
-            description: values.event_description,
-            location: values.event_location,
-            img_url: eventImgURL,
-            landing_portrait_url: landingPortraitURL,
-            ticket_max: values.ticket_max,
-            event_id: values.event_id,
-            registered_attendees: 0
-          },
-          {
-            title: values.title,
-            uid: auth.uid,
-            event_id: values.event_id,
-            start_date: values.start_date,
-            end_date: values.end_date
-          }
+      }
+      //iff 1 image is a file(event) and the other is a predefined image(landing)
+      else if (
+        values.event_file_img !== null &&
+        values.landing_img_url !== null
+      ) {
+        const eventImgfileType = setFiletype(values.event_file_img)
+        const eventImgStoragePath: string = `${auth.uid}/${
+          values.event_id + '_event' + eventImgfileType
+        }`
+        eventImgUrl = await uploadImageToStorage(
+          values.event_file_img,
+          eventImgStoragePath
         )
-        console.log('pushing to event page')
-        router.push(`/e/${values.event_id}`)
+landingPortraitUrl = values.landing_img_url
+
+      }
+      //iff 1 image is a file(landing) and the other is a predefined image(event)
+      else if (
+        values.event_img_url !== null &&
+        values.landing_file_img !== null
+      ) {
+        //if both images are predefined.
+
       } else if (
         values.event_img_url !== null &&
         values.landing_img_url !== null
       ) {
-        //this one will be kept, when both predefined images are selected.
-        await events.submitEventToFirebase(
-          {
-            title: values.title,
-            end_date: values.end_date,
-            start_date: values.start_date,
-            uid: auth.uid,
-            description: values.event_description,
-            location: values.event_location,
-            img_url: values.event_img_url,
-            landing_portrait_url: values.landing_img_url,
-            ticket_max: values.ticket_max,
-            event_id: values.event_id,
-            registered_attendees: 0
-          },
-          {
-            title: values.title,
-            uid: auth.uid,
-            event_id: values.event_id,
-            start_date: values.start_date,
-            end_date: values.end_date
-          }
-        )
-        console.log('pushing to event page')
-        router.push(`/e/${values.event_id}`)
+        //this should be putted here only once.
+
       } else {
         throw 'no image selected'
       }
+//once both urls variables are setted, then we
+//can start to submit it and push it to the event screen.
+      await events.submitEventToFirebase(
+        {
+          title: values.title,
+          end_date: values.end_date,
+          start_date: values.start_date,
+          uid: auth.uid,
+          description: values.event_description,
+          location: values.event_location,
+          img_url: values.event_img_url,
+          landing_portrait_url: values.landing_img_url,
+          ticket_max: values.ticket_max,
+          event_id: values.event_id,
+          registered_attendees: 0
+        },
+        {
+          title: values.title,
+          uid: auth.uid,
+          event_id: values.event_id,
+          start_date: values.start_date,
+          end_date: values.end_date
+        }
+      )
+      console.log('pushing to event page')
+      router.push(`/e/${values.event_id}`)
     } catch (e) {
       console.error('event/create:', e)
       alert(
