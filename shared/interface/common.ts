@@ -45,6 +45,7 @@ export interface EventHostInterface {
 export interface AllowlistUser {
   uid: string
   email: string
+  phone: string
   wallet: string
   twitter_id: string
   twitter_name: string

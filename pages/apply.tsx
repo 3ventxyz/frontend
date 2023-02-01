@@ -28,7 +28,8 @@ export default function AllowlistApplication() {
     discord: '',
     twitterName: '',
     twitter: [],
-    wallet: ''
+    wallet: '',
+    phone: ''
   })
   const [listMetaData, setListMetaData] = useState({
     lid: '',
@@ -119,7 +120,8 @@ export default function AllowlistApplication() {
           discord: docSnap.data().discord_id,
           twitterName: docSnap.data().twitter_name,
           twitter: docSnap.data().tw_verifs,
-          wallet: docSnap.data().wallet
+          wallet: docSnap.data().wallet,
+          phone: docSnap.data().phone_number
         })
       } else {
         console.log('No such document!')
@@ -213,6 +215,7 @@ export default function AllowlistApplication() {
     discord_id: string,
     wallet: string,
     email: string,
+    phone: string,
     userTokens: boolean,
     status: string
   ) => {
@@ -229,6 +232,7 @@ export default function AllowlistApplication() {
           discord_id: discord_id,
           wallet: wallet,
           email: email,
+          phone: phone,
           userTokens: userTokens,
           status: status
         })
@@ -240,6 +244,7 @@ export default function AllowlistApplication() {
           discord_id: discord_id,
           wallet: wallet,
           email: email,
+          phone: phone,
           userTokens: userTokens,
           status: status
         })
@@ -263,9 +268,9 @@ export default function AllowlistApplication() {
       userMetaData.discord,
       userMetaData.wallet,
       userMetaData.email,
+      userMetaData.phone,
       userMetaData.userTokens,
       'submitted')
-
   }
   const handleChange = (e: any) => {
     setUserMetaData({
@@ -356,6 +361,7 @@ export default function AllowlistApplication() {
                     userMetaData.discord,
                     userMetaData.wallet,
                     userMetaData.email,
+                    userMetaData.phone,
                     userMetaData.userTokens,
                     status
                   )
@@ -402,6 +408,7 @@ export default function AllowlistApplication() {
                       userMetaData.discord,
                       userMetaData.wallet,
                       userMetaData.email,
+                      userMetaData.phone,
                       userMetaData.userTokens,
                       status
                     )
@@ -469,6 +476,7 @@ export default function AllowlistApplication() {
                     userMetaData.discord,
                     userMetaData.wallet,
                     userMetaData.email,
+                    userMetaData.phone,
                     userMetaData.userTokens,
                     status
                   )
