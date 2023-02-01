@@ -84,6 +84,19 @@ export interface AllowlistInterface {
   description?: string
   allowlist_id?: string
   length: number
+  wallet: boolean
+  twitter: boolean
+  twitterFollowing: boolean
+  twitterAccountId: string
+  discord: boolean
+  discordGuild: boolean
+  discordGuildId: string
+  email: boolean
+  permalink: string
+  checkTokens: boolean
+  contractAddress: string
+  checkNumOfTokens: boolean
+  numberOfTokens: number
 }
 
 export interface PostInterface {
