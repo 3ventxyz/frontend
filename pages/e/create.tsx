@@ -92,53 +92,44 @@ export default function CreateEvent() {
         console.log('uploading image: ', values.landing_file_img?.name)
         const eventImgfileType = setFiletype(values.event_file_img)
         const landingPortraitfileType = setFiletype(values.landing_file_img)
-
         const eventImgStoragePath: string = `${auth.uid}/${
           values.event_id + '_event' + eventImgfileType
         }`
         const landingPortraitStoragePath: string = `${auth.uid}/${
           values.event_id + '_portrait' + landingPortraitfileType
         }`
-        const imgFiles = [eventImgfileType, landingPortraitfileType]
-        const storagePaths = [eventImgStoragePath, landingPortraitStoragePath]
-        // TODO(1/31/2022): change the uploadImageToStore, to uploadImagesToStorage
-        //and update the logic inside.
-        await uploadImageToStorage(
-          [values.event_file_img, values.landing_file_img],
-          [eventImgStoragePath, landingPortraitStoragePath],
-          async (event_url: string[]) => {
-            console.log('upload success STORAGE URLS:');
-            console.log('event_image:',event_url[0]);
-            console.log('landing_portrait:',event_url[1]);
-            console.log('=============');
-            await events.submitEventToFirebase(
-              {
-                title: values.title,
-                end_date: values.end_date,
-                start_date: values.start_date,
-                uid: auth.uid,
-                description: values.event_description,
-                location: values.event_location,
-                img_url: event_url[0],
-                // TODO(1/31/2023): add the landing portrait.
-                landing_portrait_url: event_url[1],
-                ticket_max: values.ticket_max,
-                event_id: values.event_id,
-                registered_attendees: 0
-              },
-              {
-                title: values.title,
-                uid: auth.uid,
-                event_id: values.event_id,
-                start_date: values.start_date,
-                end_date: values.end_date
-              }
-            )
-            console.log('pushing to event page')
-            router.push(`/e/${values.event_id}`)
+        const eventImgURL: string = await uploadImageToStorage(
+          values.event_file_img,
+          eventImgStoragePath
+        )
+        const landingPortraitURL: string = await uploadImageToStorage(
+          values.landing_file_img,
+          landingPortraitStoragePath
+        )
+        await events.submitEventToFirebase(
+          {
+            title: values.title,
+            end_date: values.end_date,
+            start_date: values.start_date,
+            uid: auth.uid,
+            description: values.event_description,
+            location: values.event_location,
+            img_url: eventImgURL,
+            landing_portrait_url: landingPortraitURL,
+            ticket_max: values.ticket_max,
+            event_id: values.event_id,
+            registered_attendees: 0
+          },
+          {
+            title: values.title,
+            uid: auth.uid,
+            event_id: values.event_id,
+            start_date: values.start_date,
+            end_date: values.end_date
           }
         )
-        //part2, landing portrait is being uploaded.
+        console.log('pushing to event page')
+        router.push(`/e/${values.event_id}`)
       } else if (
         values.event_img_url !== null &&
         values.landing_img_url !== null
