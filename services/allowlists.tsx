@@ -192,7 +192,20 @@ export default class AllowlistService {
           title: doc.data().title,
           description: doc.data().description,
           allowlist_id: doc.id,
-          length: doc.data().length
+          length: doc.data().length,
+          wallet: doc.data().walletVerif,
+          twitter: doc.data().twitterVerif,
+          twitterFollowing: doc.data().twitterFollowing,
+          twitterAccountId: doc.data().twitterAccountId,
+          discord: doc.data().discordVerif,
+          discordGuild: doc.data().discordGuild,
+          discordGuildId: doc.data().discordGuildId,
+          email: doc.data().emailVerif,
+          permalink: doc.data().permalink,
+          checkTokens: doc.data().checkTokens,
+          contractAddress: doc.data().contractAddress,
+          checkNumOfTokens: doc.data().checkNumOfTokens,
+          numberOfTokens: doc.data().numberOfTokens
         }))
         .filter((doc) => doc.uid === uid)
       return allowlists
