@@ -78,8 +78,13 @@ export default function CreateEvent() {
    **/
   const createEvent = async () => {
     let formError: CreateEventErrors
-    let eventImgUrl:string
-    let landingPortraitUrl:string
+    let eventImgURL: string
+    let landingPortraitURL: string
+
+    let eventImgfileType: string
+    let eventImgStoragePath: string
+    let landingPortraitfileType: string
+    let landingPortraitStoragePath: string
     setCreatingNewEvent(true)
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
@@ -87,64 +92,38 @@ export default function CreateEvent() {
       setErrorMsg(formError)
       return
     }
+
+    /**setting event_img_urls */
     try {
-      //if both images are selected to be uploaded.
-      if (values.event_file_img !== null && values.landing_file_img !== null) {
-        //this part can be moved to a function for creating storage urls.
-        console.log('fileImg: ', values.event_file_img?.type)
-        console.log('uploading image: ', values.landing_file_img?.name)
-        const eventImgfileType = setFiletype(values.event_file_img)
-        const landingPortraitfileType = setFiletype(values.landing_file_img)
-        //move to a higher level these paths concatenators.
-        const eventImgStoragePath: string = `${auth.uid}/${
+      if (values.event_file_img !== null) {
+        eventImgfileType = setFiletype(values.event_file_img)
+        eventImgStoragePath = `${auth.uid}/${
           values.event_id + '_event' + eventImgfileType
         }`
-        const landingPortraitStoragePath: string = `${auth.uid}/${
-          values.event_id + '_portrait' + landingPortraitfileType
-        }`
-        const eventImgURL: string = await uploadImageToStorage(
+        eventImgURL = await uploadImageToStorage(
           values.event_file_img,
           eventImgStoragePath
         )
-        const landingPortraitURL: string = await uploadImageToStorage(
+      } else {
+        eventImgURL = values.event_img_url
+      }
+
+      /**setting landing_img_urls */
+      if (values.landing_file_img !== null) {
+        landingPortraitfileType = setFiletype(values.landing_file_img)
+        landingPortraitStoragePath = `${auth.uid}/${
+          values.event_id + '_portrait' + landingPortraitfileType
+        }`
+        landingPortraitURL = await uploadImageToStorage(
           values.landing_file_img,
           landingPortraitStoragePath
         )
-      }
-      //iff 1 image is a file(event) and the other is a predefined image(landing)
-      else if (
-        values.event_file_img !== null &&
-        values.landing_img_url !== null
-      ) {
-        const eventImgfileType = setFiletype(values.event_file_img)
-        const eventImgStoragePath: string = `${auth.uid}/${
-          values.event_id + '_event' + eventImgfileType
-        }`
-        eventImgUrl = await uploadImageToStorage(
-          values.event_file_img,
-          eventImgStoragePath
-        )
-landingPortraitUrl = values.landing_img_url
-
-      }
-      //iff 1 image is a file(landing) and the other is a predefined image(event)
-      else if (
-        values.event_img_url !== null &&
-        values.landing_file_img !== null
-      ) {
-        //if both images are predefined.
-
-      } else if (
-        values.event_img_url !== null &&
-        values.landing_img_url !== null
-      ) {
-        //this should be putted here only once.
-
       } else {
-        throw 'no image selected'
+        landingPortraitURL = values.landing_img_url
       }
-//once both urls variables are setted, then we
-//can start to submit it and push it to the event screen.
+
+      //once both urls variables are setted, then we
+      //can start to submit it and push it to the event screen.
       await events.submitEventToFirebase(
         {
           title: values.title,
@@ -153,8 +132,8 @@ landingPortraitUrl = values.landing_img_url
           uid: auth.uid,
           description: values.event_description,
           location: values.event_location,
-          img_url: values.event_img_url,
-          landing_portrait_url: values.landing_img_url,
+          img_url: eventImgURL,
+          landing_portrait_url: landingPortraitURL,
           ticket_max: values.ticket_max,
           event_id: values.event_id,
           registered_attendees: 0
