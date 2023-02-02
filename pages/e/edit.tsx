@@ -171,6 +171,7 @@ export default function EditEvent() {
               description: eventDescription,
               location: eventLocation,
               img_url: url,
+              landing_portrait_url: '',
               ticket_max: ticketMax,
               event_id: eventId,
               registered_attendees: registeredAttendees
@@ -194,6 +195,7 @@ export default function EditEvent() {
           description: eventDescription,
           location: eventLocation,
           img_url: currEventImgURl,
+          landing_portrait_url: '',
           ticket_max: ticketMax,
           event_id: eventId,
           registered_attendees: registeredAttendees
