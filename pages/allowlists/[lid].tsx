@@ -17,6 +17,7 @@ import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell, FormControlLabel, Checkbox } from '@mui/material'
 import { CSVLink } from 'react-csv'
+import TextInput from '../../components/inputs/textInput'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -31,7 +32,9 @@ export default function Allowlist() {
   const auth = useAuth()
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
+  const [editting, setEditting] = useState(false)
 
+  const [email, setEmail] = useState('')
   const [listMetaData, setListMetaData] = useState({
     id: '',
     listUid: '',
@@ -52,7 +55,16 @@ export default function Allowlist() {
     permalink: '',
     length: 0
   })
-
+  const [userMetaData, setUserMetaData] = useState({
+    id: 0,
+    email: '',
+    phone: '',
+    twitterId: '',
+    twitterName: '',
+    discordId: '',
+    discordGuild: false,
+    wallet: ''
+  })
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -187,19 +199,12 @@ export default function Allowlist() {
   }
   /*Make new empty user */
   const createNewUser = async (id: number) => {
+    setEditting(false)
     try {
       const docRef = doc(db, 'lists', `${lid}`)
-      await updateDoc(docRef, {length: id + 1})
+      await updateDoc(docRef, { length: id + 1 })
       await setDoc(doc(collection(docRef, 'registered_users'), `${id + 1}`), {
-        uid: '',
-        twitter_id: '',
-        twitter_name: '',
-        discord_id: '',
-        wallet: '',
-        email: '',
-        phone: '',
-        userTokens: '',
-        status: 'Added by creator'
+        email: userMetaData.email,
       })
       console.log('Data written into doc ID: ', docRef.id)
       return true
@@ -222,7 +227,11 @@ export default function Allowlist() {
   const { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting } =
     AllowlistUsersTable(userDocs, allowlistUserHeader)
 
-    
+  const makeEditable = (i: number) => {
+    setEditting(true)
+    console.log(userDocs[i])
+  }
+
   return (
     <>
       {auth.uid !== auth.uid ?
@@ -290,65 +299,159 @@ export default function Allowlist() {
                   <TblHead />
                   <TableBody>
                     {listAfterPagingAndSorting().map((list: AllowlistUser, i) => (
-                      <TableRow key={i} className="bg-white">
-                        {listMetaData.emailVerification ? (<TableCell>
-                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                            {list.email}
-                          </span>
-                        </TableCell>) : (<></>)}
-                        <TableCell>
-                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                            {list.phone}
-                          </span>
-                        </TableCell>
-                        {listMetaData.walletVerification ? (<TableCell>
-                          <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                            {list.wallet}
-                          </span>
-                        </TableCell>) : (<></>)}
-                        {listMetaData.twitterVerification ? (<TableCell>
-                          <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
-                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                              {list.twitter_name}
-                            </span>
-                          </a>
-                        </TableCell>) : (<></>)}
-                        {listMetaData.discordVerification ? (
-                          <TableCell>
-                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
-                              {list.discord_username}
-                            </span>
-                          </TableCell>
-                        ) : (<></>)}
-                        {listMetaData.discordGuild ? (
-                          <TableCell>
-                            <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
-                          </TableCell>
-                        ) : (<></>)}
-                        <TableCell>
-                          <span className="text-gray-500">{list.status}</span>
-                        </TableCell>
-                        <TableCell>
-                          <Image
-                            className="hover:cursor-pointer"
-                            onClick={() => console.log('edit')}
-                            alt="add"
-                            src="/assets/edit.svg"
-                            height="20"
-                            width="20"
-                          />
-                          {i + 1 === listAfterPagingAndSorting().length ? (
-                            <Image
-                              className="hover:cursor-pointer"
-                              onClick={() => createNewUser(listAfterPagingAndSorting().length)}
-                              alt="add"
-                              src="/assets/add.svg"
-                              height="80"
-                              width="80"
-                            />
-                          ) : (<></>)}
-                        </TableCell>
-                      </TableRow>
+                      <>
+                        {editting ? (
+                          <TableRow key={i} className="bg-white">
+                            {listMetaData.emailVerification ? (
+                              <TableCell>
+                                <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, email: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.email}
+                                  type="text"
+                                  placeholder={list.email}
+                                />
+                              </TableCell>
+                            ) : (<></>)}
+                            <TableCell>
+                            <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, phone: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.phone}
+                                  type="text"
+                                  placeholder={list.phone}
+                                />
+                            </TableCell>
+                            {listMetaData.walletVerification ? (
+                              <TableCell>
+                                   <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, wallet: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.wallet}
+                                  type="text"
+                                  placeholder={list.wallet}
+                                />
+                              </TableCell>
+                            ) : (<></>)}
+                            {listMetaData.twitterVerification ? (
+                              <TableCell>
+                                <span>Twitter name</span>
+                                  <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, twitterName: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.twitter_name}
+                                  type="text"
+                                  placeholder={list.twitter_name}
+                                />
+                                <span>Twitter Id</span>
+                                  <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, twitterId: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.twitter_id}
+                                  type="text"
+                                  placeholder={list.twitter_id}
+                                />
+                              </TableCell>) : (<></>)}
+                            {listMetaData.discordVerification ? (
+                              <TableCell>
+                                <input
+                                  onChange={(e) => setUserMetaData({ ...userMetaData, discordId: e.target.value })}
+                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                  id={list.discord_username}
+                                  type="text"
+                                  placeholder={list.discord_username}
+                                />
+                              </TableCell>
+                            ) : (<></>)}
+                            {listMetaData.discordGuild ? (
+                              <TableCell>
+                                <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                              </TableCell>
+                            ) : (<></>)}
+                            <TableCell>
+                              <span className="text-gray-500">{list.status}</span>
+                            </TableCell>
+                            <TableCell>
+                              <Image
+                                className="hover:cursor-pointer"
+                                onClick={() => console.log('populate function query')}
+                                alt="populate"
+                                src="/assets/search.svg"
+                                height="50"
+                                width="50"
+                              />
+                              <Image
+                                className="hover:cursor-pointer"
+                                onClick={() => createNewUser(i)}
+                                alt="save"
+                                src="/assets/save.svg"
+                                height="50"
+                                width="50"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          <TableRow key={i} className="bg-white">
+                            {listMetaData.emailVerification ? (<TableCell>
+                              <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                {list.email}
+                              </span>
+                            </TableCell>) : (<></>)}
+                            <TableCell>
+                              <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                {list.phone}
+                              </span>
+                            </TableCell>
+                            {listMetaData.walletVerification ? (<TableCell>
+                              <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                {list.wallet}
+                              </span>
+                            </TableCell>) : (<></>)}
+                            {listMetaData.twitterVerification ? (<TableCell>
+                              <a href={`https://twitter.com/i/user/${list.twitter_id}`}>
+                                <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                  {list.twitter_name}
+                                </span>
+                              </a>
+                            </TableCell>) : (<></>)}
+                            {listMetaData.discordVerification ? (
+                              <TableCell>
+                                <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">
+                                  {list.discord_username}
+                                </span>
+                              </TableCell>
+                            ) : (<></>)}
+                            {listMetaData.discordGuild ? (
+                              <TableCell>
+                                <span className="... inline-block w-[100px] truncate text-gray-900 hover:w-auto">{`${list.discord_guild}`}</span>
+                              </TableCell>
+                            ) : (<></>)}
+                            <TableCell>
+                              <span className="text-gray-500">{list.status}</span>
+                            </TableCell>
+                            <TableCell>
+                              <Image
+                                className="hover:cursor-pointer"
+                                onClick={() => makeEditable(i)}
+                                alt="add"
+                                src="/assets/edit.svg"
+                                height="20"
+                                width="20"
+                              />
+                              {i + 1 === listAfterPagingAndSorting().length ? (
+                                <Image
+                                  className="hover:cursor-pointer"
+                                  onClick={() => createNewUser(listAfterPagingAndSorting().length)}
+                                  alt="add"
+                                  src="/assets/add.svg"
+                                  height="80"
+                                  width="80"
+                                />
+                              ) : (<></>)}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </>
                     ))}
                   </TableBody>
                   <TblPagination />
