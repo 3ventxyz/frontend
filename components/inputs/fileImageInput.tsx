@@ -17,15 +17,13 @@ export default function FileImageInput({
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
-  name,
-  isDisabled = false
+  name
 }: {
   fileImg: File | null
   setFileImg: (name: string, value: File) => void
   imgUrlTemplate?: string
   name: string
   mode?: 'event' | 'landing' | undefined
-  isDisabled?: boolean
 }) {
   const [imgUrl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
@@ -52,7 +50,6 @@ export default function FileImageInput({
       >
         <DisplayPredefinedImage
           name={name}
-          isDisabled={isDisabled}
           mode={mode}
           imgUrlTemplate={imgUrlTemplate}
           isMouseHover={isMouseHover}
@@ -87,7 +84,6 @@ export default function FileImageInput({
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
         setMouseHover={setMouseHover}
-        isDisabled={isDisabled}
       />
     </div>
   ) : (
@@ -104,7 +100,6 @@ export default function FileImageInput({
         mode={mode}
         setFileImg={setFileImg}
         setImgUrl={setImgUrl}
-        isDisabled={isDisabled}
       />
     </div>
   )
@@ -114,19 +109,16 @@ function UploadFileImage({
   mode,
   name,
   setFileImg,
-  setImgUrl,
-  isDisabled
+  setImgUrl
 }: {
   mode: string
   name: string
   setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
-  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
       <input
-        disabled={isDisabled}
         id={`img-input-${mode}`}
         type="file"
         className="hidden"
@@ -136,6 +128,7 @@ function UploadFileImage({
           setImgUrl(URL.createObjectURL(event.target.files[0]))
         }}
       />
+      {/* check the previous code. and it may not be from dev. */}
       <div className="flex h-full items-center justify-center text-gray-400 ">
         <div className="flex w-[150px] flex-col items-center  justify-center ">
           {mode === 'event' ? (
@@ -158,7 +151,6 @@ function FileImageUploaded({
   mode,
   imgUrl,
   isMouseHover,
-  isDisabled,
   name,
   setFileImg,
   setImgUrl,
@@ -171,7 +163,6 @@ function FileImageUploaded({
   setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
   setMouseHover: (mouseHover: boolean) => void
-  isDisabled: boolean
 }) {
   return (
     <label htmlFor={`img-input-${mode}`}>
@@ -181,7 +172,7 @@ function FileImageUploaded({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover && !isDisabled ? (
+      {isMouseHover ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
           <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>
@@ -191,7 +182,6 @@ function FileImageUploaded({
       )}
       <input
         id={`img-input-${mode}`}
-        disabled={isDisabled}
         type="file"
         className="hidden"
         accept="image/*"
@@ -208,7 +198,6 @@ function DisplayPredefinedImage({
   mode,
   imgUrlTemplate,
   isMouseHover,
-  isDisabled,
   name,
   setFileImg,
   setImgUrl,
@@ -217,7 +206,6 @@ function DisplayPredefinedImage({
   mode: string
   imgUrlTemplate: string
   isMouseHover: boolean
-  isDisabled: boolean
   name: string
   setFileImg: (name: string, file: File) => void
   setImgUrl: (url: string) => void
@@ -231,7 +219,7 @@ function DisplayPredefinedImage({
         objectFit="cover"
         className="rounded-3xl"
       />
-      {isMouseHover && !isDisabled ? (
+      {isMouseHover ? (
         <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-gray-400 text-white opacity-70">
           <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px]" />
           <div>Please click to change your image</div>
@@ -241,7 +229,6 @@ function DisplayPredefinedImage({
       )}
       <input
         id={mode}
-        disabled={isDisabled}
         type="file"
         className="hidden"
         accept="image/*"
