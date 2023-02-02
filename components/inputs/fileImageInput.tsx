@@ -93,7 +93,7 @@ export default function FileImageInput({
         mode === 'event'
           ? 'h-[325px] max-h-[320px] w-[325px] md:h-[384px] md:w-[380px]'
           : 'h-[166px] w-[352px] md:h-[285px] md:w-[600px]'
-      } relative rounded-3xl bg-gray-300 hover:cursor-pointer  sm:max-h-full`}
+      } relative rounded-3xl bg-gray-300  hover:bg-gray-400  sm:max-h-full`}
     >
       <UploadFileImage
         name={name}
@@ -129,7 +129,7 @@ function UploadFileImage({
         }}
       />
       {/* check the previous code. and it may not be from dev. */}
-      <div className="flex h-full items-center justify-center text-gray-400 ">
+      <div className="flex h-full items-center justify-center hover:cursor-pointer text-gray-400 hover:text-gray-500">
         <div className="flex w-[150px] flex-col items-center  justify-center ">
           {mode === 'event' ? (
             <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px] " />
