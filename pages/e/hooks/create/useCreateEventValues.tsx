@@ -64,10 +64,12 @@ export default function useCreateEventValues(
     ) {
       return CreateEventErrors.invalidFileType
     }
-    //TODO. UPDATE THE VALIDATOR FOR IMAGE THAT CAN CHECK THAT FILES EXISTS.
-    // if (values.event_img_url == '' && values.landing_img_url == '') {
-    //   return CreateEventErrors.emptyImage
-    // }
+    if (values.event_img_url == '' && !values.event_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+    if (values.landing_img_url == '' && !values.landing_file_img) {
+      return CreateEventErrors.emptyImage
+    }
     if (
       values.event_location.address === '' ||
       values.event_location.lat === 0 ||
