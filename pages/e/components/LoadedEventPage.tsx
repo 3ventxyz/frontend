@@ -32,7 +32,7 @@ export default function LoadedEventPage({
       <div className="flex space-x-[15px] ">
         <div id="first-col" className="flex w-[625px] flex-col space-y-[20px]">
           <div className="w-[600px]">
-            <h3>Details</h3>
+            <h3>Event Description</h3>
             <div>{events?.accessedEventData?.description}</div>
           </div>
           <RegisteredAttendees
@@ -46,6 +46,9 @@ export default function LoadedEventPage({
           />
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
+          {/* TODO(2/2/2023) Move this to Event details component, and make these
+          2 components appear as a one merged UI component in the event page. */}
+          {/* Event Details Title Header */}
           <LocationCard event={events?.accessedEventData} />
           <DateCard event={events?.accessedEventData} />
           <RegisterEventButton setShowModal={setShowModal} />

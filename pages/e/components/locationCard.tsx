@@ -1,7 +1,11 @@
-import { TbPhoto, TbMap } from 'react-icons/tb'
+import { TbMap } from 'react-icons/tb'
 import { EventInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 
+/**TODO(2/2/2023) Marthel: make the component expandable, based from the length of the address. 
+ * Based from the number of characters, including spaces, there's going to be an increase of heigth for 
+ * the whole div. 
+ */
 export default function LocationCard({
   event
 }: {

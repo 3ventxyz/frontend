@@ -1,6 +1,7 @@
 import { EventInterface } from '../../../shared/interface/common'
 import { BsCalendar3 } from 'react-icons/bs'
 
+/**TODO(2/2/2023). Marthel: Merge with the details component. So the UI looks all together. */
 export default function DateCard({ event }: { event: EventInterface | null }) {
   return !event ? (
     <div
