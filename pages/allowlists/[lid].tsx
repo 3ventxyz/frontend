@@ -227,6 +227,19 @@ export default function Allowlist() {
       console.log(e)
     }
   }
+  /*Make new empty user */
+  const createNewUser = async (id: number) => {
+    setEditting(false)
+    try {
+      const docRef = doc(db, 'lists', `${lid}`)
+      await updateDoc(docRef, { length: id + 1 })
+      await setDoc(doc(collection(docRef, 'registered_users'), `${id + 1}`), {})
+      console.log('Data written into doc ID: ', docRef.id)
+      return true
+    } catch (e) {
+      console.error('Error adding data: ', e)
+    }
+  }
 
   const saveNewUser = async (i: number) => {
     setEditting(false)
