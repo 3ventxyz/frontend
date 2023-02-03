@@ -21,7 +21,7 @@ export default function CreateEventImageInput({
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, predefinedImgUrl: string) => void
 }) {
-  const [menuVisible, setMenuVisible] = useState(true)
+  const [menuVisible, setMenuVisible] = useState(false)
   const imgUrlName = landingMode ? 'landing_img_url' : 'event_img_url'
   const fileImgName = landingMode ? 'landing_file_img' : 'event_file_img'
 

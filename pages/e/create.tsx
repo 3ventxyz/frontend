@@ -78,6 +78,13 @@ export default function CreateEvent() {
    **/
   const createEvent = async () => {
     let formError: CreateEventErrors
+    let eventImgURL: string
+    let landingPortraitURL: string
+
+    let eventImgfileType: string
+    let eventImgStoragePath: string
+    let landingPortraitfileType: string
+    let landingPortraitStoragePath: string
     setCreatingNewEvent(true)
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
@@ -85,71 +92,62 @@ export default function CreateEvent() {
       setErrorMsg(formError)
       return
     }
+
+    /**setting event_img_urls */
     try {
       if (values.event_file_img !== null) {
-        console.log('fileImg: ', values.event_file_img?.type)
-        const fileType = setFiletype(values.event_file_img)
-        const storagePath: string = `${auth.uid}/${values.event_id + fileType}`
-        console.log('uploading image: ', values.event_file_img?.name)
-        await uploadImageToStorage(
+        eventImgfileType = setFiletype(values.event_file_img)
+        eventImgStoragePath = `${auth.uid}/${
+          values.event_id + '_event' + eventImgfileType
+        }`
+        eventImgURL = await uploadImageToStorage(
           values.event_file_img,
-          storagePath,
-          async (url: string) => {
-            await events.submitEventToFirebase(
-              {
-                title: values.title,
-                end_date: values.end_date,
-                start_date: values.start_date,
-                uid: auth.uid,
-                description: values.event_description,
-                location: values.event_location,
-                img_url: url,
-                ticket_max: values.ticket_max,
-                event_id: values.event_id,
-                registered_attendees: 0
-              },
-              {
-                title: values.title,
-                uid: auth.uid,
-                event_id: values.event_id,
-                start_date: values.start_date,
-                end_date: values.end_date
-              }
-            )
-            console.log('pushing to event page')
-            router.push(`/e/${values.event_id}`)
-          }
+          eventImgStoragePath
         )
-      } else if (
-        values.event_img_url !== null &&
-        values.landing_img_url !== null
-      ) {
-        await events.submitEventToFirebase(
-          {
-            title: values.title,
-            end_date: values.end_date,
-            start_date: values.start_date,
-            uid: auth.uid,
-            description: values.event_description,
-            location: values.event_location,
-            img_url: values.event_img_url,
-            ticket_max: values.ticket_max,
-            event_id: values.event_id,
-            registered_attendees: 0
-          },
-          {
-            title: values.title,
-            uid: auth.uid,
-            event_id: values.event_id,
-            start_date: values.start_date,
-            end_date: values.end_date
-          }
-        )
-        console.log('pushing to event page')
-        router.push(`/e/${values.event_id}`)
       } else {
-        throw 'no image selected'
+        eventImgURL = values.event_img_url
       }
+
+      /**setting landing_img_urls */
+      if (values.landing_file_img !== null) {
+        landingPortraitfileType = setFiletype(values.landing_file_img)
+        landingPortraitStoragePath = `${auth.uid}/${
+          values.event_id + '_portrait' + landingPortraitfileType
+        }`
+        landingPortraitURL = await uploadImageToStorage(
+          values.landing_file_img,
+          landingPortraitStoragePath
+        )
+      } else {
+        landingPortraitURL = values.landing_img_url
+      }
+
+      //once both urls variables are setted, then we
+      //can start to submit it and push it to the event screen.
+      await events.submitEventToFirebase(
+        {
+          title: values.title,
+          end_date: values.end_date,
+          start_date: values.start_date,
+          uid: auth.uid,
+          description: values.event_description,
+          location: values.event_location,
+          img_url: eventImgURL,
+          landing_portrait_url: landingPortraitURL,
+          ticket_max: values.ticket_max,
+          event_id: values.event_id,
+          registered_attendees: 0
+        },
+        {
+          title: values.title,
+          uid: auth.uid,
+          event_id: values.event_id,
+          start_date: values.start_date,
+          end_date: values.end_date
+        }
+      )
+      console.log('pushing to event page')
+      router.push(`/e/${values.event_id}`)
     } catch (e) {
       console.error('event/create:', e)
       alert(

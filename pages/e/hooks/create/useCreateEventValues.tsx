@@ -57,13 +57,17 @@ export default function useCreateEventValues(
     if (values.title === '') {
       return CreateEventErrors.emptyTitle
     }
+
     if (
       !fileTypeValidator(values.event_file_img) ||
       !fileTypeValidator(values.landing_file_img)
     ) {
       return CreateEventErrors.invalidFileType
     }
-    if (values.event_img_url == '' && values.landing_img_url == '') {
+    if (values.event_img_url == '' && !values.event_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+    if (values.landing_img_url == '' && !values.landing_file_img) {
       return CreateEventErrors.emptyImage
     }
     if (
