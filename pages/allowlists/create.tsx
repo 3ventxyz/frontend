@@ -42,7 +42,6 @@ export default function CreateAllowlist() {
     try {
       setLoading(true)
       const response = await allowlistService.create(
-        allowlistRef.current?.value ?? '',
         titleRef.current?.value ?? '',
         descriptionRef.current?.value ?? '',
         auth.currentUser?.uid ?? '',
@@ -60,7 +59,6 @@ export default function CreateAllowlist() {
         checkNumOfTokens,
         parseInt(numberOfTokens)
       )
-
       if (!response?.success) {
         throw Error(response?.message)
       } else {
@@ -107,22 +105,6 @@ export default function CreateAllowlist() {
               ref={descriptionRef}
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="message"
-              className="mb-2 block text-sm font-medium text-gray-900"
-            >
-              ADDRESSES
-            </label>
-            <textarea
-              id="message"
-              rows={4}
-              ref={allowlistRef}
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              placeholder="Add the list of addresses separated with comma"
-              required
-            ></textarea>
           </div>
           <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">WALLET</span>

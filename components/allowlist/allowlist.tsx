@@ -80,7 +80,7 @@ export default function Allowlists() {
                     </TableCell>
                     <TableCell>
                       <span className="text-gray-500">
-                        {list.allowlist.length}
+                        {list.length}
                       </span>
                     </TableCell>
                     <TableCell>

@@ -51,15 +51,8 @@ export default function EditAllowlistForm({
 
       const response = await allowlistService.update(
         id,
-        {
-          allowlist: allowlistService.getAllowlistFromString(
-            allowlistRef.current?.value ?? ''
-          ),
-          uid: allowlist?.uid ?? '',
-          title: titleRef.current?.value ?? '',
-          description: descriptionRef.current?.value ?? '',
-          allowlist_id: id
-        },
+        titleRef.current?.value ?? '',
+        descriptionRef.current?.value ?? '',
         auth.currentUser?.uid ?? '',
         walletVerification.current,
         twitterVerification.current,

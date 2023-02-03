@@ -45,6 +45,7 @@ export interface EventHostInterface {
 export interface AllowlistUser {
   uid: string
   email: string
+  phone: string
   wallet: string
   twitter_id: string
   twitter_name: string
@@ -82,7 +83,20 @@ export interface AllowlistInterface {
   title: string
   description?: string
   allowlist_id?: string
-  allowlist: Array<string>
+  length: number
+  wallet: boolean
+  twitter: boolean
+  twitterFollowing: boolean
+  twitterAccountId: string
+  discord: boolean
+  discordGuild: boolean
+  discordGuildId: string
+  email: boolean
+  permalink: string
+  checkTokens: boolean
+  contractAddress: string
+  checkNumOfTokens: boolean
+  numberOfTokens: number
 }
 
 export interface PostInterface {

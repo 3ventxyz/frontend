@@ -102,10 +102,10 @@ export default function TventTable(
   }
 
   function allowlistLengthComparator(a: AllowlistInterface, b: AllowlistInterface) {
-    if (b.allowlist.length < a.allowlist.length) {
+    if (b.length < a.length) {
       return -1;
     }
-    if (b.allowlist.length > a.allowlist.length) {
+    if (b.length > a.length) {
       return 1;
     }
     return 0;

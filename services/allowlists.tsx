@@ -6,7 +6,8 @@ import {
   doc,
   getDoc,
   getDocs,
-  updateDoc
+  updateDoc,
+  setDoc
 } from '@firebase/firestore'
 import { ethers } from 'ethers'
 import { useAuth } from '../contexts/auth'
@@ -14,6 +15,9 @@ import { AllowlistInterface } from '../shared/interface/common'
 import { db } from './firebase_config'
 
 export default class AllowlistService {
+  getAllowlistFromString(arg0: string) {
+    throw new Error('Method not implemented.')
+  }
   listsCollectionRef: CollectionReference
 
   constructor() {
@@ -32,22 +36,7 @@ export default class AllowlistService {
     }
   }
 
-  getAllowlistFromString = (allowlist: string) => {
-    // Gets the input string with all address and removes extra spaces,
-    // apostrophes, repeated and invalid addresses
-    const _allowlist = allowlist
-      .split(',')
-      .map((e, i) => {
-        return e.trim().replaceAll("'", '')
-      })
-      .filter((val, id, array) => {
-        return array.indexOf(val) === id && this.isValidAddress(val)
-      })
-    return _allowlist
-  }
-
   create = async (
-    addresses: string,
     title: string,
     description: string,
     uid: string,
@@ -73,32 +62,31 @@ export default class AllowlistService {
       ) {
         return authVerification
       } else {
-        const allowlist = this.getAllowlistFromString(addresses)
-
-        if (allowlist && allowlist.length > 0) {
-          await addDoc(this.listsCollectionRef, {
-            title: title,
-            description: description,
-            allowlist: allowlist,
-            uid: doc(db, 'users', uid),
-            walletVerif: wallet,
-            twitterVerif: twitter,
-            twitterFollowing: twitterFollowing,
-            twitterAccountId: twitterAccountId,
-            discordVerif: discord,
-            discordGuild: discordGuild,
-            discordGuildId: discordGuildId,
-            emailVerif: email,
-            permalink: permalink,
-            checkTokens: checkTokens,
-            contractAddress: contractAddress,
-            checkNumOfTokens: checkNumOfTokens,
-            numberOfTokens: numberOfTokens
-          })
-          return { success: true, message: 'List created successfully' }
-        } else {
-          return { success: false, message: 'Any of the addresses are valid' }
+        const listRef = await addDoc(this.listsCollectionRef, {
+          title: title,
+          description: description,
+          uid: doc(db, 'users', uid),
+          walletVerif: wallet,
+          twitterVerif: twitter,
+          twitterFollowing: twitterFollowing,
+          twitterAccountId: twitterAccountId,
+          discordVerif: discord,
+          discordGuild: discordGuild,
+          discordGuildId: discordGuildId,
+          emailVerif: email,
+          permalink: permalink,
+          checkTokens: checkTokens,
+          contractAddress: contractAddress,
+          checkNumOfTokens: checkNumOfTokens,
+          numberOfTokens: numberOfTokens,
+          length: 0
+        })
+        try {
+          await setDoc(doc(collection(listRef, 'registered_users'), '0'), {})
+        } catch (e) {
+          console.error('Error adding data: ', e)
         }
+        return { success: true, message: 'List created successfully' }
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -113,14 +101,6 @@ export default class AllowlistService {
           message: `Could not create the allowlist`
         }
       }
-    }
-  }
-
-  private isValidAddress = (adr: string) => {
-    try {
-      return ethers.utils.isAddress(adr)
-    } catch (e) {
-      return false
     }
   }
 
@@ -147,7 +127,8 @@ export default class AllowlistService {
 
   update = async (
     id: string,
-    allowlist: AllowlistInterface,
+    title: string,   
+    description: string, 
     uid: string,
     wallet: boolean,
     twitter: boolean,
@@ -167,9 +148,8 @@ export default class AllowlistService {
       if (id) {
         const authVerification = await this.checkAuth(id, uid)
         await updateDoc(doc(db, 'lists', id), {
-          title: allowlist.title,
-          description: allowlist.description,
-          allowlist: allowlist.allowlist,
+          title: title,
+          description: description,
           uid: doc(db, 'users', uid),
           walletVerif: wallet,
           twitterVerif: twitter,
@@ -212,7 +192,20 @@ export default class AllowlistService {
           title: doc.data().title,
           description: doc.data().description,
           allowlist_id: doc.id,
-          allowlist: doc.data().allowlist
+          length: doc.data().length,
+          wallet: doc.data().walletVerif,
+          twitter: doc.data().twitterVerif,
+          twitterFollowing: doc.data().twitterFollowing,
+          twitterAccountId: doc.data().twitterAccountId,
+          discord: doc.data().discordVerif,
+          discordGuild: doc.data().discordGuild,
+          discordGuildId: doc.data().discordGuildId,
+          email: doc.data().emailVerif,
+          permalink: doc.data().permalink,
+          checkTokens: doc.data().checkTokens,
+          contractAddress: doc.data().contractAddress,
+          checkNumOfTokens: doc.data().checkNumOfTokens,
+          numberOfTokens: doc.data().numberOfTokens
         }))
         .filter((doc) => doc.uid === uid)
       return allowlists

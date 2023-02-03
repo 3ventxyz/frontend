@@ -8,7 +8,7 @@ import { db } from '../../services/firebase_config'
 const saveFollowing = async (
   discord_guild: boolean,
   lid: string,
-  uid: string,
+  uid: number,
   discord_username: string
 ) => {
   try {
@@ -26,7 +26,7 @@ const saveFollowing = async (
 
 export async function verifyDiscord(
   accessCode: string,
-  uid: string,
+  id: number,
   redirectUrl: string,
   guildId: string,
   lid: string
@@ -82,7 +82,7 @@ export async function verifyDiscord(
       /*check if guild is in the list*/
       guilds.forEach((guild: any) => {
         if (guild.id === guildId) {
-          saveFollowing(true, lid, uid, user.username)
+          saveFollowing(true, lid, id, user.username)
           return true
         }
       })
@@ -95,10 +95,12 @@ export async function verifyDiscord(
 
 export default function VerifyGuild({
   discordGuildID = '',
-  lid = ''
+  lid = '',
+  id = 0
 }: {
   discordGuildID: string
-  lid: string
+  lid: string,
+  id: number
 }) {
   const { asPath } = useRouter()
   const router = useRouter()
@@ -123,7 +125,7 @@ export default function VerifyGuild({
       }
     }
     if (hash != '') {
-      verifyDiscord(hash, uid, url, discordGuild, lid)
+      verifyDiscord(hash, id, url, discordGuild, lid)
     }
   }, [hash])
 
