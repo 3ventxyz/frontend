@@ -65,6 +65,16 @@ export default function Allowlist() {
     discordGuild: false,
     wallet: ''
   })
+  const [newUserMetaData, setNewUserMetaData] = useState({
+    id: 0,
+    email: '',
+    phone: '',
+    twitterId: '',
+    twitterName: '',
+    discordId: '',
+    discordGuild: false,
+    wallet: ''
+  })
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -197,32 +207,41 @@ export default function Allowlist() {
     await fetchData()
     setAddresses(new Map())
   }
-  /*Make new empty user */
-  const createNewUser = async (id: number) => {
-    setEditting(false)
-    try {
-      const docRef = doc(db, 'lists', `${lid}`)
-      await updateDoc(docRef, { length: id + 1 })
-      await setDoc(doc(collection(docRef, 'registered_users'), `${id + 1}`), {
-        email: userMetaData.email,
-      })
-      console.log('Data written into doc ID: ', docRef.id)
-      return true
-    } catch (e) {
-      console.error('Error adding data: ', e)
-    }
-  }
 
   const populateUser = async (data: string) => {
     try {
       const users = query(collection(db, 'users'), where("email", "==", data))
       const usersSnapshot = await getDocs(users)
-      usersSnapshot.forEach((doc) => {
-        console.log(doc.id, "=>", doc.data().uid)
+      await usersSnapshot.forEach((doc) => {
+        setNewUserMetaData({...newUserMetaData,
+          id: 1,
+          email: doc.data().email,
+          phone: doc.data().phone_number,
+          twitterId: doc.data().twitter_id,
+          twitterName: doc.data().twitter_name,
+          discordId: doc.data().discord_id,
+          wallet: doc.data().wallet
+        })
       })
     } catch (e) {
       console.log(e)
-      return []
+    }
+  }
+
+  const saveNewUser = async () => {
+    setEditting(false)
+    try {
+      const docRef = doc(db, 'lists', `${lid}`)
+      await setDoc(doc(collection(docRef, 'registered_users'), `${1}`), {
+        email: newUserMetaData.email,
+          phone: newUserMetaData.phone,
+          twitterId: newUserMetaData.twitterId,
+          twitterName: newUserMetaData.twitterName,
+          discordId: newUserMetaData.discordId,
+          wallet: newUserMetaData.wallet
+      })
+    } catch(e) {
+      console.log(e)
     }
   }
   const allowlistUserHeader = [
@@ -394,7 +413,7 @@ export default function Allowlist() {
                               />
                               <Image
                                 className="hover:cursor-pointer"
-                                onClick={() => createNewUser(i)}
+                                onClick={() => saveNewUser()}
                                 alt="save"
                                 src="/assets/save.svg"
                                 height="50"
