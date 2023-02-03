@@ -9,6 +9,7 @@ import VerifyGuild from '../components/auth/verifyGuild'
 import Link from 'next/link'
 import Modal from '../components/utils/modal'
 import TokenOwnership from '../components/token_ownership'
+import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 
 export default function AllowlistApplication() {
   const auth = useAuth()
@@ -72,7 +73,7 @@ export default function AllowlistApplication() {
         })
       }
     }
-  }, [listMetaData, asPath])
+  }, [])
 
   /*Allowlist Info */
   useEffect(() => {
@@ -124,20 +125,20 @@ export default function AllowlistApplication() {
           phone: docSnap.data().phone_number
         })
       } else {
-        console.log('No such document!')
+        console.log('No such document?!')
       }
     }
     getUserInfo()
-  }, [userMetaData])
+    console.log('guild2', userMetaData.guildMember)
+
+  }, [])
 
   /*Get user info on list only after you come back from the oauth and submit button activation*/
   useEffect(() => {
     const getUserInfo = async () => {
       try {
         const docRef = doc(db, 'lists', listMetaData.lid)
-        const userRef = await getDoc(
-          doc(collection(docRef, 'registered_users'), `${listMetaData.length + 1}`)
-        )
+        const userRef = await getDoc(doc(collection(docRef, 'registered_users'), `${listMetaData.length}`))
         if (userRef.exists()) {
           setUserMetaData({
             ...userMetaData,
@@ -150,7 +151,9 @@ export default function AllowlistApplication() {
       } catch (e) {
         console.error('Error adding data: ', e)
       }
+      console.log(userMetaData.guildMember)
     }
+
     const canUserSubmit = () => {
       const discordGuildRequired = listMetaData.discordGuild
         ? userMetaData.guildMember
@@ -173,9 +176,8 @@ export default function AllowlistApplication() {
     }
 
     getUserInfo()
-
     canUserSubmit()
-  }, [listMetaData, userMetaData])
+  }, [userMetaData])
 
   /*Modal Visibility*/
   useEffect(() => {
@@ -205,7 +207,7 @@ export default function AllowlistApplication() {
       )
     }
     ModalVisibility()
-  }, [listMetaData, userMetaData])
+  }, [])
 
   /*Save info */
   const saveProfile = async (
@@ -258,10 +260,10 @@ export default function AllowlistApplication() {
 
   /*Submit profile*/
   const submitProfile = async () => {
-      const docRef = doc(db, 'lists', listMetaData.lid?.toString() ?? '')
-      await updateDoc(docRef, {
-        length: listMetaData.length + 1
-      })
+    const docRef = doc(db, 'lists', listMetaData.lid?.toString() ?? '')
+    await updateDoc(docRef, {
+      length: listMetaData.length + 1
+    })
     saveProfile(userMetaData.uid,
       userMetaData.twitter[userMetaData.twitterValue],
       userMetaData.twitterName[userMetaData.twitterValue],
@@ -278,7 +280,6 @@ export default function AllowlistApplication() {
       twitterValue: e.target.value
     })
   }
-
   return (
     <div className="flex w-screen bg-secondaryBg pb-[100px] pt-[35px]">
       {listMetaData.lid !== '' ? (
@@ -417,6 +418,7 @@ export default function AllowlistApplication() {
                   <VerifyGuild
                     discordGuildID={listMetaData.guild}
                     lid={listMetaData.lid}
+                    id={listMetaData.length}
                   />
                 </div>
               )}
@@ -508,7 +510,7 @@ export default function AllowlistApplication() {
                 active={submit}
                 onClick={() => {
                   submitProfile(
-                    
+
                   )
                 }}
               ></Button>

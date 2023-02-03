@@ -12,7 +12,7 @@ import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/allowlist/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'
 import DeleteConfirmation from '../../components/allowlist/deleteConfirmation'
-import { doc, getDoc, collection, getDocs, updateDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, collection, getDocs, updateDoc, setDoc, query, where } from 'firebase/firestore'
 import { db } from '../../services/firebase_config'
 import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell, FormControlLabel, Checkbox } from '@mui/material'
@@ -213,6 +213,18 @@ export default function Allowlist() {
     }
   }
 
+  const populateUser = async (data: string) => {
+    try {
+      const users = query(collection(db, 'users'), where("email", "==", data))
+      const usersSnapshot = await getDocs(users)
+      usersSnapshot.forEach((doc) => {
+        console.log(doc.id, "=>", doc.data().uid)
+      })
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
   const allowlistUserHeader = [
     { id: 'email', label: 'Email', disableSorting: false, display: listMetaData.emailVerification },
     { id: 'phone', label: 'Phone', disableSorting: true, display: true },
@@ -229,7 +241,7 @@ export default function Allowlist() {
 
   const makeEditable = (i: number) => {
     setEditting(true)
-    console.log(userDocs[i])
+    console.log('makeEditable', userDocs[i])
   }
 
   return (
@@ -305,7 +317,7 @@ export default function Allowlist() {
                             {listMetaData.emailVerification ? (
                               <TableCell>
                                 <input
-                                  onChange={(e) => setUserMetaData({ ...userMetaData, email: e.target.value })}
+                                  onChange={(e) => setEmail(e.target.value)}
                                   className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
                                   id={list.email}
                                   type="text"
@@ -314,17 +326,17 @@ export default function Allowlist() {
                               </TableCell>
                             ) : (<></>)}
                             <TableCell>
-                            <input
-                                  onChange={(e) => setUserMetaData({ ...userMetaData, phone: e.target.value })}
-                                  className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
-                                  id={list.phone}
-                                  type="text"
-                                  placeholder={list.phone}
-                                />
+                              <input
+                                onChange={(e) => setUserMetaData({ ...userMetaData, phone: e.target.value })}
+                                className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
+                                id={list.phone}
+                                type="text"
+                                placeholder={list.phone}
+                              />
                             </TableCell>
                             {listMetaData.walletVerification ? (
                               <TableCell>
-                                   <input
+                                <input
                                   onChange={(e) => setUserMetaData({ ...userMetaData, wallet: e.target.value })}
                                   className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
                                   id={list.wallet}
@@ -336,7 +348,7 @@ export default function Allowlist() {
                             {listMetaData.twitterVerification ? (
                               <TableCell>
                                 <span>Twitter name</span>
-                                  <input
+                                <input
                                   onChange={(e) => setUserMetaData({ ...userMetaData, twitterName: e.target.value })}
                                   className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
                                   id={list.twitter_name}
@@ -344,7 +356,7 @@ export default function Allowlist() {
                                   placeholder={list.twitter_name}
                                 />
                                 <span>Twitter Id</span>
-                                  <input
+                                <input
                                   onChange={(e) => setUserMetaData({ ...userMetaData, twitterId: e.target.value })}
                                   className={'w-full focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'}
                                   id={list.twitter_id}
@@ -374,7 +386,7 @@ export default function Allowlist() {
                             <TableCell>
                               <Image
                                 className="hover:cursor-pointer"
-                                onClick={() => console.log('populate function query')}
+                                onClick={() => populateUser('Wyman_Fadel95@hotmail.com')}
                                 alt="populate"
                                 src="/assets/search.svg"
                                 height="50"
