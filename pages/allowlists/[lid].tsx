@@ -228,11 +228,11 @@ export default function Allowlist() {
     }
   }
 
-  const saveNewUser = async () => {
+  const saveNewUser = async (i: number) => {
     setEditting(false)
     try {
       const docRef = doc(db, 'lists', `${lid}`)
-      await setDoc(doc(collection(docRef, 'registered_users'), `${1}`), {
+      await setDoc(doc(collection(docRef, 'registered_users'), `${i}`), {
         email: newUserMetaData.email,
           phone: newUserMetaData.phone,
           twitterId: newUserMetaData.twitterId,
@@ -413,7 +413,7 @@ export default function Allowlist() {
                               />
                               <Image
                                 className="hover:cursor-pointer"
-                                onClick={() => saveNewUser()}
+                                onClick={() => saveNewUser(i)}
                                 alt="save"
                                 src="/assets/save.svg"
                                 height="50"
