@@ -13,6 +13,7 @@ import { Button } from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
+import CreateEventTextInput from './createEventTextInput'
 
 export default function SocialFeed({
   isMobile,
@@ -34,6 +35,9 @@ export default function SocialFeed({
    * the click of 'new post' button.
    */
 
+  const onTextChange = (name: string, value: string) => {
+    setComment(value)
+  }
   useEffect(() => {
     const fetchData = async () => {
       if (userData !== null && eventData !== null)
@@ -61,15 +65,20 @@ export default function SocialFeed({
             </div>
           </Link>
         </div>
-        <div className="flex w-full flex-col space-y-2 ">
-          <TextInput
+        <div className="flex w-full flex-col space-y-2">
+          {/**TODO(2/4/2023,Marthel):check the textInput from the createEvent component. and the Button too.
+           * so the variable and setFunction can be updated from here.
+           * */}
+          <CreateEventTextInput
             id={''}
             placeholder="comment..."
             textArea={true}
             labelText={''}
-            setValue={setComment}
+            setTextValue={onTextChange}
             maxWidth={600}
+            value={comment}
             maxWidthForm={600}
+            name={'comment'}
           />
           <Button
             text={'comment'}

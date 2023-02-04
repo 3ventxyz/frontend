@@ -5,13 +5,8 @@ import { useRouter } from 'next/router'
 import RegisterEventButton from './registerEventButton'
 import { useEvents } from '../../../contexts/events'
 import { useUsers } from '../../../contexts/users'
-<<<<<<< HEAD
 import { Button } from '../../../components/buttons/button'
 import { EventDetails } from './eventDetails'
-=======
-import Button from '../../../components/buttons/button'
-import { EventDetails } from './eventDetails'
->>>>>>> b7d9db5 (dateCard and locationCard moved to eventDetails; eventDetails sticked to the top of event page)
 
 // useRef for passing the host data that is fetched from the eid page.
 export default function LoadedEventPage({
