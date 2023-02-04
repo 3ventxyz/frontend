@@ -49,8 +49,18 @@ export default function LoadedEventPage({
           {/* TODO(2/2/2023) Move this to Event details component, and make these
           2 components appear as a one merged UI component in the event page. */}
           {/* Event Details Title Header */}
-          <LocationCard event={events?.accessedEventData} />
-          <DateCard event={events?.accessedEventData} />
+          <div className="rounded-2xl bg-white ">
+            <div className="text-[28px] font-bold ">Event Details</div>
+            <hr />
+            <LocationCard event={events?.accessedEventData} />
+            <hr />
+            <DateCard event={events?.accessedEventData} />
+          </div>
+          {/* ================================================== */}
+
+          {/* TODO(2/2/2023) Marthel: Update this button to have a modal component. That it can help
+          to update the logged in user to update his/her info to register. And add a special disabler, for the 
+          host. */}
           <RegisterEventButton setShowModal={setShowModal} />
           {isEventCreator ? (
             <div>

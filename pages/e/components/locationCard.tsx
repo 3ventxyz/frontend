@@ -14,7 +14,7 @@ export default function LocationCard({
   return (
     <div
       id="location-card"
-      className="flex h-[150px] space-x-3 shadow-md rounded-2xl bg-white"
+      className="flex h-[150px] space-x-3  px-[10px]  "
     >
       {event != null ? (
         <div className="relative h-[150px] w-[150px] rounded-2xl ">
