@@ -83,7 +83,10 @@ export default function SocialFeed({
       <br />
       <hr />
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
-      <div id="social-feed-mobile" className="h-[500px] overflow-y-auto">
+      <div
+        id="social-feed-mobile"
+        className="thin-scrollbar h-[500px] overflow-y-auto"
+      >
         <div className="space-y-[25px]">
           {currValues.posts &&
             currValues.posts.map((post, index) => {
