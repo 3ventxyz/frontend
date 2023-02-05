@@ -5,14 +5,17 @@ interface eventValuesInterface {
 }
 
 interface useEventValuesProps {
-  funct: () => void
+  setFunct: () => void
+  
 }
 
-export function useEventStatus(
+// values that are used for upload and can
+// be changed. like the registering form and event posts.
+export function useEventValues(
   initialState: eventValuesInterface
 ): [eventValuesInterface, useEventValuesProps] {
-  const [currStatus, setStatus] = useState<eventValuesInterface>(initialState)
+  const [currValues, setValues] = useState<eventValuesInterface>(initialState)
 
-  const funct = () => {}
-  return [currStatus, { funct }]
+  const setFunct = () => {}	
+  return [currValues, { setFunct }]
 }
