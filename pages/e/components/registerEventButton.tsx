@@ -7,6 +7,7 @@ import { useEvents } from '../../../contexts/events'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 import checkRegisteredAttendee from '../../../services/fetch_registered_attendee_data'
 import { useRouter } from 'next/router'
+import { useEventStatus } from '../hooks/event/useEventStatus'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -24,14 +25,17 @@ export default function RegisterEventButton({
 }: {
   setShowModal: (toggle: boolean) => void
 }) {
-  const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
-    RegisterComponentEnum.registerEvent
-  )
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
   const events = useEvents()
+  const [
+    currStatus,
+    { setRegisterPage, setIsDatabaseChecked, setRequestingRegistration }
+  ] = useEventStatus({})
+
+  // bring useEventsValues
   const [registeredUserData, setRegisteredUserData] = useState<any>()
-  const [checkedDatabase, setCheckedDatabase] = useState(false)
+
   useEffect(() => {
     /**
      * TODO: fetch the registered user data to see if the user is already
@@ -60,9 +64,9 @@ export default function RegisterEventButton({
         setRegisterPage(RegisterComponentEnum.registerEvent)
         setStyleComponent('h-[85px] bg-[#DE6767]')
       }
-      setCheckedDatabase(true)
+      setIsDatabaseChecked(true)
     }
-    if (!checkedDatabase) {
+    if (!currStatus.isDatabaseChecked) {
       fetchData()
     }
   }, [])
@@ -88,7 +92,7 @@ export default function RegisterEventButton({
   */
 
   const componentPage = () => {
-    switch (registerPage) {
+    switch (currStatus.registerPage) {
       case RegisterComponentEnum.confirmuserInfo:
         // show the confirm info registration page.
         return (
@@ -224,7 +228,10 @@ function YellowComponent({
   setRegisterPage: () => void
   setRegisteredData: (date_of_registration: any) => void
 }) {
+  //TODO (2/6/2023, Marthel) Think a work-around
   const [request, setRequest] = useState(false)
+
+  // this one can stay here, because its a UI delay.
   const [delay, setDelay] = useState(true)
   useEffect(() => {
     const delayAnimation = async () => {

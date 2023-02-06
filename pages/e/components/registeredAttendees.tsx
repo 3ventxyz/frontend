@@ -4,6 +4,7 @@ import FetchRegisteredAttendees from '../../../services/fetch_registered_attende
 import { UserInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEventStatus } from '../hooks/event/useEventStatus'
 export default function RegisteredAttendees({
   isMobile,
   eid = ''
@@ -11,13 +12,14 @@ export default function RegisteredAttendees({
   isMobile: boolean
   eid?: string
 }) {
-  const [attendees, setRegisteredAttendees] =
-    useState<Array<UserInterface>>()
-  const [isFetching, setIsFetching] = useState(true)
+  const [currStatus, { setIsFetchingAttendees }] = useEventStatus({})
   /**
    * --pass the reference of the registered attendees collection.
    * fetch the docs and use each attendee doc to the registeredAtteendee component.
    **/
+
+  //bring useEventsValues
+  const [attendees, setRegisteredAttendees] = useState<Array<UserInterface>>()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +30,8 @@ export default function RegisteredAttendees({
       // console.dir(attendeesDocs.docs)
       for (const attendeeDoc of attendeesDocs.docs) {
         const newAttendee: UserInterface = {
-          address:'',
-          qr_code:'',
+          address: '',
+          qr_code: '',
           avatar: attendeeDoc.data().avatar,
           uid: attendeeDoc.data().uid,
           username: attendeeDoc.data().username
@@ -37,9 +39,9 @@ export default function RegisteredAttendees({
         arrayOfAttendees.push(newAttendee)
       }
       setRegisteredAttendees(arrayOfAttendees)
-      setIsFetching(false)
+      setIsFetchingAttendees(false)
     }
-    if (isFetching) {
+    if (currStatus.isFetchingAttendees) {
       fetchData()
     }
   }, [])
@@ -71,14 +73,10 @@ export default function RegisteredAttendees({
 }
 
 /**pass the avatar, username to display, and the uid for accessing their profile pages. */
-function RegisteredAttendee({
-  attendee
-}: {
-  attendee: UserInterface
-}) {
+function RegisteredAttendee({ attendee }: { attendee: UserInterface }) {
   return (
     <Link href={`/u/${attendee.uid}`}>
-      <div className="flex h-[130px] space-y-[10px] w-[100px] flex-col items-center justify-center rounded-2xl  bg-[#cfe1ff] shadow-lg hover:shadow-xl transition-shadow hover:cursor-pointer">
+      <div className="flex h-[130px] w-[100px] flex-col items-center justify-center space-y-[10px] rounded-2xl  bg-[#cfe1ff] shadow-lg transition-shadow hover:cursor-pointer hover:shadow-xl">
         <div className="relative h-[80px] w-[80px] rounded-full bg-green-200">
           <Image
             src={attendee.avatar ?? ''}

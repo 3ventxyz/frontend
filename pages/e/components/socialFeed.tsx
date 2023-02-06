@@ -7,6 +7,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
+import { useEventStatus } from '../hooks/event/useEventStatus'
+
 export default function SocialFeed({
   isMobile,
   eid = '',
@@ -20,9 +22,12 @@ export default function SocialFeed({
   avatar: string
   username: string
 }) {
+  const [currStatus, { setIsFetchingPosts }] = useEventStatus({})
+  
+  // bring useEventsValues
   const [posts, setPosts] = useState<Array<PostInterface>>()
-  const [isFetching, setIsFetching] = useState(true)
   const [comment, setComment] = useState<string>('')
+
   /**
    * --pass the posts collection reference of the event and fetch it here the docs. There must be a query for the most
    * recent posts to the oldest posts, and it should be the 10 recent posts.
@@ -51,9 +56,9 @@ export default function SocialFeed({
         arrayOfPosts.push(newPost)
       }
       setPosts(arrayOfPosts)
-      setIsFetching(false)
+      setIsFetchingPosts(false)
     }
-    if (isFetching) {
+    if (currStatus.isFetchingPosts) {
       fetchData()
     }
   }, [])

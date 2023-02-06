@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+/**move these enums to another file for exporting. */
 enum EventPageEnum {
   fetchingData,
   fetchedData,
@@ -26,6 +27,8 @@ interface eventStatusInterface {
   requestingRegistration: boolean
 }
 
+/**define the initialValues for the useEventStatus here. */
+
 interface useEventStatusProps {
   setShowModal: (bool: boolean) => void
   setShowQrCodeModal: (bool: boolean) => void
@@ -39,12 +42,29 @@ interface useEventStatusProps {
   setIsFetchingPosts: (bool: boolean) => void
   setRegisterPage: (registerPage: RegisterComponentEnum) => void
   setIsDatabaseChecked: (bool: boolean) => void
+  setRequestingRegistration : (bool: boolean)=>void
 }
 
-export function useEventStatus(
-  initialState: eventStatusInterface
-): [eventStatusInterface, useEventStatusProps] {
+const eventStatusInitialState: eventStatusInterface = {
+  showModal: false,
+  showQrCodeModal: false,
+  isEventCreator: false,
+  eventPageStatus: EventPageEnum.fetchingData,
+  isQRCodeFetched: false,
+  isFetchingAttendees: false,
+  isFetchingPosts: false,
+  registerPage: RegisterComponentEnum.registerEvent,
+  isDatabaseChecked: false,
+  requestingRegistration: false
+}
+
+export function useEventStatus({
+  initialState = eventStatusInitialState
+}: {
+  initialState?: eventStatusInterface
+}): [eventStatusInterface, useEventStatusProps] {
   const [currStatus, setStatus] = useState<eventStatusInterface>(initialState)
+
   const setShowModal = (bool: boolean) => {
     setStatus({ ...currStatus, showModal: bool })
   }
@@ -103,7 +123,8 @@ export function useEventStatus(
       setIsFetchingAttendees,
       setIsFetchingPosts,
       setRegisterPage,
-      setIsDatabaseChecked
+      setIsDatabaseChecked,
+      setRequestingRegistration
     }
   ]
 }

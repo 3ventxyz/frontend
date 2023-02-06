@@ -5,6 +5,9 @@ interface eventValuesInterface {
   registeredUserData: any
 }
 
+//this one can be used for download and upload data
+//that is used locally only inside one page, and not through
+//the whole app.
 interface useEventValuesProps {
   setComment: (comment: string) => void
   setRegisteredUserData: (registeredUserData: any) => void
@@ -23,5 +26,10 @@ export function useEventValues(
   //used for uploading a new registered attendee to firebase.
   const [registeredUserData, setRegisteredUserData] = useState<any>()
 
+  //   TODO: think were to put these later.  These can be moved to eventsContext.
+  //since these vars are data that are fetched and must be stored somewhere.
+  //   const [posts, setPosts] = useState<Array<PostInterface>>()
+  //   const [attendees, setRegisteredAttendees] = useState<Array<UserInterface>>()
+  //   const [qrCodeImgUrl, setQrCodeImgUrl] = useState()
   return [currValues, { setComment, setRegisteredUserData }]
 }
