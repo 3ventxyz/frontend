@@ -21,9 +21,9 @@ interface eventStatusInterface {
   isQRCodeFetched: boolean
   isFetchingAttendees: boolean
   isFetchingPosts: boolean
-
-  //   breakpoint.
-  //   qrCodeImgUrl: string
+  registerPage: RegisterComponentEnum
+  isDatabaseChecked: boolean
+  requestingRegistration: boolean
 }
 
 interface useEventStatusProps {
@@ -31,7 +31,7 @@ interface useEventStatusProps {
   setShowQrCodeModal: (bool: boolean) => void
   setIsEventCreator: (bool: boolean) => void
   setEventPageStatus: (eventPageStatus: EventPageEnum) => void
-  onCloseFrom: (bool: boolean) => void
+  onCloseForm: (bool: boolean) => void
   onCloseAllAttendees: (bool: boolean) => void
   onCloseAllComments: (bool: boolean) => void
   setIsQRCodeFetched: (bool: boolean) => void
@@ -45,35 +45,49 @@ export function useEventStatus(
   initialState: eventStatusInterface
 ): [eventStatusInterface, useEventStatusProps] {
   const [currStatus, setStatus] = useState<eventStatusInterface>(initialState)
+  const setShowModal = (bool: boolean) => {
+    setStatus({ ...currStatus, showModal: bool })
+  }
 
-  const [showModal, setShowModal] = useState(false)
-  const [showQrCodeModal, setShowQrCodeModal] = useState(false)
-  const [isEventCreator, setIsEventCreator] = useState(false)
+  const setShowQrCodeModal = (bool: boolean) => {
+    setStatus({ ...currStatus, showQrCodeModal: bool })
+  }
 
-  const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
-    EventPageEnum.fetchingData
-  )
+  const setIsEventCreator = (bool: boolean) => {
+    setStatus({ ...currStatus, isEventCreator: bool })
+  }
 
-  const onCloseFrom = (bool: boolean) => {}
+  const setEventPageStatus = (currEventPage: EventPageEnum) => {
+    setStatus({ ...currStatus, eventPageStatus: currEventPage })
+  }
+
+  const onCloseForm = (bool: boolean) => {}
   const onCloseAllAttendees = (bool: boolean) => {}
   const onCloseAllComments = (bool: boolean) => {}
 
-  const [isQRCodeFetched, setIsQRCodeFetched] = useState<boolean>(false)
-  const [isFetchingAttendees, setIsFetchingAttendees] = useState(true)
+  const setIsQRCodeFetched = (bool: boolean) => {
+    setStatus({ ...currStatus, isQRCodeFetched: bool })
+  }
 
-  const [isFetchingPosts, setIsFetchingPosts] = useState(true)
-  const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
-    RegisterComponentEnum.registerEvent
-  )
+  const setIsFetchingAttendees = (bool: boolean) => {
+    setStatus({ ...currStatus, isFetchingAttendees: bool })
+  }
 
-  const [isDatabaseChecked, setIsDatabaseChecked] = useState(false)
+  const setIsFetchingPosts = (bool: boolean) => {
+    setStatus({ ...currStatus, isFetchingPosts: bool })
+  }
 
-  //   TODO: think were to put these later.
-  //   const [posts, setPosts] = useState<Array<PostInterface>>()
-  //   const [attendees, setRegisteredAttendees] = useState<Array<UserInterface>>()
-  const [qrCodeImgUrl, setQrCodeImgUrl] = useState()
-  const [comment, setComment] = useState<string>('')
-  const [registeredUserData, setRegisteredUserData] = useState<any>()
+  const setRegisterPage = (currRegisterPage: RegisterComponentEnum) => {
+    setStatus({ ...currStatus, registerPage: currRegisterPage })
+  }
+
+  const setIsDatabaseChecked = (bool: boolean) => {
+    setStatus({ ...currStatus, isDatabaseChecked: bool })
+  }
+
+  const setRequestingRegistration = (bool: boolean) => {
+    setStatus({ ...currStatus, requestingRegistration: bool })
+  }
 
   return [
     currStatus,
@@ -82,7 +96,7 @@ export function useEventStatus(
       setShowQrCodeModal,
       setIsEventCreator,
       setEventPageStatus,
-      onCloseFrom,
+      onCloseForm,
       onCloseAllAttendees,
       onCloseAllComments,
       setIsQRCodeFetched,
