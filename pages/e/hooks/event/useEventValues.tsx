@@ -9,33 +9,43 @@ import {
   PostInterface,
   UserInterface
 } from '../../../../shared/interface/common'
-
+import checkRegisteredAttendee from '../../../../services/fetch_registered_attendee_data'
 interface eventValuesInterface {
   comment: string
-  registeredUserData: any
+  dateOfRegistration: any
   posts: PostInterface[]
   attendees: UserInterface[]
 }
 
+const eventInitialValues = {
+  comment: '',
+  dateOfRegistration: null,
+  posts: [],
+  attendees: []
+}
+
 interface useEventValuesProps {
   setComment: (comment: string) => void
-  setRegisteredUserData: (registeredUserData: any) => void
+  setDateOfRegistration: (dateOfRegistration: any) => void
   uploadPost: (userData: UserInterface, eventData: EventInterface) => void
   registerNewAttendee: (
     userData: UserInterface,
     eventData: EventInterface
   ) => void
   fetchPosts: (uid: string, eid: string) => void
-  fetchAttendees: (uid: string, eid: string) => void
+  fetchAttendees: (eid: string) => void
   setPosts: (posts: PostInterface[]) => void
   setAttendees: (attendees: UserInterface[]) => void
+  checkRegisteredAttendeeFromDB: (
+    userData: UserInterface,
+    eventData: EventInterface
+  ) => void
 }
 
-//this one can be used for download and upload data
-//that is used locally only inside one page, and not through
-//the whole app.
-export default function  useEventValues(
-  initialState: eventValuesInterface
+//useEventValues will handle all local data inside the eid page.
+//it will fetch data from and upload to the database.
+export default function useEventValues(
+  initialState: eventValuesInterface = eventInitialValues
 ): [eventValuesInterface, useEventValuesProps] {
   const [currValues, setValues] = useState<eventValuesInterface>(initialState)
 
@@ -47,15 +57,23 @@ export default function  useEventValues(
     setValues({ ...currValues, posts: posts })
   }
 
-  //is dangerous to have the any type, fix this
-  const setRegisteredUserData = (registeredUserData: any) => {
-    setValues({ ...currValues, registeredUserData: registeredUserData })
+  const setDateOfRegistration = (dateOfRegistration: any) => {
+    setValues({ ...currValues, dateOfRegistration: dateOfRegistration })
   }
 
   const setAttendees = (attendees: UserInterface[]) => {
     setValues({ ...currValues, attendees: attendees })
   }
 
+  const checkRegisteredAttendeeFromDB = async (
+    userData: UserInterface,
+    eventData: EventInterface
+  ) => {
+    const registeredAttendeeData = await checkRegisteredAttendee({
+      uid: userData?.uid === undefined ? '' : userData?.uid,
+      eid: eventData?.event_id === undefined ? '' : eventData?.event_id
+    })
+  }
   // upload the new post to firebase
   const uploadPost = async (
     userData: UserInterface,
@@ -97,7 +115,7 @@ export default function  useEventValues(
       },
       eventData?.event_id === undefined ? '' : eventData?.event_id
     )
-    setRegisteredUserData({ date_of_registration: new Date() })
+    setDateOfRegistration({ dateOfRegistration: new Date() })
   }
 
   //fetch posts data and set them
@@ -121,7 +139,7 @@ export default function  useEventValues(
   }
 
   //fetch the attendees data and set them
-  const fetchAttendees = async (uid: string, eid: string) => {
+  const fetchAttendees = async (eid: string) => {
     const arrayOfAttendees: Array<UserInterface> = []
     var attendeesDocs: QuerySnapshot<DocumentData> =
       await FetchRegisteredAttendees(eid)
@@ -143,7 +161,8 @@ export default function  useEventValues(
     {
       setComment,
       setPosts,
-      setRegisteredUserData,
+      checkRegisteredAttendeeFromDB,
+      setDateOfRegistration,
       setAttendees,
       uploadPost,
       registerNewAttendee,
