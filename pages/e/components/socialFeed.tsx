@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
-import { useEventStatus } from '../hooks/event/useEventStatus'
+import useEventStatus from '../hooks/event/useEventStatus'
 
 export default function SocialFeed({
   isMobile,
@@ -23,7 +23,7 @@ export default function SocialFeed({
   username: string
 }) {
   const [currStatus, { setIsFetchingPosts }] = useEventStatus({})
-  
+
   // bring useEventsValues
   const [posts, setPosts] = useState<Array<PostInterface>>()
   const [comment, setComment] = useState<string>('')

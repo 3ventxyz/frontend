@@ -42,7 +42,7 @@ interface useEventStatusProps {
   setIsFetchingPosts: (bool: boolean) => void
   setRegisterPage: (registerPage: RegisterComponentEnum) => void
   setIsDatabaseChecked: (bool: boolean) => void
-  setRequestingRegistration : (bool: boolean)=>void
+  setRequestingRegistration: (bool: boolean) => void
 }
 
 const eventStatusInitialState: eventStatusInterface = {
@@ -58,7 +58,7 @@ const eventStatusInitialState: eventStatusInterface = {
   requestingRegistration: false
 }
 
-export function useEventStatus({
+export default function useEventStatus({
   initialState = eventStatusInitialState
 }: {
   initialState?: eventStatusInterface

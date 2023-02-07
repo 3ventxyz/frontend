@@ -34,7 +34,7 @@ interface useEventValuesProps {
 //this one can be used for download and upload data
 //that is used locally only inside one page, and not through
 //the whole app.
-export function useEventValues(
+export default function  useEventValues(
   initialState: eventValuesInterface
 ): [eventValuesInterface, useEventValuesProps] {
   const [currValues, setValues] = useState<eventValuesInterface>(initialState)

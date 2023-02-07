@@ -10,7 +10,7 @@ import CreateCheckoutSession from './components/createCheckoutSession'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 import DisplayQRCode from '../u/components/displayQRCode'
-import { useEventStatus } from './hooks/event/useEventStatus'
+import useEventStatus from './hooks/event/useEventStatus'
 
 enum EventPageEnum {
   fetchingData,

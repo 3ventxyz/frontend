@@ -7,7 +7,7 @@ import { useEvents } from '../../../contexts/events'
 import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 import checkRegisteredAttendee from '../../../services/fetch_registered_attendee_data'
 import { useRouter } from 'next/router'
-import { useEventStatus } from '../hooks/event/useEventStatus'
+import  useEventStatus  from '../hooks/event/useEventStatus'
 
 enum RegisterComponentEnum {
   registerEvent,

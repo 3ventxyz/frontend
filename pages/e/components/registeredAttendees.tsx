@@ -4,7 +4,7 @@ import FetchRegisteredAttendees from '../../../services/fetch_registered_attende
 import { UserInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEventStatus } from '../hooks/event/useEventStatus'
+import  useEventStatus  from '../hooks/event/useEventStatus'
 export default function RegisteredAttendees({
   isMobile,
   eid = ''
