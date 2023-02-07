@@ -2,31 +2,29 @@ import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import TextInput from '../../../components/inputs/textInput'
 import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
-import { PostInterface } from '../../../shared/interface/common'
+import {
+  EventInterface,
+  PostInterface,
+  UserInterface
+} from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../../components/buttons/button'
 import uploadComment from '../../../services/upload_comment'
 import useEventStatus from '../hooks/event/useEventStatus'
+import useEventValues from '../hooks/event/useEventValues'
 
 export default function SocialFeed({
   isMobile,
-  eid = '',
-  uid = '',
-  avatar = '',
-  username = ''
+  userData,
+  eventData
 }: {
   isMobile: boolean
-  eid?: string
-  uid?: string
-  avatar: string
-  username: string
+  userData: UserInterface | null
+  eventData: EventInterface | null
 }) {
-  const [currStatus, { setIsFetchingPosts }] = useEventStatus({})
-
-  // bring useEventsValues
-  const [posts, setPosts] = useState<Array<PostInterface>>()
-  const [comment, setComment] = useState<string>('')
+  const [currStatus, { setIsFetchingPosts }] = useEventStatus()
+  const [currValues, { fetchPosts, setComment, uploadPost }] = useEventValues()
 
   /**
    * --pass the posts collection reference of the event and fetch it here the docs. There must be a query for the most
@@ -38,24 +36,8 @@ export default function SocialFeed({
 
   useEffect(() => {
     const fetchData = async () => {
-      const arrayOfPosts: Array<PostInterface> = []
-      var postsDocs: QuerySnapshot<DocumentData> = await FetchSocialFeedPosts(
-        eid,
-        uid
-      )
-
-      //IMPORTANT move this to the event context for organizing.
-      for (const postDoc of postsDocs.docs) {
-        const newPost: PostInterface = {
-          avatar: postDoc.data().avatar,
-          date_posted: new Date(postDoc.data().date_posted.toDate()),
-          post_content: postDoc.data().post_content,
-          uid: postDoc.data().uid,
-          username: postDoc.data().username
-        }
-        arrayOfPosts.push(newPost)
-      }
-      setPosts(arrayOfPosts)
+      if (userData !== null && eventData !== null)
+        fetchPosts(userData.uid, eventData.event_id)
       setIsFetchingPosts(false)
     }
     if (currStatus.isFetchingPosts) {
@@ -67,10 +49,10 @@ export default function SocialFeed({
       <h4>Activity</h4>
       <div id="comment-input" className="flex space-x-2 pb-[20px]">
         <div className="mt-[15px] hidden h-[50px] w-[50px] rounded-full bg-red-200 lg:block ">
-          <Link href={`/u/${uid}`}>
+          <Link href={`/u/${userData?.uid}`}>
             <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
               <Image
-                src={avatar}
+                src={userData ? userData.avatar : ''}
                 loading="lazy"
                 layout="fill"
                 objectFit="cover"
@@ -91,26 +73,9 @@ export default function SocialFeed({
           />
           <Button
             text={'comment'}
-            active={comment !== '' ? true : false}
+            active={currValues.comment !== '' ? true : false}
             onClick={async () => {
-              await uploadComment({
-                uid: uid,
-                eid: eid,
-                username: username,
-                content: comment,
-                avatar: avatar
-              })
-              const newPost: PostInterface = {
-                avatar: avatar,
-                date_posted: new Date(),
-                post_content: comment,
-                uid: uid,
-                username: username
-              }
-              setComment('')
-              let localPosts = posts
-              localPosts?.splice(0, 0, newPost)
-              setPosts(localPosts)
+              if (userData && eventData) await uploadPost(userData, eventData)
             }}
           />
         </div>
@@ -120,8 +85,8 @@ export default function SocialFeed({
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
       <div id="social-feed-mobile" className="h-[500px] overflow-y-auto">
         <div className="space-y-[25px]">
-          {posts &&
-            posts.map((post, index) => {
+          {currValues.posts &&
+            currValues.posts.map((post, index) => {
               console.log(post.avatar)
               return (
                 <SocialFeedPost key={index} isMobile={isMobile} post={post} />

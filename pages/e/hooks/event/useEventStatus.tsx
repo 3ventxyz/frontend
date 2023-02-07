@@ -51,18 +51,16 @@ const eventStatusInitialState: eventStatusInterface = {
   isEventCreator: false,
   eventPageStatus: EventPageEnum.fetchingData,
   isQRCodeFetched: false,
-  isFetchingAttendees: false,
-  isFetchingPosts: false,
+  isFetchingAttendees: true,
+  isFetchingPosts: true,
   registerPage: RegisterComponentEnum.registerEvent,
   isDatabaseChecked: false,
   requestingRegistration: false
 }
 
-export default function useEventStatus({
-  initialState = eventStatusInitialState
-}: {
-  initialState?: eventStatusInterface
-}): [eventStatusInterface, useEventStatusProps] {
+export default function useEventStatus(
+  initialState: eventStatusInterface = eventStatusInitialState
+): [eventStatusInterface, useEventStatusProps] {
   const [currStatus, setStatus] = useState<eventStatusInterface>(initialState)
 
   const setShowModal = (bool: boolean) => {

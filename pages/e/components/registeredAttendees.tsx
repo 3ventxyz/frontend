@@ -4,7 +4,8 @@ import FetchRegisteredAttendees from '../../../services/fetch_registered_attende
 import { UserInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
-import  useEventStatus  from '../hooks/event/useEventStatus'
+import useEventStatus from '../hooks/event/useEventStatus'
+import useEventValues from '../hooks/event/useEventValues'
 export default function RegisteredAttendees({
   isMobile,
   eid = ''
@@ -12,33 +13,16 @@ export default function RegisteredAttendees({
   isMobile: boolean
   eid?: string
 }) {
-  const [currStatus, { setIsFetchingAttendees }] = useEventStatus({})
+  const [currStatus, { setIsFetchingAttendees }] = useEventStatus()
+  const [currValues, { fetchAttendees }] = useEventValues()
   /**
    * --pass the reference of the registered attendees collection.
    * fetch the docs and use each attendee doc to the registeredAtteendee component.
    **/
 
-  //bring useEventsValues
-  const [attendees, setRegisteredAttendees] = useState<Array<UserInterface>>()
-
   useEffect(() => {
     const fetchData = async () => {
-      const arrayOfAttendees: Array<UserInterface> = []
-      var attendeesDocs: QuerySnapshot<DocumentData> =
-        await FetchRegisteredAttendees(eid)
-      // IMPORTANT move this to the event context for organizing.
-      // console.dir(attendeesDocs.docs)
-      for (const attendeeDoc of attendeesDocs.docs) {
-        const newAttendee: UserInterface = {
-          address: '',
-          qr_code: '',
-          avatar: attendeeDoc.data().avatar,
-          uid: attendeeDoc.data().uid,
-          username: attendeeDoc.data().username
-        }
-        arrayOfAttendees.push(newAttendee)
-      }
-      setRegisteredAttendees(arrayOfAttendees)
+      fetchAttendees(eid)
       setIsFetchingAttendees(false)
     }
     if (currStatus.isFetchingAttendees) {
@@ -50,8 +34,8 @@ export default function RegisteredAttendees({
       <h4>Registered Attendees</h4>
       <div className="relative w-[320px] overflow-x-scroll">
         <div className="flex w-fit space-x-2">
-          {attendees &&
-            attendees.map((attendee, index) => {
+          {currValues.attendees &&
+            currValues.attendees.map((attendee, index) => {
               return (
                 <RegisteredAttendee key={attendee.uid} attendee={attendee} />
               )
@@ -63,8 +47,8 @@ export default function RegisteredAttendees({
     <div id="registered-attendees-web">
       <h4>Registered Attendees</h4>
       <div className="mt-[15px] grid grid-cols-5 gap-y-5">
-        {attendees &&
-          attendees.map((attendee, index) => {
+        {currValues.attendees &&
+          currValues.attendees.map((attendee, index) => {
             return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
           })}
       </div>

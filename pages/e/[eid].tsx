@@ -22,7 +22,7 @@ export default function Event() {
   const [
     currStatus,
     { setShowModal, setShowQrCodeModal, setIsEventCreator, setEventPageStatus }
-  ] = useEventStatus({})
+  ] = useEventStatus()
 
   const router = useRouter()
   const events = useEvents()
