@@ -4,9 +4,10 @@ import { useUsers } from '../../../contexts/users'
 import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import { IoQrCode } from 'react-icons/io5'
 import { useEvents } from '../../../contexts/events'
-import registerAttendeeToEvent from '../../../services/register_attendee_to_event'
 import checkRegisteredAttendee from '../../../services/fetch_registered_attendee_data'
 import { useRouter } from 'next/router'
+import useEventStatus from '../hooks/event/useEventStatus'
+import useEventValues from '../hooks/event/useEventValues'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -24,20 +25,20 @@ export default function RegisterEventButton({
 }: {
   setShowModal: (toggle: boolean) => void
 }) {
-  const [registerPage, setRegisterPage] = useState<RegisterComponentEnum>(
-    RegisterComponentEnum.registerEvent
-  )
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
   const events = useEvents()
-  const [registeredUserData, setRegisteredUserData] = useState<any>()
-  const [checkedDatabase, setCheckedDatabase] = useState(false)
+  const [currStatus, { setRegisterPage, setIsDatabaseChecked }] =
+    useEventStatus()
+  const [currValues, { setDateOfRegistration }] = useEventValues()
+
   useEffect(() => {
     /**
-     * TODO: fetch the registered user data to see if the user is already
+     * fetch the registered user data to see if the user is already
      * registered or not.
      */
     const fetchData = async () => {
+      //check database, if the user is registered
       const registeredAttendeeData = await checkRegisteredAttendee({
         uid:
           users.loggedInUserData?.uid === undefined
@@ -48,8 +49,9 @@ export default function RegisterEventButton({
             ? ''
             : events.accessedEventData?.event_id
       })
+
       if (registeredAttendeeData.exists()) {
-        setRegisteredUserData({
+        setDateOfRegistration({
           date_of_registration: registeredAttendeeData
             .data()
             .date_of_registration.toDate()
@@ -60,65 +62,40 @@ export default function RegisterEventButton({
         setRegisterPage(RegisterComponentEnum.registerEvent)
         setStyleComponent('h-[85px] bg-[#DE6767]')
       }
-      setCheckedDatabase(true)
+      setIsDatabaseChecked(true)
     }
-    if (!checkedDatabase) {
+    if (!currStatus.isDatabaseChecked) {
       fetchData()
     }
   }, [])
-  /**
-  * quick approach first.
-   * when the user clicks this button, this component will update its layout to show the entered info,
-   * if the info is correct to the user's perspective, then they will click accept,
-   *  and this component will update its layout and  will show the ticket info. with a text button saying "check your registered eevents"
-   *
-   * otherwise, if the user says that the info needs to be updated, show the modal component with the form for updating the info.
-   * and after registering, it will be redirected to a page of upcoming registered events page.
-   *
-   *
-   * DONE!!
-   * things to do here!!
-   * pass the loggedInUser whole info, that is stored in the usersContext or authContext.
-   * from that the data will be passed here directly and used for quickly registering the user right away.
-
-  **TODO (11/27) for tomorrow 11/28.
-  ** -- set the modal components to this button component, so the qr code can be shown after registering or when the user needs
-  to update its address quickly, before registering to the event. (today)
-  ** -- implement the responsive design of this updated page. (tomorrow friday!!!)
-  */
 
   const componentPage = () => {
-    switch (registerPage) {
+    switch (currStatus.registerPage) {
       case RegisterComponentEnum.confirmuserInfo:
         // show the confirm info registration page.
         return (
           <YellowComponent
             loggedInUserData={users.loggedInUserData}
             eventData={events.accessedEventData}
-            setRegisterPage={() => {
+            onClick={() => {
               setStyleComponent('h-[150px] bg-white')
               setRegisterPage(RegisterComponentEnum.userRegistered)
             }}
-            setRegisteredData={setRegisteredUserData}
+            setDateOfRegistration={setDateOfRegistration}
           />
         )
       case RegisterComponentEnum.userRegistered:
         // show that it has been a success in registering the page.
         return (
           <GreenComponent
-            nextPage={() => {}}
-            registeredUserData={registeredUserData}
+            registeredUserData={currValues.dateOfRegistration}
             setShowModal={setShowModal}
-            qrCodeModal={() => {
-              setStyleComponent('h-[85px] bg-[#DE6767]')
-              setRegisterPage(RegisterComponentEnum.registerEvent)
-            }}
           />
         )
       default:
         return (
           <RedButton
-            setRegisterPage={() => {
+            onClick={() => {
               setStyleComponent('h-[210px] bg-[#FFF6C7]')
               setRegisterPage(RegisterComponentEnum.confirmuserInfo)
             }}
@@ -138,13 +115,9 @@ export default function RegisterEventButton({
 }
 
 function GreenComponent({
-  qrCodeModal,
-  nextPage,
   registeredUserData,
   setShowModal
 }: {
-  qrCodeModal: () => void
-  nextPage: () => void
   registeredUserData: any
   setShowModal: (toggle: boolean) => void
 }) {
@@ -216,15 +189,16 @@ function GreenComponent({
 function YellowComponent({
   loggedInUserData,
   eventData,
-  setRegisterPage,
-  setRegisteredData
+  onClick,
+  setDateOfRegistration
 }: {
   loggedInUserData: UserInterface | null
   eventData: EventInterface | null
-  setRegisterPage: () => void
-  setRegisteredData: (date_of_registration: any) => void
+  onClick: () => void
+  setDateOfRegistration: (date_of_registration: any) => void
 }) {
-  const [request, setRequest] = useState(false)
+  const [currStatus, { setRequestingRegistration }] = useEventStatus()
+  const [currValues, { registerNewAttendee }] = useEventValues()
   const [delay, setDelay] = useState(true)
   useEffect(() => {
     const delayAnimation = async () => {
@@ -237,29 +211,12 @@ function YellowComponent({
   }, [])
 
   const registerUser = async () => {
-    await registerAttendeeToEvent(
-      {
-        address:
-          loggedInUserData?.address === undefined
-            ? ''
-            : loggedInUserData?.address,
-        phone_number: '+111 222 33333',
-        uid: loggedInUserData?.uid === undefined ? '' : loggedInUserData?.uid,
-        date_of_registration: new Date(),
-        username:
-          loggedInUserData?.username === undefined
-            ? ''
-            : loggedInUserData?.username,
-        avatar:
-          loggedInUserData?.avatar === undefined ? '' : loggedInUserData?.avatar
-      },
-      eventData?.event_id === undefined ? '' : eventData?.event_id
-    )
-    setRegisteredData({ date_of_registration: new Date() })
-
-    setRegisterPage()
+    if (loggedInUserData && eventData)
+      await registerNewAttendee(loggedInUserData, eventData)
+    setDateOfRegistration({ date_of_registration: new Date() })
+    onClick()
   }
-  return request ? (
+  return currStatus.requestingRegistration ? (
     <div className="animate-pulse text-[24px] font-bold">Loading...</div>
   ) : (
     <div
@@ -297,7 +254,7 @@ function YellowComponent({
           text={delay ? 'Loading...' : 'confirm registration'}
           active={!delay}
           onClick={() => {
-            setRequest(true)
+            setRequestingRegistration(true)
             registerUser()
           }}
         />
@@ -306,10 +263,10 @@ function YellowComponent({
   )
 }
 
-function RedButton({ setRegisterPage }: { setRegisterPage: () => void }) {
+function RedButton({ onClick }: { onClick: () => void }) {
   return (
     <button
-      onClick={setRegisterPage}
+      onClick={onClick}
       className="h-full w-full transition-shadow hover:shadow-xl"
     >
       <div className="text-[20px] font-bold text-white hover:cursor-pointer">

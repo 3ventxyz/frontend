@@ -10,6 +10,7 @@ import CreateCheckoutSession from './components/createCheckoutSession'
 import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 import DisplayQRCode from '../u/components/displayQRCode'
+import useEventStatus from './hooks/event/useEventStatus'
 
 enum EventPageEnum {
   fetchingData,
@@ -18,28 +19,26 @@ enum EventPageEnum {
 }
 
 export default function Event() {
-  const [eventPageStatus, setEventPageStatus] = useState<EventPageEnum>(
-    EventPageEnum.fetchingData
-  )
-  const [selectedTicket, setSelectedTicket] = useState<TicketInterface | null>(
-    null
-  )
-  const [showModal, setShowModal] = useState(false)
-  const [showQrCodeModal, setShowQrCodeModal] = useState(false)
-  const [isEventCreator, setIsEventCreator] = useState(false)
+  const [
+    currStatus,
+    { setShowModal, setShowQrCodeModal, setIsEventCreator, setEventPageStatus }
+  ] = useEventStatus()
 
   const router = useRouter()
   const events = useEvents()
   const auth = useAuth()
   const users = useUsers()
-
   const { eid } = router.query
 
+  const [selectedTicket, setSelectedTicket] = useState<TicketInterface | null>(
+    null
+  )
   const confirmSelectedTicketPurchase = () => {
     setEventPageStatus(EventPageEnum.fetchingData)
     fetchData()
   }
 
+  //TODO(2/6/2023, marthel): think a work around about this.
   const handleOnClose = () => {
     setShowModal(false)
     setShowQrCodeModal(false)
@@ -79,18 +78,18 @@ export default function Event() {
   }
 
   useEffect(() => {
-    if (eventPageStatus === EventPageEnum.fetchingData && eid) {
+    if (currStatus.eventPageStatus === EventPageEnum.fetchingData && eid) {
       fetchData()
     }
   }, [eid])
 
   const EventPage = () => {
-    switch (eventPageStatus) {
+    switch (currStatus.eventPageStatus) {
       case EventPageEnum.fetchedData:
         return (
           <LoadedEventPage
             setShowModal={setShowModal}
-            isEventCreator={isEventCreator}
+            isEventCreator={currStatus.isEventCreator}
           />
         )
       default:
@@ -104,7 +103,7 @@ export default function Event() {
         {EventPage()}
       </div>
       <Modal
-        visible={showModal}
+        visible={currStatus.showModal}
         onClose={handleOnClose}
         width={'w-[500px]'}
         height={'h-[500px]'}

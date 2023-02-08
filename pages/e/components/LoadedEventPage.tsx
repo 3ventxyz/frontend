@@ -41,26 +41,14 @@ export default function LoadedEventPage({
           />
           <SocialFeed
             isMobile={false}
-            avatar={
-              users.loggedInUserData?.avatar !== undefined
-                ? users.loggedInUserData?.avatar
-                : ''
-            }
-            username={
-              users.loggedInUserData?.username !== undefined
-                ? users.loggedInUserData?.username
-                : ''
-            }
-            eid={events?.accessedEventData?.event_id}
-            uid={events?.accessedEventData?.uid}
+            userData={users.loggedInUserData}
+            eventData={events.accessedEventData}
           />
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
           <LocationCard event={events?.accessedEventData} />
           <DateCard event={events?.accessedEventData} />
-          <RegisterEventButton
-            setShowModal={setShowModal}
-          />
+          <RegisterEventButton setShowModal={setShowModal} />
           {isEventCreator ? (
             <div>
               <Button
