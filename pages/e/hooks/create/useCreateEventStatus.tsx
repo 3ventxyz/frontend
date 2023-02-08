@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createEventStatusInterface } from '../../../../shared/interface/common'
-import { ERROR_MESSAGE, ERROR_FIELD } from '../../../../shared/consts/consts'
+import { ERROR_MESSAGE, INPUT_FIELD } from '../../../../shared/consts/consts'
 import { CreateEventErrors } from '../../../../shared/enums/enums'
 
 interface useCreateEventStatus {
@@ -43,70 +43,70 @@ export default function useCreateEventStatus(
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.emptyField,
-          errorField: ERROR_FIELD.eventTitle
+          errorField: INPUT_FIELD.eventTitle
         })
         break
       case CreateEventErrors.invalidFileType:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.invalidFileType,
-          errorField: ERROR_FIELD.eventImage
+          errorField: INPUT_FIELD.eventImage
         })
         break
       case CreateEventErrors.emptyImage:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.emptyImage,
-          errorField: ERROR_FIELD.eventImage
+          errorField: INPUT_FIELD.eventImage
         })
         break
       case CreateEventErrors.emptyEventLocation:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.emptyEventLocation,
-          errorField: ERROR_FIELD.eventLocation
+          errorField: INPUT_FIELD.eventLocation
         })
         break
       case CreateEventErrors.startDateBehind:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.startDateBehind,
-          errorField: ERROR_FIELD.date
+          errorField: INPUT_FIELD.date
         })
         break
       case CreateEventErrors.sameDatePeriod:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.sameDatePeriod,
-          errorField: ERROR_FIELD.date
+          errorField: INPUT_FIELD.date
         })
         break
       case CreateEventErrors.endDateBehind:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.endDateBehind,
-          errorField: ERROR_FIELD.date
+          errorField: INPUT_FIELD.date
         })
         break
       case CreateEventErrors.invalidNumber:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.invalidNumber,
-          errorField: ERROR_FIELD.ticket
+          errorField: INPUT_FIELD.ticket
         })
         break
       case CreateEventErrors.lowCapNumber:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.lowCapNumber,
-          errorField: ERROR_FIELD.ticket
+          errorField: INPUT_FIELD.ticket
         })
         break
       case CreateEventErrors.eventIdTaken:
         setStatus({
           ...currStatus,
           errorMsg: ERROR_MESSAGE.eventIdTaken,
-          errorField: ERROR_FIELD.eventID
+          errorField: INPUT_FIELD.eventID
         })
         break
       default:
@@ -125,6 +125,7 @@ export default function useCreateEventStatus(
   const onPressEnter = (e: any) => {
     e.preventDefault()
 
+    //use a switch case
     console.log('pressing enter, this MUST NOT RESET')
   }
 

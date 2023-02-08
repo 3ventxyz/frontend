@@ -1,4 +1,5 @@
 import { EmailAuthCredential } from '@firebase/auth'
+import { CreateEventInputs } from '../enums/enums'
 
 export interface TicketInterface {
   ticketTitle: string
@@ -132,6 +133,9 @@ export interface createEventStatusInterface {
   currentStep: number
   isCreatingNewEvent: boolean
   errorMsg: string
+  focusedInputField: CreateEventInputs
+  inputFieldName: string
+  inputFieldInstruction: string
 }
 
 export interface createEventFormInterface {
@@ -152,7 +156,7 @@ export interface createEventStatusInterface {
   currentStep: number
   isCreatingNewEvent: boolean
   errorMsg: string
-  errorField:string
+  errorField: string
 }
 
 export interface AllowlistsInterface extends Array<AllowlistInterface> {}

@@ -21,7 +21,11 @@ import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
-import { CreateEventErrors } from '../../shared/enums/enums'
+import { CreateEventErrors, CreateEventInputs } from '../../shared/enums/enums'
+import {
+  CREATE_EVENT_INSTRUCTIONS,
+  INPUT_FIELD
+} from '../../shared/consts/consts'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -45,7 +49,10 @@ const createEventStatus: createEventStatusInterface = {
   currentStep: 0,
   isCreatingNewEvent: false,
   errorMsg: '',
-  errorField: ''
+  errorField: '',
+  focusedInputField: CreateEventInputs.eventTitle,
+  inputFieldName: INPUT_FIELD.eventTitle,
+  inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
 }
 
 export default function CreateEvent() {
@@ -292,6 +299,8 @@ export default function CreateEvent() {
         createEvent={createEvent}
         errorMsg={status.errorMsg}
         errorField={status.errorField}
+        currInputField={status.inputFieldName}
+        inputFieldInstr={status.inputFieldInstruction}
       />
     </div>
   )

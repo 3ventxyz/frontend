@@ -14,7 +14,7 @@ export const ERROR_MESSAGE = {
 }
 
 /**rename to event inputs */
-export const ERROR_FIELD = {
+export const INPUT_FIELD = {
   eventTitle: 'Event Title',
   eventID: 'Event ID',
   eventImage: 'Event and Landing Image',

@@ -7,6 +7,8 @@ export default function CreateEventFooter({
   isCreatingNewEvent,
   errorMsg,
   errorField,
+  currInputField,
+  inputFieldInstr,
   prevPage,
   nextPage,
   createEvent
@@ -15,27 +17,21 @@ export default function CreateEventFooter({
   isCreatingNewEvent: boolean
   errorMsg: string
   errorField: string
+  currInputField: string
+  inputFieldInstr: string
   prevPage: () => void
   nextPage: () => void
   createEvent: () => void
 }) {
-  const stepsText = ['Step 1', 'Step 2', 'Step 3']
-  const instructionsText = [
-    'Event title, location and date',
-    'Event description and ticket supply',
-    'Event Images'
-  ]
   return (
     <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
       {/* button for pagination and submit newly created event. */}
       <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] md:max-w-[700px]">
         <div>
           <div className="text-[17px] font-bold sm:text-[20px]">
-            {stepsText[currentStep]}
+            {currInputField}
           </div>
-          <div className="text-[14px] sm:text-[16px]">
-            {instructionsText[currentStep]}
-          </div>
+          <div className="text-[14px] sm:text-[16px]">{inputFieldInstr}</div>
         </div>
         {isCreatingNewEvent ? (
           <div className="flex items-center">
