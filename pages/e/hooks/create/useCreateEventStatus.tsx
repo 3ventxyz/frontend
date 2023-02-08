@@ -9,6 +9,7 @@ interface useCreateEventStatus {
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
+  onPressEnter: (e: any) => void
 }
 
 export default function useCreateEventStatus(
@@ -121,6 +122,12 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
+  const onPressEnter = (e: any) => {
+    e.preventDefault()
+
+    console.log('pressing enter, this MUST NOT RESET')
+  }
+
   return [
     currStatus,
     {
@@ -128,7 +135,8 @@ export default function useCreateEventStatus(
       prevPage,
       setCreatingNewEvent,
       setErrorMsg,
-      setCurrentStep
+      setCurrentStep,
+      onPressEnter
     }
   ]
 }
