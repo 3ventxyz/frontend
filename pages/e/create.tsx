@@ -80,7 +80,6 @@ export default function CreateEvent() {
     let formError: CreateEventErrors
     let eventImgURL: string
     let landingPortraitURL: string
-
     let eventImgfileType: string
     let eventImgStoragePath: string
     let landingPortraitfileType: string
@@ -168,10 +167,9 @@ export default function CreateEvent() {
           <hr />
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[300px] flex-col space-y-0 sm:max-w-[400px] md:max-w-[600px]">
+          <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
             {/* step 1 */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
               childrenClassName="my-[10px]"
             >
@@ -217,7 +215,6 @@ export default function CreateEvent() {
             </CreateEventFormSection>
             {/* step 2 */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 1}
               title={'2.- Description and max attendee cap'}
               childrenClassName="my-[10px]"
             >
@@ -239,7 +236,6 @@ export default function CreateEvent() {
             </CreateEventFormSection>
             {/* step 3 */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 2}
               title={'3.- Landing portrait and ticket image'}
               fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
               childrenClassName={'md:items-start items-center'}
@@ -254,7 +250,7 @@ export default function CreateEvent() {
                   'mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal'
                 }
                 imgMenuClassName={
-                  'top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]'
+                  'top-[600px] z-20 md:absolute md:py-[40px] md:px-[30px]'
                 }
                 landingMode={false}
               />
@@ -265,7 +261,7 @@ export default function CreateEvent() {
                 setPredefinedImgUrl={setPredefinedImgUrl}
                 imgUrl={values.landing_img_url}
                 parentClassName={
-                  'top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
+                  'top-[1425px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
                 }
                 imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
                 landingMode={true}
