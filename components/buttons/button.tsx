@@ -1,4 +1,44 @@
-export default function Button({
+import { useEffect } from 'react'
+import React from 'react'
+interface ButtonProps {
+  /**
+   * text that will display on the button
+   */
+  text: string
+  /**
+   * what function will execute on clicking.
+   */
+  onClick?: (() => void) | undefined
+  /**
+   * is the butoon active or not?
+   */
+  active: boolean
+  /**
+   * what type of button will be.
+   */
+  type?: 'button' | 'submit' | 'reset' | undefined
+  /**
+   * expands the button to the whole width.
+   */
+  isExpanded?: boolean
+  /**
+   *
+   */
+  id?: string
+  /**
+   * safety lock to run when auth is needed.
+   */
+  auth?: boolean
+  /**
+   * make it reactive.
+   */
+  activeStyling?: boolean
+}
+
+/**
+ * Primary UI Button. It will execute the passed function when pressed.
+ */
+export function Button({
   text,
   onClick,
   active,
@@ -7,16 +47,7 @@ export default function Button({
   id = '',
   auth = false,
   activeStyling = false
-}: {
-  text: string
-  onClick?: (() => void) | undefined
-  active: boolean
-  type?: 'button' | 'submit' | 'reset' | undefined
-  isExpanded?: boolean
-  id?: string
-  auth?: boolean
-  activeStyling?: boolean
-}) {
+}: ButtonProps) {
   if (auth) {
     return (
       <button
@@ -37,7 +68,7 @@ export default function Button({
       type={type}
       disabled={!active}
       onClick={onClick}
-      className={`h-[40px] items-center justify-center rounded-[6px]  px-[20px] py-[10px] text-[14px] font-semibold leading-[]  ${
+      className={`  h-[40px] items-center justify-center rounded-[6px]  px-[20px] py-[10px] text-[14px] font-semibold leading-[]  ${
         isExpanded ? 'w-full' : 'w-fit'
       } ${
         !activeStyling

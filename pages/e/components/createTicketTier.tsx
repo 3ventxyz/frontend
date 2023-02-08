@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react'
-import Button from '../../../components/buttons/button'
+import { Button } from '../../../components/buttons/button'
 import TextInput from '../../../components/inputs/textInput'
 
 export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:boolean}) {

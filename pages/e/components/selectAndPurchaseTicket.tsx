@@ -1,7 +1,7 @@
 // author:marthel
 import { useEffect } from 'react'
-import Button from '../../../components/buttons/button'
-import TicketButton from '../../../components/buttons/ticketButton'
+import { Button } from '../../../components/buttons/button'
+import { TicketButton } from '../../../components/buttons/ticketButton'
 import { TicketInterface } from '../../../shared/interface/common'
 
 export default function SelectAndPurchaseTicket({

@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/auth'
 import AllowlistService from '../../services/allowlists'
 import { AllowlistInterface } from '../../shared/interface/common'
 import ErrorAlert from '../alerts/errorAlert'
-import Button from '../buttons/button'
+import { Button } from '../buttons/button'
 import TextInput from '../inputs/textInput'
 import ToggleSwitch from '../toggles/toggleSwitch'
 

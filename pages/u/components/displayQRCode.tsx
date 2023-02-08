@@ -1,11 +1,11 @@
 import React, { FormEvent, useState, useRef, useEffect } from 'react'
 import QRCode from 'qrcode.react'
-import Button from '../../../components/buttons/button'
+import { Button } from '../../../components/buttons/button'
 import { uploadQRImage } from '../../../services/upload_qr_image'
 import { useAuth } from '../../../contexts/auth'
 import { db } from '../../../services/firebase_config'
 import { doc, getDoc, updateDoc } from '@firebase/firestore'
-import Spinner from '../../../components/utils/spinner'
+import { Spinner } from '../../../components/utils/spinner'
 import Image from 'next/image'
 import QRCodeStyling from 'qr-code-styling'
 

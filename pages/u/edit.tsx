@@ -1,7 +1,7 @@
 import TextInput from '../../components/inputs/textInput'
 import LocationInput from '../../components/inputs/locationInput'
 import { useState, useEffect } from 'react'
-import Button from '../../components/buttons/button'
+import { Button } from '../../components/buttons/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'

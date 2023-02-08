@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import Button from '../../../components/buttons/button'
-import Modal from '../../../components/utils/modal'
+import { Button } from '../../../components/buttons/button'
+import { Modal } from '../../../components/utils/modal'
 import DisplayQRCode from './displayQRCode'
 
 function TextDisplay({ label, value }: { label: string; value: string }) {

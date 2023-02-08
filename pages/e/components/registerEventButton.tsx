@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Button from '../../../components/buttons/button'
+import { Button } from '../../../components/buttons/button'
 import { useUsers } from '../../../contexts/users'
 import { EventInterface, UserInterface } from '../../../shared/interface/common'
 import { IoQrCode } from 'react-icons/io5'

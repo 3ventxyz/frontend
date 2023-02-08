@@ -7,7 +7,7 @@ import {
 } from '../../shared/interface/common'
 import Image from 'next/image'
 import { HiChevronLeft } from 'react-icons/hi'
-import Modal from '../../components/utils/modal'
+import { Modal } from '../../components/utils/modal'
 import AllowlistService from '../../services/allowlists'
 import EditAllowlistForm from '../../components/allowlist/editAllowlistForm'
 import { useAuth } from '../../contexts/auth'

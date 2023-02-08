@@ -5,9 +5,9 @@ import {
   AllowlistsInterface,
   AllowlistInterface
 } from '../../shared/interface/common'
-import Modal from '../utils/modal'
+import { Modal } from '../utils/modal'
 import DeleteConfirmation from './deleteConfirmation'
-import Button from '../buttons/button'
+import { Button } from '../buttons/button'
 import AllowlistService from '../../services/allowlists'
 import Image from 'next/image'
 import absoluteUrl from 'next-absolute-url'

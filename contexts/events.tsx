@@ -99,30 +99,11 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   ) => {
     try {
       await uploadEventInfo(newEventData)
-      // {
-      //   title: title,
-      //   end_date: endDate,
-      //   start_date: startDate,
-      //   uid: auth.uid,
-      //   description: eventDescription,
-      //   location: eventLocation,
-      //   img_url: url,
-      //   ticket_max: ticketMax,
-      //   event_id: eventId,
-      //   registered_attendees: registeredAttendees
-      // }
       await updateCreatedEventToUser(eventHost)
     } catch (e) {
       console.log('error at events context')
       console.error(e)
     }
-    //   {
-    //   eventTitle: title,
-    //   uid: auth.uid,
-    //   eventId: eventId,
-    //   startDate: startDate,
-    //   endDate: endDate
-    // }
   }
 
   // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.

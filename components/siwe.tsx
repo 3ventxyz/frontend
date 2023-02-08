@@ -1,4 +1,4 @@
-import Button from './buttons/button'
+import { Button } from './buttons/button'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/auth'
 import { useAccount, useNetwork, useSignMessage } from 'wagmi'

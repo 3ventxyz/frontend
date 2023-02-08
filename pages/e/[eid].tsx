@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { TicketInterface, UserInterface } from '../../shared/interface/common'
-import Modal from '../../components/utils/modal'
+import { Modal } from '../../components/utils/modal'
 import { useEvents } from '../../contexts/events'
 import { useAuth } from '../../contexts/auth'
 import { useUsers } from '../../contexts/users'

@@ -1,14 +1,14 @@
 import React, { FormEvent, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/auth'
-import Button from '../components/buttons/button'
+import { Button } from '../components/buttons/button'
 import {
   signInWithPhoneNumber,
   RecaptchaVerifier,
   signInWithEmailAndPassword,
   UserCredential
 } from '@firebase/auth'
-import Spinner from '../components/utils/spinner'
+import { Spinner } from '../components/utils/spinner'
 import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 import { doc, setDoc, getDoc, updateDoc } from '@firebase/firestore'
 import { auth, db } from '../services/firebase_config'
