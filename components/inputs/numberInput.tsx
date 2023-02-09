@@ -7,6 +7,8 @@ interface NumberInputProps {
   labelText: string
   /**disables the ability to change the value */
   disabled?: boolean
+  /**passed function that is runned when pressing the enter key. */
+  onPressEnter: () => void
 }
 
 /**
@@ -16,7 +18,8 @@ export function NumberInput({
   setNumberValue,
   name,
   labelText,
-  disabled = false
+  disabled = false,
+  onPressEnter
 }: NumberInputProps) {
   return (
     <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
@@ -24,6 +27,12 @@ export function NumberInput({
         {labelText}
       </label>
       <input
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            onPressEnter()
+          }
+        }}
         onChange={(e) => {
           setNumberValue(name, parseInt(e.target.value))
         }}

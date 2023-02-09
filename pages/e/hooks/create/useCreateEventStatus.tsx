@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import { createEventStatusInterface } from '../../../../shared/interface/common'
-import { ERROR_MESSAGE, INPUT_FIELD } from '../../../../shared/consts/consts'
-import { CreateEventErrors } from '../../../../shared/enums/enums'
+import {
+  CREATE_EVENT_INSTRUCTIONS,
+  ERROR_MESSAGE,
+  INPUT_FIELD
+} from '../../../../shared/consts/consts'
+import {
+  CreateEventErrors,
+  CreateEventInputs
+} from '../../../../shared/enums/enums'
 
 interface useCreateEventStatus {
   nextPage: () => void
@@ -9,7 +16,7 @@ interface useCreateEventStatus {
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
-  onPressEnter: (e: any) => void
+  onPressEnter: () => void
 }
 
 export default function useCreateEventStatus(
@@ -122,11 +129,62 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
-  const onPressEnter = (e: any) => {
-    e.preventDefault()
-
-    //use a switch case
+  const onPressEnter = () => {
     console.log('pressing enter, this MUST NOT RESET')
+    //use a switch case
+    switch (currStatus.focusedInputField) {
+      case CreateEventInputs.eventTitle:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.eventId,
+          inputFieldName: INPUT_FIELD.eventID,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventIDInstr
+        })
+        break
+      case CreateEventInputs.eventId:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.location,
+          inputFieldName: INPUT_FIELD.eventLocation,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
+        })
+        break
+      case CreateEventInputs.location:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.EventDate,
+          inputFieldName: INPUT_FIELD.date,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.dateInstr
+        })
+        break
+      case CreateEventInputs.EventDate:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.eventDescription,
+          inputFieldName: 'Event Description (Optional)',
+          inputFieldInstruction: 'Please enter a description about your event'
+        })
+        break
+      case CreateEventInputs.eventDescription:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.ticketMax,
+          inputFieldName: INPUT_FIELD.ticket,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.ticketInstr
+        })
+        break
+      case CreateEventInputs.ticketMax:
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.images,
+          inputFieldName: INPUT_FIELD.eventImage,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventImageInstr
+        })
+        break
+      case CreateEventInputs.images:
+        // add a like a assure question here.
+        break
+    }
   }
 
   return [

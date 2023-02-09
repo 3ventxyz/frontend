@@ -43,7 +43,10 @@ export default function CreateEventTextInput({
       {textArea !== true ? (
         <input
           onKeyDown={(e) => {
-            if (e.key === 'Enter') e.preventDefault()
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              onPressEnter()
+            }
           }}
           onChange={(e) => setTextValue(name, e.target.value)}
           className={`${width} focus:shadow-outline leading-0 block h-full max-w-[500px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}

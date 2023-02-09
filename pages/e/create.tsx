@@ -182,7 +182,7 @@ export default function CreateEvent() {
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
-            <form action="" onSubmit={onPressEnter}>
+            {/* <form action="" onSubmit={onPressEnter}> */}
               {/* step 1 */}
               <CreateEventFormSection
                 title={'1.- Event title, location and date'}
@@ -192,6 +192,7 @@ export default function CreateEvent() {
                   id={'event_name'}
                   labelText={'Title'}
                   placeholder={''}
+                  onPressEnter={onPressEnter}
                   setTextValue={setTextValue}
                   name={'title'}
                   isDisabled={status.isCreatingNewEvent}
@@ -201,6 +202,7 @@ export default function CreateEvent() {
                   labelText={'Event ID*'}
                   placeholder={''}
                   setTextValue={setTextValue}
+                  onPressEnter={onPressEnter}
                   name={'event_id'}
                   isDisabled={status.isCreatingNewEvent}
                 />
@@ -208,6 +210,7 @@ export default function CreateEvent() {
                   labelText={'Location*'}
                   id={'event_location'}
                   placeholder={''}
+                  
                   name={'event_location'}
                   setLocation={setLocation}
                 />
@@ -239,12 +242,14 @@ export default function CreateEvent() {
                   labelText={'Description'}
                   placeholder={''}
                   setTextValue={setTextValue}
+                  
                   name={'event_description'}
                   isDisabled={status.isCreatingNewEvent}
                 />
                 <NumberInput
                   labelText="TICKET SUPPLY"
                   setNumberValue={setNumberValue}
+                  onPressEnter={onPressEnter}
                   name={'ticket_max'}
                   disabled={status.isCreatingNewEvent}
                 />
@@ -282,7 +287,7 @@ export default function CreateEvent() {
                   landingMode={true}
                 />
               </CreateEventFormSection>
-            </form>
+            {/* </form> */}
           </div>
           <CreateEventStepsDisplay
             currentStep={status.currentStep}
