@@ -1,17 +1,17 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Modal } from '../../components/utils/modal'
+import { NumberInput } from '../../components/inputs/numberInput'
 
 const childrenTest = () => {
   return <div className="bg-red-300">hello world</div>
 }
 
 export default {
-  title: 'Utils/Modal',
-  component: Modal
-} as ComponentMeta<typeof Modal>
+  title: 'Inputs/NumberInput',
+  component: NumberInput
+} as ComponentMeta<typeof NumberInput>
 
-const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />
+const Template: ComponentStory<typeof NumberInput> = (args) => <NumberInput {...args} />
 
 export const Primary = Template.bind({})
 

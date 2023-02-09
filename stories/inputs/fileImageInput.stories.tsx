@@ -1,17 +1,17 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Modal } from '../../components/utils/modal'
+import { FileImageInput } from '../../components/inputs/fileImageInput'
 
 const childrenTest = () => {
   return <div className="bg-red-300">hello world</div>
 }
 
 export default {
-  title: 'Utils/Modal',
-  component: Modal
-} as ComponentMeta<typeof Modal>
+  title: 'Inputs/FileImageInput',
+  component: FileImageInput
+} as ComponentMeta<typeof FileImageInput>
 
-const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />
+const Template: ComponentStory<typeof FileImageInput> = (args) => <FileImageInput {...args} />
 
 export const Primary = Template.bind({})
 

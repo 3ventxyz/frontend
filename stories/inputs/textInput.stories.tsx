@@ -1,17 +1,19 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Modal } from '../../components/utils/modal'
+import { TextInput } from '../../components/inputs/textInput'
 
 const childrenTest = () => {
   return <div className="bg-red-300">hello world</div>
 }
 
 export default {
-  title: 'Utils/Modal',
-  component: Modal
-} as ComponentMeta<typeof Modal>
+  title: 'Inputs/TextInput',
+  component: TextInput
+} as ComponentMeta<typeof TextInput>
 
-const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />
+const Template: ComponentStory<typeof TextInput> = (args) => (
+  <TextInput {...args} />
+)
 
 export const Primary = Template.bind({})
 
