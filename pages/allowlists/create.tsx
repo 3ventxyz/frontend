@@ -5,7 +5,7 @@ import React, { FormEvent, useState, useRef } from 'react'
 import AllowlistService from '../../services/allowlists'
 import { Button } from '../../components/buttons/button'
 import ErrorAlert from '../../components/alerts/errorAlert'
-import TextInput from '../../components/inputs/textInput'
+import { TextInput } from '../../components/inputs/textInput'
 import ToggleSwitch from '../../components/toggles/toggleSwitch'
 
 export default function CreateAllowlist() {
@@ -237,7 +237,7 @@ export default function CreateAllowlist() {
           ) : (
             <></>
           )}
-                    <div className="mb-6 flex max-w-[400px] items-center justify-between">
+          <div className="mb-6 flex max-w-[400px] items-center justify-between">
             <span className="text-sm font-medium text-gray-900">
               REQUEST MINIMUM NUMBER OF TOKENS
             </span>

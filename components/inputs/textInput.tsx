@@ -13,7 +13,7 @@ interface TextInputProps {
   xMargin?: string
 }
 
-export default function TextInput({
+export function TextInput({
   labelText,
   placeholder,
   id,

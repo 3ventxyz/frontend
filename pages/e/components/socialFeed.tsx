@@ -1,6 +1,6 @@
 import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import TextInput from '../../../components/inputs/textInput'
+import { TextInput } from '../../../components/inputs/textInput'
 import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import {
   EventInterface,

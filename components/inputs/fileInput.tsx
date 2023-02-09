@@ -2,7 +2,7 @@ import { storage } from '../../services/firebase_config'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { useState } from 'react'
 
-export default function FileInput() {
+export function FileInput() {
   const [file, setFile] = useState<File>()
 
   function handleChange(event: any) {

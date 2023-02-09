@@ -12,7 +12,7 @@ import CreateEvent from '../../pages/e/create'
 // create event page or from edit.
 //a dissable upload option will be added and it will be removed, once
 //the storage issue has been fixed.
-export default function FileImageInput({
+export function FileImageInput({
   fileImg,
   setFileImg,
   imgUrlTemplate = '',

@@ -1,4 +1,4 @@
-export default function NumberInput({
+export  function NumberInput({
   setNumberValue,
   name,
   labelText,

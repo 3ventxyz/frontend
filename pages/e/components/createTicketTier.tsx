@@ -1,8 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { Button } from '../../../components/buttons/button'
-import TextInput from '../../../components/inputs/textInput'
+import { TextInput } from '../../../components/inputs/textInput'
 
-export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:boolean}) {
+export default function CreateTicketTier({
+  creatingNewEvent
+}: {
+  creatingNewEvent: boolean
+}) {
   const [numberOfTicketTiers, setNumberOfTicketTiers] = useState(1)
   const [ticketTierList, setTicketTierList] = useState<ReactElement[]>()
   const ticketTierLimit = 3
@@ -63,7 +67,7 @@ export default function CreateTicketTier({creatingNewEvent}:{creatingNewEvent:bo
         <Button
           text={'delete a ticket tier'}
           onClick={() => {
-            if (numberOfTicketTiers > 1 ) {
+            if (numberOfTicketTiers > 1) {
               setNumberOfTicketTiers(numberOfTicketTiers - 1)
             }
           }}
