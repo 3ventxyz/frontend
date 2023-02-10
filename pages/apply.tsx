@@ -236,7 +236,8 @@ export default function AllowlistApplication() {
           email: email,
           phone: phone,
           userTokens: userTokens,
-          status: status
+          status: status,
+          id: listMetaData.length
         })
       } else {
         await setDoc(doc(collection(docRef, 'registered_users'), `${listMetaData.length}`), {
@@ -248,7 +249,8 @@ export default function AllowlistApplication() {
           email: email,
           phone: phone,
           userTokens: userTokens,
-          status: status
+          status: status,
+          id: listMetaData.length
         })
       }
       console.log('Data written into doc ID: ', docRef.id)

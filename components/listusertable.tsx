@@ -34,9 +34,9 @@ export default function AllowlistUsersTable(
     return (
       <TableHead>
         <TableRow className="bg-gray-50">
-          {headCells.map((headCell) => (
-            <>
-              {headCell.display ? (
+          {headCells.map((headCell) => {
+            if (headCell.display) {
+              return (
                 <TableCell style={{ width: 100 }} key={headCell.id}>
                   <span className="text-xs font-bold uppercase text-gray-700">
                     {headCell.disableSorting ? (
@@ -54,11 +54,9 @@ export default function AllowlistUsersTable(
                     )}
                   </span>
                 </TableCell>
-              ) : (
-                <></>
-              )}
-            </>
-          ))}
+              )
+            }
+          })}
         </TableRow>
       </TableHead>
     )
@@ -78,7 +76,6 @@ export default function AllowlistUsersTable(
   const TblPagination = () => (
     <TablePagination
       rowsPerPageOptions={pages}
-      component="div"
       count={list.length}
       rowsPerPage={rowsPerPage}
       page={page}
@@ -86,6 +83,7 @@ export default function AllowlistUsersTable(
       onRowsPerPageChange={handleChangeRowsPerPage}
     />
   )
+
   function stableSort<AllowlistsInterface>(
     array: Array<AllowlistsInterface>,
     comparator: (a: AllowlistUser, b: AllowlistUser) => number
@@ -123,10 +121,16 @@ export default function AllowlistUsersTable(
   }
 
   const listAfterPagingAndSorting = () => {
-    return stableSort(list, compareStatus(order, orderBy)).slice(
-      page * rowsPerPage,
-      (page + 1) * rowsPerPage
-    )
+    if (orderBy === '') {
+      return list.slice(page * rowsPerPage,
+        (page + 1) * rowsPerPage)
+    }
+    else {
+      return stableSort(list, compareStatus(order, orderBy)).slice(
+        page * rowsPerPage,
+        (page + 1) * rowsPerPage
+      )
+    }
   }
 
   return { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting }

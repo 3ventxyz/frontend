@@ -1,3 +1,4 @@
+import { StringColorFormat } from '@faker-js/faker'
 import { EmailAuthCredential } from '@firebase/auth'
 
 export interface TicketInterface {
@@ -50,9 +51,11 @@ export interface AllowlistUser {
   twitter_id: string
   twitter_name: string
   discord_username: string
+  discord_id: string
   discord_guild: boolean
   userTokens: boolean
   status: string
+  id: number
 }
 
 export interface AllowlistTableHeader {

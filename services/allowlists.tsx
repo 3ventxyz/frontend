@@ -82,7 +82,18 @@ export default class AllowlistService {
           length: 0
         })
         try {
-          await setDoc(doc(collection(listRef, 'registered_users'), '0'), {})
+          await setDoc(doc(collection(listRef, 'registered_users'), '0'), {
+            uid: '',
+            email: '',
+            phone: '',
+            wallet: '',
+            twitter_id: '',
+            twitter_name: '',
+            discord_username: '',
+            discord_guild: '',
+            userTokens: '',
+            status: ''
+          })
         } catch (e) {
           console.error('Error adding data: ', e)
         }
