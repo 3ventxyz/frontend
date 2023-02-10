@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import { BiLandscape } from 'react-icons/bi'
 import Image from 'next/image'
-import CreateEvent from '../../pages/e/create'
 
 interface FileImageInputProps {
   /**the selected file that will be used for uploading image */

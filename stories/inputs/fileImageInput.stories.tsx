@@ -1,23 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { FileImageInput } from '../../components/inputs/fileImageInput'
-
-const childrenTest = () => {
-  return <div className="bg-red-300">hello world</div>
-}
 
 export default {
   title: 'Inputs/FileImageInput',
   component: FileImageInput
 } as ComponentMeta<typeof FileImageInput>
 
-const Template: ComponentStory<typeof FileImageInput> = (args) => <FileImageInput {...args} />
+const Template: ComponentStory<typeof FileImageInput> = (args) => {
+  const [fileImg, setFileImg] = useState<File | null>(null)
+  const onChangeFileImg = (name: string, value: File) => {
+    setFileImg(value)
+  }
+  return (
+    <FileImageInput {...args} setFileImg={onChangeFileImg} fileImg={fileImg} />
+  )
+}
 
 export const Primary = Template.bind({})
 
 Primary.args = {
-  children: childrenTest,
-  visible: true,
-  width: 'w-[200px]',
-  height: 'h-[200px]'
+  mode: 'event'
 }
