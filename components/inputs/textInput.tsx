@@ -1,19 +1,32 @@
 interface TextInputProps {
+  /**id for the DOM */
   id: string
+  /** title for the input */
   labelText: string
+  /** hint for the input */
   placeholder?: string
+  /** maximum width of the input component*/
   maxWidth?: number
+  /** maximum width of the father div. */
   maxWidthForm?: number
+  /** displays the error message below the main component. */
   errorMsg?: string
+  /** enables the text area element. */
   textArea?: boolean
+  /**disables the ability to change the value */
   isDisabled?: boolean
+  /**setter that sets the value */
   setValue: (value: string) => void
+  /** width of the element */
   width?: string
+  /**height of the element */
   height?: string
+  /**horizontal margin of the element */
   xMargin?: string
 }
 
-export default function TextInput({
+/**Text input for general use */
+export function TextInput({
   labelText,
   placeholder,
   id,

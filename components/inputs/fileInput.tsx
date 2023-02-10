@@ -2,7 +2,7 @@ import { storage } from '../../services/firebase_config'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import { useState } from 'react'
 
-export default function FileInput() {
+export function FileInput() {
   const [file, setFile] = useState<File>()
 
   function handleChange(event: any) {
@@ -13,7 +13,7 @@ export default function FileInput() {
     if (!file) {
       alert('Please upload an image first!')
     }
-if(storage !== null) return
+    if (storage !== null) return
     const storageRef = ref(storage, `/files/${file?.name}`)
 
     // progress can be paused and resumed. It also exposes progress updates.

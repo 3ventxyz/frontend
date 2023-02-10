@@ -11,13 +11,20 @@ interface LocationData {
 }
 
 interface LocationInputProps {
+  /** text that is used as a title for the input*/
   labelText: string
+  /** the id of the element, for DOM manipulation*/
   id: string
+  /**the text that is used as a hint for the user*/
   placeholder: string
+  /**function that sets the selected location */
   setLocation: (location: LocationData) => void
 }
 
-export default function LocationInput({
+/**
+ * Component that helps to find and sets a selected location.
+ */
+export function LocationInput({
   labelText,
   id,
   placeholder,

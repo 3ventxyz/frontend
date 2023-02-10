@@ -1,12 +1,12 @@
-import TextInput from '../../components/inputs/textInput'
-import LocationInput from '../../components/inputs/locationInput'
+import { TextInput } from '../../components/inputs/textInput'
+import { LocationInput } from '../../components/inputs/locationInput'
 import { useState, useEffect } from 'react'
 import { Button } from '../../components/buttons/button'
 import { db } from '../../services/firebase_config'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { useAuth } from '../../contexts/auth'
-import FileImageInput from '../../components/inputs/fileImageInput'
+import { FileImageInput } from '../../components/inputs/fileImageInput'
 import { uploadImageToStorage } from '../../services/upload_image_to_storage'
 
 interface LocationData {
@@ -52,22 +52,26 @@ export default function CreateUser() {
     location?: LocationData
   ) => {
     try {
-      await uploadImageToStorage(fileImg, `${uid}/profile.jpg` ?? '', async (url: string) => {
-        const docRef = doc(db, 'users', uid)
-        await updateDoc(docRef, {
-          username: name,
-          bio: bio,
-          location: location,
-          avatar: url,
-        })
-        console.log('Data written into doc ID: ', docRef.id)
-      })
+      await uploadImageToStorage(
+        fileImg,
+        `${uid}/profile.jpg` ?? '',
+        async (url: string) => {
+          const docRef = doc(db, 'users', uid)
+          await updateDoc(docRef, {
+            username: name,
+            bio: bio,
+            location: location,
+            avatar: url
+          })
+          console.log('Data written into doc ID: ', docRef.id)
+        }
+      )
       return true
     } catch (e) {
       console.error('Error adding data: ', e)
     }
   }
-  
+
   return (
     <div className="h-screen w-screen bg-secondaryBg">
       <div className="mx-auto flex max-w-[300px] flex-col-reverse items-center justify-center lg:max-w-full lg:flex-row  lg:items-start lg:justify-center lg:space-x-24 lg:pt-14">
@@ -124,7 +128,7 @@ export default function CreateUser() {
             </Link>
           </div>
         </div>
-        </div>
       </div>
+    </div>
   )
 }

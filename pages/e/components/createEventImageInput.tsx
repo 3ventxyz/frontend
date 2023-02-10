@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import FileImageInput from '../../../components/inputs/fileImageInput'
+import { FileImageInput } from '../../../components/inputs/fileImageInput'
 import PredefinedEventPictures from './predefinedEventPictures'
 
 export default function CreateEventImageInput({

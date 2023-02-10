@@ -1,7 +1,7 @@
-import TextInput from '../../components/inputs/textInput'
-import LocationInput from '../../components/inputs/locationInput'
+import { TextInput } from '../../components/inputs/textInput'
+import { LocationInput } from '../../components/inputs/locationInput'
 import { useState } from 'react'
-import FileInput from '../../components/inputs/fileInput'
+import { FileInput } from '../../components/inputs/fileInput'
 
 interface LocationData {
   lat: number

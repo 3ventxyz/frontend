@@ -1,7 +1,7 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useAuth } from '../contexts/auth'
-import TextInputDisplay from '../components/inputs/textInputDisplay'
+import {TextInputDisplay} from '../components/inputs/textInputDisplay'
 import SignInButton from '../components/siwe'
 import Verify from '../components/auth/verify'
 import { Button } from '../components/buttons/button'

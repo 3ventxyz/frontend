@@ -1,14 +1,23 @@
-export default function NumberInput({
+interface NumberInputProps {
+  /**passed function that updates the value, based from the passed name */
+  setNumberValue: (name: string, value: number) => void
+  /**the name of the variable to update */
+  name: string
+  /** the title of the input */
+  labelText: string
+  /**disables the ability to change the value */
+  disabled?: boolean
+}
+
+/**
+ * input that only accepts numeric values
+ */
+export function NumberInput({
   setNumberValue,
   name,
   labelText,
   disabled = false
-}: {
-  setNumberValue: (name: string, value: number) => void
-  name: string
-  labelText:string
-  disabled?: boolean
-}) {
+}: NumberInputProps) {
   return (
     <div className="mx-auto flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">
       <label className="mb-2 block text-sm font-medium text-gray-900 ">
@@ -31,6 +40,3 @@ export default function NumberInput({
     </div>
   )
 }
-
-
-
