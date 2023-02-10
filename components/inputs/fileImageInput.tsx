@@ -5,6 +5,19 @@ import { BiLandscape } from 'react-icons/bi'
 import Image from 'next/image'
 import CreateEvent from '../../pages/e/create'
 
+interface FileImageInputProps {
+  /**the selected file that will be used for uploading image */
+  fileImg: File | null
+  /** useState function hook for setting the value fileImage, along the name of the variable  */
+  setFileImg: (name: string, value: File) => void
+  /** the img url  that will be used for displaying the image on this component*/
+  imgUrlTemplate?: string
+  /**the name given for the uploaded file*/
+  name: string
+  /** the mode that defines what type of image will be needed*/
+  mode?: 'event' | 'landing' | undefined
+}
+
 //imgUrl for the previous template.
 //if a url is passed but a fileImg is still null, display the imgUrl.
 
@@ -12,19 +25,18 @@ import CreateEvent from '../../pages/e/create'
 // create event page or from edit.
 //a dissable upload option will be added and it will be removed, once
 //the storage issue has been fixed.
+
+/**
+ * component that will be used for selecting a file image from the computer
+ * or a predefined image.
+ */
 export function FileImageInput({
   fileImg,
   setFileImg,
   imgUrlTemplate = '',
   mode = 'event',
   name
-}: {
-  fileImg: File | null
-  setFileImg: (name: string, value: File) => void
-  imgUrlTemplate?: string
-  name: string
-  mode?: 'event' | 'landing' | undefined
-}) {
+}: FileImageInputProps) {
   const [imgUrl, setImgUrl] = useState('')
   const [isMouseHover, setMouseHover] = useState<boolean>(false)
 
@@ -129,7 +141,7 @@ function UploadFileImage({
         }}
       />
       {/* check the previous code. and it may not be from dev. */}
-      <div className="flex h-full items-center justify-center hover:cursor-pointer text-gray-400 hover:text-gray-500">
+      <div className="flex h-full items-center justify-center text-gray-400 hover:cursor-pointer hover:text-gray-500">
         <div className="flex w-[150px] flex-col items-center  justify-center ">
           {mode === 'event' ? (
             <MdOutlineAddPhotoAlternate className="h-[100px] w-[100px] md:h-[150px] md:w-[150px] " />
