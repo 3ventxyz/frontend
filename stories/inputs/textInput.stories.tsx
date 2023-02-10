@@ -20,5 +20,6 @@ export const Primary = Template.bind({})
 Primary.args = {
   // name: 'variableName',
   labelText: 'Text Input',
-  disabled: false
+  disabled: false,
+  textArea: false
 }

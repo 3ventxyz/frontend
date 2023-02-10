@@ -1,8 +1,13 @@
 interface TextInputDisplayProps {
+  /**Title of the input, if the label is 'Phone Number' it 
+   * will format the phone number on the bodyText
+   */
   labelText: string
+  /**text that shows on the body */
   bodyText: string
 }
 
+/** */
 export function TextInputDisplay({
   labelText,
   bodyText
