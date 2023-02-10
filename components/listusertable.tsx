@@ -121,16 +121,12 @@ export default function AllowlistUsersTable(
   }
 
   const listAfterPagingAndSorting = () => {
-    if (orderBy === '') {
-      return list.slice(page * rowsPerPage,
-        (page + 1) * rowsPerPage)
-    }
-    else {
+
       return stableSort(list, compareStatus(order, orderBy)).slice(
         page * rowsPerPage,
         (page + 1) * rowsPerPage
       )
-    }
+    
   }
 
   return { TblContainer, TblHead, TblPagination, listAfterPagingAndSorting }

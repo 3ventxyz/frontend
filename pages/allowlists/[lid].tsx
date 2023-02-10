@@ -18,6 +18,9 @@ import AllowlistUsersTable from '../../components/listusertable'
 import { TableBody, TableRow, TableCell, FormControlLabel, Checkbox } from '@mui/material'
 import { CSVLink } from 'react-csv'
 import TextInput from '../../components/inputs/textInput'
+import Button from '../../components/buttons/button'
+import { TramOutlined } from '@material-ui/icons'
+import { ContractResultDecodeError } from 'wagmi'
 
 export default function Allowlist() {
   const [allowlist, setAllowlist] = useState<AllowlistInterface | null>(null)
@@ -33,7 +36,7 @@ export default function Allowlist() {
   const [userDocs, setUserDocs] = useState(Array<AllowlistUser>)
   const [gotInfo, setGotInfo] = useState(false)
   const [editting, setEditting] = useState(false)
-  let index = 0
+  const [index, setIndex] = useState(0)
   const [editable, setEditable] = useState<AllowlistUser>()
   const [listMetaData, setListMetaData] = useState({
     id: '',
@@ -79,6 +82,9 @@ export default function Allowlist() {
     status: 'Added by creator',
     id: 0
   })
+  const [csvFile, setCsvFile] = useState<File>()
+const [csvArray, setCsvArray] = useState(Array<AllowlistUser>)
+const [submitCsv, setSubmitCsv] = useState(false)
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -215,8 +221,8 @@ export default function Allowlist() {
   }
 
   /*Populate data based on data provided (right now only email) */
-  console.log('DATA', newUserMetaData)
   const populateUser = async (data: AllowlistUser) => {
+    setIndex(data.id)
     if (data.phone !== '') {
       try {
         const users = query(collection(db, 'users'), where("phone_number", "==", data.phone))
@@ -354,13 +360,15 @@ export default function Allowlist() {
     } catch (e) {
       console.error('Error adding data: ', e)
     }
+    fetchData()
   }
   /*Save the user with the information provided by db*/
   const saveNewUser = async (i: number) => {
+    console.log(i, index)
     setEditting(false)
     try {
       const docRef = doc(db, 'lists', `${lid}`)
-      await setDoc(doc(collection(docRef, 'registered_users'), `${newUserMetaData.id}`), {
+      await setDoc(doc(collection(docRef, 'registered_users'), `${index}`), {
         email: newUserMetaData.email,
         phone: newUserMetaData.phone,
         twitterId: newUserMetaData.twitter_id,
@@ -371,6 +379,7 @@ export default function Allowlist() {
     } catch (e) {
       console.log(e)
     }
+    fetchData()
   }
 
   const allowlistUserHeader = [
@@ -389,11 +398,52 @@ export default function Allowlist() {
 
   const makeEditable = (i: number) => {
     setEditting(true)
-    index = i
     setNewUserMetaData({...newUserMetaData, id: listAfterPagingAndSorting()[i].id})
+    setIndex(newUserMetaData.id)
     setEditable(listAfterPagingAndSorting()[i])
-    console.log('makeEditable', listAfterPagingAndSorting()[i])
   }
+
+  const processCSV = (str: string, delim=',') => {
+    const columns = str.slice(0, str.indexOf('\n')).split(delim)
+    const headers = columns.map((header) => {
+      return header.replace('"', '').replace('"', '')
+    })
+    const rows = str.slice(str.indexOf('\n') + 1).split('\n')
+
+    const newArray = rows.map(row => {
+      const values = row.split(delim)
+      const eachObject = headers.reduce((obj, header, i) => {
+        obj[header] = values[i]
+        return obj
+      }, {})
+      return eachObject
+    })
+    setCsvArray(newArray)
+    setSubmitCsv(true)
+  }
+
+  const submit = () => {
+    const file = csvFile
+    const reader = new FileReader()
+    reader.onload = function(e) {
+      const text = e.target?.result
+      console.log('text',text)
+      processCSV(text)
+    }
+    reader.readAsText(file)
+  }
+
+  const uploadCsvToDb = () => {{
+    let i = listAfterPagingAndSorting().length
+    console.log(i)
+    csvArray.map(async (user) => {
+      setNewUserMetaData({...newUserMetaData, id: i})
+      await createNewUser(i)
+      await populateUser(user)
+      console.log(i,newUserMetaData)
+      i++
+    })
+  }}
 
   return (
     <>
@@ -425,6 +475,28 @@ export default function Allowlist() {
                       <p className="mt-1 text-sm font-normal text-gray-500 ">
                         {listMetaData.description}
                       </p>
+                      <p className="mt-1 text-sm font-normal text-gray-500 ">
+                        Add your list by uploading a CSV file with the data
+                      </p>
+                      <form id="csv-form">
+                        <input
+                        type="file"
+                        accept=".csv"
+                        id="csv-file"
+                        onChange={(e) => setCsvFile(e.target?.files[0])}
+                        className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-accent file:text-white
+                        hover:file:accent file:my-4 file:hover:cursor-pointer"
+                        ></input>
+                       <Button onClick={(e) => {
+                        e.preventDefault()
+                        if(csvFile)submit()
+                       }} text='Check file' active={true} />
+                        <Button onClick={() => {uploadCsvToDb()}} text='Submit' active={submitCsv} />
+                      </form>
                     </div>
                     <div className="my-auto flex w-[150px] flex-row justify-between">
                       <Image
@@ -503,7 +575,7 @@ export default function Allowlist() {
                         <TableCell>
                           <Image
                             className="hover:cursor-pointer"
-                            onClick={() => makeEditable(i)}
+                            onClick={() => makeEditable(list.id)}
                             alt="add"
                             src="/assets/edit.svg"
                             height="20"
