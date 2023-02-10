@@ -2,9 +2,7 @@ import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { NumberInput } from '../../components/inputs/numberInput'
 
-const childrenTest = () => {
-  return <div className="bg-red-300">hello world</div>
-}
+
 
 export default {
   title: 'Inputs/NumberInput',

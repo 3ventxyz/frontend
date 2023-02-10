@@ -25,6 +25,7 @@ interface TextInputProps {
   xMargin?: string
 }
 
+/**Text input for general use */
 export function TextInput({
   labelText,
   placeholder,

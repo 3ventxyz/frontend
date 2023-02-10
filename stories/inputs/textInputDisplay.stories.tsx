@@ -2,9 +2,6 @@ import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { TextInputDisplay } from '../../components/inputs/textInputDisplay'
 
-const childrenTest = () => {
-  return <div className="bg-red-300">hello world</div>
-}
 
 export default {
   title: 'Inputs/TextInputDisplay',

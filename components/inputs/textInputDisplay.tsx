@@ -7,7 +7,7 @@ interface TextInputDisplayProps {
   bodyText: string
 }
 
-/** */
+/**TextInput that is used only for displaying data */
 export function TextInputDisplay({
   labelText,
   bodyText

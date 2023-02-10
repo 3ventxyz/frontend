@@ -13,7 +13,7 @@ export function FileInput() {
     if (!file) {
       alert('Please upload an image first!')
     }
-if(storage !== null) return
+    if (storage !== null) return
     const storageRef = ref(storage, `/files/${file?.name}`)
 
     // progress can be paused and resumed. It also exposes progress updates.

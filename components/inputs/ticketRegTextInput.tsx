@@ -1,5 +1,24 @@
 // author: marthel
 //TODO (09/17) update this name.
+
+interface TicketRegTextInputProps {
+  /**id of the element */
+  id: string
+  /**hint for the text input */
+  placeholder: string
+  /**name of the variable */
+  inputName: string
+  /**id for the html */
+  htmlFor: string
+  /**title for the input */
+  labelTitle: string
+  /**width of the input */
+  width?: string
+  /**height of the input */
+  height?: string
+}
+
+/**text input for the event registration form */
 export function TicketRegTextInput({
   id,
   placeholder,
@@ -8,15 +27,7 @@ export function TicketRegTextInput({
   labelTitle,
   width = 'w-auto',
   height = 'h-[43px]'
-}: {
-  id: string
-  placeholder: string
-  inputName: string
-  htmlFor: string
-  labelTitle: string
-  width?: string
-  height?: string
-}) {
+}: TicketRegTextInputProps) {
   return (
     <div className="flex flex-col">
       <label className="text-[12px] font-semibold" htmlFor={htmlFor}>
