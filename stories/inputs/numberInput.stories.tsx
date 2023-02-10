@@ -11,13 +11,13 @@ export default {
   component: NumberInput
 } as ComponentMeta<typeof NumberInput>
 
-const Template: ComponentStory<typeof NumberInput> = (args) => <NumberInput {...args} />
+const Template: ComponentStory<typeof NumberInput> = (args) => (
+  <NumberInput {...args} />
+)
 
 export const Primary = Template.bind({})
 
 Primary.args = {
-  children: childrenTest,
-  visible: true,
-  width: 'w-[200px]',
-  height: 'h-[200px]'
+  labelText: 'Number Input',
+  disabled: false
 }

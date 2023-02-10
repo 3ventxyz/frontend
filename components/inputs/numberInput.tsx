@@ -1,10 +1,17 @@
 interface NumberInputProps {
+  /**passed function that updates the value, based from the passed name */
   setNumberValue: (name: string, value: number) => void
+  /**the name of the variable to update */
   name: string
+  /** the title of the input */
   labelText: string
+  /**disables the ability to change the value */
   disabled?: boolean
 }
 
+/**
+ * input that only accepts numeric values
+ */
 export function NumberInput({
   setNumberValue,
   name,

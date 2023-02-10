@@ -18,8 +18,7 @@ const Template: ComponentStory<typeof TextInput> = (args) => (
 export const Primary = Template.bind({})
 
 Primary.args = {
-  children: childrenTest,
-  visible: true,
-  width: 'w-[200px]',
-  height: 'h-[200px]'
+  // name: 'variableName',
+  labelText: 'Text Input',
+  disabled: false
 }
