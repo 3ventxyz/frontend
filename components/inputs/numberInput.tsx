@@ -1,4 +1,6 @@
 interface NumberInputProps {
+  /**id name for the div element */
+  id: string
   /**passed function that updates the value, based from the passed name */
   setNumberValue: (name: string, value: number) => void
   /**the name of the variable to update */
@@ -17,6 +19,7 @@ interface NumberInputProps {
 export function NumberInput({
   setNumberValue,
   name,
+  id,
   labelText,
   disabled = false,
   onPressEnter
@@ -41,7 +44,7 @@ export function NumberInput({
             ? 'border-gray-300  text-gray-300'
             : 'bg-gray-50   text-gray-700'
         } px-2  focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
-        id={'event_ticket_max'}
+        id={id}
         type="number"
         placeholder={'0'}
         disabled={disabled}

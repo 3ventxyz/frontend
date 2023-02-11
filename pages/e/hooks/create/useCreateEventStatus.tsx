@@ -17,6 +17,8 @@ interface useCreateEventStatus {
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
   onPressEnter: () => void
+  //TODO UPDATE THIS
+  focusInput: () => void
 }
 
 export default function useCreateEventStatus(
@@ -129,6 +131,23 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
+  const focusInput = () => {
+    /**TODO create a dom function that will pass the id from the element, and it will be used
+     */
+    // const element = document.getElementById(idElement);
+    // if(element){
+    //   element.scrollIntoView({behavior:'smooth'})
+    // }
+    const element = document.getElementById('event_ticket_max')
+    if (element) {
+      // element.scrollIntoView({behavior:'smooth'})
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    /**base function added, now how to connect it to the create.tsx file.
+     * Time to read carefully.
+     */
+  }
+
   const onPressEnter = () => {
     console.log('pressing enter, this MUST NOT RESET')
     //use a switch case
@@ -195,7 +214,8 @@ export default function useCreateEventStatus(
       setCreatingNewEvent,
       setErrorMsg,
       setCurrentStep,
-      onPressEnter
+      onPressEnter,
+      focusInput
     }
   ]
 }

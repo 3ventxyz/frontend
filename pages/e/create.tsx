@@ -83,9 +83,11 @@ export default function CreateEvent() {
       setCreatingNewEvent,
       setCurrentStep,
       setErrorMsg,
-      onPressEnter
+      onPressEnter,
+      focusInput
     }
   ] = useCreateEventStatus(createEventStatus)
+  //use focusInput
 
   /**
    * logic functions
@@ -183,110 +185,109 @@ export default function CreateEvent() {
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
             {/* <form action="" onSubmit={onPressEnter}> */}
-              {/* step 1 */}
-              <CreateEventFormSection
-                title={'1.- Event title, location and date'}
-                childrenClassName="my-[10px]"
-              >
-                <CreateEventTextInput
-                  id={'event_name'}
-                  labelText={'Title'}
-                  placeholder={''}
-                  onPressEnter={onPressEnter}
-                  setTextValue={setTextValue}
-                  name={'title'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <CreateEventTextInput
-                  id={'event_id'}
-                  labelText={'Event ID*'}
-                  placeholder={''}
-                  setTextValue={setTextValue}
-                  onPressEnter={onPressEnter}
-                  name={'event_id'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <CreateEventLocationInput
-                  labelText={'Location*'}
-                  id={'event_location'}
-                  placeholder={''}
-                  
-                  name={'event_location'}
-                  setLocation={setLocation}
-                />
-                <EventLocationMap
-                  lat={values.event_location.lat}
-                  long={values.event_location.long}
-                />
-                <CreateEventDateTimePicker
-                  labelText={'START DATE'}
-                  setDate={setDate}
-                  name={'start_date'}
-                  date={values.start_date}
-                />
-                <CreateEventDateTimePicker
-                  labelText={'END DATE'}
-                  setDate={setDate}
-                  name={'end_date'}
-                  date={values.end_date}
-                />
-              </CreateEventFormSection>
-              {/* step 2 */}
-              <CreateEventFormSection
-                title={'2.- Description and max attendee cap'}
-                childrenClassName="my-[10px]"
-              >
-                <CreateEventTextInput
-                  textArea={true}
-                  id={'event_description'}
-                  labelText={'Description'}
-                  placeholder={''}
-                  setTextValue={setTextValue}
-                  
-                  name={'event_description'}
-                  isDisabled={status.isCreatingNewEvent}
-                />
-                <NumberInput
-                  labelText="TICKET SUPPLY"
-                  setNumberValue={setNumberValue}
-                  onPressEnter={onPressEnter}
-                  name={'ticket_max'}
-                  disabled={status.isCreatingNewEvent}
-                />
-              </CreateEventFormSection>
-              {/* step 3 */}
-              <CreateEventFormSection
-                title={'3.- Landing portrait and ticket image'}
-                fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
-                childrenClassName={'md:items-start items-center'}
-              >
-                <CreateEventImageInput
-                  labelText={'TICKET EVENT IMAGE'}
-                  fileImg={values.event_file_img}
-                  setFileImg={setFileImg}
-                  setPredefinedImgUrl={setPredefinedImgUrl}
-                  imgUrl={values.event_img_url}
-                  parentClassName={
-                    'mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal'
-                  }
-                  imgMenuClassName={
-                    'top-[600px] z-20 md:absolute md:py-[40px] md:px-[30px]'
-                  }
-                  landingMode={false}
-                />
-                <CreateEventImageInput
-                  labelText={'LANDING PORTRAIT IMAGES'}
-                  fileImg={values.landing_file_img}
-                  setFileImg={setFileImg}
-                  setPredefinedImgUrl={setPredefinedImgUrl}
-                  imgUrl={values.landing_img_url}
-                  parentClassName={
-                    'top-[1425px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
-                  }
-                  imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
-                  landingMode={true}
-                />
-              </CreateEventFormSection>
+            {/* step 1 */}
+            <CreateEventFormSection
+              title={'1.- Event title, location and date'}
+              childrenClassName="my-[10px]"
+            >
+              <CreateEventTextInput
+                id={'event_name'}
+                labelText={'Title'}
+                placeholder={''}
+                onPressEnter={onPressEnter}
+                setTextValue={setTextValue}
+                name={'title'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <CreateEventTextInput
+                id={'event_id'}
+                labelText={'Event ID*'}
+                placeholder={''}
+                setTextValue={setTextValue}
+                onPressEnter={onPressEnter}
+                name={'event_id'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <CreateEventLocationInput
+                labelText={'Location*'}
+                id={'event_location'}
+                placeholder={''}
+                name={'event_location'}
+                setLocation={setLocation}
+              />
+              <EventLocationMap
+                lat={values.event_location.lat}
+                long={values.event_location.long}
+              />
+              <CreateEventDateTimePicker
+                labelText={'START DATE'}
+                setDate={setDate}
+                name={'start_date'}
+                date={values.start_date}
+              />
+              <CreateEventDateTimePicker
+                labelText={'END DATE'}
+                setDate={setDate}
+                name={'end_date'}
+                date={values.end_date}
+              />
+            </CreateEventFormSection>
+            {/* step 2 */}
+            <CreateEventFormSection
+              title={'2.- Description and max attendee cap'}
+              childrenClassName="my-[10px]"
+            >
+              <CreateEventTextInput
+                textArea={true}
+                id={'event_description'}
+                labelText={'Description'}
+                placeholder={''}
+                setTextValue={setTextValue}
+                name={'event_description'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <NumberInput
+                id="event_ticket_max"
+                labelText="TICKET SUPPLY"
+                setNumberValue={setNumberValue}
+                onPressEnter={onPressEnter}
+                name={'ticket_max'}
+                disabled={status.isCreatingNewEvent}
+              />
+            </CreateEventFormSection>
+            {/* step 3 */}
+            <CreateEventFormSection
+              title={'3.- Landing portrait and ticket image'}
+              fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
+              childrenClassName={'md:items-start items-center'}
+            >
+              <CreateEventImageInput
+                labelText={'TICKET EVENT IMAGE'}
+                fileImg={values.event_file_img}
+                setFileImg={setFileImg}
+                setPredefinedImgUrl={setPredefinedImgUrl}
+                imgUrl={values.event_img_url}
+                parentClassName={
+                  'mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal'
+                }
+                imgMenuClassName={
+                  'top-[600px] z-20 md:absolute md:py-[40px] md:px-[30px]'
+                }
+                landingMode={false}
+              />
+              <CreateEventImageInput
+                labelText={'LANDING PORTRAIT IMAGES'}
+                fileImg={values.landing_file_img}
+                setFileImg={setFileImg}
+                setPredefinedImgUrl={setPredefinedImgUrl}
+                imgUrl={values.landing_img_url}
+                parentClassName={
+                  'top-[1425px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
+                }
+                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
+                landingMode={true}
+              />
+            </CreateEventFormSection>
             {/* </form> */}
           </div>
           <CreateEventStepsDisplay
@@ -300,7 +301,7 @@ export default function CreateEvent() {
         currentStep={status.currentStep}
         isCreatingNewEvent={status.isCreatingNewEvent}
         prevPage={prevPage}
-        nextPage={nextPage}
+        nextPage={focusInput}
         createEvent={createEvent}
         errorMsg={status.errorMsg}
         errorField={status.errorField}
