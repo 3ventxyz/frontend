@@ -78,13 +78,11 @@ export default function CreateEvent() {
   const [
     status,
     {
-      nextPage,
+      onNextStep,
       prevPage,
       setCreatingNewEvent,
       setCurrentStep,
-      setErrorMsg,
-      onPressEnter,
-      focusInput
+      setErrorMsg
     }
   ] = useCreateEventStatus(createEventStatus)
   //use focusInput
@@ -184,7 +182,6 @@ export default function CreateEvent() {
         </div>
         <div id="create-event-form" className="flex space-x-5 ">
           <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
-            {/* <form action="" onSubmit={onPressEnter}> */}
             {/* step 1 */}
             <CreateEventFormSection
               title={'1.- Event title, location and date'}
@@ -194,7 +191,7 @@ export default function CreateEvent() {
                 id={'event_name'}
                 labelText={'Title'}
                 placeholder={''}
-                onPressEnter={onPressEnter}
+                onPressEnter={onNextStep}
                 setTextValue={setTextValue}
                 name={'title'}
                 isDisabled={status.isCreatingNewEvent}
@@ -204,7 +201,7 @@ export default function CreateEvent() {
                 labelText={'Event ID*'}
                 placeholder={''}
                 setTextValue={setTextValue}
-                onPressEnter={onPressEnter}
+                onPressEnter={onNextStep}
                 name={'event_id'}
                 isDisabled={status.isCreatingNewEvent}
               />
@@ -250,7 +247,7 @@ export default function CreateEvent() {
                 id="event_ticket_max"
                 labelText="TICKET SUPPLY"
                 setNumberValue={setNumberValue}
-                onPressEnter={onPressEnter}
+                onPressEnter={onNextStep}
                 name={'ticket_max'}
                 disabled={status.isCreatingNewEvent}
               />
@@ -288,7 +285,6 @@ export default function CreateEvent() {
                 landingMode={true}
               />
             </CreateEventFormSection>
-            {/* </form> */}
           </div>
           <CreateEventStepsDisplay
             currentStep={status.currentStep}
@@ -301,7 +297,7 @@ export default function CreateEvent() {
         currentStep={status.currentStep}
         isCreatingNewEvent={status.isCreatingNewEvent}
         prevPage={prevPage}
-        nextPage={focusInput}
+        nextPage={onNextStep}
         createEvent={createEvent}
         errorMsg={status.errorMsg}
         errorField={status.errorField}

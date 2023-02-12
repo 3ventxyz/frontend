@@ -16,9 +16,7 @@ interface useCreateEventStatus {
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
-  onPressEnter: () => void
-  //TODO UPDATE THIS
-  focusInput: () => void
+  onNextStep: () => void
 }
 
 export default function useCreateEventStatus(
@@ -131,34 +129,25 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
-  const focusInput = () => {
-    /**TODO create a dom function that will pass the id from the element, and it will be used
-     */
-    // const element = document.getElementById(idElement);
-    // if(element){
-    //   element.scrollIntoView({behavior:'smooth'})
-    // }
-    const element = document.getElementById('event_ticket_max')
+  const focusInput = (eventID: string) => {
+    const element = document.getElementById(eventID)
     if (element) {
-      // element.scrollIntoView({behavior:'smooth'})
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      element.focus()
     }
-    /**base function added, now how to connect it to the create.tsx file.
-     * Time to read carefully.
-     */
   }
 
-  const onPressEnter = () => {
-    console.log('pressing enter, this MUST NOT RESET')
-    //use a switch case
+  const onNextStep = () => {
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
+        //todo move each setStatus to inside focus input.
         setStatus({
           ...currStatus,
           focusedInputField: CreateEventInputs.eventId,
           inputFieldName: INPUT_FIELD.eventID,
           inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventIDInstr
         })
+        focusInput('event_id')
         break
       case CreateEventInputs.eventId:
         setStatus({
@@ -167,6 +156,7 @@ export default function useCreateEventStatus(
           inputFieldName: INPUT_FIELD.eventLocation,
           inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
         })
+        focusInput('event_location')
         break
       case CreateEventInputs.location:
         setStatus({
@@ -175,6 +165,9 @@ export default function useCreateEventStatus(
           inputFieldName: INPUT_FIELD.date,
           inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.dateInstr
         })
+        //todo create an id for the date area so it can be
+        //focused.
+        // focusInput('event_location')
         break
       case CreateEventInputs.EventDate:
         setStatus({
@@ -183,6 +176,7 @@ export default function useCreateEventStatus(
           inputFieldName: 'Event Description (Optional)',
           inputFieldInstruction: 'Please enter a description about your event'
         })
+        focusInput('event_description')
         break
       case CreateEventInputs.eventDescription:
         setStatus({
@@ -191,6 +185,7 @@ export default function useCreateEventStatus(
           inputFieldName: INPUT_FIELD.ticket,
           inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.ticketInstr
         })
+        focusInput('event_ticket_max')
         break
       case CreateEventInputs.ticketMax:
         setStatus({
@@ -199,9 +194,19 @@ export default function useCreateEventStatus(
           inputFieldName: INPUT_FIELD.eventImage,
           inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventImageInstr
         })
+        //this should be focus on the image inputs.
+        // focusInput('event_ticket_max')
         break
       case CreateEventInputs.images:
-        // add a like a assure question here.
+        // add a like a assure question here, but for now it's
+        //just a reset.
+        setStatus({
+          ...currStatus,
+          focusedInputField: CreateEventInputs.eventTitle,
+          inputFieldName: INPUT_FIELD.eventTitle,
+          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
+        })
+        focusInput('event_name')
         break
     }
   }
@@ -214,8 +219,7 @@ export default function useCreateEventStatus(
       setCreatingNewEvent,
       setErrorMsg,
       setCurrentStep,
-      onPressEnter,
-      focusInput
+      onNextStep
     }
   ]
 }
