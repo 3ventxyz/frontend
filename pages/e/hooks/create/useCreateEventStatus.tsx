@@ -16,6 +16,7 @@ interface useCreateEventStatus {
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
+  onFocus: (input: CreateEventInputs) => void
   onNextStep: () => void
 }
 
@@ -129,84 +130,150 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
-  const focusInput = (eventID: string) => {
+  //
+
+  const focusInput = (
+    eventID: string,
+    selectedCreateEventInput: CreateEventInputs,
+    inputFieldName: string,
+    inputFieldInstr: string
+  ) => {
     const element = document.getElementById(eventID)
+
+    setStatus({
+      ...currStatus,
+      focusedInputField: selectedCreateEventInput,
+      inputFieldName: inputFieldName,
+      inputFieldInstruction: inputFieldInstr
+    })
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
       element.focus()
     }
   }
 
+  const onFocus = (element: CreateEventInputs) => {
+    switch (element) {
+      case CreateEventInputs.eventTitle:
+        focusInput(
+          'event_name',
+          CreateEventInputs.eventTitle,
+          INPUT_FIELD.eventTitle,
+          CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
+        )
+        break
+      case CreateEventInputs.eventId:
+        focusInput(
+          'event_id',
+          CreateEventInputs.eventId,
+          INPUT_FIELD.eventID,
+          CREATE_EVENT_INSTRUCTIONS.eventIDInstr
+        )
+        break
+      case CreateEventInputs.location:
+        focusInput(
+          'event_location',
+          CreateEventInputs.location,
+          INPUT_FIELD.eventLocation,
+          CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
+        )
+        break
+      case CreateEventInputs.EventDate:
+        focusInput(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          CREATE_EVENT_INSTRUCTIONS.dateInstr
+        )
+        break
+      case CreateEventInputs.eventDescription:
+        focusInput(
+          'event_description',
+          CreateEventInputs.eventDescription,
+          'Event Description (Optional)',
+          'Please enter a description about your event'
+        )
+        break
+      case CreateEventInputs.ticketMax:
+        focusInput(
+          'event_ticket_max',
+          CreateEventInputs.ticketMax,
+          INPUT_FIELD.ticket,
+          CREATE_EVENT_INSTRUCTIONS.ticketInstr
+        )
+        break
+      case CreateEventInputs.images:
+        focusInput(
+          'image_inputs',
+          CreateEventInputs.images,
+          INPUT_FIELD.eventImage,
+          CREATE_EVENT_INSTRUCTIONS.eventImageInstr
+        )
+        break
+      // add a like a assure question here, but for now it's
+      //just a reset.
+    }
+  }
+
   const onNextStep = () => {
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
-        //todo move each setStatus to inside focus input.
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.eventId,
-          inputFieldName: INPUT_FIELD.eventID,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventIDInstr
-        })
-        focusInput('event_id')
+        focusInput(
+          'event_id',
+          CreateEventInputs.eventId,
+          INPUT_FIELD.eventID,
+          CREATE_EVENT_INSTRUCTIONS.eventIDInstr
+        )
         break
       case CreateEventInputs.eventId:
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.location,
-          inputFieldName: INPUT_FIELD.eventLocation,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
-        })
-        focusInput('event_location')
+        focusInput(
+          'event_location',
+          CreateEventInputs.location,
+          INPUT_FIELD.eventLocation,
+          CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
+        )
         break
       case CreateEventInputs.location:
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.EventDate,
-          inputFieldName: INPUT_FIELD.date,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.dateInstr
-        })
-        //todo create an id for the date area so it can be
-        //focused.
-        // focusInput('event_location')
+        focusInput(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          CREATE_EVENT_INSTRUCTIONS.dateInstr
+        )
         break
       case CreateEventInputs.EventDate:
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.eventDescription,
-          inputFieldName: 'Event Description (Optional)',
-          inputFieldInstruction: 'Please enter a description about your event'
-        })
-        focusInput('event_description')
+        focusInput(
+          'event_description',
+          CreateEventInputs.eventDescription,
+          'Event Description (Optional)',
+          'Please enter a description about your event'
+        )
         break
       case CreateEventInputs.eventDescription:
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.ticketMax,
-          inputFieldName: INPUT_FIELD.ticket,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.ticketInstr
-        })
-        focusInput('event_ticket_max')
+        focusInput(
+          'event_ticket_max',
+          CreateEventInputs.ticketMax,
+          INPUT_FIELD.ticket,
+          CREATE_EVENT_INSTRUCTIONS.ticketInstr
+        )
         break
       case CreateEventInputs.ticketMax:
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.images,
-          inputFieldName: INPUT_FIELD.eventImage,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventImageInstr
-        })
-        //this should be focus on the image inputs.
-        // focusInput('event_ticket_max')
+        focusInput(
+          'image_inputs',
+          CreateEventInputs.images,
+          INPUT_FIELD.eventImage,
+          CREATE_EVENT_INSTRUCTIONS.eventImageInstr
+        )
         break
       case CreateEventInputs.images:
         // add a like a assure question here, but for now it's
         //just a reset.
-        setStatus({
-          ...currStatus,
-          focusedInputField: CreateEventInputs.eventTitle,
-          inputFieldName: INPUT_FIELD.eventTitle,
-          inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
-        })
-        focusInput('event_name')
+        focusInput(
+          'event_name',
+          CreateEventInputs.eventTitle,
+          INPUT_FIELD.eventTitle,
+          CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
+        )
         break
     }
   }
@@ -219,7 +286,8 @@ export default function useCreateEventStatus(
       setCreatingNewEvent,
       setErrorMsg,
       setCurrentStep,
-      onNextStep
+      onNextStep,
+      onFocus
     }
   ]
 }

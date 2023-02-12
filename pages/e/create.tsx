@@ -82,7 +82,8 @@ export default function CreateEvent() {
       prevPage,
       setCreatingNewEvent,
       setCurrentStep,
-      setErrorMsg
+      setErrorMsg,
+      onFocus
     }
   ] = useCreateEventStatus(createEventStatus)
   //use focusInput
@@ -194,6 +195,9 @@ export default function CreateEvent() {
                 onPressEnter={onNextStep}
                 setTextValue={setTextValue}
                 name={'title'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventTitle)
+                }}
                 isDisabled={status.isCreatingNewEvent}
               />
               <CreateEventTextInput
@@ -203,6 +207,9 @@ export default function CreateEvent() {
                 setTextValue={setTextValue}
                 onPressEnter={onNextStep}
                 name={'event_id'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventId)
+                }}
                 isDisabled={status.isCreatingNewEvent}
               />
               <CreateEventLocationInput
@@ -239,6 +246,9 @@ export default function CreateEvent() {
                 id={'event_description'}
                 labelText={'Description'}
                 placeholder={''}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventDescription)
+                }}
                 setTextValue={setTextValue}
                 name={'event_description'}
                 isDisabled={status.isCreatingNewEvent}
@@ -248,6 +258,9 @@ export default function CreateEvent() {
                 labelText="TICKET SUPPLY"
                 setNumberValue={setNumberValue}
                 onPressEnter={onNextStep}
+                // onFocus={() => {
+                //   onFocus(CreateEventInputs.ticketMax)
+                // }}
                 name={'ticket_max'}
                 disabled={status.isCreatingNewEvent}
               />
@@ -260,6 +273,9 @@ export default function CreateEvent() {
             >
               <CreateEventImageInput
                 labelText={'TICKET EVENT IMAGE'}
+                // onFocus={() => {
+                //   onFocus(CreateEventInputs.images)
+                // }}
                 fileImg={values.event_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
@@ -274,6 +290,9 @@ export default function CreateEvent() {
               />
               <CreateEventImageInput
                 labelText={'LANDING PORTRAIT IMAGES'}
+                // onFocus={() => {
+                //   onFocus(CreateEventInputs.images)
+                // }}
                 fileImg={values.landing_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
