@@ -6,6 +6,7 @@ export default function CreateEventDateTimePicker({
   setDate,
   name,
   date,
+  onFocus=()=>{},
   id = ''
 }: {
   labelText: string
@@ -13,6 +14,7 @@ export default function CreateEventDateTimePicker({
   name: string
   date: Date
   id?: string
+  onFocus?:()=>void
 }) {
   return (
     <div className="flex w-full max-w-[400px] flex-col items-start space-y-1 text-[16px] font-normal">

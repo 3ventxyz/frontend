@@ -214,6 +214,9 @@ export default function CreateEvent() {
               />
               <CreateEventLocationInput
                 labelText={'Location*'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.location)
+                }}
                 id={'event_location'}
                 placeholder={''}
                 name={'event_location'}
@@ -225,12 +228,18 @@ export default function CreateEvent() {
               />
               <CreateEventDateTimePicker
                 labelText={'START DATE'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.EventDate)
+                }}
                 setDate={setDate}
                 name={'start_date'}
                 date={values.start_date}
               />
               <CreateEventDateTimePicker
                 labelText={'END DATE'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.EventDate)
+                }}
                 setDate={setDate}
                 name={'end_date'}
                 date={values.end_date}
@@ -258,9 +267,9 @@ export default function CreateEvent() {
                 labelText="TICKET SUPPLY"
                 setNumberValue={setNumberValue}
                 onPressEnter={onNextStep}
-                // onFocus={() => {
-                //   onFocus(CreateEventInputs.ticketMax)
-                // }}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.ticketMax)
+                }}
                 name={'ticket_max'}
                 disabled={status.isCreatingNewEvent}
               />
@@ -273,9 +282,9 @@ export default function CreateEvent() {
             >
               <CreateEventImageInput
                 labelText={'TICKET EVENT IMAGE'}
-                // onFocus={() => {
-                //   onFocus(CreateEventInputs.images)
-                // }}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.images)
+                }}
                 fileImg={values.event_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
@@ -290,9 +299,9 @@ export default function CreateEvent() {
               />
               <CreateEventImageInput
                 labelText={'LANDING PORTRAIT IMAGES'}
-                // onFocus={() => {
-                //   onFocus(CreateEventInputs.images)
-                // }}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.images)
+                }}
                 fileImg={values.landing_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}

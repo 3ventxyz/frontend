@@ -64,6 +64,9 @@ export default function CreateEventTextInput({
         <textarea
           onChange={(e) => setTextValue(name, e.target.value)}
           name="textarea"
+          onFocus={() => {
+            onFocus()
+          }}
           className={`${width} focus:shadow-outline leading-0 block max-w-[${maxWidth}px] min-h-[80px] rounded-lg border-[1.5px] bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500`}
           id={id}
           placeholder={placeholder}

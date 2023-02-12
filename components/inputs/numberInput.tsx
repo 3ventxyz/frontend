@@ -11,6 +11,8 @@ interface NumberInputProps {
   disabled?: boolean
   /**passed function that is runned when pressing the enter key. */
   onPressEnter: () => void
+  /**passed function that is runned when this input is focused */
+  onFocus?: () => void
 }
 
 /**
@@ -22,6 +24,7 @@ export function NumberInput({
   id,
   labelText,
   disabled = false,
+  onFocus = () => {},
   onPressEnter
 }: NumberInputProps) {
   return (
@@ -30,6 +33,9 @@ export function NumberInput({
         {labelText}
       </label>
       <input
+        onFocus={() => {
+          onFocus()
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault()
