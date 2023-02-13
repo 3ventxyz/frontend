@@ -228,6 +228,7 @@ export default function CreateEvent() {
               />
               <CreateEventDateTimePicker
                 labelText={'START DATE'}
+                id={'event-date'}
                 onFocus={() => {
                   onFocus(CreateEventInputs.EventDate)
                 }}
@@ -239,6 +240,9 @@ export default function CreateEvent() {
                 labelText={'END DATE'}
                 onFocus={() => {
                   onFocus(CreateEventInputs.EventDate)
+                }}
+                onNextStep={() => {
+                  console.log('next step to description')
                 }}
                 setDate={setDate}
                 name={'end_date'}
@@ -275,8 +279,10 @@ export default function CreateEvent() {
               />
             </CreateEventFormSection>
             {/* step 3 */}
+            {/* set the id to this section just for the  */}
             <CreateEventFormSection
               title={'3.- Landing portrait and ticket image'}
+              id={'image-section'}
               fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
               childrenClassName={'md:items-start items-center'}
             >

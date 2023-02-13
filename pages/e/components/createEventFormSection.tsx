@@ -4,15 +4,17 @@ export default function CreateEventFormSection({
   title = '',
   children,
   fatherClassName = '',
-  childrenClassName = ''
+  childrenClassName = '',
+  id = ''
 }: {
   title: string
   children: JSX.Element | JSX.Element[]
   fatherClassName?: string
   childrenClassName?: string
+  id?: string
 }): JSX.Element {
   return (
-    <div className={fatherClassName}>
+    <div id={id} className={fatherClassName}>
       <h4>{title}</h4>
       <hr />
       <div

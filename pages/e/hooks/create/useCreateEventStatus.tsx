@@ -180,7 +180,7 @@ export default function useCreateEventStatus(
         break
       case CreateEventInputs.EventDate:
         focusInput(
-          'event_date',
+          'event-date',
           CreateEventInputs.EventDate,
           INPUT_FIELD.date,
           CREATE_EVENT_INSTRUCTIONS.dateInstr
@@ -204,7 +204,7 @@ export default function useCreateEventStatus(
         break
       case CreateEventInputs.images:
         focusInput(
-          'image_inputs',
+          'image-section',
           CreateEventInputs.images,
           INPUT_FIELD.eventImage,
           CREATE_EVENT_INSTRUCTIONS.eventImageInstr
@@ -259,7 +259,7 @@ export default function useCreateEventStatus(
         break
       case CreateEventInputs.ticketMax:
         focusInput(
-          'image_inputs',
+          'image-section',
           CreateEventInputs.images,
           INPUT_FIELD.eventImage,
           CREATE_EVENT_INSTRUCTIONS.eventImageInstr
