@@ -11,13 +11,14 @@ import {
 } from '../../../../shared/enums/enums'
 
 interface useCreateEventStatus {
-  nextPage: () => void
-  prevPage: () => void
+  // nextPage: () => void
+  // prevPage: () => void
   setCreatingNewEvent: (bool: boolean) => void
   setCurrentStep: (step: number) => void
   setErrorMsg: (errorStatus: CreateEventErrors) => void
   onFocus: (input: CreateEventInputs) => void
   onNextStep: () => void
+  onPrevStep: () => void
 }
 
 export default function useCreateEventStatus(
@@ -215,6 +216,68 @@ export default function useCreateEventStatus(
     }
   }
 
+  const onPrevStep = () => {
+    switch (currStatus.focusedInputField) {
+      case CreateEventInputs.eventTitle:
+      // this should be a null, since it cannot go back to the end.
+      //  focusInput(
+      //   'image_section',
+      //   CreateEventInputs.images,
+      //   INPUT_FIELD.eventImage,
+      //   CREATE_EVENT_INSTRUCTIONS.eventImageInstr
+      // )
+      // break
+      case CreateEventInputs.eventId:
+        focusInput(
+          'event_name',
+          CreateEventInputs.eventTitle,
+          INPUT_FIELD.eventTitle,
+          CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
+        )
+        break
+      case CreateEventInputs.location:
+        focusInput(
+          'event_id',
+          CreateEventInputs.eventId,
+          INPUT_FIELD.eventID,
+          CREATE_EVENT_INSTRUCTIONS.eventIDInstr
+        )
+        break
+      case CreateEventInputs.EventDate:
+        focusInput(
+          'event_location',
+          CreateEventInputs.location,
+          INPUT_FIELD.eventLocation,
+          CREATE_EVENT_INSTRUCTIONS.eventLocationInstr
+        )
+        break
+      case CreateEventInputs.eventDescription:
+        focusInput(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          CREATE_EVENT_INSTRUCTIONS.dateInstr
+        )
+        break
+      case CreateEventInputs.ticketMax:
+        focusInput(
+          'event_description',
+          CreateEventInputs.eventDescription,
+          'Event Description (Optional)',
+          'Please enter a description about your event'
+        )
+        break
+      case CreateEventInputs.images:
+        focusInput(
+          'event_ticket_max',
+          CreateEventInputs.ticketMax,
+          INPUT_FIELD.ticket,
+          CREATE_EVENT_INSTRUCTIONS.ticketInstr
+        )
+        break
+    }
+  }
+
   const onNextStep = () => {
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
@@ -281,12 +344,13 @@ export default function useCreateEventStatus(
   return [
     currStatus,
     {
-      nextPage,
-      prevPage,
+      // nextPage,
+      // prevPage,
       setCreatingNewEvent,
       setErrorMsg,
       setCurrentStep,
       onNextStep,
+      onPrevStep,
       onFocus
     }
   ]

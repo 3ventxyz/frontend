@@ -79,7 +79,7 @@ export default function CreateEvent() {
     status,
     {
       onNextStep,
-      prevPage,
+      onPrevStep,
       setCreatingNewEvent,
       setCurrentStep,
       setErrorMsg,
@@ -330,10 +330,10 @@ export default function CreateEvent() {
         </div>
       </div>
       <CreateEventFooter
-        currentStep={status.currentStep}
+        currentInput={status.focusedInputField}
         isCreatingNewEvent={status.isCreatingNewEvent}
-        prevPage={prevPage}
-        nextPage={onNextStep}
+        onPrevStep={onPrevStep}
+        onNextStep={onNextStep}
         createEvent={createEvent}
         errorMsg={status.errorMsg}
         errorField={status.errorField}

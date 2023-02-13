@@ -1,26 +1,27 @@
 import { Button } from '../../../components/buttons/button'
-import  ErrorFormMsg  from '../../../components/utils/errorMsg'
+import ErrorFormMsg from '../../../components/utils/errorMsg'
 import { Spinner } from '../../../components/utils/spinner'
+import { CreateEventInputs } from '../../../shared/enums/enums'
 
 export default function CreateEventFooter({
-  currentStep,
+  currentInput,
   isCreatingNewEvent,
   errorMsg,
   errorField,
   currInputField,
   inputFieldInstr,
-  prevPage,
-  nextPage,
+  onPrevStep,
+  onNextStep,
   createEvent
 }: {
-  currentStep: number
+  currentInput: CreateEventInputs
   isCreatingNewEvent: boolean
   errorMsg: string
   errorField: string
   currInputField: string
   inputFieldInstr: string
-  prevPage: () => void
-  nextPage: () => void
+  onPrevStep: () => void
+  onNextStep: () => void
   createEvent: () => void
 }) {
   return (
@@ -43,17 +44,17 @@ export default function CreateEventFooter({
             <div className="  flex space-x-2">
               <Button
                 text={'Prev'}
-                active={currentStep > 0 ? true : false}
+                active={currentInput !== CreateEventInputs.eventTitle}
                 onClick={() => {
-                  prevPage()
+                  onPrevStep()
                 }}
               />
-              {currentStep < 2 ? (
+              {currentInput !== CreateEventInputs.images ? (
                 <Button
                   text={'Next'}
-                  active={currentStep < 2 ? true : false}
+                  active={true}
                   onClick={() => {
-                    nextPage()
+                    onNextStep()
                   }}
                 />
               ) : (
