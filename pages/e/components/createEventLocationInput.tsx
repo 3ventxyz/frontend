@@ -16,6 +16,7 @@ interface LocationInputProps {
   placeholder: string
   name: string
   onFocus?: () => void
+  onPressEnter: () => void
   setLocation: (name: string, location: LocationData) => void
 }
 
@@ -25,6 +26,7 @@ export default function CreateEventLocationInput({
   placeholder,
   name,
   setLocation,
+  onPressEnter,
   onFocus = () => {}
 }: LocationInputProps) {
   const [searchText, setSearchText] = useState('')
@@ -48,6 +50,7 @@ export default function CreateEventLocationInput({
           long: latLng['lng'],
           address: address
         })
+        onPressEnter()
         return console.log('Success', latLng)
       })
       .catch((error) => console.error('Error', error))

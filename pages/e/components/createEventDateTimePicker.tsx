@@ -33,7 +33,12 @@ export default function CreateEventDateTimePicker({
         className="flex space-x-3"
       >
         <LocalDatePicker setDate={setDate} name={name} selectedDate={date} />
-        <LocalTimePicker setDate={setDate} name={name} selectedDate={date} />
+        <LocalTimePicker
+          setDate={setDate}
+          name={name}
+          onNextStep={onNextStep}
+          selectedDate={date}
+        />
       </div>
     </div>
   )

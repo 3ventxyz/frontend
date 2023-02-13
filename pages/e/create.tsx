@@ -220,6 +220,7 @@ export default function CreateEvent() {
                 id={'event_location'}
                 placeholder={''}
                 name={'event_location'}
+                onPressEnter={onNextStep}
                 setLocation={setLocation}
               />
               <EventLocationMap
@@ -228,7 +229,7 @@ export default function CreateEvent() {
               />
               <CreateEventDateTimePicker
                 labelText={'START DATE'}
-                id={'event-date'}
+                id={'event_date'}
                 onFocus={() => {
                   onFocus(CreateEventInputs.EventDate)
                 }}
@@ -242,6 +243,7 @@ export default function CreateEvent() {
                   onFocus(CreateEventInputs.EventDate)
                 }}
                 onNextStep={() => {
+                  onNextStep()
                   console.log('next step to description')
                 }}
                 setDate={setDate}
@@ -282,7 +284,7 @@ export default function CreateEvent() {
             {/* set the id to this section just for the  */}
             <CreateEventFormSection
               title={'3.- Landing portrait and ticket image'}
-              id={'image-section'}
+              id={'image_section'}
               fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
               childrenClassName={'md:items-start items-center'}
             >
