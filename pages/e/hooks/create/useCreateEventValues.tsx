@@ -58,18 +58,10 @@ export default function useCreateEventValues(
       return CreateEventErrors.emptyTitle
     }
 
-    if (
-      !fileTypeValidator(values.event_file_img) ||
-      !fileTypeValidator(values.landing_file_img)
-    ) {
-      return CreateEventErrors.invalidFileType
+    if (await CheckEventId(values.event_id)) {
+      return CreateEventErrors.eventIdTaken
     }
-    if (values.event_img_url == '' && !values.event_file_img) {
-      return CreateEventErrors.emptyImage
-    }
-    if (values.landing_img_url == '' && !values.landing_file_img) {
-      return CreateEventErrors.emptyImage
-    }
+
     if (
       values.event_location.address === '' ||
       values.event_location.lat === 0 ||
@@ -88,15 +80,27 @@ export default function useCreateEventValues(
     if (values.start_date.getTime() > values.end_date.getTime()) {
       return CreateEventErrors.endDateBehind
     }
+
     if (isNaN(values.ticket_max)) {
       return CreateEventErrors.invalidNumber
     }
     if (values.ticket_max < 0) {
       return CreateEventErrors.lowCapNumber
     }
-    if (await CheckEventId(values.event_id)) {
-      return CreateEventErrors.eventIdTaken
+
+    if (
+      !fileTypeValidator(values.event_file_img) ||
+      !fileTypeValidator(values.landing_file_img)
+    ) {
+      return CreateEventErrors.invalidFileType
     }
+    if (values.event_img_url == '' && !values.event_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+    if (values.landing_img_url == '' && !values.landing_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+
     return CreateEventErrors.noError
   }
 

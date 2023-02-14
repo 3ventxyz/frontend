@@ -102,8 +102,9 @@ export default function CreateEvent() {
     setCreatingNewEvent(true)
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
-      setCreatingNewEvent(false)
+      console.log('error: ' + formError)
       setErrorMsg(formError)
+      setCreatingNewEvent(false)
       return
     }
 

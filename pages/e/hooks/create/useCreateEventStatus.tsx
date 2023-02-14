@@ -49,74 +49,84 @@ export default function useCreateEventStatus(
   const setErrorMsg = (errorStatus: CreateEventErrors) => {
     switch (errorStatus) {
       case CreateEventErrors.emptyTitle:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.emptyField,
-          errorField: INPUT_FIELD.eventTitle
-        })
+        onFocusError(
+          'event_name',
+          CreateEventInputs.eventTitle,
+          INPUT_FIELD.eventTitle,
+          ERROR_MESSAGE.emptyField
+        )
         break
       case CreateEventErrors.invalidFileType:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.invalidFileType,
-          errorField: INPUT_FIELD.eventImage
-        })
+        onFocusError(
+          'image_section',
+          CreateEventInputs.images,
+          INPUT_FIELD.eventImage,
+          ERROR_MESSAGE.invalidFileType
+        )
         break
       case CreateEventErrors.emptyImage:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.emptyImage,
-          errorField: INPUT_FIELD.eventImage
-        })
+        onFocusError(
+          'image_section',
+          CreateEventInputs.images,
+          INPUT_FIELD.eventImage,
+          ERROR_MESSAGE.emptyImage
+        )
         break
       case CreateEventErrors.emptyEventLocation:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.emptyEventLocation,
-          errorField: INPUT_FIELD.eventLocation
-        })
+        onFocusError(
+          'event_location',
+          CreateEventInputs.location,
+          INPUT_FIELD.eventLocation,
+          ERROR_MESSAGE.emptyEventLocation
+        )
         break
       case CreateEventErrors.startDateBehind:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.startDateBehind,
-          errorField: INPUT_FIELD.date
-        })
+        onFocusError(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          ERROR_MESSAGE.startDateBehind
+        )
         break
       case CreateEventErrors.sameDatePeriod:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.sameDatePeriod,
-          errorField: INPUT_FIELD.date
-        })
+        onFocusError(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          ERROR_MESSAGE.sameDatePeriod
+        )
         break
       case CreateEventErrors.endDateBehind:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.endDateBehind,
-          errorField: INPUT_FIELD.date
-        })
+        onFocusError(
+          'event_date',
+          CreateEventInputs.EventDate,
+          INPUT_FIELD.date,
+          ERROR_MESSAGE.endDateBehind
+        )
         break
       case CreateEventErrors.invalidNumber:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.invalidNumber,
-          errorField: INPUT_FIELD.ticket
-        })
+        onFocusError(
+          'event_ticket_max',
+          CreateEventInputs.ticketMax,
+          INPUT_FIELD.ticket,
+          ERROR_MESSAGE.invalidNumber
+        )
         break
       case CreateEventErrors.lowCapNumber:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.lowCapNumber,
-          errorField: INPUT_FIELD.ticket
-        })
+        onFocusError(
+          'event_ticket_max',
+          CreateEventInputs.ticketMax,
+          INPUT_FIELD.ticket,
+          ERROR_MESSAGE.lowCapNumber
+        )
         break
       case CreateEventErrors.eventIdTaken:
-        setStatus({
-          ...currStatus,
-          errorMsg: ERROR_MESSAGE.eventIdTaken,
-          errorField: INPUT_FIELD.eventID
-        })
+        onFocusError(
+          'event_id',
+          CreateEventInputs.eventId,
+          INPUT_FIELD.eventID,
+          ERROR_MESSAGE.eventIdTaken
+        )
         break
       default:
         setStatus({
@@ -131,8 +141,6 @@ export default function useCreateEventStatus(
     setStatus({ ...currStatus, currentStep: step })
   }
 
-  //
-
   const focusInput = (
     eventID: string,
     selectedCreateEventInput: CreateEventInputs,
@@ -145,7 +153,30 @@ export default function useCreateEventStatus(
       ...currStatus,
       focusedInputField: selectedCreateEventInput,
       inputFieldName: inputFieldName,
-      inputFieldInstruction: inputFieldInstr
+      inputFieldInstruction: inputFieldInstr,
+      errorMsg: '',
+      errorField: ''
+    })
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      element.focus()
+    }
+  }
+
+  const onFocusError = (
+    eventID: string,
+    selectedCreateEventInput: CreateEventInputs,
+    errorField: string,
+    errorMsg: string
+  ) => {
+    const element = document.getElementById(eventID)
+
+    setStatus({
+      ...currStatus,
+      focusedInputField: selectedCreateEventInput,
+      errorMsg: errorMsg,
+      errorField: errorField,
+      isCreatingNewEvent: false
     })
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -154,6 +185,11 @@ export default function useCreateEventStatus(
   }
 
   const onFocus = (element: CreateEventInputs) => {
+    setStatus({
+      ...currStatus,
+      errorMsg: '',
+      errorField: ''
+    })
     switch (element) {
       case CreateEventInputs.eventTitle:
         focusInput(
@@ -217,16 +253,15 @@ export default function useCreateEventStatus(
   }
 
   const onPrevStep = () => {
+    setStatus({
+      ...currStatus,
+      errorMsg: '',
+      errorField: ''
+    })
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
-      // this should be a null, since it cannot go back to the end.
-      //  focusInput(
-      //   'image_section',
-      //   CreateEventInputs.images,
-      //   INPUT_FIELD.eventImage,
-      //   CREATE_EVENT_INSTRUCTIONS.eventImageInstr
-      // )
-      // break
+        //nothing goes here
+        break
       case CreateEventInputs.eventId:
         focusInput(
           'event_name',
@@ -279,6 +314,11 @@ export default function useCreateEventStatus(
   }
 
   const onNextStep = () => {
+    setStatus({
+      ...currStatus,
+      errorMsg: '',
+      errorField: ''
+    })
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
         focusInput(

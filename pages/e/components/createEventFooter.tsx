@@ -2,6 +2,7 @@ import { Button } from '../../../components/buttons/button'
 import ErrorFormMsg from '../../../components/utils/errorMsg'
 import { Spinner } from '../../../components/utils/spinner'
 import { CreateEventInputs } from '../../../shared/enums/enums'
+import { BsFillExclamationTriangleFill } from 'react-icons/bs'
 
 export default function CreateEventFooter({
   currentInput,
@@ -28,12 +29,30 @@ export default function CreateEventFooter({
     <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
       {/* button for pagination and submit newly created event. */}
       <div className="flex w-full max-w-[350px] items-center justify-between space-x-5 sm:max-w-[450px] md:max-w-[700px]">
-        <div>
-          <div className="text-[17px] font-bold sm:text-[20px]">
-            {currInputField}
+        {errorField !== '' && errorMsg !== '' ? (
+          <div className="flex items-center space-x-2">
+            <div>
+              <BsFillExclamationTriangleFill className="h-[35px] w-[35px]" />
+            </div>
+            <div>
+              <div className="text-[17px] font-bold sm:text-[20px]">
+                <span className="text-red-500">Error:</span> {errorField}
+              </div>
+              <div className="hidden text-[14px] sm:text-[16px] md:block">
+                {errorMsg}
+              </div>
+            </div>
           </div>
-          <div className="text-[14px] sm:text-[16px]">{inputFieldInstr}</div>
-        </div>
+        ) : (
+          <div>
+            <div className="text-[17px] font-bold sm:text-[20px]">
+              {currInputField}
+            </div>
+            <div className="hidden text-[14px] sm:text-[16px] md:block">
+              {inputFieldInstr}
+            </div>
+          </div>
+        )}
         {isCreatingNewEvent ? (
           <div className="flex items-center">
             <Spinner width={25} height={25} />
@@ -67,13 +86,6 @@ export default function CreateEventFooter({
                 />
               )}
             </div>
-            {errorField !== '' && errorMsg !== '' ? (
-              <div className="absolute right-[420px]">
-                <ErrorFormMsg errorField={errorField} errorMsg={errorMsg} />
-              </div>
-            ) : (
-              <></>
-            )}
           </div>
         )}
       </div>
