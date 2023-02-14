@@ -314,9 +314,11 @@ export default function CreateEvent() {
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
                 imgUrl={values.landing_img_url}
-                parentClassName={
-                  'top-[1425px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
-                }
+                parentClassName={`${
+                  values.event_location.address !== ''
+                    ? 'top-[1600px]'
+                    : 'top-[1425px]'
+                } z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0`}
                 imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
                 landingMode={true}
               />
