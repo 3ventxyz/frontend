@@ -103,8 +103,8 @@ export default function CreateEvent() {
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
       console.log('error: ' + formError)
-      setErrorMsg(formError)
       setCreatingNewEvent(false)
+      setErrorMsg(formError)
       return
     }
 
@@ -177,12 +177,12 @@ export default function CreateEvent() {
    **/
   return (
     <div className="flex w-full flex-col items-center bg-secondaryBg">
-      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
+      <div className="flex  max-w-[325px] flex-col items-center justify-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
         <div>
           <h3>Create Event</h3>
           <hr />
         </div>
-        <div id="create-event-form" className="flex space-x-5 ">
+        <div id="create-event-form" className="flex  ">
           <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
             {/* step 1 */}
             <CreateEventFormSection
@@ -319,17 +319,12 @@ export default function CreateEvent() {
                   values.event_location.address !== ''
                     ? 'top-[1600px]'
                     : 'top-[1425px]'
-                } z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0`}
-                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
+                } z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:left-[340px] md:space-y-0`}
+                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px] '}
                 landingMode={true}
               />
             </CreateEventFormSection>
           </div>
-          <CreateEventStepsDisplay
-            currentStep={status.currentStep}
-            setCurrentStep={setCurrentStep}
-            isCreatingEvent={status.isCreatingNewEvent}
-          />
         </div>
       </div>
       <CreateEventFooter

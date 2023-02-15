@@ -73,6 +73,7 @@ export default function useCreateEventStatus(
         )
         break
       case CreateEventErrors.emptyEventLocation:
+        console.log('setting empty event location error')
         onFocusError(
           'event_location',
           CreateEventInputs.location,
@@ -129,6 +130,7 @@ export default function useCreateEventStatus(
         )
         break
       default:
+        console.log('no error: ' + currStatus.focusedInputField.toString())
         setStatus({
           ...currStatus,
           errorMsg: '',
@@ -258,6 +260,7 @@ export default function useCreateEventStatus(
       errorMsg: '',
       errorField: ''
     })
+    console.log('previous step from:' + currStatus.focusedInputField.toString())
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
         //nothing goes here
@@ -319,6 +322,7 @@ export default function useCreateEventStatus(
       errorMsg: '',
       errorField: ''
     })
+    console.log('next step from:' + currStatus.focusedInputField.toString())
     switch (currStatus.focusedInputField) {
       case CreateEventInputs.eventTitle:
         focusInput(
@@ -369,14 +373,7 @@ export default function useCreateEventStatus(
         )
         break
       case CreateEventInputs.images:
-        // add a like a assure question here, but for now it's
-        //just a reset.
-        focusInput(
-          'event_name',
-          CreateEventInputs.eventTitle,
-          INPUT_FIELD.eventTitle,
-          CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
-        )
+        // null here, there's nothing after images section.
         break
     }
   }
