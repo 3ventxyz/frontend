@@ -33,6 +33,7 @@ export interface EventInterface {
   ticket_max: number
   event_id: string
   registered_attendees: number
+  tags: string[]
 }
 
 export interface EventHostInterface {
@@ -127,7 +128,7 @@ export interface createEventFormInterface {
   event_img_url: string
   landing_file_img: File | null
   landing_img_url: string
-  tags:string[]
+  tags: string[]
 }
 
 export interface createEventStatusInterface {

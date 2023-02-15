@@ -153,8 +153,8 @@ export default function CreateEvent() {
           landing_portrait_url: landingPortraitURL,
           ticket_max: values.ticket_max,
           event_id: values.event_id,
-          registered_attendees: 0
-          // tags:values.tags
+          registered_attendees: 0,
+          tags:values.tags
         },
         {
           title: values.title,
