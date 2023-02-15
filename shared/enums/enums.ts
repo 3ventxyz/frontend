@@ -20,6 +20,7 @@ export enum CreateEventInputs {
   location,
   EventDate,
   eventDescription,
+  eventTags,
   ticketMax,
   images
 }

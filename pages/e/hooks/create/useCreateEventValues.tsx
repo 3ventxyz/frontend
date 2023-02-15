@@ -13,6 +13,7 @@ interface useCreateEventValuesInterface {
   setLocation: (name: string, location: LocationData) => void
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, fileImgUrl: string) => void
+  setTags: (name: string, value: string) => void
   formValidator: () => Promise<CreateEventErrors>
 }
 
@@ -41,6 +42,11 @@ export default function useCreateEventValues(
     setValues({ ...values, [name]: predefinedImgUrl })
   }
 
+  const setTags = (name: string, value: string) => {
+    const slicedTags: string[] = value.split(',')
+    setValues({ ...values, [name]: slicedTags })
+  }
+
   const fileTypeValidator = (file: File | null) => {
     if (!file) {
       return true
@@ -56,6 +62,10 @@ export default function useCreateEventValues(
   const formValidator = async () => {
     if (values.title === '') {
       return CreateEventErrors.emptyTitle
+    }
+
+    if (values.event_id === '') {
+      return CreateEventErrors.eventIdTaken
     }
 
     if (await CheckEventId(values.event_id)) {
@@ -84,7 +94,7 @@ export default function useCreateEventValues(
     if (isNaN(values.ticket_max)) {
       return CreateEventErrors.invalidNumber
     }
-    if (values.ticket_max < 0) {
+    if (values.ticket_max <= 0) {
       return CreateEventErrors.lowCapNumber
     }
 
@@ -112,6 +122,7 @@ export default function useCreateEventValues(
       setDate,
       setLocation,
       setFileImg,
+      setTags,
       setPredefinedImgUrl,
       formValidator
     }

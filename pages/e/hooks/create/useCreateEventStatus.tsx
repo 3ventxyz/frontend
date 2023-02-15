@@ -233,6 +233,14 @@ export default function useCreateEventStatus(
           'Please enter a description about your event'
         )
         break
+      case CreateEventInputs.eventTags:
+        focusInput(
+          'event_tags',
+          CreateEventInputs.eventTags,
+          'Tags (Optional)',
+          'Please enter any tags for your event, separated with a comma'
+        )
+        break
       case CreateEventInputs.ticketMax:
         focusInput(
           'event_ticket_max',
@@ -297,13 +305,24 @@ export default function useCreateEventStatus(
           CREATE_EVENT_INSTRUCTIONS.dateInstr
         )
         break
-      case CreateEventInputs.ticketMax:
+
+      case CreateEventInputs.eventTags:
         focusInput(
           'event_description',
           CreateEventInputs.eventDescription,
           'Event Description (Optional)',
           'Please enter a description about your event'
         )
+        break
+
+      case CreateEventInputs.ticketMax:
+        focusInput(
+          'event_tags',
+          CreateEventInputs.eventTags,
+          'Tags (Optional)',
+          'Please enter any tags for your event, separated with a comma'
+        )
+
         break
       case CreateEventInputs.images:
         focusInput(
@@ -358,6 +377,15 @@ export default function useCreateEventStatus(
         break
       case CreateEventInputs.eventDescription:
         focusInput(
+          'event_tags',
+          CreateEventInputs.eventTags,
+          'Tags (Optional)',
+          'Please enter any tags for your event, separated with a comma'
+        )
+
+        break
+      case CreateEventInputs.eventTags:
+        focusInput(
           'event_ticket_max',
           CreateEventInputs.ticketMax,
           INPUT_FIELD.ticket,
@@ -373,7 +401,7 @@ export default function useCreateEventStatus(
         )
         break
       case CreateEventInputs.images:
-        // null here, there's nothing after images section.
+        //null here, there's nothing after images section.
         break
     }
   }

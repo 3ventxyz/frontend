@@ -127,6 +127,7 @@ export interface createEventFormInterface {
   event_img_url: string
   landing_file_img: File | null
   landing_img_url: string
+  tags:string[]
 }
 
 export interface createEventStatusInterface {

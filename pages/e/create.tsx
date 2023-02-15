@@ -42,7 +42,8 @@ const inputValues: createEventFormInterface = {
   event_file_img: null,
   landing_file_img: null,
   event_img_url: '',
-  landing_img_url: ''
+  landing_img_url: '',
+  tags: []
 }
 
 const createEventStatus: createEventStatusInterface = {
@@ -65,6 +66,7 @@ export default function CreateEvent() {
       setTextValue,
       setNumberValue,
       setDate,
+      setTags,
       setLocation,
       setFileImg,
       setPredefinedImgUrl,
@@ -89,7 +91,7 @@ export default function CreateEvent() {
   //use focusInput
 
   /**
-   * logic functions
+   * Logic functions
    **/
   const createEvent = async () => {
     let formError: CreateEventErrors
@@ -152,6 +154,7 @@ export default function CreateEvent() {
           ticket_max: values.ticket_max,
           event_id: values.event_id,
           registered_attendees: 0
+          // tags:values.tags
         },
         {
           title: values.title,
@@ -254,7 +257,7 @@ export default function CreateEvent() {
             </CreateEventFormSection>
             {/* step 2 */}
             <CreateEventFormSection
-              title={'2.- Description and max attendee cap'}
+              title={'2.- Description, tags, and max attendee cap'}
               childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
@@ -267,6 +270,18 @@ export default function CreateEvent() {
                 }}
                 setTextValue={setTextValue}
                 name={'event_description'}
+                isDisabled={status.isCreatingNewEvent}
+              />
+              <CreateEventTextInput
+                id={'event_tags'}
+                labelText={'Tags'}
+                placeholder={''}
+                setTextValue={setTags}
+                onPressEnter={onNextStep}
+                name={'tags'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventTags)
+                }}
                 isDisabled={status.isCreatingNewEvent}
               />
               <NumberInput
@@ -317,8 +332,8 @@ export default function CreateEvent() {
                 imgUrl={values.landing_img_url}
                 parentClassName={`${
                   values.event_location.address !== ''
-                    ? 'top-[1600px]'
-                    : 'top-[1425px]'
+                    ? 'top-[1700px]'
+                    : 'top-[1525px]'
                 } z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:left-[340px] md:space-y-0`}
                 imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px] '}
                 landingMode={true}
