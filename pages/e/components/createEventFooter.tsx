@@ -3,6 +3,7 @@ import ErrorFormMsg from '../../../components/utils/errorMsg'
 import { Spinner } from '../../../components/utils/spinner'
 import { CreateEventInputs } from '../../../shared/enums/enums'
 import { BsFillExclamationTriangleFill } from 'react-icons/bs'
+import { useEffect } from 'react'
 
 export default function CreateEventFooter({
   currentInput,
@@ -25,6 +26,12 @@ export default function CreateEventFooter({
   onNextStep: () => void
   createEvent: () => void
 }) {
+  useEffect(() => {
+    console.log('update create event footer')
+    console.log('errorField: ', errorField)
+    console.log('errorMsg: ', errorMsg)
+    console.log('isCreatingNewEvent: ', isCreatingNewEvent)
+  }, [errorField, errorMsg, isCreatingNewEvent])
   return (
     <div className="sticky bottom-[0px] z-40 flex h-[80px] w-full  justify-center bg-white shadow-md">
       {/* button for pagination and submit newly created event. */}

@@ -77,7 +77,11 @@ export default function useCreateEventValues(
       values.event_location.lat === 0 ||
       values.event_location.long === 0
     ) {
+      console.log('useCreateEventValues: event location error inside if statement');
       return CreateEventErrors.emptyEventLocation
+    }
+    else{
+      console.log('useCreateEventValues: NO ERRROR.');
     }
 
     if (values.start_date.getTime() < startOfToday().getTime()) {

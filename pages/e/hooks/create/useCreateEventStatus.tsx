@@ -171,6 +171,17 @@ export default function useCreateEventStatus(
     errorField: string,
     errorMsg: string
   ) => {
+    console.log('onFocusError log:')
+    console.log(
+      'eventID: ',
+      eventID,
+      ', selectedCreateEventInput: ',
+      selectedCreateEventInput,
+      ', errorField: ',
+      errorField,
+      ', errorMsg: ',
+      errorMsg
+    )
     const element = document.getElementById(eventID)
 
     setStatus({

@@ -83,7 +83,7 @@ export default function CreateEvent() {
       onNextStep,
       onPrevStep,
       setCreatingNewEvent,
-      setCurrentStep,
+      // setCurrentStep,
       setErrorMsg,
       onFocus
     }
@@ -154,7 +154,7 @@ export default function CreateEvent() {
           ticket_max: values.ticket_max,
           event_id: values.event_id,
           registered_attendees: 0,
-          tags:values.tags
+          tags: values.tags
         },
         {
           title: values.title,
@@ -218,9 +218,6 @@ export default function CreateEvent() {
               />
               <CreateEventLocationInput
                 labelText={'Location*'}
-                onFocus={() => {
-                  onFocus(CreateEventInputs.location)
-                }}
                 id={'event_location'}
                 placeholder={''}
                 name={'event_location'}
