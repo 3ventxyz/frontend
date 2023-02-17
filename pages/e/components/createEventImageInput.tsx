@@ -10,7 +10,8 @@ export default function CreateEventImageInput({
   imgMenuClassName = '',
   landingMode,
   setFileImg,
-  setPredefinedImgUrl
+  setPredefinedImgUrl,
+  onFocus = () => {}
 }: {
   labelText: string
   fileImg: File | null
@@ -20,6 +21,7 @@ export default function CreateEventImageInput({
   landingMode: boolean
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, predefinedImgUrl: string) => void
+  onFocus: () => void
 }) {
   const [menuVisible, setMenuVisible] = useState(false)
   const imgUrlName = landingMode ? 'landing_img_url' : 'event_img_url'
@@ -51,7 +53,12 @@ export default function CreateEventImageInput({
           Predefined Images
         </span>
       </div>
-      <div className="z-10">
+      <div
+        onClick={() => {
+          onFocus()
+        }}
+        className="z-10"
+      >
         <FileImageInput
           name={fileImgName}
           fileImg={fileImg}

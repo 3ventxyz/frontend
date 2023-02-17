@@ -120,7 +120,8 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       landing_portrait_url: eventDoc.data()?.landing_portrait_url,
       end_date: eventDoc.data()?.end_date?.toDate(),
       ticket_max: eventDoc.data()?.ticket_max,
-      registered_attendees: eventDoc.data()?.registered_attendees
+      registered_attendees: eventDoc.data()?.registered_attendees,
+      tags: eventDoc.data()?.tags
     }
     return eventData
   }

@@ -1,26 +1,26 @@
 import { Children, ReactElement } from 'react'
 
 export default function CreateEventFormSection({
-  isExpanded = false,
   title = '',
   children,
-  fatherClassName='',
-  childrenClassName='',
+  fatherClassName = '',
+  childrenClassName = '',
+  id = ''
 }: {
-  isExpanded: boolean
   title: string
   children: JSX.Element | JSX.Element[]
-  fatherClassName?:string,
-  childrenClassName?:string,
+  fatherClassName?: string
+  childrenClassName?: string
+  id?: string
 }): JSX.Element {
   return (
-    <div className={fatherClassName}>
+    <div id={id} className={fatherClassName}>
       <h4>{title}</h4>
       <hr />
       <div
-        className={`${
-          isExpanded ? 'h-full' : 'hidden h-[0px]'
-        }  flex flex-col space-y-3 transition-transform ${childrenClassName}`}
+        className={`
+          'h-full' 
+          flex flex-col space-y-3 transition-transform ${childrenClassName}`}
       >
         {children}
       </div>

@@ -13,6 +13,7 @@ interface useCreateEventValuesInterface {
   setLocation: (name: string, location: LocationData) => void
   setFileImg: (name: string, fileImg: File) => void
   setPredefinedImgUrl: (name: string, fileImgUrl: string) => void
+  setTags: (name: string, value: string) => void
   formValidator: () => Promise<CreateEventErrors>
 }
 
@@ -41,6 +42,11 @@ export default function useCreateEventValues(
     setValues({ ...values, [name]: predefinedImgUrl })
   }
 
+  const setTags = (name: string, value: string) => {
+    const slicedTags: string[] = value.split(',')
+    setValues({ ...values, [name]: slicedTags })
+  }
+
   const fileTypeValidator = (file: File | null) => {
     if (!file) {
       return true
@@ -58,24 +64,24 @@ export default function useCreateEventValues(
       return CreateEventErrors.emptyTitle
     }
 
-    if (
-      !fileTypeValidator(values.event_file_img) ||
-      !fileTypeValidator(values.landing_file_img)
-    ) {
-      return CreateEventErrors.invalidFileType
+    if (values.event_id === '') {
+      return CreateEventErrors.eventIdTaken
     }
-    if (values.event_img_url == '' && !values.event_file_img) {
-      return CreateEventErrors.emptyImage
+
+    if (await CheckEventId(values.event_id)) {
+      return CreateEventErrors.eventIdTaken
     }
-    if (values.landing_img_url == '' && !values.landing_file_img) {
-      return CreateEventErrors.emptyImage
-    }
+
     if (
       values.event_location.address === '' ||
       values.event_location.lat === 0 ||
       values.event_location.long === 0
     ) {
+      console.log('useCreateEventValues: event location error inside if statement');
       return CreateEventErrors.emptyEventLocation
+    }
+    else{
+      console.log('useCreateEventValues: NO ERRROR.');
     }
 
     if (values.start_date.getTime() < startOfToday().getTime()) {
@@ -88,15 +94,27 @@ export default function useCreateEventValues(
     if (values.start_date.getTime() > values.end_date.getTime()) {
       return CreateEventErrors.endDateBehind
     }
+
     if (isNaN(values.ticket_max)) {
       return CreateEventErrors.invalidNumber
     }
-    if (values.ticket_max < 0) {
+    if (values.ticket_max <= 0) {
       return CreateEventErrors.lowCapNumber
     }
-    if (await CheckEventId(values.event_id)) {
-      return CreateEventErrors.eventIdTaken
+
+    if (
+      !fileTypeValidator(values.event_file_img) ||
+      !fileTypeValidator(values.landing_file_img)
+    ) {
+      return CreateEventErrors.invalidFileType
     }
+    if (values.event_img_url == '' && !values.event_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+    if (values.landing_img_url == '' && !values.landing_file_img) {
+      return CreateEventErrors.emptyImage
+    }
+
     return CreateEventErrors.noError
   }
 
@@ -108,6 +126,7 @@ export default function useCreateEventValues(
       setDate,
       setLocation,
       setFileImg,
+      setTags,
       setPredefinedImgUrl,
       formValidator
     }

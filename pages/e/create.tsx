@@ -21,7 +21,11 @@ import CreateEventFooter from './components/createEventFooter'
 import CreateEventFormSection from './components/createEventFormSection'
 import CreateEventDateTimePicker from './components/createEventDateTimePicker'
 import CreateEventImageInput from './components/createEventImageInput'
-import { CreateEventErrors } from '../../shared/enums/enums'
+import { CreateEventErrors, CreateEventInputs } from '../../shared/enums/enums'
+import {
+  CREATE_EVENT_INSTRUCTIONS,
+  INPUT_FIELD
+} from '../../shared/consts/consts'
 
 const inputValues: createEventFormInterface = {
   title: '',
@@ -38,14 +42,18 @@ const inputValues: createEventFormInterface = {
   event_file_img: null,
   landing_file_img: null,
   event_img_url: '',
-  landing_img_url: ''
+  landing_img_url: '',
+  tags: []
 }
 
 const createEventStatus: createEventStatusInterface = {
   currentStep: 0,
   isCreatingNewEvent: false,
   errorMsg: '',
-  errorField: ''
+  errorField: '',
+  focusedInputField: CreateEventInputs.eventTitle,
+  inputFieldName: INPUT_FIELD.eventTitle,
+  inputFieldInstruction: CREATE_EVENT_INSTRUCTIONS.eventTitleInstr
 }
 
 export default function CreateEvent() {
@@ -58,6 +66,7 @@ export default function CreateEvent() {
       setTextValue,
       setNumberValue,
       setDate,
+      setTags,
       setLocation,
       setFileImg,
       setPredefinedImgUrl,
@@ -70,17 +79,24 @@ export default function CreateEvent() {
    **/
   const [
     status,
-    { nextPage, prevPage, setCreatingNewEvent, setCurrentStep, setErrorMsg }
+    {
+      onNextStep,
+      onPrevStep,
+      setCreatingNewEvent,
+      // setCurrentStep,
+      setErrorMsg,
+      onFocus
+    }
   ] = useCreateEventStatus(createEventStatus)
+  //use focusInput
 
   /**
-   * logic functions
+   * Logic functions
    **/
   const createEvent = async () => {
     let formError: CreateEventErrors
     let eventImgURL: string
     let landingPortraitURL: string
-
     let eventImgfileType: string
     let eventImgStoragePath: string
     let landingPortraitfileType: string
@@ -88,6 +104,7 @@ export default function CreateEvent() {
     setCreatingNewEvent(true)
     formError = await formValidator()
     if (formError !== CreateEventErrors.noError) {
+      console.log('error: ' + formError)
       setCreatingNewEvent(false)
       setErrorMsg(formError)
       return
@@ -136,7 +153,8 @@ export default function CreateEvent() {
           landing_portrait_url: landingPortraitURL,
           ticket_max: values.ticket_max,
           event_id: values.event_id,
-          registered_attendees: 0
+          registered_attendees: 0,
+          tags: values.tags
         },
         {
           title: values.title,
@@ -162,16 +180,15 @@ export default function CreateEvent() {
    **/
   return (
     <div className="flex w-full flex-col items-center bg-secondaryBg">
-      <div className="flex w-full max-w-[325px] flex-col items-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
+      <div className="flex  max-w-[325px] flex-col items-center justify-center space-y-10 pt-[60px] pb-[200px] sm:block sm:max-w-[400px] md:max-w-[600px] ">
         <div>
           <h3>Create Event</h3>
           <hr />
         </div>
-        <div id="create-event-form" className="flex space-x-5 ">
-          <div className="flex max-w-[300px] flex-col space-y-0 sm:max-w-[400px] md:max-w-[600px]">
+        <div id="create-event-form" className="flex  ">
+          <div className="flex max-w-[300px] flex-col space-y-3 sm:max-w-[400px] md:max-w-[600px]">
             {/* step 1 */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 0}
               title={'1.- Event title, location and date'}
               childrenClassName="my-[10px]"
             >
@@ -179,8 +196,12 @@ export default function CreateEvent() {
                 id={'event_name'}
                 labelText={'Title'}
                 placeholder={''}
+                onPressEnter={onNextStep}
                 setTextValue={setTextValue}
                 name={'title'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventTitle)
+                }}
                 isDisabled={status.isCreatingNewEvent}
               />
               <CreateEventTextInput
@@ -188,7 +209,11 @@ export default function CreateEvent() {
                 labelText={'Event ID*'}
                 placeholder={''}
                 setTextValue={setTextValue}
+                onPressEnter={onNextStep}
                 name={'event_id'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventId)
+                }}
                 isDisabled={status.isCreatingNewEvent}
               />
               <CreateEventLocationInput
@@ -196,6 +221,7 @@ export default function CreateEvent() {
                 id={'event_location'}
                 placeholder={''}
                 name={'event_location'}
+                onPressEnter={onNextStep}
                 setLocation={setLocation}
               />
               <EventLocationMap
@@ -204,12 +230,23 @@ export default function CreateEvent() {
               />
               <CreateEventDateTimePicker
                 labelText={'START DATE'}
+                id={'event_date'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.EventDate)
+                }}
                 setDate={setDate}
                 name={'start_date'}
                 date={values.start_date}
               />
               <CreateEventDateTimePicker
                 labelText={'END DATE'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.EventDate)
+                }}
+                onNextStep={() => {
+                  onNextStep()
+                  console.log('next step to description')
+                }}
                 setDate={setDate}
                 name={'end_date'}
                 date={values.end_date}
@@ -217,8 +254,7 @@ export default function CreateEvent() {
             </CreateEventFormSection>
             {/* step 2 */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 1}
-              title={'2.- Description and max attendee cap'}
+              title={'2.- Description, tags, and max attendee cap'}
               childrenClassName="my-[10px]"
             >
               <CreateEventTextInput
@@ -226,26 +262,50 @@ export default function CreateEvent() {
                 id={'event_description'}
                 labelText={'Description'}
                 placeholder={''}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventDescription)
+                }}
                 setTextValue={setTextValue}
                 name={'event_description'}
                 isDisabled={status.isCreatingNewEvent}
               />
+              <CreateEventTextInput
+                id={'event_tags'}
+                labelText={'Tags'}
+                placeholder={''}
+                setTextValue={setTags}
+                onPressEnter={onNextStep}
+                name={'tags'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.eventTags)
+                }}
+                isDisabled={status.isCreatingNewEvent}
+              />
               <NumberInput
+                id="event_ticket_max"
                 labelText="TICKET SUPPLY"
                 setNumberValue={setNumberValue}
+                onPressEnter={onNextStep}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.ticketMax)
+                }}
                 name={'ticket_max'}
                 disabled={status.isCreatingNewEvent}
               />
             </CreateEventFormSection>
             {/* step 3 */}
+            {/* set the id to this section just for the  */}
             <CreateEventFormSection
-              isExpanded={status.currentStep == 2}
               title={'3.- Landing portrait and ticket image'}
+              id={'image_section'}
               fatherClassName={'h-full space-y-[11px] md:h-[800px]'}
               childrenClassName={'md:items-start items-center'}
             >
               <CreateEventImageInput
                 labelText={'TICKET EVENT IMAGE'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.images)
+                }}
                 fileImg={values.event_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
@@ -254,39 +314,41 @@ export default function CreateEvent() {
                   'mx-auto flex w-full max-w-[400px] flex-col items-start text-[16px] font-normal'
                 }
                 imgMenuClassName={
-                  'top-[345px] z-20 md:absolute md:py-[40px] md:px-[30px]'
+                  'top-[600px] z-20 md:absolute md:py-[40px] md:px-[30px]'
                 }
                 landingMode={false}
               />
               <CreateEventImageInput
                 labelText={'LANDING PORTRAIT IMAGES'}
+                onFocus={() => {
+                  onFocus(CreateEventInputs.images)
+                }}
                 fileImg={values.landing_file_img}
                 setFileImg={setFileImg}
                 setPredefinedImgUrl={setPredefinedImgUrl}
                 imgUrl={values.landing_img_url}
-                parentClassName={
-                  'top-[780px] z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:space-y-0'
-                }
-                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px]'}
+                parentClassName={`${
+                  values.event_location.address !== ''
+                    ? 'top-[1700px]'
+                    : 'top-[1525px]'
+                } z-20 flex flex-col space-y-1 md:absolute md:w-[600px] md:left-[340px] md:space-y-0`}
+                imgMenuClassName={'z-20 px-[15px] md:absolute md:top-[42px] '}
                 landingMode={true}
               />
             </CreateEventFormSection>
           </div>
-          <CreateEventStepsDisplay
-            currentStep={status.currentStep}
-            setCurrentStep={setCurrentStep}
-            isCreatingEvent={status.isCreatingNewEvent}
-          />
         </div>
       </div>
       <CreateEventFooter
-        currentStep={status.currentStep}
+        currentInput={status.focusedInputField}
         isCreatingNewEvent={status.isCreatingNewEvent}
-        prevPage={prevPage}
-        nextPage={nextPage}
+        onPrevStep={onPrevStep}
+        onNextStep={onNextStep}
         createEvent={createEvent}
         errorMsg={status.errorMsg}
         errorField={status.errorField}
+        currInputField={status.inputFieldName}
+        inputFieldInstr={status.inputFieldInstruction}
       />
     </div>
   )

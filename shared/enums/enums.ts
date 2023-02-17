@@ -1,5 +1,4 @@
-
-/**error for create event form */
+/**errors for create event form */
 export enum CreateEventErrors {
   noError,
   emptyTitle,
@@ -12,4 +11,16 @@ export enum CreateEventErrors {
   invalidNumber,
   lowCapNumber,
   eventIdTaken
+}
+
+/**enum for create event form inputs */
+export enum CreateEventInputs {
+  eventTitle,
+  eventId,
+  location,
+  EventDate,
+  eventDescription,
+  eventTags,
+  ticketMax,
+  images
 }
