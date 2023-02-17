@@ -76,7 +76,7 @@ export default function SocialFeed({
             labelText={''}
             setTextValue={onTextChange}
             maxWidth={600}
-            value={comment}
+            value={currValues.comment}
             maxWidthForm={600}
             name={'comment'}
           />

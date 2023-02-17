@@ -6,7 +6,7 @@ import RegisterEventButton from './registerEventButton'
 import { useEvents } from '../../../contexts/events'
 import { useUsers } from '../../../contexts/users'
 import { Button } from '../../../components/buttons/button'
-import { EventDetails } from './eventDetails'
+import  EventDetails  from './eventDetails'
 
 // useRef for passing the host data that is fetched from the eid page.
 export default function LoadedEventPage({

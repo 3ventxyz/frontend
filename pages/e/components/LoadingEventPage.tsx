@@ -1,5 +1,5 @@
 // import DateCard from './dateCard'
-import { EventDetails } from './eventDetails'
+import EventDetails from './eventDetails'
 import LandingPortrait from './landingPortrait'
 
 export default function LoadingEventPage() {

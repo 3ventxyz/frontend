@@ -3,7 +3,7 @@ import { TbMap } from 'react-icons/tb'
 import Image from 'next/image'
 import { BsCalendar3 } from 'react-icons/bs'
 
-export function EventDetails({ event }: { event: EventInterface | null }) {
+export default function EventDetails({ event }: { event: EventInterface | null }) {
   return (
     <div className="rounded-2xl bg-white ">
       <div className="text-[28px] font-bold ">Date and place</div>
@@ -83,7 +83,8 @@ function DateCard({ event }: { event: EventInterface | null }) {
       <div id="date-text" className="flex flex-col justify-center">
         <div className="text-[24px] font-bold ">Date and time:</div>
         <div>
-          {event?.start_date.toLocaleString('en-US', {
+          {
+          event?.start_date.toLocaleString('en-US', {
             weekday: 'short',
             year: 'numeric',
             month: 'short',
@@ -94,7 +95,7 @@ function DateCard({ event }: { event: EventInterface | null }) {
               hour: '2-digit',
               minute: '2-digit'
             }) +
-            ' - ' +
+            ' to ' +
             event?.end_date.toLocaleString('en-US', {
               weekday: 'short',
               year: 'numeric',
@@ -105,7 +106,6 @@ function DateCard({ event }: { event: EventInterface | null }) {
             event?.end_date.toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
-              timeZoneName: 'short'
             })}
         </div>
       </div>
