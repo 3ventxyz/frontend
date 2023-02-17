@@ -1,7 +1,7 @@
-import { DocumentData, QuerySnapshot } from '@firebase/firestore'
-import { useEffect, useState } from 'react'
-import TextInput from '../../../components/inputs/textInput'
-import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
+// import { DocumentData, QuerySnapshot } from '@firebase/firestore'
+import { useEffect } from 'react'
+// import TextInput from '../../../components/inputs/textInput'
+// import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
 import {
   EventInterface,
   PostInterface,
@@ -10,7 +10,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '../../../components/buttons/button'
-import uploadComment from '../../../services/upload_comment'
+// import uploadComment from '../../../services/upload_comment'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
 import CreateEventTextInput from './createEventTextInput'
@@ -50,7 +50,12 @@ export default function SocialFeed({
   }, [])
   return (
     <div id="social-feed-web" className="w-full">
-      <h4>Activity</h4>
+      <div className="flex items-center justify-between pr-[10px]">
+        <h4>Activity</h4>
+        <span className="text-blue-600 hover:cursor-pointer hover:underline">
+          view all comments
+        </span>
+      </div>
       <div id="comment-input" className="flex space-x-2 pb-[20px]">
         <div className="mt-[15px] hidden h-[50px] w-[50px] rounded-full bg-red-200 lg:block ">
           <Link href={`/u/${userData?.uid}`}>
@@ -84,7 +89,10 @@ export default function SocialFeed({
             text={'comment'}
             active={currValues.comment !== '' ? true : false}
             onClick={async () => {
-              if (userData && eventData) await uploadPost(userData, eventData)
+              if (userData && eventData) {
+                await uploadPost(userData, eventData)
+                setComment('')
+              }
             }}
           />
         </div>
