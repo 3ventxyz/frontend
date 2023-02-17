@@ -1,6 +1,6 @@
-import DateCard from './dateCard'
+// import DateCard from './dateCard'
+import EventDetails from './eventDetails'
 import LandingPortrait from './landingPortrait'
-import LocationCard from './locationCard'
 
 export default function LoadingEventPage() {
   return (
@@ -25,8 +25,9 @@ export default function LoadingEventPage() {
           </div>
         </div>
         <div id="second-col" className="w-[330px] space-y-5 ">
-          <LocationCard event={null} />
-          <DateCard event={null} />
+          <div className="sticky top-[100px]">
+            <EventDetails event={null} />
+          </div>
         </div>
       </div>
     </div>

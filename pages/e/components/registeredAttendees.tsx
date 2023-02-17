@@ -44,9 +44,12 @@ export default function RegisteredAttendees({
       </div>
     </div>
   ) : (
-    <div id="registered-attendees-web">
-      <h4>Registered Attendees</h4>
-      <div className="mt-[15px] grid grid-cols-5 gap-y-5">
+    <div id="registered-attendees-web" className="space-y-2">
+      <div className='flex justify-between items-center pr-[10px]'>
+        <h4>Registered Attendees</h4>
+        <span className='text-blue-600 hover:underline hover:cursor-pointer'>See all attendees</span>
+      </div>
+      <div className="mt-[15px] grid grid-cols-5 gap-y-1">
         {currValues.attendees &&
           currValues.attendees.map((attendee, index) => {
             return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
@@ -60,8 +63,8 @@ export default function RegisteredAttendees({
 function RegisteredAttendee({ attendee }: { attendee: UserInterface }) {
   return (
     <Link href={`/u/${attendee.uid}`}>
-      <div className="flex h-[130px] w-[100px] flex-col items-center justify-center space-y-[10px] rounded-2xl  bg-[#cfe1ff] shadow-lg transition-shadow hover:cursor-pointer hover:shadow-xl">
-        <div className="relative h-[80px] w-[80px] rounded-full bg-green-200">
+      <div className="flex h-[120px] w-[120px] flex-col items-center justify-center space-y-[0px] rounded-2xl  bg-white shadow-sm transition-shadow hover:cursor-pointer hover:shadow-md">
+        <div className="relative h-[50px] w-[50px] rounded-full bg-green-200">
           <Image
             src={attendee.avatar ?? ''}
             layout="fill"
@@ -72,10 +75,17 @@ function RegisteredAttendee({ attendee }: { attendee: UserInterface }) {
         </div>
         <div
           className={`... truncate  ${
-            attendee.username.length > 10 ? 'w-[80px]' : 'w-fit'
+            attendee.username.length > 8 ? 'w-[80px]' : 'w-fit'
           }`}
         >
           {attendee.username}
+        </div>
+        <div
+          className={`
+             w-fit text-[14px] font-bold
+          `}
+        >
+          attendee
         </div>
       </div>
     </Link>
