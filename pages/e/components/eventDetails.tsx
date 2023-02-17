@@ -5,7 +5,7 @@ import { BsCalendar3 } from 'react-icons/bs'
 
 export default function EventDetails({ event }: { event: EventInterface | null }) {
   return (
-    <div className="rounded-2xl bg-white ">
+    <div className="rounded-2xl bg-white shadow-sm">
       <div className="text-[28px] font-bold ">Date and place</div>
       <hr />
       <LocationCard event={event} />
@@ -75,7 +75,7 @@ function DateCard({ event }: { event: EventInterface | null }) {
   ) : (
     <div
       id="date-card"
-      className="flex h-[100px] space-x-1 rounded-2xl bg-white px-[8px] shadow-md"
+      className="flex h-[100px] space-x-1 rounded-2xl bg-white px-[8px] "
     >
       <div className="flex h-[100px] w-[60px] items-center justify-center">
         <BsCalendar3 className="h-[60px] w-[60px]" />
