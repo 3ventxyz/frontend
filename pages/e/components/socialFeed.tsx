@@ -1,7 +1,10 @@
-// import { DocumentData, QuerySnapshot } from '@firebase/firestore'
 import { useEffect } from 'react'
-// import TextInput from '../../../components/inputs/textInput'
-// import FetchSocialFeedPosts from '../../../services/fetch_social_feed_posts'
+import {
+  startOfToday,
+  differenceInCalendarDays,
+  differenceInCalendarMonths,
+  differenceInYears
+} from 'date-fns'
 import {
   EventInterface,
   PostInterface,
@@ -10,7 +13,6 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '../../../components/buttons/button'
-// import uploadComment from '../../../services/upload_comment'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
 import CreateEventTextInput from './createEventTextInput'
@@ -71,9 +73,6 @@ export default function SocialFeed({
           </Link>
         </div>
         <div className="flex w-full flex-col space-y-2">
-          {/**TODO(2/4/2023,Marthel):check the textInput from the createEvent component. and the Button too.
-           * so the variable and setFunction can be updated from here.
-           * */}
           <CreateEventTextInput
             id={''}
             placeholder="comment..."
@@ -133,26 +132,30 @@ function SocialFeedPost({
   post: PostInterface
 }) {
   const calculateAgeOfPost = (dateTime: Date) => {
-    const currentDate = new Date()
-    const differenceInTime = currentDate.getTime() - dateTime.getTime()
-    var differenceInDays: number = differenceInTime / (1000 * 3600 * 24)
-    if (differenceInDays >= 365) {
-      if (differenceInDays >= 365 && differenceInDays <= 730) {
-        return 'posted a year ago'
+    const differenceDays = differenceInCalendarDays(startOfToday(), dateTime)
+    const differenceMonths = differenceInCalendarMonths(
+      startOfToday(),
+      dateTime
+    )
+    const differenceYears = differenceInYears(startOfToday(), dateTime)
+    if (differenceYears >= 1) {
+      if (differenceYears > 1) {
+        return 'posted ' + differenceYears + ' years ago'
       }
-      return 'posted ' + (differenceInDays / 30).toFixed(0) + ' years ago'
-    }
-    if (differenceInDays >= 30) {
-      if (differenceInDays >= 30 && differenceInDays <= 60) {
-        return 'posted a month ago'
+      return 'posted a year ago'
+    } else if (differenceMonths >= 1) {
+      if (differenceMonths > 1) {
+        return 'posted ' + differenceMonths + ' months ago'
       }
-      return 'posted ' + (differenceInDays / 30).toFixed(0) + ' months ago'
+      return 'posted a month ago'
     }
-    if (differenceInDays < 30 && differenceInDays > 2) {
-      return 'posted ' + differenceInDays.toFixed(0) + ' days ago'
-    }
-    if (differenceInDays < 2 && differenceInDays > 1) {
-      return 'posted yesterday'
+    if (differenceDays >= 30) {
+      if (differenceDays <= 30 && differenceDays >= 2) {
+        return 'posted ' + differenceDays + ' days ago'
+      }
+      if (differenceDays == 1) {
+        return 'posted yesterday'
+      }
     }
     return 'posted today'
   }
@@ -213,8 +216,6 @@ function SocialFeedPost({
             commented
           </p>
           <div className="my-0 py-0 text-[15px]">
-            {/* {String(post.date_posted)} */}
-            {/* 3 months ago */}
             {calculateAgeOfPost(post.date_posted)}
           </div>
         </div>

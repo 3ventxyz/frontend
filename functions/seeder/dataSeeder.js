@@ -6,6 +6,12 @@ const eventSize = 10
 const postsSize = 15
 const listSize = 5
 
+function randomDate(start, end) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  )
+}
+
 module.exports = class DataSeeder {
   constructor(firebaseApp) {
     this.app = firebaseApp
@@ -318,7 +324,7 @@ module.exports = class DataSeeder {
               username: user.data().username,
               avatar: user.data().avatar,
               post_content: faker.lorem.lines(3),
-              date_posted: new Date()
+              date_posted: randomDate(new Date(2012, 0, 1), new Date())
             })
         })
       })
