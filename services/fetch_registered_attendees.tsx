@@ -8,6 +8,8 @@ import {
 } from '@firebase/firestore'
 import { db } from './firebase_config'
 
+const fetchRegisteredAttendeesCap = 10
+
 export default async function FetchRegisteredAttendees(eid: string) {
   const eventRef = doc(db, 'events', eid)
   const registeredAttendeesCollectionRef = collection(
@@ -19,7 +21,7 @@ export default async function FetchRegisteredAttendees(eid: string) {
     query(
       registeredAttendeesCollectionRef,
       orderBy('date_of_registration', 'desc'),
-      limit(8)
+      limit(fetchRegisteredAttendeesCap)
     )
   )
 

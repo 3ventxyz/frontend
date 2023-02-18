@@ -1,7 +1,7 @@
 // author: marthel
 const { faker } = require('@faker-js/faker')
 
-const userSize = 10
+const userSize = 20
 const eventSize = 10
 const postsSize = 15
 const listSize = 5

@@ -50,17 +50,15 @@ export default function RegisteredAttendees({
         <h4>Registered Attendees</h4>
         <span
           onClick={() => {
-            // onClick={() => {
             events.setDisplayModal(true)
             events.setEventModalOption(EventModalOptions.seeAllAttendees)
-            // }}
           }}
           className="text-blue-600 hover:cursor-pointer hover:underline"
         >
           See all attendees
         </span>
       </div>
-      <div className="mt-[15px] grid grid-cols-5 gap-y-1">
+      <div className="mt-[15px] grid grid-cols-5  gap-y-1">
         {currValues.attendees &&
           currValues.attendees.map((attendee, index) => {
             return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
