@@ -8,6 +8,7 @@ import checkRegisteredAttendee from '../../../services/fetch_registered_attendee
 import { useRouter } from 'next/router'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
+import { EventModalOptions } from '../../../shared/enums/enums'
 
 enum RegisterComponentEnum {
   registerEvent,
@@ -20,11 +21,7 @@ function timeout(delay: number) {
   return new Promise((res) => setTimeout(res, delay))
 }
 
-export default function RegisterEventButton({
-  setShowModal
-}: {
-  setShowModal: (toggle: boolean) => void
-}) {
+export default function RegisterEventButton() {
   const [styleComponent, setStyleComponent] = useState('h-[85px] bg-[#DE6767]')
   const users = useUsers()
   const events = useEvents()
@@ -89,7 +86,7 @@ export default function RegisterEventButton({
         return (
           <GreenComponent
             registeredUserData={currValues.dateOfRegistration}
-            setShowModal={setShowModal}
+            // setShowModal={setShowModal}
           />
         )
       default:
@@ -115,14 +112,15 @@ export default function RegisterEventButton({
 }
 
 function GreenComponent({
-  registeredUserData,
-  setShowModal
-}: {
+  registeredUserData
+}: // setShowModal
+{
   registeredUserData: any
-  setShowModal: (toggle: boolean) => void
+  // setShowModal: (toggle: boolean) => void
 }) {
   const [delay, setDelay] = useState(true)
   const router = useRouter()
+  const events = useEvents()
 
   useEffect(() => {
     const delayAnimation = async () => {
@@ -170,7 +168,8 @@ function GreenComponent({
           active={true}
           onClick={() => {
             console.log('viewing qr')
-            setShowModal(true)
+            events.setEventModalOption(EventModalOptions.QRCode)
+            events.setDisplayModal(true)
           }}
         />
         <Button

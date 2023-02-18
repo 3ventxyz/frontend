@@ -47,10 +47,7 @@ export default function LoadedEventPage({
         <div id="second-col" className="w-[330px]">
           <div className="sticky top-[100px] space-y-5">
             <EventDetails event={events?.accessedEventData} />
-            {/* TODO(2/2/2023) Marthel: Update this button to have a modal component. That it can help
-          to update the logged in user to update his/her info to register. And add a special disabler, for the 
-          host. */}
-            <RegisterEventButton setShowModal={setShowModal} />
+            <RegisterEventButton />
             {/* ================================================== */}
             {isEventCreator ? (
               <div>
