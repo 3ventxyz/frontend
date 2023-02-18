@@ -13,3 +13,12 @@ export enum CreateEventErrors {
   lowCapNumber,
   eventIdTaken
 }
+
+/**event page enums */
+
+export enum EventModalOptions {
+  QRCode,
+  registrationForm,
+  seeAllAttendees,
+  viewAllPosts
+}

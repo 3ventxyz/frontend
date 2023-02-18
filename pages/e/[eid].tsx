@@ -11,6 +11,8 @@ import LoadedEventPage from './components/LoadedEventPage'
 import LoadingEventPage from './components/LoadingEventPage'
 import DisplayQRCode from '../u/components/displayQRCode'
 import useEventStatus from './hooks/event/useEventStatus'
+import EventModals from './components/eventModals'
+import { EventModalOptions } from '../../shared/enums/enums'
 
 enum EventPageEnum {
   fetchingData,
@@ -102,14 +104,13 @@ export default function Event() {
       <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[35px] lg:space-x-[80px] xl:space-x-[291px]">
         {EventPage()}
       </div>
-      <Modal
-        visible={currStatus.showModal}
-        onClose={handleOnClose}
-        width={'w-[500px]'}
-        height={'h-[500px]'}
-      >
-        <DisplayQRCode />
-      </Modal>
+      {/* TODO:create a component that is called, eventModals.
+      that will be activated between, the update the form, display qr code, show all attendees, and view all comments. */}
+      <EventModals
+        showModal={false}
+        handleOnClose={handleOnClose}
+        modalOption={EventModalOptions.seeAllAttendees}
+      />
     </>
   )
 }
