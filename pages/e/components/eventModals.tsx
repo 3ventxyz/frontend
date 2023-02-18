@@ -22,7 +22,7 @@ export default function EventModals({
           height={'h-[500px]'}
         >
           <div className="h-[400px] w-[400px] bg-green-300 ">
-            ok let's update your new info for the event.
+            ok let&pos;s update your new info for the event.
           </div>
         </Modal>
       )
@@ -35,7 +35,7 @@ export default function EventModals({
           height={'h-[500px]'}
         >
           <div className="h-[400px] w-[400px] bg-red-300 ">
-            Showing all attendees
+          <p>Showing all attendee&pos;</p>
           </div>
         </Modal>
       )
