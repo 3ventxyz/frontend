@@ -15,6 +15,7 @@ import { createContext } from 'react'
 import { db } from '../services/firebase_config'
 import updateCreatedEventToUser from '../services/update_created_event_to_user'
 import { uploadEventInfo } from '../services/upload_event_info'
+import { EventModalOptions } from '../shared/enums/enums'
 import {
   EventHostInterface,
   EventInterface,
@@ -30,6 +31,7 @@ interface EventsInterface {
   cachedUpcomingEvents: EventInterface[] | null
   cachedPastEvents: EventInterface[] | null
   cachedRegisteredEvents: EventInterface[] | null
+
   cacheUpcomingEvents: (events: EventInterface[]) => void | void
   cacheRegisteredEvents: (events: EventInterface[]) => void | void
   cachePastEvents: (events: EventInterface[]) => void | void
@@ -50,6 +52,11 @@ interface EventsInterface {
   newEventData: (
     eventDoc: DocumentSnapshot<DocumentData>
   ) => EventInterface | void
+
+  eventModalOption: EventModalOptions
+  setEventModalOption: (eventModalOption: EventModalOptions) => void
+  displayModal: boolean
+  setDisplayModal: (option: boolean) => void
 }
 
 const EventsContext = createContext<EventsInterface>({
@@ -64,7 +71,11 @@ const EventsContext = createContext<EventsInterface>({
   cachedPastEvents: null,
   cachedUpcomingEvents: null,
   cachedRegisteredEvents: null,
-  accessedEventData: null
+  accessedEventData: null,
+  eventModalOption: EventModalOptions.QRCode,
+  setEventModalOption: () => undefined,
+  displayModal: false,
+  setDisplayModal: () => undefined
 })
 
 const EventsProvider = ({ children }: Props): JSX.Element => {
@@ -79,7 +90,11 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
   >(null)
   const [accessedEventData, setAcessedEventData] =
     useState<EventInterface | null>(null)
+  const [eventModalOption, setEventModalOption] = useState<EventModalOptions>(
+    EventModalOptions.QRCode
+  )
 
+  const [displayModal, setDisplayModal] = useState<boolean>(false)
   const cacheUpcomingEvents = (events: EventInterface[]) => {
     setCachedUpcomingEvents(events)
   }
@@ -105,8 +120,6 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
       console.error(e)
     }
   }
-
-  // TODO (Marthel): add a timer that will clear and set null, the cachedEventsData.
 
   const newEventData = (eventDoc: DocumentSnapshot<DocumentData>) => {
     const eventData: EventInterface = {
@@ -166,7 +179,12 @@ const EventsProvider = ({ children }: Props): JSX.Element => {
         cacheUpcomingEvents: cacheUpcomingEvents,
         cachePastEvents: cachePastEvents,
         cacheRegisteredEvents: cacheRegisteredEvents,
-        fetchAccessedEventData: fetchAccessedEventData
+        fetchAccessedEventData: fetchAccessedEventData,
+
+        eventModalOption: eventModalOption,
+        setEventModalOption: setEventModalOption,
+        displayModal: displayModal,
+        setDisplayModal: setDisplayModal
       }}
     >
       {children}

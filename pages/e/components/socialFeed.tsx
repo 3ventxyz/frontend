@@ -16,6 +16,8 @@ import { Button } from '../../../components/buttons/button'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
 import CreateEventTextInput from './createEventTextInput'
+import { useEvents } from '../../../contexts/events'
+import { EventModalOptions } from '../../../shared/enums/enums'
 
 export default function SocialFeed({
   isMobile,
@@ -28,7 +30,7 @@ export default function SocialFeed({
 }) {
   const [currStatus, { setIsFetchingPosts }] = useEventStatus()
   const [currValues, { fetchPosts, setComment, uploadPost }] = useEventValues()
-
+  const events = useEvents()
   /**
    * --pass the posts collection reference of the event and fetch it here the docs. There must be a query for the most
    * recent posts to the oldest posts, and it should be the 10 recent posts.
@@ -54,7 +56,13 @@ export default function SocialFeed({
     <div id="social-feed-web" className="w-full">
       <div className="flex items-center justify-between pr-[10px]">
         <h4>Activity</h4>
-        <span className="text-blue-600 hover:cursor-pointer hover:underline">
+        <span
+          onClick={() => {
+            events.setDisplayModal(true);
+            events.setEventModalOption(EventModalOptions.viewAllPosts)
+          }}
+          className="text-blue-600 hover:cursor-pointer hover:underline"
+        >
           view all comments
         </span>
       </div>

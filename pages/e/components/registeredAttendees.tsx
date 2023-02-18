@@ -1,11 +1,11 @@
-import { DocumentData, QuerySnapshot } from '@firebase/firestore'
-import { useEffect, useState } from 'react'
-import FetchRegisteredAttendees from '../../../services/fetch_registered_attendees'
+import { useEffect } from 'react'
 import { UserInterface } from '../../../shared/interface/common'
 import Image from 'next/image'
 import Link from 'next/link'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
+import { EventModalOptions } from '../../../shared/enums/enums'
+import { useEvents } from '../../../contexts/events'
 export default function RegisteredAttendees({
   isMobile,
   eid = ''
@@ -15,6 +15,7 @@ export default function RegisteredAttendees({
 }) {
   const [currStatus, { setIsFetchingAttendees }] = useEventStatus()
   const [currValues, { fetchAttendees }] = useEventValues()
+  const events = useEvents()
   /**
    * --pass the reference of the registered attendees collection.
    * fetch the docs and use each attendee doc to the registeredAtteendee component.
@@ -45,9 +46,19 @@ export default function RegisteredAttendees({
     </div>
   ) : (
     <div id="registered-attendees-web" className="space-y-2">
-      <div className='flex justify-between items-center pr-[10px]'>
+      <div className="flex items-center justify-between pr-[10px]">
         <h4>Registered Attendees</h4>
-        <span className='text-blue-600 hover:underline hover:cursor-pointer'>See all attendees</span>
+        <span
+          onClick={() => {
+            // onClick={() => {
+            events.setDisplayModal(true)
+            events.setEventModalOption(EventModalOptions.seeAllAttendees)
+            // }}
+          }}
+          className="text-blue-600 hover:cursor-pointer hover:underline"
+        >
+          See all attendees
+        </span>
       </div>
       <div className="mt-[15px] grid grid-cols-5 gap-y-1">
         {currValues.attendees &&
@@ -74,7 +85,7 @@ function RegisteredAttendee({ attendee }: { attendee: UserInterface }) {
           />
         </div>
         <div
-          className={`... truncate  ${
+          className={`... truncate ${
             attendee.username.length > 8 ? 'w-[80px]' : 'w-fit'
           }`}
         >

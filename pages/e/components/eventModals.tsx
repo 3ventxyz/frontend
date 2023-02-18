@@ -21,7 +21,7 @@ export default function EventModals({
           width={'w-[500px]'}
           height={'h-[500px]'}
         >
-          <div className="h-[400px] w-[400px] bg-red-300 ">
+          <div className="h-[400px] w-[400px] bg-green-300 ">
             ok let's update your new info for the event.
           </div>
         </Modal>
@@ -47,7 +47,7 @@ export default function EventModals({
           width={'w-[500px]'}
           height={'h-[500px]'}
         >
-          <div className="h-[500px] w-[500px] bg-red-300 ">
+          <div className="h-[500px] w-[500px] bg-blue-500 ">
             viewing all posts and comments
           </div>
         </Modal>

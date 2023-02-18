@@ -42,8 +42,7 @@ export default function Event() {
 
   //TODO(2/6/2023, marthel): think a work around about this.
   const handleOnClose = () => {
-    setShowModal(false)
-    setShowQrCodeModal(false)
+    events.setDisplayModal(false)
   }
 
   const fetchData = async () => {
@@ -104,12 +103,10 @@ export default function Event() {
       <div className="flex w-screen flex-col justify-center bg-secondaryBg px-[20px] pt-[35px] pb-[70px] sm:px-[210px] md:flex-row md:pb-[106px] md:pt-[35px] lg:space-x-[80px] xl:space-x-[291px]">
         {EventPage()}
       </div>
-      {/* TODO:create a component that is called, eventModals.
-      that will be activated between, the update the form, display qr code, show all attendees, and view all comments. */}
       <EventModals
-        showModal={false}
+        showModal={events.displayModal}
         handleOnClose={handleOnClose}
-        modalOption={EventModalOptions.seeAllAttendees}
+        modalOption={events.eventModalOption}
       />
     </>
   )
