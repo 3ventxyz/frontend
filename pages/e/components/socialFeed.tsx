@@ -58,7 +58,7 @@ export default function SocialFeed({
         <h4>Activity</h4>
         <span
           onClick={() => {
-            events.setDisplayModal(true);
+            events.setDisplayModal(true)
             events.setEventModalOption(EventModalOptions.viewAllPosts)
           }}
           className="text-blue-600 hover:cursor-pointer hover:underline"
@@ -66,7 +66,7 @@ export default function SocialFeed({
           view all comments
         </span>
       </div>
-      <div id="comment-input" className="flex space-x-2 pb-[20px]">
+      <div id="comment-input" className="mr-[12px] flex space-x-2 pb-[10px] ">
         <div className="mt-[15px] hidden h-[50px] w-[50px] rounded-full bg-red-200 lg:block ">
           <Link href={`/u/${userData?.uid}`}>
             <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
@@ -80,7 +80,7 @@ export default function SocialFeed({
             </div>
           </Link>
         </div>
-        <div className="flex w-full flex-col space-y-2">
+        <div className="flex w-full flex-col items-end space-y-2">
           <CreateEventTextInput
             id={''}
             placeholder="comment..."
@@ -104,14 +104,13 @@ export default function SocialFeed({
           />
         </div>
       </div>
-      <br />
       <hr />
       {/* use the max-height parameter so it can be resized based from the number of comments. */}
       <div
         id="social-feed-mobile"
-        className="thin-scrollbar h-[500px] overflow-y-auto"
+        className="thin-scrollbar h-[500px] overflow-y-auto py-[5px]"
       >
-        <div className="space-y-[25px]">
+        <div className="space-y-[5px]">
           {currValues.posts &&
             currValues.posts.map((post, index) => {
               console.log(post.avatar)
@@ -148,24 +147,24 @@ function SocialFeedPost({
     const differenceYears = differenceInYears(startOfToday(), dateTime)
     if (differenceYears >= 1) {
       if (differenceYears > 1) {
-        return 'posted ' + differenceYears + ' years ago'
+        return `${differenceYears}` + ' years ago'
       }
-      return 'posted a year ago'
+      return 'a year ago'
     } else if (differenceMonths >= 1) {
       if (differenceMonths > 1) {
-        return 'posted ' + differenceMonths + ' months ago'
+        return `${differenceMonths}` + ' months ago'
       }
-      return 'posted a month ago'
+      return 'a month ago'
     }
     if (differenceDays >= 30) {
       if (differenceDays <= 30 && differenceDays >= 2) {
-        return 'posted ' + differenceDays + ' days ago'
+        return `${differenceDays}` + ' days ago'
       }
       if (differenceDays == 1) {
-        return 'posted yesterday'
+        return 'yesterday'
       }
     }
-    return 'posted today'
+    return 'today'
   }
 
   return isMobile ? (
@@ -189,7 +188,7 @@ function SocialFeedPost({
               <span className="font-bold hover:cursor-pointer hover:underline">
                 {post.username}
               </span>
-            </Link>{' '}
+            </Link>
             commented
           </p>
           <div className="my-0 py-0 text-[12px]">
@@ -200,10 +199,10 @@ function SocialFeedPost({
       <div className="">{post.post_content}</div>
     </div>
   ) : (
-    <div className="flex flex-col">
-      <div className="flex items-end space-x-2 ">
-        <Link href={`/u/${post.uid}`}>
-          <div className="relative h-[50px] w-[50px] rounded-full hover:cursor-pointer ">
+    <div className="border-1 mr-[5px] flex flex-col rounded-2xl bg-white py-[8px] px-[8px] shadow-sm">
+      <div className="flex items-start space-x-2 ">
+        <div className="relative h-[45px] w-[45px] rounded-full hover:cursor-pointer ">
+          <Link href={`/u/${post.uid}`}>
             <Image
               src={post.avatar ?? ''}
               loading="lazy"
@@ -211,11 +210,11 @@ function SocialFeedPost({
               objectFit="cover"
               className="rounded-full bg-gray-200"
             />
-          </div>
-        </Link>
-        <div className="flex flex-col items-start space-y-0">
+          </Link>
+        </div>
+        <div className="flex w-fit flex-col items-start space-y-0">
           <div className="my-0 text-[21px]"></div>
-          <p className="my-0 py-0 text-[21px]">
+          <p className="my-0 py-0 text-[15px]">
             <Link href={`/u/${post.uid}`}>
               <span className="font-bold hover:cursor-pointer hover:underline">
                 {post.username}
@@ -226,9 +225,9 @@ function SocialFeedPost({
           <div className="my-0 py-0 text-[15px]">
             {calculateAgeOfPost(post.date_posted)}
           </div>
+          <div className="">{post.post_content}</div>
         </div>
       </div>
-      <div className="ml-[60px]">{post.post_content}</div>
     </div>
   )
 }
