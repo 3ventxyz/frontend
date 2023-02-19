@@ -1,6 +1,12 @@
+import { useEffect } from 'react'
 import { Modal } from '../../../components/utils/modal'
+import { useEvents } from '../../../contexts/events'
+import { useUsers } from '../../../contexts/users'
 import { EventModalOptions } from '../../../shared/enums/enums'
 import DisplayQRCode from '../../u/components/displayQRCode'
+import useEventStatus from '../hooks/event/useEventStatus'
+import useEventValues from '../hooks/event/useEventValues'
+import SocialFeedPost from './socialFeedPost'
 
 export default function EventModals({
   showModal,
@@ -34,9 +40,7 @@ export default function EventModals({
           width={'w-[500px]'}
           height={'h-[500px]'}
         >
-          <div className="h-[400px] w-[400px] bg-red-300 ">
-          <p>Showing all attendee&pos;</p>
-          </div>
+          <AllRegisteredAttendeesModal />
         </Modal>
       )
     case EventModalOptions.viewAllPosts:
@@ -44,12 +48,10 @@ export default function EventModals({
         <Modal
           visible={showModal}
           onClose={handleOnClose}
-          width={'w-[500px]'}
-          height={'h-[500px]'}
+          width={'w-[600px]'}
+          height={'h-[450px]'}
         >
-          <div className="h-[500px] w-[500px] bg-blue-500 ">
-            viewing all posts and comments
-          </div>
+          <AllPostsModal />
         </Modal>
       )
     default:
@@ -64,4 +66,60 @@ export default function EventModals({
         </Modal>
       )
   }
+}
+
+function AllPostsModal() {
+  const events = useEvents()
+  const users = useUsers()
+  const userData = users.loggedInUserData
+  const eventData = events.accessedEventData
+  const [currStatus, { setIsFetchingPosts }] = useEventStatus()
+  const [currValues, { fetchPosts, setComment, uploadPost }] = useEventValues()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userData !== null && eventData !== null)
+        fetchPosts(userData.uid, eventData.event_id)
+      setIsFetchingPosts(false)
+    }
+    if (currStatus.isFetchingPosts) {
+      fetchData()
+    }
+  }, [])
+
+  return (
+    <div className="">
+      <h4>Viewing all posts</h4>
+      <>
+        <hr />
+        {currStatus.isFetchingPosts ? (
+          <>Loading</>
+        ) : (
+          <div
+            id="social-feed-viwer"
+            className="thin-scrollbar h-[400px] overflow-y-auto  py-[5px]"
+          >
+            <div className="space-y-[5px]">
+              {currValues.posts &&
+                currValues.posts.map((post, index) => {
+                  console.log(post.avatar)
+                  return (
+                    <SocialFeedPost key={index} isMobile={false} post={post} />
+                  )
+                })}
+            </div>
+          </div>
+        )}
+        <hr />
+      </>
+    </div>
+  )
+}
+
+function AllRegisteredAttendeesModal() {
+  return (
+    <div className="h-[400px] w-[400px] bg-red-300 ">
+      <p>Showing all attendee&pos;</p>
+    </div>
+  )
 }

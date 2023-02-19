@@ -48,7 +48,6 @@ export default function LoadedEventPage({
           <div className="sticky top-[100px] space-y-5">
             <EventDetails event={events?.accessedEventData} />
             <RegisterEventButton />
-            {/* ================================================== */}
             {isEventCreator ? (
               <div>
                 <Button
