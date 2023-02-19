@@ -6,6 +6,7 @@ import { EventModalOptions } from '../../../shared/enums/enums'
 import DisplayQRCode from '../../u/components/displayQRCode'
 import useEventStatus from '../hooks/event/useEventStatus'
 import useEventValues from '../hooks/event/useEventValues'
+import RegisteredAttendee from './registeredAttendee'
 import SocialFeedPost from './socialFeedPost'
 
 export default function EventModals({
@@ -37,7 +38,7 @@ export default function EventModals({
         <Modal
           visible={showModal}
           onClose={handleOnClose}
-          width={'w-[500px]'}
+          width={'w-[650px]'}
           height={'h-[500px]'}
         >
           <AllRegisteredAttendeesModal />
@@ -117,9 +118,35 @@ function AllPostsModal() {
 }
 
 function AllRegisteredAttendeesModal() {
+  const [currStatus, { setIsFetchingAttendees }] = useEventStatus()
+  const [currValues, { fetchAttendees }] = useEventValues()
+  const events = useEvents()
+  const eid = events.accessedEventData?.event_id? events.accessedEventData?.event_id :''
+
+  useEffect(() => {
+    const fetchData = async () => {
+      fetchAttendees(eid)
+      setIsFetchingAttendees(false)
+    }
+    if (currStatus.isFetchingAttendees) {
+      fetchData()
+    }
+  }, [])
   return (
-    <div className="h-[400px] w-[400px] bg-red-300 ">
-      <p>Showing all attendee&pos;</p>
+    <div className="w-auto  ">
+      <h4>All Registered Attendees</h4>
+      <hr />
+      <div className="thin-scrollbar grid h-[450px]  grid-cols-5 gap-y-1 overflow-y-auto  py-[5px]">
+        {currValues.attendees &&
+          currValues.attendees.map((attendee, index) => {
+            return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
+          })}
+        {currValues.attendees &&
+          currValues.attendees.map((attendee, index) => {
+            return <RegisteredAttendee key={attendee.uid} attendee={attendee} />
+          })}
+      </div>
+      <hr />
     </div>
   )
 }
