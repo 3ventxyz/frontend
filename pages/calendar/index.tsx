@@ -5,7 +5,7 @@ import SubCalendar from './components/subCalendar'
 
 export default function Calendar() {
   return (
-    <div className="flex  h-auto w-screen justify-center space-x-2 bg-secondaryBg">
+    <div className="flex pt-[20px]  h-auto w-screen justify-center space-x-2 bg-secondaryBg">
       <div id="sub-column" className="flex w-auto flex-col space-y-1 ">
         <h4>Community Calendar</h4>
         <SubCalendar
