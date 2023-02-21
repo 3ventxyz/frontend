@@ -15,7 +15,6 @@ import {
   getDay
 } from 'date-fns'
 import { useState } from 'react'
-import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri'
 
 export default function SubCalendar({
   selectedDate,
@@ -99,7 +98,7 @@ export default function SubCalendar({
               S{' '}
             </div>
           </div>
-          <div className={`grid grid-cols-7   gap-x-2 gap-y-2`}>
+          <div className={`grid grid-cols-7 gap-x-2 gap-y-2`}>
             {newDays.map((day: Date, dayIdx: number) => {
               return (
                 <div
