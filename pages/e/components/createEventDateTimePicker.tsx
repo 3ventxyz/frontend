@@ -1,4 +1,4 @@
-import LocalDatePicker from './datepicker'
+import LocalDatePicker from '../../../components/utils/datepicker'
 import LocalTimePicker from './timepicker'
 
 export default function CreateEventDateTimePicker({
